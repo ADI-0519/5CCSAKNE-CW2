@@ -13,5 +13,33 @@ Based on this and our coursework description, produce a plan on who should be wo
 
 Prompt 2
 ----
+wrtie me a concrete plan on the whole pipeline, so I can used to implement the code clearly
+----
+
+
+Prompt 3
+----
+implement the unfinished code based on this plan
+----
+
+Prompt 4
+----
 
 ----
+
+Prompt 5
+----
+
+----
+
+Prompt 6
+----
+
+----
+
+
+Prompt 7
+----
+
+----
+
