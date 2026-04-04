@@ -1,11 +1,12 @@
 """Unit tests for data_normalisation module."""
 
 import pytest
+
 from src.data_normalisation import (
-    _stable_id,
     _canonicalise_date,
     _is_valid_url,
     _normalise_name,
+    _stable_id,
     normalise_data,
 )
 
@@ -158,6 +159,7 @@ class TestNormaliseData:
     def test_generates_stable_id_from_url(self):
         result = normalise_data([self._valid_record()])
         import hashlib
+
         expected = hashlib.sha256(b"https://example.com/test").hexdigest()[:16]
         assert result[0]["id"] == expected
 

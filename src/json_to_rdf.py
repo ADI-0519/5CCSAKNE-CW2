@@ -2,22 +2,22 @@
 
 import re
 
-from rdflib import Graph, Namespace, Literal, RDF, XSD, URIRef
+from rdflib import RDF, XSD, Graph, Literal, Namespace
 
 EX = Namespace("http://example.org/news/")
 SCHEMA = Namespace("http://schema.org/")
 
 # Maps controlled predicate names to RDF predicate URIs
 PREDICATE_URI_MAP = {
-    "mentions":        EX.mentions,
-    "developed_by":    EX.developedBy,
-    "announced":       EX.announced,
-    "located_in":      EX.locatedIn,
-    "authored_by":     EX.authoredBy,
-    "published_by":    EX.publishedBy,
+    "mentions": EX.mentions,
+    "developed_by": EX.developedBy,
+    "announced": EX.announced,
+    "located_in": EX.locatedIn,
+    "authored_by": EX.authoredBy,
+    "published_by": EX.publishedBy,
     "uses_technology": EX.usesTechnology,
-    "involved_in":     EX.involvedIn,
-    "part_of":         EX.partOf,
+    "involved_in": EX.involvedIn,
+    "part_of": EX.partOf,
 }
 
 
@@ -58,8 +58,13 @@ def convert_json_to_rdf(normalised_data):
         g.add((article_uri, RDF.type, SCHEMA.NewsArticle))
         g.add((article_uri, SCHEMA.headline, Literal(record["title"])))
         g.add((article_uri, SCHEMA.url, Literal(record["url"])))
-        g.add((article_uri, SCHEMA.datePublished,
-               Literal(record["published_at"], datatype=XSD.dateTime)))
+        g.add(
+            (
+                article_uri,
+                SCHEMA.datePublished,
+                Literal(record["published_at"], datatype=XSD.dateTime),
+            )
+        )
         g.add((article_uri, SCHEMA.publisher, Literal(record["source_name"])))
 
         if record.get("author"):

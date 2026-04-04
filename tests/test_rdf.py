@@ -1,10 +1,10 @@
 """Unit tests for json_to_rdf module."""
 
 import pytest
-from rdflib import URIRef, Literal, RDF
+from rdflib import RDF, Literal
 from rdflib.namespace import Namespace
 
-from src.json_to_rdf import convert_json_to_rdf, EX, SCHEMA
+from src.json_to_rdf import EX, convert_json_to_rdf
 
 SCHEMA_NS = Namespace("http://schema.org/")
 
@@ -27,7 +27,11 @@ def _sample_record():
         },
         "relations": [
             {"subject": "abc123def456789a", "predicate": "mentions", "object": "GPT"},
-            {"subject": "abc123def456789a", "predicate": "mentions", "object": "OpenAI Corporation"},
+            {
+                "subject": "abc123def456789a",
+                "predicate": "mentions",
+                "object": "OpenAI Corporation",
+            },
             {"subject": "OpenAI Corporation", "predicate": "uses_technology", "object": "GPT"},
         ],
     }

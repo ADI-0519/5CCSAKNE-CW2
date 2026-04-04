@@ -61,11 +61,13 @@ def _normalise_relations(relations, record_index):
                 f"[NORMALISE] Record {record_index}: unknown predicate {pred!r}. "
                 f"Allowed: {sorted(CONTROLLED_PREDICATES)}"
             )
-        normalised.append({
-            "subject": _normalise_name(rel["subject"]),
-            "predicate": pred,
-            "object": _normalise_name(rel["object"]),
-        })
+        normalised.append(
+            {
+                "subject": _normalise_name(rel["subject"]),
+                "predicate": pred,
+                "object": _normalise_name(rel["object"]),
+            }
+        )
     return _dedup_list(normalised)
 
 
@@ -102,33 +104,31 @@ def normalise_data(extracted_data):
             "organizations": _dedup_list(
                 [_normalise_name(o) for o in entities.get("organizations", [])]
             ),
-            "people": _dedup_list(
-                [_normalise_name(p) for p in entities.get("people", [])]
-            ),
+            "people": _dedup_list([_normalise_name(p) for p in entities.get("people", [])]),
             "locations": _dedup_list(
-                [_normalise_name(l) for l in entities.get("locations", [])]
+                [_normalise_name(location) for location in entities.get("locations", [])]
             ),
             "technologies": _dedup_list(
                 [_normalise_name(t) for t in entities.get("technologies", [])]
             ),
-            "topics": _dedup_list(
-                [_normalise_name(t) for t in entities.get("topics", [])]
-            ),
+            "topics": _dedup_list([_normalise_name(t) for t in entities.get("topics", [])]),
         }
 
         author = record.get("author")
 
-        normalised.append({
-            "id": stable_id,
-            "title": _normalise_name(title),
-            "url": url,
-            "published_at": canonical_date,
-            "source_name": _normalise_name(source_name),
-            "author": _normalise_name(author) if author else None,
-            "summary": record.get("summary"),
-            "entities": normalised_entities,
-            "relations": _normalise_relations(record.get("relations", []), i),
-        })
+        normalised.append(
+            {
+                "id": stable_id,
+                "title": _normalise_name(title),
+                "url": url,
+                "published_at": canonical_date,
+                "source_name": _normalise_name(source_name),
+                "author": _normalise_name(author) if author else None,
+                "summary": record.get("summary"),
+                "entities": normalised_entities,
+                "relations": _normalise_relations(record.get("relations", []), i),
+            }
+        )
 
     print(f"[NORMALISE] Normalised {len(normalised)} records.")
     return normalised

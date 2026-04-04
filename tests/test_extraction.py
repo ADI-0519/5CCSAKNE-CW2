@@ -1,13 +1,13 @@
 """Unit tests for data_extraction module."""
 
 import pytest
+
 from src.data_extraction import (
-    _extract_technologies,
-    _extract_topics,
+    _extract_locations,
     _extract_organizations,
     _extract_people,
-    _extract_locations,
-    _generate_relations,
+    _extract_technologies,
+    _extract_topics,
     _stable_id,
     extract_relevant_information,
 )
@@ -119,15 +119,17 @@ class TestExtractRelevantInformation:
 
     def test_returns_list_of_records(self):
         raw = {
-            "articles": [{
-                "source": {"name": "TestSource"},
-                "author": "John Doe",
-                "title": "AI in Machine Learning Research",
-                "description": "Deep learning advances.",
-                "url": "https://example.com/article1",
-                "publishedAt": "2024-01-15T10:00:00Z",
-                "content": "More AI content here.",
-            }]
+            "articles": [
+                {
+                    "source": {"name": "TestSource"},
+                    "author": "John Doe",
+                    "title": "AI in Machine Learning Research",
+                    "description": "Deep learning advances.",
+                    "url": "https://example.com/article1",
+                    "publishedAt": "2024-01-15T10:00:00Z",
+                    "content": "More AI content here.",
+                }
+            ]
         }
         result = extract_relevant_information(raw)
         assert len(result) == 1
@@ -142,14 +144,16 @@ class TestExtractRelevantInformation:
 
     def test_entities_have_required_keys(self):
         raw = {
-            "articles": [{
-                "source": {"name": "TestSource"},
-                "title": "Some Title",
-                "description": "Some description",
-                "url": "https://example.com/x",
-                "publishedAt": "2024-01-15T10:00:00Z",
-                "content": "",
-            }]
+            "articles": [
+                {
+                    "source": {"name": "TestSource"},
+                    "title": "Some Title",
+                    "description": "Some description",
+                    "url": "https://example.com/x",
+                    "publishedAt": "2024-01-15T10:00:00Z",
+                    "content": "",
+                }
+            ]
         }
         result = extract_relevant_information(raw)
         entities = result[0]["entities"]
@@ -159,15 +163,17 @@ class TestExtractRelevantInformation:
 
     def test_handles_missing_optional_fields(self):
         raw = {
-            "articles": [{
-                "source": {"name": "TestSource"},
-                "title": "Minimal Article",
-                "description": None,
-                "url": "https://example.com/minimal",
-                "publishedAt": "2024-01-15T10:00:00Z",
-                "content": None,
-                "author": None,
-            }]
+            "articles": [
+                {
+                    "source": {"name": "TestSource"},
+                    "title": "Minimal Article",
+                    "description": None,
+                    "url": "https://example.com/minimal",
+                    "publishedAt": "2024-01-15T10:00:00Z",
+                    "content": None,
+                    "author": None,
+                }
+            ]
         }
         result = extract_relevant_information(raw)
         assert len(result) == 1

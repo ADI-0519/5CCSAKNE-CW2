@@ -1,7 +1,7 @@
 # Code to extract relevant information from the collected data
 
-import re
 import hashlib
+import re
 
 from src.config import CONFIG
 
@@ -23,9 +23,7 @@ _ORG_PATTERN = re.compile(
 _PERSON_PATTERN = re.compile(r"\b([A-Z][a-z]+\s+[A-Z][a-z]+)\b")
 
 # "in/at/from/near [Capitalized phrase]"
-_LOCATION_PATTERN = re.compile(
-    r"\b(?:in|at|from|near|across)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\b"
-)
+_LOCATION_PATTERN = re.compile(r"\b(?:in|at|from|near|across)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\b")
 
 
 def _stable_id(url, title, published_at):
@@ -122,11 +120,16 @@ def extract_relevant_information(raw_data):
             published_at = article.get("publishedAt") or ""
 
             # Concatenate all text for entity detection
-            full_text = " ".join(filter(None, [
-                title,
-                article.get("description") or "",
-                article.get("content") or "",
-            ]))
+            full_text = " ".join(
+                filter(
+                    None,
+                    [
+                        title,
+                        article.get("description") or "",
+                        article.get("content") or "",
+                    ],
+                )
+            )
 
             article_id = _stable_id(url, title, published_at)
 
@@ -140,17 +143,19 @@ def extract_relevant_information(raw_data):
 
             relations = _generate_relations(article_id, entities)
 
-            extracted.append({
-                "id": article_id,
-                "title": title,
-                "url": url,
-                "published_at": published_at,
-                "source_name": (article.get("source") or {}).get("name") or "",
-                "author": article.get("author"),
-                "summary": article.get("description") or article.get("content"),
-                "entities": entities,
-                "relations": relations,
-            })
+            extracted.append(
+                {
+                    "id": article_id,
+                    "title": title,
+                    "url": url,
+                    "published_at": published_at,
+                    "source_name": (article.get("source") or {}).get("name") or "",
+                    "author": article.get("author"),
+                    "summary": article.get("description") or article.get("content"),
+                    "entities": entities,
+                    "relations": relations,
+                }
+            )
         except Exception as e:
             raise RuntimeError(f"[EXTRACT] Failed processing article {i}: {e}") from e
 

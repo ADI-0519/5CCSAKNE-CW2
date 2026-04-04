@@ -1,11 +1,11 @@
 import os
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
+from src.config import CONFIG
 from src.data_collection import load_data_from_url
 from src.data_extraction import extract_relevant_information
 from src.data_normalisation import normalise_data
 from src.json_to_rdf import convert_json_to_rdf
-from src.config import CONFIG
 
 
 def save_rdf_to_file(rdf_graph, filename):

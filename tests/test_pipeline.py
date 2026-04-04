@@ -2,12 +2,12 @@
 
 import json
 import os
+
 import pytest
 
 from src.data_extraction import extract_relevant_information
 from src.data_normalisation import normalise_data
 from src.json_to_rdf import convert_json_to_rdf
-
 
 FIXTURE_PATH = os.path.join(os.path.dirname(__file__), "fixtures", "sample_response.json")
 
@@ -37,6 +37,7 @@ def rdf_graph(normalised):
 # Contract: extract -> normalise
 # ---------------------------------------------------------------------------
 
+
 class TestExtractToNormaliseContract:
     def test_extracted_records_pass_normalisation(self, extracted):
         """Every record output by extraction must be accepted by normalisation."""
@@ -63,29 +64,28 @@ class TestExtractToNormaliseContract:
 
     def test_all_normalised_relations_use_controlled_predicates(self, normalised):
         from src.config import CONFIG
+
         allowed = CONFIG["CONTROLLED_PREDICATES"]
         for record in normalised:
             for rel in record["relations"]:
-                assert rel["predicate"] in allowed, (
-                    f"Unexpected predicate: {rel['predicate']!r}"
-                )
+                assert rel["predicate"] in allowed, f"Unexpected predicate: {rel['predicate']!r}"
 
 
 # ---------------------------------------------------------------------------
 # Contract: normalise -> rdf
 # ---------------------------------------------------------------------------
 
+
 class TestNormaliseToRdfContract:
     def test_every_normalised_record_produces_triples(self, normalised):
-        from rdflib import Graph
         for record in normalised:
             g = convert_json_to_rdf([record])
             assert len(g) > 0, f"No triples produced for record {record['id']}"
 
     def test_rdf_graph_has_article_nodes(self, normalised, rdf_graph):
-        from src.json_to_rdf import EX
         from rdflib import RDF
         from rdflib.namespace import Namespace
+
         SCHEMA_NS = Namespace("http://schema.org/")
         article_types = list(rdf_graph.subjects(RDF.type, SCHEMA_NS.NewsArticle))
         assert len(article_types) == len(normalised)
@@ -94,6 +94,7 @@ class TestNormaliseToRdfContract:
 # ---------------------------------------------------------------------------
 # Smoke test: offline end-to-end with fixture
 # ---------------------------------------------------------------------------
+
 
 class TestEndToEndSmoke:
     def test_pipeline_produces_valid_nonempty_turtle(self, rdf_graph, tmp_path):
