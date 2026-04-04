@@ -1,3 +1,5 @@
+# Code to collect data from a specified URL
+
 import requests
 
 def load_data_from_url(url):
