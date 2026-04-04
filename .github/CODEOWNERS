@@ -1,0 +1,16 @@
+* @asalmenov @ADI-0519 @KasimM05 @IFOLIVEIR @sdsdsdasa
+
+# Knowledge graph / ontology files
+kg/ @asalmenov @ADI-0519 @KasimM05 @IFOLIVEIR
+
+# Prompts documentation
+prompts/ @IFOLIVEIR @sdsdsdasa
+
+# Source code / pipeline
+src/ @asalmenov @ADI-0519 @KasimM05 @IFOLIVEIR @sdsdsdasa
+
+# Tests
+tests/ @asalmenov @ADI-0519 @KasimM05 @IFOLIVEIR @sdsdsdasa
+
+# Repo configuration / workflow
+.github/ @ADI-0519

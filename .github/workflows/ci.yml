@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - hotfix/**
+  pull_request:
+    branches:
+      - main
+      - develop
+      - hotfix/**
+  workflow_dispatch:
+
+jobs:
+  pre-commit:
+    name: ci/precommit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pre-commit
+        run: python -m pip install -U pip pre-commit
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files
+
+  unit-tests:
+    name: ci/unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upgrade pip
+        run: python -m pip install -U pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run unit tests
+        run: pytest -q
+
+  turtle-validation:
+    name: ci/turtle-validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install rdflib
+        run: |
+          python -m pip install -U pip
+          pip install rdflib
+
+      - name: Validate Turtle files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from rdflib import Graph
+
+          ttl_files = list(Path("kg").rglob("*.ttl"))
+          if not ttl_files:
+              print("No Turtle files found in kg/, skipping TTL validation.")
+          else:
+              for ttl_file in ttl_files:
+                  g = Graph()
+                  g.parse(ttl_file, format="turtle")
+                  print(f"Parsed successfully: {ttl_file}")
+          PY
