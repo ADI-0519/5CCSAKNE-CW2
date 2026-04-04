@@ -1,0 +1,8 @@
+requests
+python-dotenv
+rdflib
+pyyaml
+
+# Test dependencies
+pytest
+pre-commit
