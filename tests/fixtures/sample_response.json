@@ -1,0 +1,24 @@
+{
+  "status": "ok",
+  "totalResults": 2,
+  "articles": [
+    {
+      "source": {"id": "techcrunch", "name": "TechCrunch"},
+      "author": "Jane Smith",
+      "title": "OpenAI Announces GPT Model Breakthrough in Machine Learning",
+      "description": "OpenAI Corporation has released a new GPT model demonstrating advances in artificial intelligence and deep learning, unveiled in San Francisco.",
+      "url": "https://techcrunch.com/2024/01/15/openai-gpt-breakthrough",
+      "publishedAt": "2024-01-15T10:00:00Z",
+      "content": "OpenAI Corporation announced the release in San Francisco. CEO Sam Altman presented the deep learning model which advances artificial intelligence research."
+    },
+    {
+      "source": {"id": "bbc-news", "name": "BBC News"},
+      "author": "John Doe",
+      "title": "Robotics and AI Automation Transforming Manufacturing",
+      "description": "Industrial robotics powered by machine learning and AI are reshaping manufacturing in Detroit and across North America.",
+      "url": "https://bbc.com/news/technology/robotics-ai-manufacturing",
+      "publishedAt": "2024-01-15T12:30:00Z",
+      "content": "Companies including Automation Systems Inc are deploying AI-driven robotics in manufacturing facilities across the United States."
+    }
+  ]
+}

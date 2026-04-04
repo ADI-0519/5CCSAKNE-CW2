@@ -2,11 +2,16 @@
 
 import requests
 
+
 def load_data_from_url(url):
-    print("Collecting data...")
-    response = requests.get(url)
-    if response.status_code == 200:
+    print("[COLLECT] Fetching data from URL...")
+    try:
+        response = requests.get(url, timeout=15)
+        response.raise_for_status()
         return response.json()
-    else:
-        print(f"Failed to retrieve data from {url}. Status code: {response.status_code}")
-        return None
+    except requests.exceptions.HTTPError as e:
+        raise RuntimeError(f"[COLLECT] HTTP error fetching {url}: {e}") from e
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"[COLLECT] Request failed for {url}: {e}") from e
+    except ValueError as e:
+        raise RuntimeError(f"[COLLECT] Failed to parse JSON response from {url}: {e}") from e
