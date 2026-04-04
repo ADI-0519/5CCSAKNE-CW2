@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 
 from src.data_collection import load_data_from_url
 from src.data_extraction import extract_relevant_information
@@ -33,9 +33,9 @@ def main():
     rdf_graph = convert_json_to_rdf(normalised_data)
 
     print("[PIPELINE] Stage 5: Save")
-    save_rdf_to_file(rdf_graph, "kg/new_kg.ttl")
+    save_rdf_to_file(rdf_graph, "kg/generated/new_kg.ttl")
 
-    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     save_rdf_to_file(rdf_graph, f"output/{timestamp}_kg.ttl")
 
     print("[PIPELINE] Done.")

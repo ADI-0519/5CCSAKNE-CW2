@@ -40,3 +40,4 @@ data/processed/
 
 # Optional generated KG artifacts only
 kg/generated/
+output/
