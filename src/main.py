@@ -16,7 +16,8 @@ def save_rdf_to_file(rdf_graph, filename):
 
 
 def main():
-    raw_data = load_data_from_url(CONFIG["url1"])
+    raw_data = load_data_from_url(CONFIG["url_headlines"])
+    print(raw_data)
     extracted_data = extract_relevant_information(raw_data)
     normalised_data = normalise_data(extracted_data)
     rdf_graph = convert_json_to_rdf(normalised_data)
