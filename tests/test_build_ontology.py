@@ -1,5 +1,3 @@
-"""Unit tests for the ontology builder."""
-
 from rdflib import RDF, RDFS
 from rdflib.namespace import OWL
 
