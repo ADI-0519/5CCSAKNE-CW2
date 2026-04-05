@@ -84,10 +84,9 @@ class TestNormaliseToRdfContract:
 
     def test_rdf_graph_has_article_nodes(self, normalised, rdf_graph):
         from rdflib import RDF
-        from rdflib.namespace import Namespace
+        from src.json_to_rdf import EX
 
-        SCHEMA_NS = Namespace("http://schema.org/")
-        article_types = list(rdf_graph.subjects(RDF.type, SCHEMA_NS.NewsArticle))
+        article_types = list(rdf_graph.subjects(RDF.type, EX.NewsArticle))
         assert len(article_types) == len(normalised)
 
 

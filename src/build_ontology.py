@@ -10,6 +10,26 @@ CORE = Namespace("http://www.bbc.co.uk/ontologies/coreconcepts/")
 OUTPUT_PATH = Path(__file__).parent.parent / "ontology" / "news_ontology.ttl"
 
 
+def _add_class(graph, class_uri, label, comment, parent=None):
+    graph.add((class_uri, RDF.type, RDFS.Class))
+    if parent is not None:
+        graph.add((class_uri, RDFS.subClassOf, parent))
+    graph.add((class_uri, RDFS.label, Literal(label)))
+    graph.add((class_uri, RDFS.comment, Literal(comment)))
+
+
+def _add_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
+    graph.add((property_uri, RDF.type, RDF.Property))
+    if parent is not None:
+        graph.add((property_uri, RDFS.subPropertyOf, parent))
+    if domain is not None:
+        graph.add((property_uri, RDFS.domain, domain))
+    if range_ is not None:
+        graph.add((property_uri, RDFS.range, range_))
+    graph.add((property_uri, RDFS.label, Literal(label)))
+    graph.add((property_uri, RDFS.comment, Literal(comment)))
+
+
 def build_ontology() -> Graph:
     g = Graph()
     g.bind("news", NEWS)
@@ -34,75 +54,102 @@ def build_ontology() -> Graph:
 
     # ── Classes extending Schema.org ─────────────────────────────────────
 
-    g.add((NEWS.NewsArticle, RDF.type, RDFS.Class))
-    g.add((NEWS.NewsArticle, RDFS.subClassOf, SCHEMA.NewsArticle))
-    g.add((NEWS.NewsArticle, RDFS.label, Literal("News Article")))
-    g.add(
-        (
-            NEWS.NewsArticle,
-            RDFS.comment,
-            Literal("A news article from any source in our knowledge graph."),
-        )
+    _add_class(
+        g,
+        NEWS.NewsArticle,
+        "News Article",
+        "A news article from any source in our knowledge graph.",
+        SCHEMA.NewsArticle,
     )
-
-    g.add((NEWS.BreakingNewsArticle, RDF.type, RDFS.Class))
-    g.add((NEWS.BreakingNewsArticle, RDFS.subClassOf, NEWS.NewsArticle))
-    g.add((NEWS.BreakingNewsArticle, RDFS.label, Literal("Breaking News Article")))
-    g.add(
-        (NEWS.BreakingNewsArticle, RDFS.comment, Literal("An article published as breaking news."))
+    _add_class(
+        g,
+        NEWS.BreakingNewsArticle,
+        "Breaking News Article",
+        "An article published as breaking news.",
+        NEWS.NewsArticle,
     )
-
-    g.add((NEWS.OpinionArticle, RDF.type, RDFS.Class))
-    g.add((NEWS.OpinionArticle, RDFS.subClassOf, NEWS.NewsArticle))
-    g.add((NEWS.OpinionArticle, RDFS.label, Literal("Opinion Article")))
-    g.add((NEWS.OpinionArticle, RDFS.comment, Literal("An editorial or opinion piece.")))
-
-    g.add((NEWS.Journalist, RDF.type, RDFS.Class))
-    g.add((NEWS.Journalist, RDFS.subClassOf, SCHEMA.Person))
-    g.add((NEWS.Journalist, RDFS.label, Literal("Journalist")))
-    g.add((NEWS.Journalist, RDFS.comment, Literal("A person who writes or reports news articles.")))
-
-    g.add((NEWS.NewsOrganisation, RDF.type, RDFS.Class))
-    g.add((NEWS.NewsOrganisation, RDFS.subClassOf, SCHEMA.Organization))
-    g.add((NEWS.NewsOrganisation, RDFS.label, Literal("News Organisation")))
-    g.add((NEWS.NewsOrganisation, RDFS.comment, Literal("A media company or news publisher.")))
-
-    g.add((NEWS.Topic, RDF.type, RDFS.Class))
-    g.add((NEWS.Topic, RDFS.subClassOf, SCHEMA.Thing))
-    g.add((NEWS.Topic, RDFS.label, Literal("Topic")))
-    g.add((NEWS.Topic, RDFS.comment, Literal("A thematic category or subject area.")))
+    _add_class(
+        g,
+        NEWS.OpinionArticle,
+        "Opinion Article",
+        "An editorial or opinion piece.",
+        NEWS.NewsArticle,
+    )
+    _add_class(
+        g,
+        NEWS.Journalist,
+        "Journalist",
+        "A person who writes or reports news articles.",
+        SCHEMA.Person,
+    )
+    _add_class(
+        g,
+        NEWS.Organisation,
+        "Organisation",
+        "An organisation mentioned in current news coverage.",
+        SCHEMA.Organization,
+    )
+    _add_class(
+        g,
+        NEWS.NewsOrganisation,
+        "News Organisation",
+        "A media company or news publisher.",
+        NEWS.Organisation,
+    )
+    _add_class(
+        g,
+        NEWS.Technology,
+        "Technology",
+        "A technology, platform, model, or technical capability mentioned in reporting.",
+        SCHEMA.Thing,
+    )
+    _add_class(
+        g,
+        NEWS.Topic,
+        "Topic",
+        "A thematic category or subject area.",
+        SCHEMA.Thing,
+    )
 
     # ── Classes extending BBC Core Concepts ──────────────────────────────
 
-    g.add((NEWS.NewsEvent, RDF.type, RDFS.Class))
-    g.add((NEWS.NewsEvent, RDFS.subClassOf, CORE.Event))
-    g.add((NEWS.NewsEvent, RDFS.label, Literal("News Event")))
-    g.add((NEWS.NewsEvent, RDFS.comment, Literal("A real-world event covered by news.")))
-
-    g.add((NEWS.PoliticalEvent, RDF.type, RDFS.Class))
-    g.add((NEWS.PoliticalEvent, RDFS.subClassOf, NEWS.NewsEvent))
-    g.add((NEWS.PoliticalEvent, RDFS.label, Literal("Political Event")))
-    g.add(
-        (NEWS.PoliticalEvent, RDFS.comment, Literal("An election, debate, or policy announcement."))
+    _add_class(
+        g,
+        NEWS.NewsEvent,
+        "News Event",
+        "A real-world event covered by news.",
+        CORE.Event,
     )
-
-    g.add((NEWS.NaturalDisasterEvent, RDF.type, RDFS.Class))
-    g.add((NEWS.NaturalDisasterEvent, RDFS.subClassOf, NEWS.NewsEvent))
-    g.add((NEWS.NaturalDisasterEvent, RDFS.label, Literal("Natural Disaster Event")))
-    g.add(
-        (NEWS.NaturalDisasterEvent, RDFS.comment, Literal("An earthquake, flood, wildfire, etc."))
+    _add_class(
+        g,
+        NEWS.PoliticalEvent,
+        "Political Event",
+        "An election, debate, or policy announcement.",
+        NEWS.NewsEvent,
     )
-
-    g.add((NEWS.Location, RDF.type, RDFS.Class))
-    g.add((NEWS.Location, RDFS.subClassOf, CORE.Place))
-    g.add((NEWS.Location, RDFS.label, Literal("Location")))
-    g.add((NEWS.Location, RDFS.comment, Literal("A geographic location mentioned in news.")))
+    _add_class(
+        g,
+        NEWS.NaturalDisasterEvent,
+        "Natural Disaster Event",
+        "An earthquake, flood, wildfire, or similar event.",
+        NEWS.NewsEvent,
+    )
+    _add_class(
+        g,
+        NEWS.Location,
+        "Location",
+        "A geographic location mentioned in news.",
+        CORE.Place,
+    )
 
     # ── New classes ────────────────────────────────────────────────────
 
-    g.add((NEWS.Sentiment, RDF.type, RDFS.Class))
-    g.add((NEWS.Sentiment, RDFS.label, Literal("Sentiment")))
-    g.add((NEWS.Sentiment, RDFS.comment, Literal("Positive, negative, or neutral sentiment.")))
+    _add_class(
+        g,
+        NEWS.Sentiment,
+        "Sentiment",
+        "Positive, negative, or neutral sentiment associated with a news article.",
+    )
 
     for label in ["Positive", "Negative", "Neutral"]:
         g.add((NEWS[label], RDF.type, NEWS.Sentiment))
@@ -110,108 +157,216 @@ def build_ontology() -> Graph:
 
     # ── Properties extending Schema.org ──────────────────────────────────
 
-    g.add((NEWS.hasAuthor, RDF.type, RDF.Property))
-    g.add((NEWS.hasAuthor, RDFS.subPropertyOf, SCHEMA.author))
-    g.add((NEWS.hasAuthor, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.hasAuthor, RDFS.range, NEWS.Journalist))
-    g.add((NEWS.hasAuthor, RDFS.label, Literal("has author")))
-
-    g.add((NEWS.publishedBy, RDF.type, RDF.Property))
-    g.add((NEWS.publishedBy, RDFS.subPropertyOf, SCHEMA.publisher))
-    g.add((NEWS.publishedBy, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.publishedBy, RDFS.range, NEWS.NewsOrganisation))
-    g.add((NEWS.publishedBy, RDFS.label, Literal("published by")))
-
-    g.add((NEWS.hasTopic, RDF.type, RDF.Property))
-    g.add((NEWS.hasTopic, RDFS.subPropertyOf, SCHEMA.about))
-    g.add((NEWS.hasTopic, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.hasTopic, RDFS.range, NEWS.Topic))
-    g.add((NEWS.hasTopic, RDFS.label, Literal("has topic")))
-
-    g.add((NEWS.mentionsPerson, RDF.type, RDF.Property))
-    g.add((NEWS.mentionsPerson, RDFS.subPropertyOf, SCHEMA.mentions))
-    g.add((NEWS.mentionsPerson, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.mentionsPerson, RDFS.range, SCHEMA.Person))
-    g.add((NEWS.mentionsPerson, RDFS.label, Literal("mentions person")))
-
-    g.add((NEWS.mentionsOrganisation, RDF.type, RDF.Property))
-    g.add((NEWS.mentionsOrganisation, RDFS.subPropertyOf, SCHEMA.mentions))
-    g.add((NEWS.mentionsOrganisation, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.mentionsOrganisation, RDFS.range, SCHEMA.Organization))
-    g.add((NEWS.mentionsOrganisation, RDFS.label, Literal("mentions organisation")))
-
-    g.add((NEWS.mentionsLocation, RDF.type, RDF.Property))
-    g.add((NEWS.mentionsLocation, RDFS.subPropertyOf, SCHEMA.mentions))
-    g.add((NEWS.mentionsLocation, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.mentionsLocation, RDFS.range, NEWS.Location))
-    g.add((NEWS.mentionsLocation, RDFS.label, Literal("mentions location")))
-
-    g.add((NEWS.publishedDate, RDF.type, RDF.Property))
-    g.add((NEWS.publishedDate, RDFS.subPropertyOf, SCHEMA.datePublished))
-    g.add((NEWS.publishedDate, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.publishedDate, RDFS.range, XSD.dateTime))
-    g.add((NEWS.publishedDate, RDFS.label, Literal("published date")))
-
-    g.add((NEWS.hasUpdateTimestamp, RDF.type, RDF.Property))
-    g.add((NEWS.hasUpdateTimestamp, RDFS.subPropertyOf, SCHEMA.dateModified))
-    g.add((NEWS.hasUpdateTimestamp, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.hasUpdateTimestamp, RDFS.range, XSD.dateTime))
-    g.add((NEWS.hasUpdateTimestamp, RDFS.label, Literal("update timestamp")))
-
-    g.add((NEWS.hasSection, RDF.type, RDF.Property))
-    g.add((NEWS.hasSection, RDFS.subPropertyOf, SCHEMA.articleSection))
-    g.add((NEWS.hasSection, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.hasSection, RDFS.range, XSD.string))
-    g.add((NEWS.hasSection, RDFS.label, Literal("has section")))
-
-    g.add((NEWS.articleURL, RDF.type, RDF.Property))
-    g.add((NEWS.articleURL, RDFS.subPropertyOf, SCHEMA.url))
-    g.add((NEWS.articleURL, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.articleURL, RDFS.range, XSD.anyURI))
-    g.add((NEWS.articleURL, RDFS.label, Literal("article URL")))
-
-    g.add((NEWS.worksFor, RDF.type, RDF.Property))
-    g.add((NEWS.worksFor, RDFS.subPropertyOf, SCHEMA.worksFor))
-    g.add((NEWS.worksFor, RDFS.domain, NEWS.Journalist))
-    g.add((NEWS.worksFor, RDFS.range, NEWS.NewsOrganisation))
-    g.add((NEWS.worksFor, RDFS.label, Literal("works for")))
+    _add_property(
+        g,
+        NEWS.hasAuthor,
+        "has author",
+        "Links an article to the journalist credited with writing it.",
+        NEWS.NewsArticle,
+        NEWS.Journalist,
+        SCHEMA.author,
+    )
+    _add_property(
+        g,
+        NEWS.publishedBy,
+        "published by",
+        "Links an article to the news organisation that published it.",
+        NEWS.NewsArticle,
+        NEWS.NewsOrganisation,
+        SCHEMA.publisher,
+    )
+    _add_property(
+        g,
+        NEWS.hasTopic,
+        "has topic",
+        "Links an article to a thematic topic discussed in it.",
+        NEWS.NewsArticle,
+        NEWS.Topic,
+        SCHEMA.about,
+    )
+    _add_property(
+        g,
+        NEWS.mentionsPerson,
+        "mentions person",
+        "Links an article to a person mentioned in its content.",
+        NEWS.NewsArticle,
+        SCHEMA.Person,
+        SCHEMA.mentions,
+    )
+    _add_property(
+        g,
+        NEWS.mentionsOrganisation,
+        "mentions organisation",
+        "Links an article to an organisation mentioned in its content.",
+        NEWS.NewsArticle,
+        NEWS.Organisation,
+        SCHEMA.mentions,
+    )
+    _add_property(
+        g,
+        NEWS.mentionsLocation,
+        "mentions location",
+        "Links an article to a location mentioned in its content.",
+        NEWS.NewsArticle,
+        NEWS.Location,
+        SCHEMA.mentions,
+    )
+    _add_property(
+        g,
+        NEWS.mentionsTechnology,
+        "mentions technology",
+        "Links an article to a technology mentioned in its content.",
+        NEWS.NewsArticle,
+        NEWS.Technology,
+        SCHEMA.mentions,
+    )
+    _add_property(
+        g,
+        NEWS.publishedDate,
+        "published date",
+        "The publication date of a news article.",
+        NEWS.NewsArticle,
+        XSD.dateTime,
+        SCHEMA.datePublished,
+    )
+    _add_property(
+        g,
+        NEWS.hasUpdateTimestamp,
+        "update timestamp",
+        "The timestamp of the latest update known for an article.",
+        NEWS.NewsArticle,
+        XSD.dateTime,
+        SCHEMA.dateModified,
+    )
+    _add_property(
+        g,
+        NEWS.hasSection,
+        "has section",
+        "The editorial section assigned to an article.",
+        NEWS.NewsArticle,
+        XSD.string,
+        SCHEMA.articleSection,
+    )
+    _add_property(
+        g,
+        NEWS.articleURL,
+        "article URL",
+        "The canonical URL of a news article.",
+        NEWS.NewsArticle,
+        XSD.anyURI,
+        SCHEMA.url,
+    )
+    _add_property(
+        g,
+        NEWS.worksFor,
+        "works for",
+        "Links a journalist to the news organisation they work for.",
+        NEWS.Journalist,
+        NEWS.NewsOrganisation,
+        SCHEMA.worksFor,
+    )
 
     # ── Properties extending BBC Core Concepts ───────────────────────────
 
-    g.add((NEWS.eventLocation, RDF.type, RDF.Property))
-    g.add((NEWS.eventLocation, RDFS.subPropertyOf, CORE.eventPlace))
-    g.add((NEWS.eventLocation, RDFS.domain, NEWS.NewsEvent))
-    g.add((NEWS.eventLocation, RDFS.range, NEWS.Location))
-    g.add((NEWS.eventLocation, RDFS.label, Literal("event location")))
-
-    g.add((NEWS.eventDate, RDF.type, RDF.Property))
-    g.add((NEWS.eventDate, RDFS.subPropertyOf, CORE.startDate))
-    g.add((NEWS.eventDate, RDFS.domain, NEWS.NewsEvent))
-    g.add((NEWS.eventDate, RDFS.range, XSD.dateTime))
-    g.add((NEWS.eventDate, RDFS.label, Literal("event date")))
-
-    g.add((NEWS.coversEvent, RDF.type, RDF.Property))
-    g.add((NEWS.coversEvent, RDFS.subPropertyOf, CORE.notablyAssociatedWith))
-    g.add((NEWS.coversEvent, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.coversEvent, RDFS.range, NEWS.NewsEvent))
-    g.add((NEWS.coversEvent, RDFS.label, Literal("covers event")))
+    _add_property(
+        g,
+        NEWS.eventLocation,
+        "event location",
+        "Links a news event to the place where it happened.",
+        NEWS.NewsEvent,
+        NEWS.Location,
+        CORE.eventPlace,
+    )
+    _add_property(
+        g,
+        NEWS.eventDate,
+        "event date",
+        "The date on which a news event occurred.",
+        NEWS.NewsEvent,
+        XSD.dateTime,
+        CORE.startDate,
+    )
+    _add_property(
+        g,
+        NEWS.coversEvent,
+        "covers event",
+        "Links a news article to the event it covers.",
+        NEWS.NewsArticle,
+        NEWS.NewsEvent,
+        CORE.notablyAssociatedWith,
+    )
 
     # ── New properties ─────────────────────────────────────────────────
 
-    g.add((NEWS.hasSentiment, RDF.type, RDF.Property))
-    g.add((NEWS.hasSentiment, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.hasSentiment, RDFS.range, NEWS.Sentiment))
-    g.add((NEWS.hasSentiment, RDFS.label, Literal("has sentiment")))
-
-    g.add((NEWS.wordCount, RDF.type, RDF.Property))
-    g.add((NEWS.wordCount, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.wordCount, RDFS.range, XSD.integer))
-    g.add((NEWS.wordCount, RDFS.label, Literal("word count")))
-
-    g.add((NEWS.hasFollowUp, RDF.type, RDF.Property))
-    g.add((NEWS.hasFollowUp, RDFS.domain, NEWS.NewsArticle))
-    g.add((NEWS.hasFollowUp, RDFS.range, NEWS.NewsArticle))
-    g.add((NEWS.hasFollowUp, RDFS.label, Literal("has follow-up")))
+    _add_property(
+        g,
+        NEWS.hasSentiment,
+        "has sentiment",
+        "Links an article to its sentiment classification.",
+        NEWS.NewsArticle,
+        NEWS.Sentiment,
+    )
+    _add_property(
+        g,
+        NEWS.wordCount,
+        "word count",
+        "The number of words available for an article representation.",
+        NEWS.NewsArticle,
+        XSD.integer,
+    )
+    _add_property(
+        g,
+        NEWS.hasFollowUp,
+        "has follow-up",
+        "Links an article to a subsequent follow-up article.",
+        NEWS.NewsArticle,
+        NEWS.NewsArticle,
+    )
+    _add_property(
+        g,
+        NEWS.usesTechnology,
+        "uses technology",
+        "Links an organisation to a technology it is reported as using.",
+        NEWS.Organisation,
+        NEWS.Technology,
+    )
+    _add_property(
+        g,
+        NEWS.locatedIn,
+        "located in",
+        "Links an entity or event to a location.",
+        SCHEMA.Thing,
+        NEWS.Location,
+    )
+    _add_property(
+        g,
+        NEWS.developedBy,
+        "developed by",
+        "Links a technology or artefact to its developer.",
+        NEWS.Technology,
+        NEWS.Organisation,
+        SCHEMA.creator,
+    )
+    _add_property(
+        g,
+        NEWS.announced,
+        "announced",
+        "Links an organisation or person to something they announced.",
+    )
+    _add_property(
+        g,
+        NEWS.involvedIn,
+        "involved in",
+        "Links an entity to an event it is involved in.",
+        parent=CORE.notablyAssociatedWith,
+    )
+    _add_property(
+        g,
+        NEWS.partOf,
+        "part of",
+        "Links a thing to a larger thing it is part of.",
+        parent=SCHEMA.isPartOf,
+    )
 
     return g
 

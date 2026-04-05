@@ -1,0 +1,251 @@
+PREFIX news: <http://example.org/news#>
+PREFIX schema: <https://schema.org/>
+
+# CQ01: Which articles mention a target technology such as AI or Robotics?
+SELECT ?article ?headline
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:mentionsTechnology ?technology .
+  ?technology schema:name "AI" .
+}
+ORDER BY ?headline
+
+
+# CQ02: Which organisations are mentioned in articles about a target technology?
+SELECT DISTINCT ?organisation ?organisationName
+WHERE {
+  ?article a news:NewsArticle ;
+           news:mentionsTechnology ?technology ;
+           news:mentionsOrganisation ?organisation .
+  ?technology schema:name "AI" .
+  ?organisation schema:name ?organisationName .
+}
+ORDER BY ?organisationName
+
+
+# CQ03: Which journalists authored articles that mention a target organisation?
+SELECT DISTINCT ?journalist ?journalistName ?headline
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:hasAuthor ?journalist ;
+           news:mentionsOrganisation ?organisation .
+  ?journalist schema:name ?journalistName .
+  ?organisation schema:name "OpenAI Corporation" .
+}
+ORDER BY ?journalistName ?headline
+
+
+# CQ04: Which publishers have published articles about a target topic?
+SELECT DISTINCT ?publisher ?publisherName
+WHERE {
+  ?article a news:NewsArticle ;
+           news:publishedBy ?publisher ;
+           news:hasTopic ?topic .
+  ?publisher schema:name ?publisherName .
+  ?topic schema:name "research" .
+}
+ORDER BY ?publisherName
+
+
+# CQ05: Which locations are mentioned in articles about a target technology?
+SELECT DISTINCT ?location ?locationName
+WHERE {
+  ?article a news:NewsArticle ;
+           news:mentionsTechnology ?technology ;
+           news:mentionsLocation ?location .
+  ?technology schema:name "Robotics" .
+  ?location schema:name ?locationName .
+}
+ORDER BY ?locationName
+
+
+# CQ06: Which technologies are associated with a target organisation through news:usesTechnology?
+SELECT DISTINCT ?technology ?technologyName
+WHERE {
+  ?organisation a news:Organisation ;
+                schema:name "OpenAI Corporation" ;
+                news:usesTechnology ?technology .
+  ?technology schema:name ?technologyName .
+}
+ORDER BY ?technologyName
+
+
+# CQ07: Which articles mention the same organisation together with multiple technologies?
+SELECT ?article ?headline (COUNT(DISTINCT ?technology) AS ?technologyCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:mentionsOrganisation ?organisation ;
+           news:mentionsTechnology ?technology .
+  ?organisation schema:name "OpenAI Corporation" .
+}
+GROUP BY ?article ?headline
+HAVING (COUNT(DISTINCT ?technology) > 1)
+ORDER BY DESC(?technologyCount) ?headline
+
+
+# CQ08: Which people are mentioned most often in articles about a target topic?
+SELECT ?person ?personName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:hasTopic ?topic ;
+           news:mentionsPerson ?person .
+  ?topic schema:name "research" .
+  ?person schema:name ?personName .
+}
+GROUP BY ?person ?personName
+ORDER BY DESC(?articleCount) ?personName
+
+
+# CQ09: Which publishers cover the widest range of topics?
+SELECT ?publisher ?publisherName (COUNT(DISTINCT ?topic) AS ?topicCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:publishedBy ?publisher ;
+           news:hasTopic ?topic .
+  ?publisher schema:name ?publisherName .
+}
+GROUP BY ?publisher ?publisherName
+ORDER BY DESC(?topicCount) ?publisherName
+
+
+# CQ10: Which topics co-occur most often with a target technology?
+SELECT ?topic ?topicName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:mentionsTechnology ?technology ;
+           news:hasTopic ?topic .
+  ?technology schema:name "AI" .
+  ?topic schema:name ?topicName .
+}
+GROUP BY ?topic ?topicName
+ORDER BY DESC(?articleCount) ?topicName
+
+
+# CQ11: Which articles mention both a target technology and a target location?
+SELECT DISTINCT ?article ?headline
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:mentionsTechnology ?technology ;
+           news:mentionsLocation ?location .
+  ?technology schema:name "AI" .
+  ?location schema:name "San Francisco" .
+}
+ORDER BY ?headline
+
+
+# CQ12: Which publishers mention the same organisation across multiple articles?
+SELECT ?publisher ?publisherName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:publishedBy ?publisher ;
+           news:mentionsOrganisation ?organisation .
+  ?publisher schema:name ?publisherName .
+  ?organisation schema:name "OpenAI Corporation" .
+}
+GROUP BY ?publisher ?publisherName
+HAVING (COUNT(DISTINCT ?article) > 1)
+ORDER BY DESC(?articleCount) ?publisherName
+
+
+# CQ13: Which journalists write most often about a target technology?
+SELECT ?journalist ?journalistName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:hasAuthor ?journalist ;
+           news:mentionsTechnology ?technology .
+  ?journalist schema:name ?journalistName .
+  ?technology schema:name "AI" .
+}
+GROUP BY ?journalist ?journalistName
+ORDER BY DESC(?articleCount) ?journalistName
+
+
+# CQ14: Which locations are most frequently discussed within a target topic?
+SELECT ?location ?locationName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:hasTopic ?topic ;
+           news:mentionsLocation ?location .
+  ?topic schema:name "research" .
+  ?location schema:name ?locationName .
+}
+GROUP BY ?location ?locationName
+ORDER BY DESC(?articleCount) ?locationName
+
+
+# CQ15: Which organisations appear in articles published by more than one publisher?
+SELECT ?organisation ?organisationName (COUNT(DISTINCT ?publisher) AS ?publisherCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:publishedBy ?publisher ;
+           news:mentionsOrganisation ?organisation .
+  ?organisation schema:name ?organisationName .
+}
+GROUP BY ?organisation ?organisationName
+HAVING (COUNT(DISTINCT ?publisher) > 1)
+ORDER BY DESC(?publisherCount) ?organisationName
+
+
+# CQ16: Which technologies appear together in the same article?
+SELECT DISTINCT ?article ?headline ?technologyOneName ?technologyTwoName
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:mentionsTechnology ?technologyOne, ?technologyTwo .
+  ?technologyOne schema:name ?technologyOneName .
+  ?technologyTwo schema:name ?technologyTwoName .
+  FILTER(STR(?technologyOne) < STR(?technologyTwo))
+}
+ORDER BY ?headline ?technologyOneName ?technologyTwoName
+
+
+# CQ17: Which people and organisations co-occur in the same articles?
+SELECT DISTINCT ?article ?headline ?personName ?organisationName
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:mentionsPerson ?person ;
+           news:mentionsOrganisation ?organisation .
+  ?person schema:name ?personName .
+  ?organisation schema:name ?organisationName .
+}
+ORDER BY ?headline ?personName ?organisationName
+
+
+# CQ18: Which articles are tagged with more than one topic?
+SELECT ?article ?headline (COUNT(DISTINCT ?topic) AS ?topicCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:hasTopic ?topic .
+}
+GROUP BY ?article ?headline
+HAVING (COUNT(DISTINCT ?topic) > 1)
+ORDER BY DESC(?topicCount) ?headline
+
+
+# CQ19: Which publishers mention the highest number of unique organisations?
+SELECT ?publisher ?publisherName (COUNT(DISTINCT ?organisation) AS ?organisationCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:publishedBy ?publisher ;
+           news:mentionsOrganisation ?organisation .
+  ?publisher schema:name ?publisherName .
+}
+GROUP BY ?publisher ?publisherName
+ORDER BY DESC(?organisationCount) ?publisherName
+
+
+# CQ20: Which topics have the highest number of articles overall?
+SELECT ?topic ?topicName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:hasTopic ?topic .
+  ?topic schema:name ?topicName .
+}
+GROUP BY ?topic ?topicName
+ORDER BY DESC(?articleCount) ?topicName

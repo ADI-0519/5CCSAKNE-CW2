@@ -79,7 +79,7 @@ def _extract_locations(text):
     return sorted(found)
 
 
-def _generate_relations(article_id, entities):
+def _generate_relations(article_id, entities, author=None, source_name=None):
     relations = []
 
     # Article mentions every detected entity
@@ -90,9 +90,14 @@ def _generate_relations(article_id, entities):
     for person in entities["people"]:
         relations.append({"subject": article_id, "predicate": "mentions", "object": person})
     for loc in entities["locations"]:
-        relations.append({"subject": article_id, "predicate": "located_in", "object": loc})
+        relations.append({"subject": article_id, "predicate": "mentions", "object": loc})
     for topic in entities["topics"]:
         relations.append({"subject": article_id, "predicate": "mentions", "object": topic})
+
+    if author:
+        relations.append({"subject": article_id, "predicate": "authored_by", "object": author})
+    if source_name:
+        relations.append({"subject": article_id, "predicate": "published_by", "object": source_name})
 
     # Co-occurrence signal: an org that appears alongside a technology likely uses it
     for org in entities["organizations"]:
@@ -118,6 +123,8 @@ def extract_relevant_information(raw_data):
             url = article.get("url") or ""
             title = article.get("title") or ""
             published_at = article.get("publishedAt") or ""
+            source_name = (article.get("source") or {}).get("name") or ""
+            author = article.get("author")
 
             # Concatenate all text for entity detection
             full_text = " ".join(
@@ -141,7 +148,7 @@ def extract_relevant_information(raw_data):
                 "topics": _extract_topics(full_text),
             }
 
-            relations = _generate_relations(article_id, entities)
+            relations = _generate_relations(article_id, entities, author=author, source_name=source_name)
 
             extracted.append(
                 {
@@ -149,8 +156,8 @@ def extract_relevant_information(raw_data):
                     "title": title,
                     "url": url,
                     "published_at": published_at,
-                    "source_name": (article.get("source") or {}).get("name") or "",
-                    "author": article.get("author"),
+                    "source_name": source_name,
+                    "author": author,
                     "summary": article.get("description") or article.get("content"),
                     "entities": entities,
                     "relations": relations,
