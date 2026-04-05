@@ -1,6 +1,7 @@
 from pathlib import Path
-from rdflib import Graph, Namespace, Literal, URIRef
-from rdflib.namespace import RDF, RDFS, OWL, XSD
+
+from rdflib import Graph, Literal, Namespace
+from rdflib.namespace import OWL, RDF, RDFS, XSD
 
 NEWS = Namespace("http://example.org/news#")
 SCHEMA = Namespace("https://schema.org/")
@@ -19,23 +20,37 @@ def build_ontology() -> Graph:
 
     g.add((NEWS[""], RDF.type, OWL.Ontology))
     g.add((NEWS[""], RDFS.label, Literal("Current News Ontology")))
-    g.add((NEWS[""], RDFS.comment, Literal(
-        "An ontology for representing current news articles, events, "
-        "journalists, organisations, and their relationships. "
-        "Extends Schema.org and the BBC Core Concepts Ontology."
-    )))
+    g.add(
+        (
+            NEWS[""],
+            RDFS.comment,
+            Literal(
+                "An ontology for representing current news articles, events, "
+                "journalists, organisations, and their relationships. "
+                "Extends Schema.org and the BBC Core Concepts Ontology."
+            ),
+        )
+    )
 
     # ── Classes extending Schema.org ─────────────────────────────────────
 
     g.add((NEWS.NewsArticle, RDF.type, RDFS.Class))
     g.add((NEWS.NewsArticle, RDFS.subClassOf, SCHEMA.NewsArticle))
     g.add((NEWS.NewsArticle, RDFS.label, Literal("News Article")))
-    g.add((NEWS.NewsArticle, RDFS.comment, Literal("A news article from any source in our knowledge graph.")))
+    g.add(
+        (
+            NEWS.NewsArticle,
+            RDFS.comment,
+            Literal("A news article from any source in our knowledge graph."),
+        )
+    )
 
     g.add((NEWS.BreakingNewsArticle, RDF.type, RDFS.Class))
     g.add((NEWS.BreakingNewsArticle, RDFS.subClassOf, NEWS.NewsArticle))
     g.add((NEWS.BreakingNewsArticle, RDFS.label, Literal("Breaking News Article")))
-    g.add((NEWS.BreakingNewsArticle, RDFS.comment, Literal("An article published as breaking news.")))
+    g.add(
+        (NEWS.BreakingNewsArticle, RDFS.comment, Literal("An article published as breaking news."))
+    )
 
     g.add((NEWS.OpinionArticle, RDF.type, RDFS.Class))
     g.add((NEWS.OpinionArticle, RDFS.subClassOf, NEWS.NewsArticle))
@@ -67,12 +82,16 @@ def build_ontology() -> Graph:
     g.add((NEWS.PoliticalEvent, RDF.type, RDFS.Class))
     g.add((NEWS.PoliticalEvent, RDFS.subClassOf, NEWS.NewsEvent))
     g.add((NEWS.PoliticalEvent, RDFS.label, Literal("Political Event")))
-    g.add((NEWS.PoliticalEvent, RDFS.comment, Literal("An election, debate, or policy announcement.")))
+    g.add(
+        (NEWS.PoliticalEvent, RDFS.comment, Literal("An election, debate, or policy announcement."))
+    )
 
     g.add((NEWS.NaturalDisasterEvent, RDF.type, RDFS.Class))
     g.add((NEWS.NaturalDisasterEvent, RDFS.subClassOf, NEWS.NewsEvent))
     g.add((NEWS.NaturalDisasterEvent, RDFS.label, Literal("Natural Disaster Event")))
-    g.add((NEWS.NaturalDisasterEvent, RDFS.comment, Literal("An earthquake, flood, wildfire, etc.")))
+    g.add(
+        (NEWS.NaturalDisasterEvent, RDFS.comment, Literal("An earthquake, flood, wildfire, etc."))
+    )
 
     g.add((NEWS.Location, RDF.type, RDFS.Class))
     g.add((NEWS.Location, RDFS.subClassOf, CORE.Place))
@@ -214,7 +233,9 @@ def main():
     print(f"  Classes:          {len(classes)}")
     print(f"  Properties:       {len(properties)}")
     print(f"  Total triples:    {len(g)}")
-    print(f"\n  Schema.org — {len(schema_subclasses)} subclasses, {len(schema_subprops)} subproperties")
+    print(
+        f"\n  Schema.org — {len(schema_subclasses)} subclasses, {len(schema_subprops)} subproperties"
+    )
     print(f"  BBC Core   — {len(bbc_subclasses)} subclasses, {len(bbc_subprops)} subproperties")
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
