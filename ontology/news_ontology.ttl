@@ -1,0 +1,174 @@
+@prefix core: <http://www.bbc.co.uk/ontologies/coreconcepts/> .
+@prefix news: <http://example.org/news#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+news:BreakingNewsArticle a rdfs:Class ;
+    rdfs:label "Breaking News Article" ;
+    rdfs:comment "An article published as breaking news." ;
+    rdfs:subClassOf news:NewsArticle .
+
+news:Journalist a rdfs:Class ;
+    rdfs:label "Journalist" ;
+    rdfs:comment "A person who writes or reports news articles." ;
+    rdfs:subClassOf schema:Person .
+
+news:Location a rdfs:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A geographic location mentioned in news." ;
+    rdfs:subClassOf core:Place .
+
+news:NaturalDisasterEvent a rdfs:Class ;
+    rdfs:label "Natural Disaster Event" ;
+    rdfs:comment "An earthquake, flood, wildfire, etc." ;
+    rdfs:subClassOf news:NewsEvent .
+
+news:NewsArticle a rdfs:Class ;
+    rdfs:label "News Article" ;
+    rdfs:comment "A news article from any source in our knowledge graph." ;
+    rdfs:subClassOf schema:NewsArticle .
+
+news:NewsEvent a rdfs:Class ;
+    rdfs:label "News Event" ;
+    rdfs:comment "A real-world event covered by news." ;
+    rdfs:subClassOf core:Event .
+
+news:NewsOrganisation a rdfs:Class ;
+    rdfs:label "News Organisation" ;
+    rdfs:comment "A media company or news publisher." ;
+    rdfs:subClassOf schema:Organization .
+
+news:OpinionArticle a rdfs:Class ;
+    rdfs:label "Opinion Article" ;
+    rdfs:comment "An editorial or opinion piece." ;
+    rdfs:subClassOf news:NewsArticle .
+
+news:PoliticalEvent a rdfs:Class ;
+    rdfs:label "Political Event" ;
+    rdfs:comment "An election, debate, or policy announcement." ;
+    rdfs:subClassOf news:NewsEvent .
+
+news:Sentiment a rdfs:Class ;
+    rdfs:label "Sentiment" ;
+    rdfs:comment "Positive, negative, or neutral sentiment." .
+
+news:Topic a rdfs:Class ;
+    rdfs:label "Topic" ;
+    rdfs:comment "A thematic category or subject area." ;
+    rdfs:subClassOf schema:Thing .
+
+news: a owl:Ontology ;
+    rdfs:label "Current News Ontology" ;
+    rdfs:comment "An ontology for representing current news articles, events, journalists, organisations, and their relationships. Extends Schema.org and the BBC Core Concepts Ontology." .
+
+news:Negative a news:Sentiment ;
+    rdfs:label "Negative" .
+
+news:Neutral a news:Sentiment ;
+    rdfs:label "Neutral" .
+
+news:Positive a news:Sentiment ;
+    rdfs:label "Positive" .
+
+news:articleURL a rdf:Property ;
+    rdfs:label "article URL" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range xsd:anyURI ;
+    rdfs:subPropertyOf schema:url .
+
+news:coversEvent a rdf:Property ;
+    rdfs:label "covers event" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:NewsEvent ;
+    rdfs:subPropertyOf core:notablyAssociatedWith .
+
+news:eventDate a rdf:Property ;
+    rdfs:label "event date" ;
+    rdfs:domain news:NewsEvent ;
+    rdfs:range xsd:dateTime ;
+    rdfs:subPropertyOf core:startDate .
+
+news:eventLocation a rdf:Property ;
+    rdfs:label "event location" ;
+    rdfs:domain news:NewsEvent ;
+    rdfs:range news:Location ;
+    rdfs:subPropertyOf core:eventPlace .
+
+news:hasAuthor a rdf:Property ;
+    rdfs:label "has author" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:Journalist ;
+    rdfs:subPropertyOf schema:author .
+
+news:hasFollowUp a rdf:Property ;
+    rdfs:label "has follow-up" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:NewsArticle .
+
+news:hasSection a rdf:Property ;
+    rdfs:label "has section" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf schema:articleSection .
+
+news:hasSentiment a rdf:Property ;
+    rdfs:label "has sentiment" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:Sentiment .
+
+news:hasTopic a rdf:Property ;
+    rdfs:label "has topic" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:Topic ;
+    rdfs:subPropertyOf schema:about .
+
+news:hasUpdateTimestamp a rdf:Property ;
+    rdfs:label "update timestamp" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range xsd:dateTime ;
+    rdfs:subPropertyOf schema:dateModified .
+
+news:mentionsLocation a rdf:Property ;
+    rdfs:label "mentions location" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:Location ;
+    rdfs:subPropertyOf schema:mentions .
+
+news:mentionsOrganisation a rdf:Property ;
+    rdfs:label "mentions organisation" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range schema:Organization ;
+    rdfs:subPropertyOf schema:mentions .
+
+news:mentionsPerson a rdf:Property ;
+    rdfs:label "mentions person" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range schema:Person ;
+    rdfs:subPropertyOf schema:mentions .
+
+news:publishedBy a rdf:Property ;
+    rdfs:label "published by" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range news:NewsOrganisation ;
+    rdfs:subPropertyOf schema:publisher .
+
+news:publishedDate a rdf:Property ;
+    rdfs:label "published date" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range xsd:dateTime ;
+    rdfs:subPropertyOf schema:datePublished .
+
+news:wordCount a rdf:Property ;
+    rdfs:label "word count" ;
+    rdfs:domain news:NewsArticle ;
+    rdfs:range xsd:integer .
+
+news:worksFor a rdf:Property ;
+    rdfs:label "works for" ;
+    rdfs:domain news:Journalist ;
+    rdfs:range news:NewsOrganisation ;
+    rdfs:subPropertyOf schema:worksFor .
+
