@@ -1,243 +1,435 @@
 import os
+from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ---------------------------------------------------------------------------
-# Fixed coursework scope
+# Project scope
 # ---------------------------------------------------------------------------
 
-FIXED_SCOPE = (
-    "A knowledge graph for current UK politics and policy news, using articles "
-    "published between March 1, 2026 and April 6, 2026 from GuardianAPI and "
-    "NewsAPI, with OpenAI used for extraction, classification, and completion."
+PROJECT_SCOPE = (
+    "Current UK politics and policy news from March 6, 2026 to April 6, 2026, "
+    "collected from GuardianAPI and NewsAPI, with OpenAI used for extraction, "
+    "classification, and completion."
 )
 
-DATE_WINDOW_START = "2026-03-01"
-DATE_WINDOW_END = "2026-04-06"
+DATE_START = "2026-03-06"
+DATE_END = "2026-04-06"
 
-UK_POLITICS_QUERY = (
-    '"UK government" OR Westminster OR Parliament OR Labour OR Conservative '
-    'OR budget OR regulation OR policy OR minister OR "public affairs"'
-)
+# ---------------------------------------------------------------------------
+# Source configuration
+# ---------------------------------------------------------------------------
 
-POLITICAL_PERSON_TITLES = {
-    "chancellor",
-    "councillor",
-    "deputy prime minister",
-    "foreign secretary",
-    "home secretary",
-    "lord",
-    "mayor",
-    "minister",
-    "mp",
-    "prime minister",
-    "secretary",
-    "shadow chancellor",
-    "shadow minister",
-    "sir",
-}
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-POLITICAL_PARTIES = {
-    "Conservative Party",
-    "Green Party",
-    "Labour Party",
-    "Liberal Democrats",
-    "Plaid Cymru",
-    "Reform UK",
-    "Scottish National Party",
-}
+NEWS_API_BASE = "https://newsapi.org/v2"
+GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
+NEWS_API_PAGE_SIZE = 100
+GUARDIAN_PAGE_SIZE = 200
+GUARDIAN_SHOW_TAGS = ["keyword", "tone", "contributor"]
 
-GOVERNMENT_BODIES = {
-    "Cabinet Office",
-    "Department for Education",
-    "Department for Transport",
-    "HM Treasury",
-    "House of Commons",
-    "House of Lords",
-    "No 10",
+RAW_DATA_DIR = "data/raw"
+PROCESSED_DATA_DIR = "data/processed"
+GENERATED_KG_DIR = "kg/generated"
+
+NEWS_QUERY_TERMS = [
+    "UK politics",
+    "UK government",
     "Parliament",
-    "UK Government",
-    "Westminster",
-}
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Home Office",
+    "Treasury",
+    "budget",
+    "tax",
+    "public spending",
+    "immigration",
+    "NHS",
+    "policy",
+]
 
+GUARDIAN_SECTIONS = ["politics", "uk-news", "commentisfree"]
+GUARDIAN_TAGS = [
+    "politics/politics",
+    "politics/uk",
+    "business/economics",
+    "society/health",
+]
+
+GUARDIAN_FIELDS = [
+    "headline",
+    "trailText",
+    "bodyText",
+    "byline",
+    "lastModified",
+    "wordcount",
+]
+
+# ---------------------------------------------------------------------------
+# Extraction dictionaries
+# ---------------------------------------------------------------------------
+
+# Kept for backwards compatibility with the current prototype extraction code.
+# The current branch still uses a technology-oriented extractor in places, even
+# though the final project focus is UK politics and policy news.
 TECHNOLOGY_KEYWORDS = [
     "AI",
     "Artificial Intelligence",
     "Machine Learning",
     "Deep Learning",
-    "Neural Network",
-    "Natural Language Processing",
-    "NLP",
-    "Computer Vision",
-    "Robotics",
     "Automation",
-    "Cloud Computing",
-    "Blockchain",
-    "Cryptocurrency",
-    "Bitcoin",
-    "Ethereum",
-    "Quantum Computing",
-    "Cybersecurity",
-    "Data Science",
-    "Big Data",
-    "Internet of Things",
-    "IoT",
-    "5G",
-    "Augmented Reality",
-    "Virtual Reality",
-    "Mixed Reality",
-    "Edge Computing",
-    "Kubernetes",
-    "Docker",
-    "Microservices",
     "Large Language Model",
     "LLM",
     "Generative AI",
     "GPT",
-    "ChatGPT",
-    "Transformer",
-    "BERT",
-    "Diffusion Model",
-    "Autonomous Vehicle",
-    "Self-Driving",
-    "Semiconductor",
-    "GPU",
-    "TPU",
 ]
 
 TOPIC_KEYWORDS = [
-    "budget",
-    "climate",
-    "economy",
-    "education",
-    "election",
-    "energy",
-    "finance",
-    "funding",
-    "government",
-    "healthcare",
-    "housing",
-    "innovation",
-    "investment",
-    "migration",
-    "parliament",
-    "policy",
     "politics",
-    "public services",
-    "regulation",
-    "research",
-    "security",
+    "policy",
+    "government",
+    "parliament",
+    "election",
+    "leadership",
+    "budget",
     "tax",
-    "transport",
-    "welfare",
+    "taxation",
+    "public spending",
+    "economy",
+    "economic policy",
+    "immigration",
+    "healthcare",
+    "nhs",
+    "education",
+    "energy",
+    "defense",
+    "housing",
+    "cost of living",
+    "regulation",
 ]
+
+POLITICIAN_NAMES = [
+    "Keir Starmer",
+    "Rishi Sunak",
+    "Kemi Badenoch",
+    "Angela Rayner",
+    "Rachel Reeves",
+    "Wes Streeting",
+    "Yvette Cooper",
+    "David Lammy",
+    "Nigel Farage",
+    "Ed Davey",
+    "John Swinney",
+    "Eluned Morgan",
+    "Michelle O'Neill",
+]
+
+POLITICAL_PARTY_NAMES = [
+    "Labour",
+    "Labour Party",
+    "Conservative",
+    "Conservative Party",
+    "Liberal Democrats",
+    "Green Party",
+    "Reform UK",
+    "Scottish National Party",
+    "SNP",
+    "Plaid Cymru",
+    "Democratic Unionist Party",
+    "DUP",
+    "Sinn Fein",
+    "Sinn Féin",
+]
+
+GOVERNMENT_BODY_NAMES = [
+    "HM Treasury",
+    "Treasury",
+    "Home Office",
+    "Cabinet Office",
+    "Department of Health and Social Care",
+    "Department for Education",
+    "Department for Work and Pensions",
+    "Ministry of Defence",
+    "Foreign Office",
+    "Downing Street",
+    "No 10",
+    "NHS England",
+    "House of Commons",
+    "House of Lords",
+    "Parliament",
+]
+
+UK_LOCATION_NAMES = [
+    "London",
+    "Westminster",
+    "Manchester",
+    "Birmingham",
+    "Liverpool",
+    "Leeds",
+    "Bristol",
+    "Edinburgh",
+    "Glasgow",
+    "Cardiff",
+    "Belfast",
+    "England",
+    "Scotland",
+    "Wales",
+    "Northern Ireland",
+    "United Kingdom",
+]
+
+TOPIC_GROUPS = {
+    "Taxation": ["tax", "taxation", "fiscal", "levy"],
+    "Public Spending": ["public spending", "spending review", "spending cuts", "funding"],
+    "Economic Policy": ["economy", "economic policy", "growth", "inflation", "interest rates"],
+    "Immigration": ["immigration", "asylum", "migrant", "border"],
+    "Healthcare": ["nhs", "healthcare", "hospital", "waiting list"],
+    "Education": ["education", "school", "university", "teachers"],
+    "Energy": ["energy", "net zero", "oil", "gas", "renewable"],
+    "Housing": ["housing", "rent", "homes", "planning"],
+    "Defence": ["defence", "defense", "armed forces", "military"],
+    "Election": ["election", "ballot", "campaign", "polling"],
+    "Parliament": ["parliament", "commons", "lords", "mp", "mps"],
+    "Leadership": ["leadership", "cabinet reshuffle", "party leader"],
+    "Government Policy": ["policy", "bill", "legislation", "proposal", "white paper"],
+}
+
+POLITICAL_EVENT_HINTS = [
+    "election",
+    "leadership contest",
+    "parliamentary vote",
+    "commons vote",
+    "lords vote",
+    "policy announcement",
+    "cabinet reshuffle",
+    "bill debate",
+    "spring statement",
+]
+
+ECONOMIC_EVENT_HINTS = [
+    "budget",
+    "spring statement",
+    "autumn statement",
+    "spending review",
+    "fiscal statement",
+    "interest rate decision",
+]
+
+POSITIVE_SENTIMENT_TERMS = [
+    "boost",
+    "success",
+    "welcome",
+    "improve",
+    "growth",
+    "progress",
+    "confidence",
+    "backing",
+]
+
+NEGATIVE_SENTIMENT_TERMS = [
+    "crisis",
+    "criticised",
+    "criticized",
+    "concern",
+    "failure",
+    "backlash",
+    "warning",
+    "decline",
+    "pressure",
+    "row",
+]
+
+OPINION_SECTION_NAMES = {"comment is free", "opinion", "comment"}
+BREAKING_NEWS_HINTS = ["breaking", "live", "updates", "developing", "just in"]
 
 CONTROLLED_PREDICATES = {
     "mentions",
-    "developed_by",
-    "announced",
     "located_in",
     "authored_by",
     "published_by",
-    "uses_technology",
     "involved_in",
-    "part_of",
 }
 
 ENTITY_STOPLIST = {
-    "April",
-    "Britain",
-    "February",
+    "The",
+    "This",
+    "That",
+    "These",
+    "Those",
     "It",
     "Its",
-    "January",
-    "June",
-    "Last",
-    "Monday",
+    "He",
+    "She",
+    "They",
+    "We",
+    "You",
+    "I",
+    "Me",
+    "Us",
+    "Them",
+    "New",
     "More",
     "Most",
-    "New",
-    "North America",
+    "First",
+    "Last",
+    "Next",
     "Other",
-    "Prime Minister",
-    "Saturday",
-    "September",
     "Some",
-    "South America",
-    "Sunday",
-    "The",
-    "Those",
+    "Monday",
     "Tuesday",
-    "This",
-    "Thursday",
-    "United States",
-    "UK",
-    "United Kingdom",
     "Wednesday",
-    "Westminster",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "United Kingdom",
+    "Great Britain",
 }
 
 PERSON_STOPLIST = {
-    "Capitol Hill",
-    "Federal Reserve",
-    "Hong Kong",
-    "House of Commons",
-    "House of Lords",
-    "Labour Party",
-    "Liberal Democrats",
-    "Los Angeles",
-    "Middle East",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New Orleans",
-    "New York",
-    "North America",
-    "North Carolina",
-    "North Dakota",
-    "Prime Minister",
-    "Puerto Rico",
-    "Reform UK",
-    "Rhode Island",
-    "Scottish National Party",
-    "Saudi Arabia",
-    "Silicon Valley",
-    "South America",
-    "South Carolina",
-    "South Dakota",
-    "Supreme Court",
-    "UK Government",
     "United Kingdom",
-    "United States",
-    "Wall Street",
-    "Westminster",
-    "White House",
-    "World Cup",
+    "Prime Minister",
+    "Labour Party",
+    "Conservative Party",
+    "House Commons",
+    "House Lords",
+    "Downing Street",
+    "Cabinet Office",
+    "New Labour",
+    "Northern Ireland",
+    "Westminster Abbey",
 }
 
+
+def build_news_query_string():
+    return " OR ".join(NEWS_QUERY_TERMS)
+
+
+def build_newsapi_everything_url():
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{NEWS_API_BASE}/everything?"
+        f"q={query}&"
+        f"language=en&"
+        f"sortBy=publishedAt&"
+        f"pageSize={NEWS_API_PAGE_SIZE}&"
+        f"from={DATE_START}&"
+        f"to={DATE_END}&"
+        f"apiKey={NEWS_API_KEY}"
+    )
+
+
+def build_newsapi_page_url(page):
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{NEWS_API_BASE}/everything?"
+        f"q={query}&"
+        f"language=en&"
+        f"sortBy=publishedAt&"
+        f"pageSize={NEWS_API_PAGE_SIZE}&"
+        f"page={page}&"
+        f"from={DATE_START}&"
+        f"to={DATE_END}&"
+        f"apiKey={NEWS_API_KEY}"
+    )
+
+
+def build_guardian_url():
+    section_filter = "|".join(GUARDIAN_SECTIONS)
+    fields = ",".join(GUARDIAN_FIELDS)
+    tag_filter = "|".join(GUARDIAN_TAGS)
+    show_tags = ",".join(GUARDIAN_SHOW_TAGS)
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{GUARDIAN_API_BASE}?"
+        f"q={query}&"
+        f"from-date={DATE_START}&"
+        f"to-date={DATE_END}&"
+        f"section={section_filter}&"
+        f"tag={tag_filter}&"
+        f"show-fields={fields}&"
+        f"show-tags={show_tags}&"
+        f"page-size={GUARDIAN_PAGE_SIZE}&"
+        f"api-key={GUARDIAN_API_KEY}"
+    )
+
+
+def build_guardian_page_url(page):
+    section_filter = "|".join(GUARDIAN_SECTIONS)
+    fields = ",".join(GUARDIAN_FIELDS)
+    tag_filter = "|".join(GUARDIAN_TAGS)
+    show_tags = ",".join(GUARDIAN_SHOW_TAGS)
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{GUARDIAN_API_BASE}?"
+        f"q={query}&"
+        f"from-date={DATE_START}&"
+        f"to-date={DATE_END}&"
+        f"section={section_filter}&"
+        f"tag={tag_filter}&"
+        f"show-fields={fields}&"
+        f"show-tags={show_tags}&"
+        f"page-size={GUARDIAN_PAGE_SIZE}&"
+        f"page={page}&"
+        f"api-key={GUARDIAN_API_KEY}"
+    )
+
+
 CONFIG = {
-    "scope_sentence": FIXED_SCOPE,
-    "dataset_start": DATE_WINDOW_START,
-    "dataset_end": DATE_WINDOW_END,
-    "dataset_query": UK_POLITICS_QUERY,
-    "NEWS_API_KEY": os.getenv("NEWS_API_KEY"),
-    "GUARDIAN_API_KEY": os.getenv("GUARDIAN_API_KEY"),
-    "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+    "project_scope": PROJECT_SCOPE,
+    "date_start": DATE_START,
+    "date_end": DATE_END,
+    "NEWS_API_KEY": NEWS_API_KEY,
+    "GUARDIAN_API_KEY": GUARDIAN_API_KEY,
+    "OPENAI_API_KEY": OPENAI_API_KEY,
+    "NEWS_API_BASE": NEWS_API_BASE,
+    "GUARDIAN_API_BASE": GUARDIAN_API_BASE,
+    "NEWS_API_PAGE_SIZE": NEWS_API_PAGE_SIZE,
+    "GUARDIAN_PAGE_SIZE": GUARDIAN_PAGE_SIZE,
+    "GUARDIAN_SHOW_TAGS": GUARDIAN_SHOW_TAGS,
+    "RAW_DATA_DIR": RAW_DATA_DIR,
+    "PROCESSED_DATA_DIR": PROCESSED_DATA_DIR,
+    "GENERATED_KG_DIR": GENERATED_KG_DIR,
+    "NEWS_QUERY_TERMS": NEWS_QUERY_TERMS,
+    "GUARDIAN_SECTIONS": GUARDIAN_SECTIONS,
+    "GUARDIAN_TAGS": GUARDIAN_TAGS,
+    "GUARDIAN_FIELDS": GUARDIAN_FIELDS,
     "TECHNOLOGY_KEYWORDS": TECHNOLOGY_KEYWORDS,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
+    "POLITICIAN_NAMES": POLITICIAN_NAMES,
+    "POLITICAL_PARTY_NAMES": POLITICAL_PARTY_NAMES,
+    "GOVERNMENT_BODY_NAMES": GOVERNMENT_BODY_NAMES,
+    "UK_LOCATION_NAMES": UK_LOCATION_NAMES,
+    "TOPIC_GROUPS": TOPIC_GROUPS,
+    "POLITICAL_EVENT_HINTS": POLITICAL_EVENT_HINTS,
+    "ECONOMIC_EVENT_HINTS": ECONOMIC_EVENT_HINTS,
+    "POSITIVE_SENTIMENT_TERMS": POSITIVE_SENTIMENT_TERMS,
+    "NEGATIVE_SENTIMENT_TERMS": NEGATIVE_SENTIMENT_TERMS,
+    "OPINION_SECTION_NAMES": OPINION_SECTION_NAMES,
+    "BREAKING_NEWS_HINTS": BREAKING_NEWS_HINTS,
     "CONTROLLED_PREDICATES": CONTROLLED_PREDICATES,
     "ENTITY_STOPLIST": ENTITY_STOPLIST,
     "PERSON_STOPLIST": PERSON_STOPLIST,
-    "POLITICAL_PERSON_TITLES": POLITICAL_PERSON_TITLES,
-    "POLITICAL_PARTIES": POLITICAL_PARTIES,
-    "GOVERNMENT_BODIES": GOVERNMENT_BODIES,
-    "guardian_base_url": "https://content.guardianapis.com/search",
-    "guardian_section": "politics",
-    "guardian_page_size": 50,
-    "guardian_max_pages": 4,
-    "newsapi_base_url": "https://newsapi.org/v2/everything",
-    "newsapi_page_size": 100,
-    "newsapi_max_pages": 2,
+    "url_newsapi_everything": build_newsapi_everything_url(),
+    "url_guardian": build_guardian_url(),
 }
+
+# Backwards-compatible alias used by the current prototype pipeline.
+CONFIG["url_headlines"] = CONFIG["url_newsapi_everything"]

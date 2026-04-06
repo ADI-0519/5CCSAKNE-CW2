@@ -1,49 +1,73 @@
-import os
+import json
 from datetime import UTC, datetime
+from pathlib import Path
 
-from src.build_ontology import build_ontology
 from src.config import CONFIG
-from src.data_collection import collect_politics_news_dataset
+from src.data_collection import collect_all_sources
 from src.data_extraction import extract_relevant_information
-from src.data_normalisation import normalise_data
+from src.data_normalisation import (
+    normalise_collected_sources,
+    normalise_data,
+    save_normalised_articles,
+)
 from src.json_to_rdf import convert_json_to_rdf
 
 
-def save_rdf_to_file(rdf_graph, filename):
-    print(f"[SAVE] Serializing RDF graph to {filename}...")
-    parent = os.path.dirname(filename)
-    if parent:
-        os.makedirs(parent, exist_ok=True)
-    rdf_graph.serialize(destination=filename, format="turtle")
-    print(f"[SAVE] Saved {len(rdf_graph)} triples to {filename}.")
+def build_timestamp():
+    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+
+
+def ensure_parent(path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+
+def save_json(data, filename):
+    output_path = Path(filename)
+    ensure_parent(output_path)
+    output_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"[SAVE] Saved JSON output to {output_path}")
+    return output_path
+
+
+def save_rdf(graph, filename):
+    output_path = Path(filename)
+    ensure_parent(output_path)
+    graph.serialize(destination=str(output_path), format="turtle")
+    print(f"[SAVE] Saved {len(graph)} triples to {output_path}")
+    return output_path
 
 
 def main():
-    print("[PIPELINE] Starting fixed-scope UK politics/policy pipeline")
-    print(f"[PIPELINE] Scope: {CONFIG['scope_sentence']}")
+    timestamp = build_timestamp()
+    print(f"[PIPELINE] Starting news KG pipeline at {timestamp}")
+    print(f"[PIPELINE] Scope: {CONFIG['project_scope']}")
 
-    print("[PIPELINE] Stage 1: Collect")
-    raw_data = collect_politics_news_dataset()
+    print("[PIPELINE] Stage 1: Collect source data")
+    collected_data = collect_all_sources(save_snapshots=True)
 
-    print("[PIPELINE] Stage 2: Extract")
-    extracted_data = extract_relevant_information(raw_data)
+    print("[PIPELINE] Stage 2: Normalise source records")
+    source_records = normalise_collected_sources(collected_data)
+    save_normalised_articles(source_records, filename="normalised_articles.json")
+    save_json(
+        source_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_normalised_articles.json"
+    )
 
-    print("[PIPELINE] Stage 3: Normalise")
-    normalised_data = normalise_data(extracted_data)
+    print("[PIPELINE] Stage 3: Extract KG-ready information")
+    extracted_records = extract_relevant_information(source_records)
+    save_json(
+        extracted_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_extracted_articles.json"
+    )
 
-    print("[PIPELINE] Stage 4: Convert to RDF")
-    rdf_graph = convert_json_to_rdf(normalised_data)
+    print("[PIPELINE] Stage 4: Normalise extracted records")
+    kg_records = normalise_data(extracted_records)
+    save_json(kg_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_kg_records.json")
 
-    print("[PIPELINE] Stage 5: Merge ontology and instance data")
-    kg_graph = build_ontology()
-    for triple in rdf_graph:
-        kg_graph.add(triple)
+    print("[PIPELINE] Stage 5: Convert to RDF")
+    rdf_graph = convert_json_to_rdf(kg_records)
 
-    print("[PIPELINE] Stage 6: Save")
-    save_rdf_to_file(kg_graph, "kg/generated/new_kg.ttl")
-
-    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    save_rdf_to_file(kg_graph, f"output/{timestamp}_kg.ttl")
+    print("[PIPELINE] Stage 6: Save knowledge graph")
+    save_rdf(rdf_graph, f"{CONFIG['GENERATED_KG_DIR']}/new_kg.ttl")
+    save_rdf(rdf_graph, f"output/{timestamp}_kg.ttl")
 
     print("[PIPELINE] Done.")
 

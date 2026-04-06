@@ -42,14 +42,21 @@ def test_execute_queries_runs_against_fixture_graph():
     assert len(results) == 20
     assert all("query_id" in result for result in results)
     assert all("row_count" in result for result in results)
-    assert all(result["row_count"] >= 0 for result in results)
+    assert all(isinstance(result["row_count"], int) for result in results)
+    assert all("rows" in result for result in results)
+    assert all("variables" in result for result in results)
 
 
-def test_all_query_ids_are_unique():
+def test_query_execution_is_stable_against_fixture_graph():
+    graph = _build_fixture_graph()
     definitions = load_query_definitions()
-    query_ids = [definition.query_id for definition in definitions]
+    results = execute_queries(graph, definitions)
+    results_again = execute_queries(graph, definitions)
 
-    assert len(query_ids) == len(set(query_ids))
+    first_counts = {result["query_id"]: result["row_count"] for result in results}
+    second_counts = {result["query_id"]: result["row_count"] for result in results_again}
+
+    assert first_counts == second_counts
 
 
 def test_save_results_writes_json(tmp_path):

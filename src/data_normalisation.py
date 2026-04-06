@@ -1,7 +1,7 @@
-# Code to normalise the extracted data
-
 import hashlib
+import json
 from datetime import datetime, timezone
+from pathlib import Path
 from urllib.parse import urlparse
 
 from src.config import CONFIG
@@ -9,19 +9,21 @@ from src.config import CONFIG
 CONTROLLED_PREDICATES = CONFIG["CONTROLLED_PREDICATES"]
 
 
-def _stable_id(url, title, published_at):
+def build_stable_id(url, title, published_at):
     source = url if url else f"{title}{published_at}"
     return hashlib.sha256(source.encode()).hexdigest()[:16]
 
 
-def _normalise_name(name):
+def normalise_name(name):
     if not name:
         return ""
-    return " ".join(name.strip().split())
+    return " ".join(str(name).strip().split())
 
 
-def _canonicalise_date(date_str):
-    """Parse a date string and return a UTC ISO-8601 string (YYYY-MM-DDTHH:MM:SSZ)."""
+def canonicalise_date(date_str):
+    if not date_str:
+        raise ValueError(f"Cannot parse date: {date_str!r}")
+
     for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%d"):
         try:
             dt = datetime.strptime(date_str, fmt)
@@ -33,7 +35,7 @@ def _canonicalise_date(date_str):
     raise ValueError(f"Cannot parse date: {date_str!r}")
 
 
-def _is_valid_url(url):
+def is_valid_url(url):
     try:
         parts = urlparse(url)
         return parts.scheme in ("http", "https") and bool(parts.netloc)
@@ -41,7 +43,7 @@ def _is_valid_url(url):
         return False
 
 
-def _dedup_list(lst):
+def deduplicate_list(lst):
     seen = set()
     result = []
     for item in lst:
@@ -52,7 +54,13 @@ def _dedup_list(lst):
     return result
 
 
-def _normalise_relations(relations, record_index):
+def count_words(text):
+    if not text:
+        return 0
+    return len(str(text).split())
+
+
+def normalise_relations(relations, record_index):
     normalised = []
     for rel in relations:
         pred = rel.get("predicate")
@@ -63,12 +71,176 @@ def _normalise_relations(relations, record_index):
             )
         normalised.append(
             {
-                "subject": _normalise_name(rel["subject"]),
+                "subject": normalise_name(rel["subject"]),
                 "predicate": pred,
-                "object": _normalise_name(rel["object"]),
+                "object": normalise_name(rel["object"]),
             }
         )
-    return _dedup_list(normalised)
+    return deduplicate_list(normalised)
+
+
+def normalise_tags(tags):
+    cleaned = []
+    for tag in tags or []:
+        if isinstance(tag, dict):
+            tag_type = normalise_name(tag.get("type")).lower()
+            if tag_type == "contributor":
+                continue
+            label = tag.get("webTitle") or tag.get("title") or tag.get("id")
+        else:
+            label = str(tag)
+        label = normalise_name(label)
+        if label:
+            cleaned.append(label)
+    return deduplicate_list(cleaned)
+
+
+def guardian_section_name(article):
+    return normalise_name(article.get("sectionName"))
+
+
+def guardian_author(article):
+    fields = article.get("fields") or {}
+    return normalise_name(fields.get("byline"))
+
+
+def guardian_summary(article):
+    fields = article.get("fields") or {}
+    return normalise_name(fields.get("trailText"))
+
+
+def guardian_content(article):
+    fields = article.get("fields") or {}
+    return normalise_name(fields.get("bodyText"))
+
+
+def normalise_newsapi_articles(raw_data):
+    articles = raw_data.get("articles", [])
+    normalised = []
+
+    for i, article in enumerate(articles):
+        title = normalise_name(article.get("title"))
+        url = article.get("url") or ""
+        published_at = article.get("publishedAt") or ""
+        source_name = normalise_name((article.get("source") or {}).get("name"))
+
+        if not title or not url or not published_at or not source_name:
+            continue
+        if not is_valid_url(url):
+            continue
+
+        summary = normalise_name(article.get("description"))
+        content = normalise_name(article.get("content"))
+        author = normalise_name(article.get("author"))
+        section = ""
+        updated_at = None
+        tags = []
+        text_for_word_count = content or summary or title
+
+        normalised.append(
+            {
+                "id": build_stable_id(url, title, published_at),
+                "source_system": "newsapi",
+                "source_name": source_name,
+                "title": title,
+                "url": url,
+                "published_at": canonicalise_date(published_at),
+                "updated_at": updated_at,
+                "author": author or None,
+                "section": section or None,
+                "summary": summary or None,
+                "content": content or None,
+                "tags": tags,
+                "word_count": count_words(text_for_word_count),
+                "raw_article_type_hint": None,
+            }
+        )
+
+    print(f"[NORMALISE] Normalised {len(normalised)} NewsAPI articles.")
+    return normalised
+
+
+def normalise_guardian_articles(raw_data):
+    response = raw_data.get("response") or {}
+    articles = response.get("results", [])
+    normalised = []
+
+    for i, article in enumerate(articles):
+        title = normalise_name(article.get("webTitle"))
+        url = article.get("webUrl") or ""
+        published_at = article.get("webPublicationDate") or ""
+        source_name = "The Guardian"
+
+        if not title or not url or not published_at:
+            continue
+        if not is_valid_url(url):
+            continue
+
+        fields = article.get("fields") or {}
+        content = guardian_content(article)
+        summary = guardian_summary(article)
+        author = guardian_author(article)
+        section = guardian_section_name(article)
+        updated_raw = fields.get("lastModified")
+        updated_at = canonicalise_date(updated_raw) if updated_raw else None
+        tags = normalise_tags(article.get("tags") or [])
+        raw_type_hint = "OpinionArticle" if section.lower() == "comment is free" else None
+        word_count = fields.get("wordcount")
+        if word_count is None:
+            word_count = count_words(content or summary or title)
+        else:
+            try:
+                word_count = int(word_count)
+            except (TypeError, ValueError):
+                word_count = count_words(content or summary or title)
+
+        normalised.append(
+            {
+                "id": build_stable_id(url, title, published_at),
+                "source_system": "guardian",
+                "source_name": source_name,
+                "title": title,
+                "url": url,
+                "published_at": canonicalise_date(published_at),
+                "updated_at": updated_at,
+                "author": author or None,
+                "section": section or None,
+                "summary": summary or None,
+                "content": content or None,
+                "tags": tags,
+                "word_count": word_count,
+                "raw_article_type_hint": raw_type_hint,
+            }
+        )
+
+    print(f"[NORMALISE] Normalised {len(normalised)} Guardian articles.")
+    return normalised
+
+
+def normalise_collected_sources(collected_data):
+    sources = collected_data.get("sources", {})
+    newsapi_records = normalise_newsapi_articles(sources.get("newsapi") or {})
+    guardian_records = normalise_guardian_articles(sources.get("guardian") or {})
+    combined = guardian_records + newsapi_records
+
+    seen_ids = set()
+    deduped = []
+    for record in combined:
+        if record["id"] in seen_ids:
+            continue
+        seen_ids.add(record["id"])
+        deduped.append(record)
+
+    print(f"[NORMALISE] Combined normalised article count: {len(deduped)}")
+    return deduped
+
+
+def save_normalised_articles(records, filename="normalised_articles.json"):
+    output_path = Path(CONFIG["PROCESSED_DATA_DIR"]) / filename
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(records, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"[NORMALISE] Saved normalised article set to {output_path}")
+    return output_path
 
 
 def normalise_data(extracted_data):
@@ -83,68 +255,97 @@ def normalise_data(extracted_data):
         url = record.get("url")
         published_at = record.get("published_at")
         source_name = record.get("source_name")
-        updated_at = record.get("updated_at")
-        section = record.get("section")
-        tags = record.get("tags") or []
-        source_system = record.get("source_system")
-        raw_article_type_hint = record.get("raw_article_type_hint")
-        word_count = record.get("word_count")
 
-        # --- Required field validation (fail-fast) ---
         if not title:
             raise ValueError(f"[NORMALISE] Record {i}: missing required field 'title'.")
         if not url:
             raise ValueError(f"[NORMALISE] Record {i}: missing required field 'url'.")
-        if not _is_valid_url(url):
+        if not is_valid_url(url):
             raise ValueError(f"[NORMALISE] Record {i}: invalid URL {url!r}.")
         if not published_at:
             raise ValueError(f"[NORMALISE] Record {i}: missing required field 'published_at'.")
         if not source_name:
             raise ValueError(f"[NORMALISE] Record {i}: missing required field 'source_name'.")
 
-        canonical_date = _canonicalise_date(published_at)
-        stable_id = _stable_id(url, title, published_at)
+        canonical_date = canonicalise_date(published_at)
+        stable_id = build_stable_id(url, title, published_at)
 
         entities = record.get("entities", {})
         normalised_entities = {
-            "organizations": _dedup_list(
-                [_normalise_name(o) for o in entities.get("organizations", [])]
+            "organizations": deduplicate_list(
+                [normalise_name(o) for o in entities.get("organizations", [])]
             ),
-            "people": _dedup_list([_normalise_name(p) for p in entities.get("people", [])]),
-            "locations": _dedup_list(
-                [_normalise_name(location) for location in entities.get("locations", [])]
+            "people": deduplicate_list([normalise_name(p) for p in entities.get("people", [])]),
+            "politicians": deduplicate_list(
+                [normalise_name(p) for p in entities.get("politicians", [])]
             ),
-            "technologies": _dedup_list(
-                [_normalise_name(t) for t in entities.get("technologies", [])]
+            "political_parties": deduplicate_list(
+                [normalise_name(party) for party in entities.get("political_parties", [])]
             ),
-            "topics": _dedup_list([_normalise_name(t) for t in entities.get("topics", [])]),
+            "government_bodies": deduplicate_list(
+                [normalise_name(body) for body in entities.get("government_bodies", [])]
+            ),
+            "locations": deduplicate_list(
+                [normalise_name(location) for location in entities.get("locations", [])]
+            ),
+            "technologies": deduplicate_list(
+                [normalise_name(t) for t in entities.get("technologies", [])]
+            ),
+            "topics": deduplicate_list([normalise_name(t) for t in entities.get("topics", [])]),
+            "events": deduplicate_list(
+                [normalise_name(event) for event in entities.get("events", [])]
+            ),
         }
 
         author = record.get("author")
-        canonical_updated_at = _canonicalise_date(updated_at) if updated_at else canonical_date
+        event_candidates = []
+        for event in record.get("event_candidates", []):
+            event_candidates.append(
+                {
+                    "name": normalise_name(event.get("name")),
+                    "type": normalise_name(event.get("type")),
+                    "date": event.get("date"),
+                    "location": normalise_name(event.get("location"))
+                    if event.get("location")
+                    else None,
+                    "source": normalise_name(event.get("source")),
+                }
+            )
+
+        follow_up_candidates = []
+        for candidate in record.get("follow_up_candidates", []):
+            follow_up_candidates.append(
+                {
+                    "match_key": normalise_name(candidate.get("match_key")),
+                    "reason": normalise_name(candidate.get("reason")),
+                }
+            )
 
         normalised.append(
             {
                 "id": stable_id,
-                "title": _normalise_name(title),
+                "title": normalise_name(title),
                 "url": url,
                 "published_at": canonical_date,
-                "updated_at": canonical_updated_at,
-                "source_name": _normalise_name(source_name),
-                "source_system": _normalise_name(source_system) if source_system else None,
-                "author": _normalise_name(author) if author else None,
-                "section": _normalise_name(section) if section else None,
-                "tags": _dedup_list([_normalise_name(tag) for tag in tags if tag]),
-                "summary": record.get("summary"),
-                "content": record.get("content"),
-                "word_count": int(word_count) if word_count is not None else None,
-                "raw_article_type_hint": _normalise_name(raw_article_type_hint)
-                if raw_article_type_hint
+                "updated_at": canonicalise_date(record["updated_at"])
+                if record.get("updated_at")
                 else None,
+                "source_system": normalise_name(record.get("source_system")),
+                "source_name": normalise_name(source_name),
+                "author": normalise_name(author) if author else None,
+                "section": normalise_name(record.get("section")) if record.get("section") else None,
+                "summary": normalise_name(record.get("summary")) if record.get("summary") else None,
+                "content": normalise_name(record.get("content")) if record.get("content") else None,
+                "tags": deduplicate_list([normalise_name(tag) for tag in record.get("tags", [])]),
+                "word_count": int(record.get("word_count") or 0),
+                "article_type": normalise_name(record.get("article_type")) or "NewsArticle",
+                "sentiment": normalise_name(record.get("sentiment")) or "Neutral",
+                "event_candidates": event_candidates,
+                "follow_up_candidates": follow_up_candidates,
                 "entities": normalised_entities,
-                "relations": _normalise_relations(record.get("relations", []), i),
+                "relations": normalise_relations(record.get("relations", []), i),
             }
         )
 
-    print(f"[NORMALISE] Normalised {len(normalised)} records.")
+    print(f"[NORMALISE] Normalised {len(normalised)} extracted records.")
     return normalised

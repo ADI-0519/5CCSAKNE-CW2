@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from rdflib import RDF, Graph, Literal
+from rdflib import RDF, Literal
 from rdflib.namespace import XSD
 
 from src.build_ontology import NEWS, SCHEMA, build_ontology
@@ -54,7 +54,12 @@ def test_enrich_graph_classifies_articles_and_adds_follow_up():
     publisher_uri = NEWS["org/Daily_News"]
     org_uri = NEWS["org/City_Council"]
 
-    _add_named_entity(graph, publisher_uri, "Daily News", (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization))
+    _add_named_entity(
+        graph,
+        publisher_uri,
+        "Daily News",
+        (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization),
+    )
     _add_named_entity(graph, org_uri, "City Council", (NEWS.Organisation, SCHEMA.Organization))
 
     article_1 = NEWS["article/a1"]

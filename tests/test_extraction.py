@@ -1,179 +1,125 @@
-"""Unit tests for data_extraction module."""
+"""Behavioral tests for the current extraction pipeline."""
 
 import pytest
 
 from src.data_extraction import (
-    _extract_locations,
-    _extract_organizations,
-    _extract_people,
-    _extract_technologies,
-    _extract_topics,
-    _stable_id,
+    build_article_id,
+    classify_article_type,
+    classify_sentiment,
     extract_relevant_information,
 )
 
 
-class TestExtractTechnologies:
-    def test_detects_known_keyword(self):
-        result = _extract_technologies("This article is about Machine Learning trends.")
-        assert "Machine Learning" in result
-
-    def test_case_insensitive(self):
-        result = _extract_technologies("advances in ARTIFICIAL INTELLIGENCE")
-        assert "Artificial Intelligence" in result
-
-    def test_returns_empty_for_no_match(self):
-        result = _extract_technologies("The weather is nice today.")
-        assert result == []
-
-    def test_deduplicates_via_set(self):
-        text = "AI and AI and AI"
-        result = _extract_technologies(text)
-        assert result.count("AI") == 1
-
-    def test_detects_multiple_keywords(self):
-        text = "GPT and deep learning are both AI technologies."
-        result = _extract_technologies(text)
-        assert "GPT" in result
-        assert "Deep Learning" in result
-        assert "AI" in result
+def make_article(**overrides):
+    article = {
+        "id": "article-1",
+        "source_system": "guardian",
+        "source_name": "The Guardian",
+        "title": "Keir Starmer faces pressure over budget plans",
+        "url": "https://example.com/article-1",
+        "published_at": "2026-03-20T10:00:00Z",
+        "updated_at": None,
+        "author": "Pippa Crerar",
+        "section": "Politics",
+        "summary": "Treasury plans spark debate in Westminster.",
+        "content": (
+            "Keir Starmer and Rachel Reeves faced criticism in London after the Treasury "
+            "announced budget and public spending changes in Parliament."
+        ),
+        "tags": ["Politics", "Budget"],
+        "word_count": 120,
+        "raw_article_type_hint": None,
+    }
+    article.update(overrides)
+    return article
 
 
-class TestExtractTopics:
-    def test_detects_topic(self):
-        result = _extract_topics("New government regulation on AI is expected.")
-        assert "regulation" in result
-        assert "government" in result
-
-    def test_returns_empty_for_no_match(self):
-        result = _extract_topics("Cats and dogs are popular pets.")
-        assert result == []
+class TestBuildArticleId:
+    def test_stable_for_same_input(self):
+        result_one = build_article_id("https://example.com/article", "Title", "2026-03-06")
+        result_two = build_article_id("https://example.com/article", "Title", "2026-03-06")
+        assert result_one == result_two
+        assert len(result_one) == 16
 
 
-class TestExtractOrganizations:
-    def test_detects_org_with_suffix(self):
-        result = _extract_organizations("OpenAI Corporation announced new research today.")
-        assert any("OpenAI" in o for o in result)
+class TestClassificationHelpers:
+    def test_opinion_article_detected_from_section(self):
+        article = make_article(section="Comment is Free", raw_article_type_hint=None)
+        result = classify_article_type(article, f"{article['title']} {article['summary']}")
+        assert result == "OpinionArticle"
 
-    def test_detects_tech_suffix(self):
-        result = _extract_organizations("Acme Technologies released a new product.")
-        assert any("Acme" in o for o in result)
+    def test_breaking_article_detected_from_live_title(self):
+        article = make_article(title="Live: Labour faces budget backlash")
+        result = classify_article_type(article, f"{article['title']} {article['summary']}")
+        assert result == "BreakingNewsArticle"
 
-    def test_no_false_positive_without_suffix(self):
-        result = _extract_organizations("John went to the store.")
-        assert result == []
+    def test_sentiment_classification_detects_negative_language(self):
+        text = "The policy drew criticism, concern and backlash across Parliament."
+        assert classify_sentiment(text) == "Negative"
 
-
-class TestExtractPeople:
-    def test_detects_two_word_name(self):
-        result = _extract_people("CEO Jane Smith presented the findings.")
-        assert "Jane Smith" in result
-
-    def test_filters_person_stoplist(self):
-        result = _extract_people("The event was held in New York.")
-        assert "New York" not in result
-
-    def test_filters_entity_stoplist(self):
-        result = _extract_people("More details will follow.")
-        assert result == []
-
-
-class TestExtractLocations:
-    def test_detects_location_after_in(self):
-        result = _extract_locations("The conference was held in London this week.")
-        assert "London" in result
-
-    def test_detects_location_after_from(self):
-        result = _extract_locations("Reporting from Paris.")
-        assert "Paris" in result
-
-    def test_no_match_without_preposition(self):
-        result = _extract_locations("Apple released a new product.")
-        assert result == []
-
-
-class TestStableId:
-    def test_stable_from_url(self):
-        id1 = _stable_id("https://example.com/article", "Title", "2024-01-01")
-        id2 = _stable_id("https://example.com/article", "Title", "2024-01-01")
-        assert id1 == id2
-
-    def test_different_urls_different_ids(self):
-        id1 = _stable_id("https://example.com/a", "", "")
-        id2 = _stable_id("https://example.com/b", "", "")
-        assert id1 != id2
-
-    def test_id_is_16_chars(self):
-        result = _stable_id("https://example.com/x", "", "")
-        assert len(result) == 16
+    def test_sentiment_classification_detects_positive_language(self):
+        text = "The plan was welcomed as progress and a boost for growth."
+        assert classify_sentiment(text) == "Positive"
 
 
 class TestExtractRelevantInformation:
     def test_raises_on_none_input(self):
-        with pytest.raises((ValueError, AttributeError)):
+        with pytest.raises(ValueError, match="No data provided"):
             extract_relevant_information(None)
 
-    def test_raises_on_empty_articles(self):
-        with pytest.raises(ValueError, match="No articles"):
-            extract_relevant_information({"articles": []})
+    def test_raises_on_empty_list_input(self):
+        with pytest.raises(ValueError, match="No articles found"):
+            extract_relevant_information([])
 
-    def test_returns_list_of_records(self):
-        raw = {
-            "articles": [
-                {
-                    "source": {"name": "TestSource"},
-                    "author": "John Doe",
-                    "title": "AI in Machine Learning Research",
-                    "description": "Deep learning advances.",
-                    "url": "https://example.com/article1",
-                    "publishedAt": "2024-01-15T10:00:00Z",
-                    "content": "More AI content here.",
-                }
-            ]
-        }
-        result = extract_relevant_information(raw)
-        assert len(result) == 1
-        record = result[0]
-        assert "id" in record
-        assert "title" in record
-        assert "url" in record
-        assert "published_at" in record
-        assert "source_name" in record
+    def test_extracts_from_normalised_article_list(self):
+        records = extract_relevant_information([make_article()])
+        assert len(records) == 1
+
+        record = records[0]
+        assert record["article_type"] == "NewsArticle"
+        assert record["sentiment"] in {"Positive", "Negative", "Neutral"}
         assert "entities" in record
+        assert "event_candidates" in record
         assert "relations" in record
 
-    def test_entities_have_required_keys(self):
-        raw = {
-            "articles": [
-                {
-                    "source": {"name": "TestSource"},
-                    "title": "Some Title",
-                    "description": "Some description",
-                    "url": "https://example.com/x",
-                    "publishedAt": "2024-01-15T10:00:00Z",
-                    "content": "",
-                }
-            ]
-        }
-        result = extract_relevant_information(raw)
-        entities = result[0]["entities"]
-        for key in ("organizations", "people", "locations", "technologies", "topics"):
-            assert key in entities
-            assert isinstance(entities[key], list)
+    def test_removes_people_organisation_overlap(self):
+        article = make_article(
+            title="Home Office confirms new immigration rules",
+            content=(
+                "The Home Office announced changes in London. Griff Ferris said the Home Office "
+                "proposal would face challenge."
+            ),
+            tags=["Immigration and asylum", "Home Office"],
+        )
 
-    def test_handles_missing_optional_fields(self):
-        raw = {
-            "articles": [
-                {
-                    "source": {"name": "TestSource"},
-                    "title": "Minimal Article",
-                    "description": None,
-                    "url": "https://example.com/minimal",
-                    "publishedAt": "2024-01-15T10:00:00Z",
-                    "content": None,
-                    "author": None,
-                }
-            ]
-        }
-        result = extract_relevant_information(raw)
-        assert len(result) == 1
+        record = extract_relevant_information([article])[0]
+        people = set(record["entities"]["people"])
+        organisations = set(record["entities"]["organizations"])
+
+        assert "Griff Ferris" in people
+        assert "Home Office" in organisations
+        assert "Home Office" not in people
+        assert not (people & organisations)
+
+    def test_extracts_topics_events_and_actor_types(self):
+        article = make_article(
+            title="Treasury announces spring budget as Labour responds",
+            content=(
+                "The Treasury announced the spring budget in London as Labour criticised the "
+                "proposal in Parliament."
+            ),
+            tags=["Politics", "Labour", "Budget"],
+        )
+
+        record = extract_relevant_information([article])[0]
+        entities = record["entities"]
+
+        assert "Budget" in entities["events"] or "Spring Statement" in entities["events"]
+        assert "Labour" in entities["political_parties"]
+        assert "Treasury" in entities["government_bodies"]
+        assert "Politics" in entities["topics"] or "Economic Policy" in entities["topics"]
+
+    def test_respects_raw_article_type_hint(self):
+        article = make_article(raw_article_type_hint="OpinionArticle", section="UK news")
+        record = extract_relevant_information([article])[0]
+        assert record["article_type"] == "OpinionArticle"

@@ -66,7 +66,15 @@ OPINION_KEYWORDS = {"analysis", "comment", "editorial", "opinion", "view"}
 BREAKING_KEYWORDS = {"breaking", "developing", "live", "urgent", "just in"}
 
 ADDITIONAL_TOPIC_RULES = {
-    "innovation": {"ai", "artificial intelligence", "machine learning", "deep learning", "gpt", "robotics", "automation"},
+    "innovation": {
+        "ai",
+        "artificial intelligence",
+        "machine learning",
+        "deep learning",
+        "gpt",
+        "robotics",
+        "automation",
+    },
     "research": {"openai", "research", "model", "breakthrough"},
     "economy": {"market", "economy", "investment", "funding", "ipo"},
 }
@@ -236,7 +244,9 @@ def enrich_graph(graph):
     for article_uri in article_nodes:
         headline = _get_text(enriched, article_uri, SCHEMA.headline)
         description = _get_text(enriched, article_uri, SCHEMA.description)
-        article_text = _normalize_whitespace(" ".join(part for part in (headline, description) if part))
+        article_text = _normalize_whitespace(
+            " ".join(part for part in (headline, description) if part)
+        )
 
         topic_names = _get_named_entities(enriched, article_uri, NEWS.hasTopic)
         technology_names = _get_named_entities(enriched, article_uri, NEWS.mentionsTechnology)
@@ -257,7 +267,10 @@ def enrich_graph(graph):
                 enriched.add((article_uri, RDF.type, article_type))
 
         published_date = _get_first_literal(enriched, article_uri, NEWS.publishedDate)
-        if published_date is not None and (article_uri, NEWS.hasUpdateTimestamp, None) not in enriched:
+        if (
+            published_date is not None
+            and (article_uri, NEWS.hasUpdateTimestamp, None) not in enriched
+        ):
             enriched.set((article_uri, NEWS.hasUpdateTimestamp, published_date))
 
         inferred_topics = infer_additional_topics(

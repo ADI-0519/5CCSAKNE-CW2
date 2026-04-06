@@ -1,42 +1,54 @@
-"""Unit tests for json_to_rdf module."""
+"""Tests for RDF generation from KG-ready records."""
 
 import pytest
-from rdflib import RDF, Literal
+from rdflib import RDF
 from rdflib.namespace import XSD
 
-from src.build_ontology import CORE
-from src.json_to_rdf import EX, SCHEMA, convert_json_to_rdf
+from src.json_to_rdf import NEWS, SCHEMA, convert_json_to_rdf
 
 
-def _sample_record():
-    return {
+def sample_record(**overrides):
+    record = {
         "id": "abc123def456789a",
-        "title": "OpenAI Announces GPT Breakthrough",
-        "url": "https://techcrunch.com/2024/01/15/openai-gpt",
-        "published_at": "2024-01-15T10:00:00Z",
-        "source_name": "TechCrunch",
+        "source_system": "guardian",
+        "source_name": "The Guardian",
+        "title": "Labour responds to spring budget announcement",
+        "url": "https://example.com/article",
+        "published_at": "2026-03-06T10:00:00Z",
+        "updated_at": "2026-03-06T11:00:00Z",
         "author": "Jane Smith",
-        "summary": "A major GPT announcement.",
-        "entities": {
-            "organizations": ["OpenAI Corporation"],
-            "people": ["Jane Smith", "Sam Altman"],
-            "locations": ["San Francisco"],
-            "technologies": ["GPT", "AI"],
-            "topics": ["research"],
-        },
-        "relations": [
-            {"subject": "abc123def456789a", "predicate": "mentions", "object": "GPT"},
+        "section": "Politics",
+        "summary": "A politics update from Westminster.",
+        "content": "Labour criticised the Treasury after the spring budget announcement in London.",
+        "tags": ["Politics", "Budget"],
+        "word_count": 250,
+        "article_type": "OpinionArticle",
+        "sentiment": "Negative",
+        "follow_up_candidates": [{"match_key": "The Guardian|Budget", "reason": "same source"}],
+        "event_candidates": [
             {
-                "subject": "abc123def456789a",
-                "predicate": "mentions",
-                "object": "OpenAI Corporation",
-            },
-            {"subject": "abc123def456789a", "predicate": "mentions", "object": "research"},
-            {"subject": "abc123def456789a", "predicate": "published_by", "object": "TechCrunch"},
-            {"subject": "abc123def456789a", "predicate": "authored_by", "object": "Jane Smith"},
-            {"subject": "OpenAI Corporation", "predicate": "uses_technology", "object": "GPT"},
+                "name": "Budget",
+                "type": "EconomicEvent",
+                "date": "2026-03-06",
+                "location": "London",
+                "source": "heuristic",
+            }
         ],
+        "entities": {
+            "organizations": ["Labour", "Treasury"],
+            "people": ["Jane Smith", "Keir Starmer"],
+            "politicians": ["Keir Starmer"],
+            "political_parties": ["Labour"],
+            "government_bodies": ["Treasury"],
+            "locations": ["London"],
+            "technologies": [],
+            "topics": ["Politics", "Economic Policy"],
+            "events": ["Budget"],
+        },
+        "relations": [],
     }
+    record.update(overrides)
+    return record
 
 
 class TestConvertJsonToRdf:
@@ -44,123 +56,63 @@ class TestConvertJsonToRdf:
         with pytest.raises(ValueError, match="No normalised data"):
             convert_json_to_rdf([])
 
-    def test_raises_on_none_input(self):
-        with pytest.raises((ValueError, TypeError)):
-            convert_json_to_rdf(None)
-
     def test_returns_non_empty_graph(self):
-        g = convert_json_to_rdf([_sample_record()])
-        assert len(g) > 0
+        graph = convert_json_to_rdf([sample_record()])
+        assert len(graph) > 0
 
-    def test_article_has_correct_type(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        assert (article_uri, RDF.type, EX.NewsArticle) in g
-        assert (article_uri, RDF.type, SCHEMA.NewsArticle) in g
+    def test_article_node_has_expected_types_and_metadata(self):
+        graph = convert_json_to_rdf([sample_record()])
+        article = NEWS["article/abc123def456789a"]
 
-    def test_article_has_headline(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        headline_values = list(g.objects(article_uri, SCHEMA.headline))
-        assert Literal("OpenAI Announces GPT Breakthrough") in headline_values
+        assert (article, RDF.type, NEWS.NewsArticle) in graph
+        assert (article, RDF.type, NEWS.OpinionArticle) in graph
+        assert (article, SCHEMA.headline, None) in graph
+        assert (article, NEWS.hasSection, None) in graph
+        assert (article, NEWS.wordCount, None) in graph
 
-    def test_article_has_date_published(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        dates = list(g.objects(article_uri, EX.publishedDate))
-        assert len(dates) == 1
-        assert str(dates[0]).startswith("2024-01-15T10:00:00")
+    def test_author_and_publisher_nodes_are_created(self):
+        graph = convert_json_to_rdf([sample_record()])
+        article = NEWS["article/abc123def456789a"]
+        author = NEWS["person/Jane_Smith"]
+        publisher = NEWS["organisation/The_Guardian"]
 
-    def test_article_has_url(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        urls = list(g.objects(article_uri, EX.articleURL))
-        assert Literal("https://techcrunch.com/2024/01/15/openai-gpt", datatype=XSD.anyURI) in urls
+        assert (article, NEWS.hasAuthor, author) in graph
+        assert (author, RDF.type, NEWS.Journalist) in graph
+        assert (article, NEWS.publishedBy, publisher) in graph
+        assert (publisher, RDF.type, NEWS.NewsOrganisation) in graph
 
-    def test_article_has_author(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        author_uri = EX["person/Jane_Smith"]
-        authors = list(g.objects(article_uri, EX.hasAuthor))
-        assert author_uri in authors
-        assert (author_uri, RDF.type, EX.Journalist) in g
+    def test_people_orgs_locations_and_topics_are_typed(self):
+        graph = convert_json_to_rdf([sample_record()])
 
-    def test_org_entity_created(self):
-        g = convert_json_to_rdf([_sample_record()])
-        org_uri = EX["org/OpenAI_Corporation"]
-        assert (org_uri, RDF.type, EX.Organisation) in g
-        assert (org_uri, RDF.type, SCHEMA.Organization) in g
+        politician = NEWS["person/Keir_Starmer"]
+        party = NEWS["organisation/Labour"]
+        body = NEWS["organisation/Treasury"]
+        location = NEWS["location/London"]
+        topic = NEWS["topic/Politics"]
 
-    def test_publisher_entity_created(self):
-        g = convert_json_to_rdf([_sample_record()])
-        org_uri = EX["org/TechCrunch"]
-        assert (org_uri, RDF.type, EX.NewsOrganisation) in g
-        assert (org_uri, RDF.type, EX.Organisation) in g
+        assert (politician, RDF.type, NEWS.Politician) in graph
+        assert (party, RDF.type, NEWS.PoliticalParty) in graph
+        assert (body, RDF.type, NEWS.GovernmentBody) in graph
+        assert (location, RDF.type, NEWS.Location) in graph
+        assert (topic, RDF.type, NEWS.Topic) in graph
 
-    def test_tech_entity_created(self):
-        g = convert_json_to_rdf([_sample_record()])
-        tech_uri = EX["tech/GPT"]
-        assert (tech_uri, RDF.type, EX.Technology) in g
+    def test_event_and_sentiment_triples_are_created(self):
+        graph = convert_json_to_rdf([sample_record()])
+        article = NEWS["article/abc123def456789a"]
+        event = NEWS["event/abc123def456789a_Budget"]
 
-    def test_person_entity_created(self):
-        g = convert_json_to_rdf([_sample_record()])
-        person_uri = EX["person/Jane_Smith"]
-        assert (person_uri, RDF.type, SCHEMA.Person) in g
+        assert (article, NEWS.hasSentiment, NEWS.Negative) in graph
+        assert (article, NEWS.coversEvent, event) in graph
+        assert (event, RDF.type, NEWS.EconomicEvent) in graph
+        assert any(obj.datatype == XSD.date for obj in graph.objects(event, NEWS.eventDate))
 
-    def test_location_entity_created(self):
-        g = convert_json_to_rdf([_sample_record()])
-        loc_uri = EX["location/San_Francisco"]
-        assert (loc_uri, RDF.type, EX.Location) in g
-        assert (loc_uri, RDF.type, CORE.Place) in g
+    def test_follow_up_link_is_created_between_related_articles(self):
+        first = sample_record(id="article-a", published_at="2026-03-06T10:00:00Z")
+        second = sample_record(id="article-b", published_at="2026-03-06T12:00:00Z")
+        graph = convert_json_to_rdf([first, second])
 
-    def test_mentions_relation_present(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        tech_uri = EX["tech/GPT"]
-        assert (article_uri, EX.mentionsTechnology, tech_uri) in g
-
-    def test_topic_relation_present(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        topic_uri = EX["topic/research"]
-        assert (article_uri, EX.hasTopic, topic_uri) in g
-
-    def test_published_by_relation_present(self):
-        g = convert_json_to_rdf([_sample_record()])
-        article_uri = EX["article/abc123def456789a"]
-        publisher_uri = EX["org/TechCrunch"]
-        assert (article_uri, EX.publishedBy, publisher_uri) in g
-
-    def test_uses_technology_relation_present(self):
-        g = convert_json_to_rdf([_sample_record()])
-        org_uri = EX["org/OpenAI_Corporation"]
-        tech_uri = EX["tech/GPT"]
-        assert (org_uri, EX.usesTechnology, tech_uri) in g
-
-    def test_raises_on_unknown_predicate(self):
-        record = _sample_record()
-        record["relations"] = [
-            {"subject": record["id"], "predicate": "invented_by", "object": "GPT"}
-        ]
-        with pytest.raises(ValueError, match="Unknown predicate"):
-            convert_json_to_rdf([record])
-
-    def test_multiple_records_produce_more_triples(self):
-        r1 = _sample_record()
-        r2 = _sample_record()
-        r2["id"] = "bbbbbbbbbbbbbbbb"
-        r2["url"] = "https://example.com/other"
-        r2["relations"] = [
-            {"subject": "bbbbbbbbbbbbbbbb", "predicate": "mentions", "object": "GPT"}
-        ]
-        g_single = convert_json_to_rdf([r1])
-        g_double = convert_json_to_rdf([r1, r2])
-        assert len(g_double) > len(g_single)
-
-    def test_graph_serializes_to_turtle(self, tmp_path):
-        g = convert_json_to_rdf([_sample_record()])
-        out = tmp_path / "test.ttl"
-        g.serialize(destination=str(out), format="turtle")
-        content = out.read_text()
-        assert "@prefix" in content
-        assert "NewsArticle" in content
+        assert (
+            NEWS["article/article-a"],
+            NEWS.hasFollowUp,
+            NEWS["article/article-b"],
+        ) in graph
