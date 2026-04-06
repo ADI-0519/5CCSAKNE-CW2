@@ -4,7 +4,7 @@ from pathlib import Path
 
 import requests
 
-from src.config import CONFIG
+from src.config import CONFIG, build_guardian_page_url, build_newsapi_page_url
 
 
 def fetch_json(url):
@@ -36,33 +36,75 @@ def save_raw_json(data, source_name, filename=None):
 
     output_path = raw_dir / filename
     ensure_parent(output_path)
-    output_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+    output_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"[COLLECT] Saved raw {source_name} payload to {output_path}")
     return output_path
 
 
 def fetch_newsapi_data(save_snapshot=True):
-    url = CONFIG["url_newsapi_everything"]
-    data = fetch_json(url)
+    first_page = fetch_json(build_newsapi_page_url(page=1))
+    total_results = first_page.get("totalResults", 0)
+    articles = list(first_page.get("articles", []))
+
+    data = {
+        "status": first_page.get("status"),
+        "totalResults": total_results,
+        "articles": articles,
+        "pagesFetched": 1,
+        "resultLimitNote": (
+            "NewsAPI developer-tier access is limited to the first 100 results. "
+            "The pipeline therefore fetches page 1 only and treats NewsAPI as a "
+            "supplementary source."
+        ),
+    }
     if save_snapshot:
         save_raw_json(data, "newsapi")
     return data
 
 
 def fetch_guardian_data(save_snapshot=True):
-    url = CONFIG["url_guardian"]
-    data = fetch_json(url)
+    first_page = fetch_json(build_guardian_page_url(page=1))
+    response = first_page.get("response") or {}
+    total_pages = max(1, response.get("pages", 1))
+
+    results = list(response.get("results", []))
+    for page in range(2, total_pages + 1):
+        page_data = fetch_json(build_guardian_page_url(page=page))
+        page_response = page_data.get("response") or {}
+        results.extend(page_response.get("results", []))
+
+    data = {
+        "response": {
+            **response,
+            "results": results,
+            "pagesFetched": total_pages,
+        }
+    }
     if save_snapshot:
         save_raw_json(data, "guardian")
     return data
 
 
 def collect_all_sources(save_snapshots=True):
+    sources = {}
+    errors = {}
+
     print("[COLLECT] Collecting NewsAPI data...")
-    newsapi_data = fetch_newsapi_data(save_snapshot=save_snapshots)
+    try:
+        sources["newsapi"] = fetch_newsapi_data(save_snapshot=save_snapshots)
+    except Exception as exc:
+        errors["newsapi"] = str(exc)
+        print(f"[COLLECT] NewsAPI collection failed: {exc}")
 
     print("[COLLECT] Collecting Guardian data...")
-    guardian_data = fetch_guardian_data(save_snapshot=save_snapshots)
+    try:
+        sources["guardian"] = fetch_guardian_data(save_snapshot=save_snapshots)
+    except Exception as exc:
+        errors["guardian"] = str(exc)
+        print(f"[COLLECT] Guardian collection failed: {exc}")
+
+    if not sources:
+        raise RuntimeError("[COLLECT] No source data could be collected from any provider.")
 
     return {
         "scope": {
@@ -70,10 +112,8 @@ def collect_all_sources(save_snapshots=True):
             "date_start": CONFIG["date_start"],
             "date_end": CONFIG["date_end"],
         },
-        "sources": {
-            "newsapi": newsapi_data,
-            "guardian": guardian_data,
-        },
+        "sources": sources,
+        "collection_errors": errors,
     }
 
 
