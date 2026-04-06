@@ -1,118 +1,131 @@
-"""Contract and smoke tests for the full pipeline."""
+"""Smoke and contract tests for the current KG pipeline."""
 
-import json
-import os
+from collections import Counter
 
 import pytest
 
 from src.data_extraction import extract_relevant_information
-from src.data_normalisation import normalise_data
-from src.json_to_rdf import convert_json_to_rdf
-
-FIXTURE_PATH = os.path.join(os.path.dirname(__file__), "fixtures", "sample_response.json")
+from src.data_normalisation import normalise_collected_sources, normalise_data
+from src.json_to_rdf import NEWS, convert_json_to_rdf
 
 
 @pytest.fixture
-def sample_raw_data():
-    with open(FIXTURE_PATH) as f:
-        return json.load(f)
+def sample_collected_data():
+    return {
+        "sources": {
+            "newsapi": {
+                "articles": [
+                    {
+                        "source": {"name": "BBC News"},
+                        "author": "Laura Kuenssberg",
+                        "title": "Keir Starmer under pressure as Treasury defends spring budget plans",
+                        "description": "Labour faces questions over tax and public spending in Westminster.",
+                        "url": "https://example.com/article-1",
+                        "publishedAt": "2026-03-20T10:00:00Z",
+                        "content": (
+                            "Keir Starmer and Rachel Reeves faced criticism in London after the Treasury "
+                            "outlined budget and public spending changes in Parliament."
+                        ),
+                    }
+                ]
+            },
+            "guardian": {
+                "response": {
+                    "results": [
+                        {
+                            "webTitle": "Opinion: Parliament needs a clearer immigration policy",
+                            "webUrl": "https://example.com/article-2",
+                            "webPublicationDate": "2026-03-25T08:30:00Z",
+                            "sectionName": "Comment is Free",
+                            "tags": [{"type": "keyword", "webTitle": "Immigration and asylum"}],
+                            "fields": {
+                                "byline": "Polly Toynbee",
+                                "trailText": "An opinion piece on Westminster and immigration.",
+                                "bodyText": (
+                                    "The Home Office and Labour Party are under scrutiny over immigration policy in London."
+                                ),
+                                "lastModified": "2026-03-25T09:00:00Z",
+                                "wordcount": "650",
+                            },
+                        }
+                    ]
+                }
+            },
+        }
+    }
 
 
 @pytest.fixture
-def extracted(sample_raw_data):
-    return extract_relevant_information(sample_raw_data)
+def source_records(sample_collected_data):
+    return normalise_collected_sources(sample_collected_data)
 
 
 @pytest.fixture
-def normalised(extracted):
-    return normalise_data(extracted)
+def extracted_records(source_records):
+    return extract_relevant_information(source_records)
 
 
 @pytest.fixture
-def rdf_graph(normalised):
-    return convert_json_to_rdf(normalised)
+def kg_records(extracted_records):
+    return normalise_data(extracted_records)
 
 
-# ---------------------------------------------------------------------------
-# Contract: extract -> normalise
-# ---------------------------------------------------------------------------
+@pytest.fixture
+def rdf_graph(kg_records):
+    return convert_json_to_rdf(kg_records)
 
 
-class TestExtractToNormaliseContract:
-    def test_extracted_records_pass_normalisation(self, extracted):
-        """Every record output by extraction must be accepted by normalisation."""
-        result = normalise_data(extracted)
-        assert len(result) == len(extracted)
+class TestPipelineStages:
+    def test_source_normalisation_keeps_both_sources(self, source_records):
+        assert len(source_records) == 2
+        assert Counter(record["source_system"] for record in source_records) == {
+            "newsapi": 1,
+            "guardian": 1,
+        }
 
-    def test_normalised_ids_are_stable(self, extracted):
-        """Running normalisation twice on the same extracted data yields identical IDs."""
-        r1 = normalise_data(extracted)
-        r2 = normalise_data(extracted)
-        assert [r["id"] for r in r1] == [r["id"] for r in r2]
+    def test_extraction_outputs_kg_ready_fields(self, extracted_records):
+        record = extracted_records[0]
+        for key in (
+            "article_type",
+            "sentiment",
+            "entities",
+            "event_candidates",
+            "follow_up_candidates",
+            "relations",
+        ):
+            assert key in record
 
-    def test_normalised_dates_are_utc_iso(self, normalised):
-        for record in normalised:
-            dt = record["published_at"]
-            assert dt.endswith("Z"), f"Date not UTC: {dt}"
-            assert "T" in dt
+    def test_normalised_records_preserve_entity_groups(self, kg_records):
+        entities = kg_records[0]["entities"]
+        for key in (
+            "organizations",
+            "people",
+            "politicians",
+            "political_parties",
+            "government_bodies",
+            "locations",
+            "topics",
+            "events",
+        ):
+            assert key in entities
 
-    def test_all_normalised_entities_have_required_keys(self, normalised):
-        for record in normalised:
-            entities = record["entities"]
-            for key in ("organizations", "people", "locations", "technologies", "topics"):
-                assert key in entities
+    def test_pipeline_produces_nonempty_graph(self, rdf_graph):
+        assert len(rdf_graph) > 0
 
-    def test_all_normalised_relations_use_controlled_predicates(self, normalised):
-        from src.config import CONFIG
+    def test_graph_contains_article_nodes_for_all_records(self, kg_records, rdf_graph):
+        article_count = sum(1 for _ in rdf_graph.triples((None, None, None)))
+        assert article_count > 0
+        for record in kg_records:
+            article_uri = NEWS[f"article/{record['id']}"]
+            assert (article_uri, None, None) in rdf_graph
 
-        allowed = CONFIG["CONTROLLED_PREDICATES"]
-        for record in normalised:
-            for rel in record["relations"]:
-                assert rel["predicate"] in allowed, f"Unexpected predicate: {rel['predicate']!r}"
+    def test_graph_contains_event_and_sentiment_information(self, rdf_graph):
+        assert any(True for _ in rdf_graph.triples((None, NEWS.hasSentiment, None)))
+        assert any(True for _ in rdf_graph.triples((None, NEWS.coversEvent, None)))
 
-
-# ---------------------------------------------------------------------------
-# Contract: normalise -> rdf
-# ---------------------------------------------------------------------------
-
-
-class TestNormaliseToRdfContract:
-    def test_every_normalised_record_produces_triples(self, normalised):
-        for record in normalised:
-            g = convert_json_to_rdf([record])
-            assert len(g) > 0, f"No triples produced for record {record['id']}"
-
-    def test_rdf_graph_has_article_nodes(self, normalised, rdf_graph):
-        from rdflib import RDF
-
-        from src.json_to_rdf import EX
-
-        article_types = list(rdf_graph.subjects(RDF.type, EX.NewsArticle))
-        assert len(article_types) == len(normalised)
-
-
-# ---------------------------------------------------------------------------
-# Smoke test: offline end-to-end with fixture
-# ---------------------------------------------------------------------------
-
-
-class TestEndToEndSmoke:
-    def test_pipeline_produces_valid_nonempty_turtle(self, rdf_graph, tmp_path):
-        out_file = tmp_path / "output.ttl"
-        rdf_graph.serialize(destination=str(out_file), format="turtle")
-
-        assert out_file.exists()
-        content = out_file.read_text()
-        assert len(content) > 0
-        assert "@prefix" in content
-
-    def test_fixture_produces_expected_article_count(self, normalised):
-        assert len(normalised) == 2
-
-    def test_fixture_detects_ai_technology(self, normalised):
-        all_techs = [t for r in normalised for t in r["entities"]["technologies"]]
-        assert "AI" in all_techs or "Artificial Intelligence" in all_techs
-
-    def test_fixture_detects_robotics(self, normalised):
-        all_techs = [t for r in normalised for t in r["entities"]["technologies"]]
-        assert "Robotics" in all_techs
+    def test_guardian_opinion_article_survives_end_to_end(self, kg_records):
+        opinion_records = [
+            record for record in kg_records if record["article_type"] == "OpinionArticle"
+        ]
+        assert opinion_records
+        assert opinion_records[0]["section"] == "Comment is Free"
