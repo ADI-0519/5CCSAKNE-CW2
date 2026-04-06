@@ -25,6 +25,7 @@ DATE_END = "2026-04-06"
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 NEWS_API_BASE = "https://newsapi.org/v2"
 GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
@@ -35,6 +36,7 @@ GUARDIAN_SHOW_TAGS = ["keyword", "tone", "contributor"]
 RAW_DATA_DIR = "data/raw"
 PROCESSED_DATA_DIR = "data/processed"
 GENERATED_KG_DIR = "kg/generated"
+OPENAI_CACHE_DIR = "data/cache/openai"
 
 NEWS_QUERY_TERMS = [
     "UK politics",
@@ -256,23 +258,15 @@ CONTROLLED_PREDICATES = {
 }
 
 ENTITY_STOPLIST = {
-    "The",
-    "This",
-    "That",
-    "These",
-    "Those",
+    "April",
+    "Britain",
+    "February",
     "It",
     "Its",
-    "He",
-    "She",
-    "They",
-    "We",
-    "You",
-    "I",
-    "Me",
-    "Us",
-    "Them",
-    "New",
+    "January",
+    "June",
+    "Last",
+    "Monday",
     "More",
     "Most",
     "First",
@@ -399,6 +393,7 @@ CONFIG = {
     "NEWS_API_KEY": NEWS_API_KEY,
     "GUARDIAN_API_KEY": GUARDIAN_API_KEY,
     "OPENAI_API_KEY": OPENAI_API_KEY,
+    "OPENAI_MODEL": OPENAI_MODEL,
     "NEWS_API_BASE": NEWS_API_BASE,
     "GUARDIAN_API_BASE": GUARDIAN_API_BASE,
     "NEWS_API_PAGE_SIZE": NEWS_API_PAGE_SIZE,
@@ -407,6 +402,7 @@ CONFIG = {
     "RAW_DATA_DIR": RAW_DATA_DIR,
     "PROCESSED_DATA_DIR": PROCESSED_DATA_DIR,
     "GENERATED_KG_DIR": GENERATED_KG_DIR,
+    "OPENAI_CACHE_DIR": OPENAI_CACHE_DIR,
     "NEWS_QUERY_TERMS": NEWS_QUERY_TERMS,
     "GUARDIAN_SECTIONS": GUARDIAN_SECTIONS,
     "GUARDIAN_TAGS": GUARDIAN_TAGS,
