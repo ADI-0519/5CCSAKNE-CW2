@@ -69,4 +69,4 @@ class TestOntologyMain:
         assert output_path.exists()
         content = output_path.read_text()
         assert "@prefix" in content
-        assert "Current News Ontology" in content
+        assert "UK Politics and Policy News Ontology" in content
