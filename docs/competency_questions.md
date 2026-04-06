@@ -1,55 +1,61 @@
-# Competency Questions
+# Final Competency Questions
 
-This document captures the 20 competency questions for the current-news KG. The first 10 were written manually. The second 10 were added through LLM-assisted augmentation and then refined to match the ontology and expected query scope.
+This document contains the final wording for the 20 competency questions used in the coursework.
 
-Each question has a corresponding SPARQL query in `queries/news_competency_queries.rq`.
+Project scope:
+
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+
+The first 10 questions are the manually authored set. The second 10 were LLM-assisted and then revised so they align with the fixed time window, the current ontology, and the implemented pipeline outputs.
+
+Implementation difficulty and current pipeline support are tracked separately in [cq_coverage_table.md](5CCSAKNE-CW2/docs/cq_coverage_table.md).
 
 ## Manual Competency Questions
 
-`CQ01.` Which articles mention a target technology such as `AI` or `Robotics`?
+`CQ01.` Which journalists wrote politics-section articles about government or policy issues during the project time window?
 
-`CQ02.` Which organisations are mentioned in articles about a target technology?
+`CQ02.` Which news organisations published politics-section articles between March 6, 2026 and April 6, 2026?
 
-`CQ03.` Which journalists authored articles that mention a target organisation?
+`CQ03.` Which people were mentioned most often across the fixed article collection?
 
-`CQ04.` Which publishers have published articles about a target topic?
+`CQ04.` Which political parties were mentioned in articles about elections or parliamentary politics?
 
-`CQ05.` Which locations are mentioned in articles about a target technology?
+`CQ05.` Which government bodies were mentioned in articles about taxation, public spending, or healthcare policy?
 
-`CQ06.` Which technologies are associated with a target organisation through the `news:usesTechnology` relation?
+`CQ06.` Which opinion articles were classified as negative in sentiment?
 
-`CQ07.` Which articles mention the same organisation together with multiple technologies?
+`CQ07.` Which topics appeared most often in politics-section reporting during the project time window?
 
-`CQ08.` Which people are mentioned most often in articles about a target topic?
+`CQ08.` Which articles were updated after their original publication time, and what are their canonical URLs?
 
-`CQ09.` Which publishers cover the widest range of topics?
+`CQ09.` How does the average word count of politics-section articles compare with the average word count of opinion articles?
 
-`CQ10.` Which topics co-occur most often with a target technology?
+`CQ10.` Which articles have a follow-up article, and do the original and follow-up share at least one topic?
 
-## LLM-Augmented Competency Questions
+## LLM-Assisted Competency Questions
 
-`CQ11.` Which articles mention both a target technology and a target location?
+`CQ11.` Which journalists from the same news organisation wrote about the same topic during the project time window?
 
-`CQ12.` Which publishers mention the same organisation across multiple articles?
+`CQ12.` Which breaking news articles were published in the politics section?
 
-`CQ13.` Which journalists write most often about a target technology?
+`CQ13.` Which locations were mentioned most often in articles about immigration, taxation, or healthcare policy?
 
-`CQ14.` Which locations are most frequently discussed within a target topic?
+`CQ14.` Which journalists wrote articles that were later updated?
 
-`CQ15.` Which organisations appear in articles published by more than one publisher?
+`CQ15.` Which articles mention both a person and an organisation?
 
-`CQ16.` Which technologies appear together in the same article?
+`CQ16.` Which news organisations published the widest range of topics during the project time window?
 
-`CQ17.` Which people and organisations co-occur in the same articles?
+`CQ17.` Which people and organisations were co-mentioned most often in the same articles?
 
-`CQ18.` Which articles are tagged with more than one topic?
+`CQ18.` Which political events took place in London during the project time window, and when did they occur?
 
-`CQ19.` Which publishers mention the highest number of unique organisations?
+`CQ19.` Which political or economic events were covered by more than one news organisation?
 
-`CQ20.` Which topics have the highest number of articles overall?
+`CQ20.` Which politicians and political parties were mentioned together most often in the same articles?
 
-## Scope Notes
+## Notes
 
-- The current prototype can already answer article, publisher, author, organisation, technology, topic, and location questions.
-- Event-centric questions were deliberately deferred because `news:NewsEvent` is modelled in the ontology but not yet populated by the extraction pipeline.
-- Future competency-question iterations should add questions once structured-source ingestion and completion work are in place.
+- This set is now fully aligned to the fixed March 6, 2026 to April 6, 2026 dataset window.
+- The wording avoids the earlier generic news and technology framing.
+- The set is designed to exercise both the stronger metadata-driven parts of the KG and the harder analytical areas such as political-actor typing, sentiment, follow-up links, and event modelling.

@@ -1,152 +1,299 @@
 # Evaluation Methodology
 
-This evaluation plan is for the fixed-scope UK politics and policy news KG:
+This document defines how the UK politics and policy knowledge graph should be evaluated in a way that matches the current codebase and pipeline.
+
+Project scope:
 
 `A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
 
-The evaluation should compare:
+The current pipeline now produces several distinct artefacts:
 
-- the base KG produced by [main.py](/home/kasim/5CCSAKNE-CW2/src/main.py)
-- the enriched KG produced by [complete_kg.py](/home/kasim/5CCSAKNE-CW2/src/complete_kg.py)
+- a normalised article set
+- extracted KG-ready records
+- an ontology graph
+- an instance graph
+- a merged prototype KG
+- a completed/enriched KG
+- a query result set over the completed KG
+
+So evaluation should no longer focus on only one generated graph. It should compare the system across stages, especially:
+
+- the prototype KG before completion
+- the completed KG after enrichment
 
 ## 1. Structural Correctness
 
-Goal: confirm that the KG is valid RDF and remains aligned with the ontology.
+Goal: confirm that the pipeline produces syntactically valid and structurally coherent outputs at each stage.
 
-Metrics:
+### What to check
 
-- Turtle parse success rate.
-- Number of generated triples.
-- Triples per article.
-- Namespace conformance: percentage of application-specific triples using `news:` terms.
-- Required field pass rate after normalisation.
+- all JSON artefacts are generated successfully
+- all Turtle outputs parse successfully
+- ontology, prototype KG, and completed KG are all valid RDF graphs
+- expected namespaces and ontology terms appear in the final graph
+- the required article fields survive collection, normalisation, extraction, and RDF conversion
 
-Evidence:
+### Metrics
 
-- unit tests
-- ontology tests
-- RDF conversion tests
-- successful parsing of `news_ontology.ttl`, `new_kg.ttl`, and `completed_kg.ttl`
+- JSON generation success rate
+- Turtle parse success rate
+- total triple count
+- triples per article
+- percentage of articles that retain required metadata:
+  - title
+  - URL
+  - publication date
+  - publisher
+  - section
+  - word count
+
+### Evidence sources
+
+- pipeline smoke tests
+- normalisation tests
+- RDF tests
+- successful execution of the end-to-end pipeline in [main.py](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/src/main.py)
 
 ## 2. Competency-Question Coverage
 
-Goal: measure how well the current KG supports the 20 final competency questions.
+Goal: measure how well the generated KG supports the final set of competency questions.
 
-Method:
+### Method
 
-- Use the CQ coverage table in [cq_coverage_table.md](/home/kasim/5CCSAKNE-CW2/docs/cq_coverage_table.md) as the baseline expectation.
-- Run all 20 SPARQL queries over the base KG and again over the completed KG.
-- For each CQ, label the result as `answered`, `partially answered`, or `unanswered`.
-- Record whether failure is caused by missing ontology population, weak extraction quality, or genuine absence of evidence.
+- use the final 20 competency questions as the evaluation target
+- run the full SPARQL query set over the completed KG
+- record whether each query:
+  - executes successfully
+  - returns meaningful rows
+  - is only partially supported because the graph is incomplete or noisy
 
-Metrics:
+### Labels
 
-- Query parse success rate.
-- Query execution success rate.
-- Answerability rate on the base KG.
-- Answerability rate on the completed KG.
-- Improvement in answerability after completion.
+Each CQ should be classified as:
+
+- `answered`
+- `partially answered`
+- `unanswered`
+
+### Metrics
+
+- query parse success rate
+- query execution success rate
+- answerability rate on the prototype KG
+- answerability rate on the completed KG
+- improvement in answerability after completion
+
+### Why this matters
+
+This is the most important evaluation category for coursework quality because it connects:
+
+- ontology design
+- extraction quality
+- completion quality
+- SPARQL usefulness
 
 ## 3. Extraction And Classification Quality
 
-Goal: assess the quality of the current extraction pipeline for the entities and metadata that matter to the final ontology.
+Goal: assess how accurate the extraction stage is for the ontology elements that matter most to the final KG.
 
-Priority entity and metadata types:
+### Core extracted elements
 
-- journalists
+- journalists/authors
 - publishers
 - people
-- organisations
-- locations
-- topics
-- section labels
-- article update timestamps
-
-Planned advanced types:
-
 - politicians
+- organisations
 - political parties
 - government bodies
-- political events
-- economic events
+- locations
+- topics
+- article subtype
+- sentiment
+- event candidates
+
+### Manual evaluation setup
+
+- sample 30 to 50 articles from the fixed dataset
+- include both Guardian and NewsAPI articles
+- create a small gold sheet with the expected:
+  - author
+  - publisher
+  - people
+  - organisations
+  - locations
+  - topics
+  - sentiment
+  - article subtype
+  - key events where obvious
+
+If time is limited, priority should go to:
+
+- political actors
+- topics
 - sentiment
 - article subtype
+- event candidates
 
-Recommended annotation setup:
+### Metrics
 
-- Sample 30 to 50 articles from the fixed dataset.
-- Create a small gold sheet with expected people, organisations, locations, topics, and key article metadata.
-- For the completion layer, separately annotate sentiment, subtype, and follow-up on a smaller subset if time is limited.
+- precision, recall, and F1 for people, organisations, locations, and topics
+- classification accuracy for:
+  - politicians
+  - political parties
+  - government bodies
+  - sentiment
+  - article subtype
+- event extraction precision on the manually reviewed sample
+- metadata accuracy for:
+  - author
+  - publisher
+  - publication date
+  - section
+  - update timestamp
+  - word count
 
-Metrics:
+### Practical note
 
-- Entity precision, recall, and F1 for people, organisations, locations, and topics.
-- Metadata accuracy for author, publisher, section, publication date, update timestamp, and word count.
-- Classification accuracy for sentiment, article subtype, and any later political-actor typing.
+The extraction layer is now partly heuristic and partly OpenAI-assisted. Evaluation should therefore describe whether errors are mostly caused by:
+
+- heuristic over-generation
+- weak event grounding
+- incomplete actor typing
+- poor LLM refinement
 
 ## 4. Completion Quality
 
-Goal: evaluate whether completion actually improves the KG rather than just adding noisy triples.
+Goal: determine whether the completion stage genuinely improves the graph.
 
-Method:
+The current completion stage already enriches the prototype KG with:
 
-- Compare the base KG and completed KG on the same CQ/query set.
-- Manually inspect a sample of completion-generated triples.
-- Track which completions are heuristic and which later become LLM-assisted.
+- sentiment
+- section
+- word count
+- update timestamp
+- additional topics
+- article subtype reinforcement
+- follow-up links
 
-Metrics:
+and it can optionally use OpenAI completion with cached structured outputs.
 
-- Number of completion triples added.
-- Percentage of completion triples that pass ontology validation.
-- Precision of sampled completion triples.
-- Number of previously unsupported or partially supported CQs improved by completion.
+### Method
 
-## 5. Performance
+- compare prototype KG and completed KG on the same query set
+- inspect a sample of completion-generated triples manually
+- separate heuristic completions from OpenAI-assisted completions where possible
 
-Goal: quantify the runtime cost of the pipeline.
+### Metrics
 
-Metrics:
+- number of completion triples added
+- number of articles affected by completion
+- percentage of completion triples that are ontology-compatible
+- precision of sampled completion triples
+- number of CQs improved after completion
 
-- End-to-end runtime of `main.py`.
-- End-to-end runtime of `complete_kg.py`.
-- Runtime per stage: collection, extraction, normalisation, RDF generation, completion.
-- Number of articles successfully processed.
-- Triples generated per article.
+### Important remaining quality questions
 
-Recommended procedure:
+- are added topics relevant rather than over-broad?
+- are subtype corrections sensible?
+- are follow-up links meaningful?
+- does OpenAI completion improve quality or merely add noise?
 
-- Run the pipeline at least three times on the fixed window.
-- Report median runtime.
-- Record article counts and triple counts for each run.
-- Note when NewsAPI returns plan-related restrictions for the fixed date window.
+## 5. Cross-Source Evaluation
 
-## 6. Baseline Comparison
+Goal: show that the system genuinely works across more than one source and identify source-specific weaknesses.
 
-Goal: compare KG-based answers with direct LLM answers.
+### Method
 
-Method:
+- compare Guardian and NewsAPI records after normalisation and extraction
+- compare the kinds of metadata available from each
+- compare whether one source produces cleaner entities or more useful topics/events
 
-- Select 5 to 10 representative CQs.
-- Ask the LLM to answer them directly from the same source material.
-- Compare those answers with SPARQL results over the KG.
+### Metrics
 
-Comparison criteria:
+- number of articles collected per source
+- number of usable articles per source after normalisation
+- coverage of key fields by source:
+  - author
+  - section
+  - summary
+  - content
+  - tags
+  - word count
+- extraction quality by source on the manual sample
+
+### Important context
+
+NewsAPI developer-tier limits restrict retrieval to the first 100 results in the project window. This should be treated as a documented data-source limitation rather than as a pipeline failure.
+
+## 6. Performance And Reproducibility
+
+Goal: quantify runtime cost and show that the system can be rerun consistently.
+
+### Metrics
+
+- end-to-end runtime of [main.py](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/src/main.py)
+- runtime of each major stage:
+  - collection
+  - normalisation
+  - extraction
+  - ontology build
+  - RDF conversion
+  - completion
+  - query execution
+- number of articles processed
+- total triples generated
+- triples per article
+
+### Reproducibility checks
+
+- confirm that raw snapshots are saved under `data/raw`
+- confirm that processed JSON artefacts are saved under `data/processed`
+- confirm that the same cached raw snapshots can be reused with offline mode
+- confirm that OpenAI outputs can be cached and reused rather than recomputed every run
+
+This is especially important because the coursework values automation and reproducibility, not just a one-off demonstration.
+
+## 7. Baseline Comparison With Direct LLM Answers
+
+Goal: compare KG-based answering with direct LLM answering on a smaller subset of questions.
+
+### Method
+
+- select 5 to 10 representative competency questions
+- answer them directly from the article texts with the LLM
+- compare those answers with SPARQL results over the completed KG
+
+### Comparison criteria
 
 - factual grounding
+- traceability to source metadata
 - reproducibility
-- traceability back to article metadata
 - consistency of answer format
+- ease of auditing
 
-Expected conclusion:
+### Expected conclusion
 
-- KG plus SPARQL should be more reproducible and easier to audit.
-- Direct LLM answers may be broader, but they will be less structurally grounded.
+The KG plus SPARQL approach should be more reproducible and structurally auditable, while direct LLM answers may be more fluent but less transparent.
 
-## 7. Minimum Results Tables To Produce
+## 8. Minimum Tables And Figures To Produce
 
-The final evaluation write-up should include:
+The final evaluation section should include at least:
 
-- a CQ support table for all 20 questions
-- a base-KG versus completed-KG comparison table
-- a small manual quality audit table
+- a CQ support table for all 20 competency questions
+- a prototype-KG versus completed-KG comparison table
+- a manual quality-audit table for the sampled articles
+- a per-source article-count table
 - a runtime and triple-count table
+
+## Final Evaluation Position
+
+The current project is now advanced enough that evaluation should not be framed as "does the pipeline run at all?".
+
+The more important questions are:
+
+- how accurate is the extraction?
+- how much does completion improve the graph?
+- how many competency questions are genuinely answerable?
+- how reproducible is the pipeline under API and model constraints?
+
+That framing is much closer to the actual maturity of the codebase and much stronger for the final submission.
