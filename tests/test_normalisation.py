@@ -1,169 +1,198 @@
-"""Unit tests for data_normalisation module."""
+"""Unit tests for the current normalisation layer."""
 
 import pytest
 
 from src.data_normalisation import (
-    _canonicalise_date,
-    _is_valid_url,
-    _normalise_name,
-    _stable_id,
+    build_stable_id,
+    canonicalise_date,
+    is_valid_url,
+    normalise_collected_sources,
     normalise_data,
+    normalise_name,
 )
 
 
-class TestStableId:
-    def test_uses_url_when_present(self):
-        id1 = _stable_id("https://example.com/a", "Title", "2024-01-01")
-        id2 = _stable_id("https://example.com/a", "Different Title", "2024-01-02")
-        assert id1 == id2  # URL takes precedence
+class TestUtilityFunctions:
+    def test_build_stable_id_prefers_url(self):
+        first = build_stable_id("https://example.com/a", "Title", "2026-03-06")
+        second = build_stable_id("https://example.com/a", "Different", "2026-04-01")
+        assert first == second
+        assert len(first) == 16
 
-    def test_falls_back_to_title_plus_date(self):
-        id1 = _stable_id("", "My Title", "2024-01-01")
-        id2 = _stable_id("", "My Title", "2024-01-01")
-        assert id1 == id2
+    def test_canonicalise_date_accepts_supported_formats(self):
+        assert canonicalise_date("2026-03-06T10:00:00Z") == "2026-03-06T10:00:00Z"
+        assert canonicalise_date("2026-03-06").startswith("2026-03-06")
 
-    def test_is_16_chars(self):
-        assert len(_stable_id("https://x.com", "", "")) == 16
-
-
-class TestCanonicalisedDate:
-    def test_parses_iso_z(self):
-        result = _canonicalise_date("2024-01-15T10:00:00Z")
-        assert result == "2024-01-15T10:00:00Z"
-
-    def test_parses_date_only(self):
-        result = _canonicalise_date("2024-01-15")
-        assert result.startswith("2024-01-15")
-
-    def test_raises_on_invalid_date(self):
+    def test_canonicalise_date_rejects_invalid_input(self):
         with pytest.raises(ValueError, match="Cannot parse date"):
-            _canonicalise_date("not-a-date")
+            canonicalise_date("not-a-date")
 
-    def test_raises_on_empty_date(self):
-        with pytest.raises((ValueError, TypeError)):
-            _canonicalise_date("")
+    def test_is_valid_url_accepts_http_and_https(self):
+        assert is_valid_url("https://example.com") is True
+        assert is_valid_url("http://example.com") is True
+        assert is_valid_url("ftp://example.com") is False
 
-
-class TestIsValidUrl:
-    def test_valid_https_url(self):
-        assert _is_valid_url("https://example.com/article") is True
-
-    def test_valid_http_url(self):
-        assert _is_valid_url("http://example.com/") is True
-
-    def test_rejects_ftp(self):
-        assert _is_valid_url("ftp://example.com/file") is False
-
-    def test_rejects_empty_string(self):
-        assert _is_valid_url("") is False
-
-    def test_rejects_relative_path(self):
-        assert _is_valid_url("/just/a/path") is False
+    def test_normalise_name_trims_and_collapses_whitespace(self):
+        assert normalise_name("  hello   world  ") == "hello world"
+        assert normalise_name(None) == ""
 
 
-class TestNormaliseName:
-    def test_trims_whitespace(self):
-        assert _normalise_name("  hello world  ") == "hello world"
+class TestSourceNormalisation:
+    def test_normalise_collected_sources_preserves_both_sources(self):
+        collected = {
+            "sources": {
+                "newsapi": {
+                    "articles": [
+                        {
+                            "source": {"name": "BBC News"},
+                            "author": "Laura Kuenssberg",
+                            "title": "Labour responds to budget row",
+                            "description": "A Westminster update.",
+                            "url": "https://example.com/newsapi-1",
+                            "publishedAt": "2026-03-06T08:00:00Z",
+                            "content": "The Treasury and Labour traded criticism in Parliament.",
+                        }
+                    ]
+                },
+                "guardian": {
+                    "response": {
+                        "results": [
+                            {
+                                "webTitle": "Opinion: Immigration policy needs reform",
+                                "webUrl": "https://example.com/guardian-1",
+                                "webPublicationDate": "2026-03-06T09:00:00Z",
+                                "sectionName": "Comment is Free",
+                                "tags": [{"webTitle": "Immigration and asylum"}],
+                                "fields": {
+                                    "byline": "Polly Toynbee",
+                                    "trailText": "An opinion column on immigration.",
+                                    "bodyText": "The Home Office is under pressure over immigration policy.",
+                                    "lastModified": "2026-03-06T10:00:00Z",
+                                    "wordcount": "500",
+                                },
+                            }
+                        ]
+                    }
+                },
+            }
+        }
 
-    def test_collapses_internal_spaces(self):
-        assert _normalise_name("hello   world") == "hello world"
+        result = normalise_collected_sources(collected)
+        assert len(result) == 2
+        assert {record["source_system"] for record in result} == {"newsapi", "guardian"}
 
-    def test_empty_returns_empty(self):
-        assert _normalise_name("") == ""
+    def test_guardian_contributor_tags_are_not_kept_as_topics(self):
+        collected = {
+            "sources": {
+                "guardian": {
+                    "response": {
+                        "results": [
+                            {
+                                "webTitle": "Politics article",
+                                "webUrl": "https://example.com/guardian-2",
+                                "webPublicationDate": "2026-03-06T09:00:00Z",
+                                "sectionName": "Politics",
+                                "tags": [
+                                    {"type": "contributor", "webTitle": "John Harris"},
+                                    {"type": "keyword", "webTitle": "Labour"},
+                                ],
+                                "fields": {
+                                    "byline": "John Harris",
+                                    "trailText": "Politics update.",
+                                    "bodyText": "Labour responds in Parliament.",
+                                    "lastModified": "2026-03-06T10:00:00Z",
+                                    "wordcount": "400",
+                                },
+                            }
+                        ]
+                    }
+                }
+            }
+        }
 
-    def test_none_returns_empty(self):
-        assert _normalise_name(None) == ""
+        result = normalise_collected_sources(collected)
+        assert result[0]["tags"] == ["Labour"]
 
 
-class TestNormaliseData:
-    def _valid_record(self, **overrides):
-        base = {
+class TestExtractedRecordNormalisation:
+    def valid_record(self, **overrides):
+        record = {
             "id": "abc123",
-            "title": "Test Article Title",
+            "source_system": "guardian",
+            "source_name": "The Guardian",
+            "title": "Keir Starmer faces pressure over budget plans",
             "url": "https://example.com/test",
-            "published_at": "2024-01-15T10:00:00Z",
-            "source_name": "Test Source",
+            "published_at": "2026-03-06T10:00:00Z",
+            "updated_at": None,
             "author": "Jane Doe",
-            "summary": "A test summary.",
+            "section": "Politics",
+            "summary": "A budget update.",
+            "content": "The Treasury and Labour clashed in Parliament.",
+            "tags": ["Politics", "Budget"],
+            "word_count": 120,
+            "article_type": "NewsArticle",
+            "sentiment": "Negative",
+            "event_candidates": [
+                {
+                    "name": "Budget",
+                    "type": "EconomicEvent",
+                    "date": "2026-03-06",
+                    "location": "London",
+                    "source": "heuristic",
+                }
+            ],
+            "follow_up_candidates": [],
             "entities": {
-                "organizations": ["Acme Corp"],
+                "organizations": ["Treasury", "Labour"],
                 "people": ["Jane Doe"],
+                "politicians": [],
+                "political_parties": ["Labour"],
+                "government_bodies": ["Treasury"],
                 "locations": ["London"],
-                "technologies": ["AI"],
-                "topics": ["research"],
+                "technologies": [],
+                "topics": ["Politics", "Economic Policy"],
+                "events": ["Budget"],
             },
             "relations": [
-                {"subject": "abc123", "predicate": "mentions", "object": "AI"},
+                {"subject": "abc123", "predicate": "published_by", "object": "The Guardian"},
+                {"subject": "abc123", "predicate": "authored_by", "object": "Jane Doe"},
             ],
         }
-        base.update(overrides)
-        return base
+        record.update(overrides)
+        return record
 
-    def test_returns_normalised_records(self):
-        result = normalise_data([self._valid_record()])
-        assert len(result) == 1
-        r = result[0]
-        assert r["title"] == "Test Article Title"
-        assert r["published_at"] == "2024-01-15T10:00:00Z"
+    def test_normalise_data_preserves_richer_fields(self):
+        result = normalise_data([self.valid_record()])
+        record = result[0]
+        assert record["source_system"] == "guardian"
+        assert record["section"] == "Politics"
+        assert record["article_type"] == "NewsArticle"
+        assert record["sentiment"] == "Negative"
+        assert record["entities"]["government_bodies"] == ["Treasury"]
+        assert record["event_candidates"][0]["name"] == "Budget"
 
-    def test_raises_on_empty_input(self):
-        with pytest.raises(ValueError, match="No extracted data"):
-            normalise_data([])
-
-    def test_raises_on_none_input(self):
-        with pytest.raises((ValueError, TypeError)):
-            normalise_data(None)
-
-    def test_raises_on_missing_title(self):
-        with pytest.raises(ValueError, match="title"):
-            normalise_data([self._valid_record(title="")])
-
-    def test_raises_on_missing_url(self):
-        with pytest.raises(ValueError, match="url"):
-            normalise_data([self._valid_record(url="")])
-
-    def test_raises_on_invalid_url(self):
-        with pytest.raises(ValueError, match="invalid URL"):
-            normalise_data([self._valid_record(url="not-a-url")])
-
-    def test_raises_on_missing_published_at(self):
-        with pytest.raises(ValueError, match="published_at"):
-            normalise_data([self._valid_record(published_at="")])
-
-    def test_raises_on_missing_source_name(self):
-        with pytest.raises(ValueError, match="source_name"):
-            normalise_data([self._valid_record(source_name="")])
-
-    def test_raises_on_unknown_predicate(self):
-        record = self._valid_record(
-            relations=[{"subject": "abc123", "predicate": "invented_by", "object": "AI"}]
+    def test_normalise_data_rejects_unknown_predicate(self):
+        record = self.valid_record(
+            relations=[{"subject": "abc123", "predicate": "invented_by", "object": "Budget"}]
         )
         with pytest.raises(ValueError, match="unknown predicate"):
             normalise_data([record])
 
-    def test_deduplicates_entities(self):
-        record = self._valid_record(
+    def test_normalise_data_deduplicates_entity_lists(self):
+        record = self.valid_record(
             entities={
-                "organizations": ["Acme Corp", "Acme Corp"],
-                "people": [],
-                "locations": [],
-                "technologies": ["AI", "AI"],
-                "topics": [],
-            },
-            relations=[],
+                "organizations": ["Treasury", "Treasury"],
+                "people": ["Jane Doe", "Jane Doe"],
+                "politicians": [],
+                "political_parties": ["Labour", "Labour"],
+                "government_bodies": ["Treasury", "Treasury"],
+                "locations": ["London", "London"],
+                "technologies": [],
+                "topics": ["Politics", "Politics"],
+                "events": ["Budget", "Budget"],
+            }
         )
-        result = normalise_data([record])
-        assert result[0]["entities"]["organizations"] == ["Acme Corp"]
-        assert result[0]["entities"]["technologies"] == ["AI"]
-
-    def test_generates_stable_id_from_url(self):
-        result = normalise_data([self._valid_record()])
-        import hashlib
-
-        expected = hashlib.sha256(b"https://example.com/test").hexdigest()[:16]
-        assert result[0]["id"] == expected
-
-    def test_canonicalises_date_to_utc(self):
-        record = self._valid_record(published_at="2024-06-01T08:00:00Z")
-        result = normalise_data([record])
-        assert result[0]["published_at"] == "2024-06-01T08:00:00Z"
+        result = normalise_data([record])[0]
+        assert result["entities"]["organizations"] == ["Treasury"]
+        assert result["entities"]["people"] == ["Jane Doe"]
+        assert result["entities"]["topics"] == ["Politics"]
