@@ -2,7 +2,7 @@
 
 This document records the current source-to-ontology mapping for the fixed coursework scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 1, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
 
 ## Source Design
 
@@ -93,4 +93,4 @@ Each collected article is normalized into a record with these fields:
 - The final CQ set is centred on politics and policy, not on generic current news and not on technology.
 - Author, publisher, topic, section, update timestamp, word count, and URL are already strong enough to support several coursework queries.
 - Event modelling, political-actor typing, and journalist affiliation are the main remaining gaps between the ontology design and the populated KG.
-- `news:mentionsTechnology` still exists in the codebase as a legacy property, but it is outside the final scoring-critical CQ scope and should not drive the final evaluation.
+- The final scoped ontology now excludes legacy technology-only relations that are not populated by the politics-and-policy pipeline.

@@ -2,7 +2,7 @@
 
 This document defines the recommended target ontology for Coursework 2 after narrowing the project scope to:
 
-`Current UK politics and policy news from March 1, 2026 to April 6, 2026, collected from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`Current UK politics and policy news from March 6, 2026 to April 6, 2026, collected from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
 
 This plan is designed to maximize marks by aligning the ontology with:
 
@@ -367,7 +367,6 @@ Unless your final CQ set or data pipeline truly needs them, deprioritize or remo
 In practice, that means the current generic-news ontology should likely drop or reduce emphasis on:
 
 - `Technology`
-- `mentionsTechnology`
 - `usesTechnology`
 - `developedBy`
 - `announced`
