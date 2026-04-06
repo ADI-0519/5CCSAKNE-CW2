@@ -1,99 +1,257 @@
 import os
-from datetime import date
+from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ---------------------------------------------------------------------------
-# Entity extraction dictionaries
+# Project scope
 # ---------------------------------------------------------------------------
 
+PROJECT_SCOPE = (
+    "Current UK politics and policy news from March 1, 2026 to April 6, 2026, "
+    "collected from GuardianAPI and NewsAPI, with OpenAI used for extraction, "
+    "classification, and completion."
+)
+
+DATE_START = "2026-03-01"
+DATE_END = "2026-04-06"
+
+# ---------------------------------------------------------------------------
+# Source configuration
+# ---------------------------------------------------------------------------
+
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+NEWS_API_BASE = "https://newsapi.org/v2"
+GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
+
+RAW_DATA_DIR = "data/raw"
+PROCESSED_DATA_DIR = "data/processed"
+GENERATED_KG_DIR = "kg/generated"
+
+NEWS_QUERY_TERMS = [
+    "UK politics",
+    "UK government",
+    "Parliament",
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Home Office",
+    "Treasury",
+    "budget",
+    "tax",
+    "public spending",
+    "immigration",
+    "NHS",
+    "policy",
+]
+
+GUARDIAN_SECTIONS = ["politics", "uk-news", "commentisfree"]
+GUARDIAN_TAGS = [
+    "politics/politics",
+    "politics/uk",
+    "business/economics",
+    "society/health",
+]
+
+GUARDIAN_FIELDS = [
+    "headline",
+    "trailText",
+    "bodyText",
+    "byline",
+    "lastModified",
+    "wordcount",
+]
+
+# ---------------------------------------------------------------------------
+# Extraction dictionaries
+# ---------------------------------------------------------------------------
+
+# Kept for backwards compatibility with the current prototype extraction code.
+# The current branch still uses a technology-oriented extractor in places, even
+# though the final project focus is UK politics and policy news.
 TECHNOLOGY_KEYWORDS = [
     "AI",
     "Artificial Intelligence",
     "Machine Learning",
     "Deep Learning",
-    "Neural Network",
-    "Natural Language Processing",
-    "NLP",
-    "Computer Vision",
-    "Robotics",
     "Automation",
-    "Cloud Computing",
-    "Blockchain",
-    "Cryptocurrency",
-    "Bitcoin",
-    "Ethereum",
-    "Quantum Computing",
-    "Cybersecurity",
-    "Data Science",
-    "Big Data",
-    "Internet of Things",
-    "IoT",
-    "5G",
-    "Augmented Reality",
-    "Virtual Reality",
-    "Mixed Reality",
-    "Edge Computing",
-    "Kubernetes",
-    "Docker",
-    "Microservices",
     "Large Language Model",
     "LLM",
     "Generative AI",
     "GPT",
-    "ChatGPT",
-    "Transformer",
-    "BERT",
-    "Diffusion Model",
-    "Autonomous Vehicle",
-    "Self-Driving",
-    "Semiconductor",
-    "GPU",
-    "TPU",
 ]
 
 TOPIC_KEYWORDS = [
-    "healthcare",
-    "finance",
-    "economy",
-    "climate",
-    "education",
     "politics",
-    "security",
-    "privacy",
-    "regulation",
     "policy",
-    "research",
-    "startup",
-    "investment",
-    "funding",
-    "acquisition",
-    "merger",
-    "IPO",
-    "innovation",
-    "sustainability",
-    "energy",
-    "space",
-    "defense",
     "government",
+    "parliament",
+    "election",
+    "leadership",
+    "budget",
+    "tax",
+    "taxation",
+    "public spending",
+    "economy",
+    "economic policy",
+    "immigration",
+    "healthcare",
+    "nhs",
+    "education",
+    "energy",
+    "defense",
+    "housing",
+    "cost of living",
+    "regulation",
 ]
 
-# Allowed predicate names; any other predicate causes a validation failure.
+POLITICIAN_NAMES = [
+    "Keir Starmer",
+    "Rishi Sunak",
+    "Kemi Badenoch",
+    "Angela Rayner",
+    "Rachel Reeves",
+    "Wes Streeting",
+    "Yvette Cooper",
+    "David Lammy",
+    "Nigel Farage",
+    "Ed Davey",
+    "John Swinney",
+    "Eluned Morgan",
+    "Michelle O'Neill",
+]
+
+POLITICAL_PARTY_NAMES = [
+    "Labour",
+    "Labour Party",
+    "Conservative",
+    "Conservative Party",
+    "Liberal Democrats",
+    "Green Party",
+    "Reform UK",
+    "Scottish National Party",
+    "SNP",
+    "Plaid Cymru",
+    "Democratic Unionist Party",
+    "DUP",
+    "Sinn Fein",
+    "Sinn Féin",
+]
+
+GOVERNMENT_BODY_NAMES = [
+    "HM Treasury",
+    "Treasury",
+    "Home Office",
+    "Cabinet Office",
+    "Department of Health and Social Care",
+    "Department for Education",
+    "Department for Work and Pensions",
+    "Ministry of Defence",
+    "Foreign Office",
+    "Downing Street",
+    "No 10",
+    "NHS England",
+    "House of Commons",
+    "House of Lords",
+    "Parliament",
+]
+
+UK_LOCATION_NAMES = [
+    "London",
+    "Westminster",
+    "Manchester",
+    "Birmingham",
+    "Liverpool",
+    "Leeds",
+    "Bristol",
+    "Edinburgh",
+    "Glasgow",
+    "Cardiff",
+    "Belfast",
+    "England",
+    "Scotland",
+    "Wales",
+    "Northern Ireland",
+    "United Kingdom",
+]
+
+TOPIC_GROUPS = {
+    "Taxation": ["tax", "taxation", "fiscal", "levy"],
+    "Public Spending": ["public spending", "spending review", "spending cuts", "funding"],
+    "Economic Policy": ["economy", "economic policy", "growth", "inflation", "interest rates"],
+    "Immigration": ["immigration", "asylum", "migrant", "border"],
+    "Healthcare": ["nhs", "healthcare", "hospital", "waiting list"],
+    "Education": ["education", "school", "university", "teachers"],
+    "Energy": ["energy", "net zero", "oil", "gas", "renewable"],
+    "Housing": ["housing", "rent", "homes", "planning"],
+    "Defence": ["defence", "defense", "armed forces", "military"],
+    "Election": ["election", "ballot", "campaign", "polling"],
+    "Parliament": ["parliament", "commons", "lords", "mp", "mps"],
+    "Leadership": ["leadership", "cabinet reshuffle", "party leader"],
+    "Government Policy": ["policy", "bill", "legislation", "proposal", "white paper"],
+}
+
+POLITICAL_EVENT_HINTS = [
+    "election",
+    "leadership contest",
+    "parliamentary vote",
+    "commons vote",
+    "lords vote",
+    "policy announcement",
+    "cabinet reshuffle",
+    "bill debate",
+    "spring statement",
+]
+
+ECONOMIC_EVENT_HINTS = [
+    "budget",
+    "spring statement",
+    "autumn statement",
+    "spending review",
+    "fiscal statement",
+    "interest rate decision",
+]
+
+POSITIVE_SENTIMENT_TERMS = [
+    "boost",
+    "success",
+    "welcome",
+    "improve",
+    "growth",
+    "progress",
+    "confidence",
+    "backing",
+]
+
+NEGATIVE_SENTIMENT_TERMS = [
+    "crisis",
+    "criticised",
+    "criticized",
+    "concern",
+    "failure",
+    "backlash",
+    "warning",
+    "decline",
+    "pressure",
+    "row",
+]
+
+OPINION_SECTION_NAMES = {"comment is free", "opinion", "comment"}
+BREAKING_NEWS_HINTS = ["breaking", "live", "updates", "developing", "just in"]
+
 CONTROLLED_PREDICATES = {
     "mentions",
-    "developed_by",
-    "announced",
     "located_in",
     "authored_by",
     "published_by",
-    "uses_technology",
     "involved_in",
-    "part_of",
 }
 
-# Words that look like entity names but should be ignored.
 ENTITY_STOPLIST = {
     "The",
     "This",
@@ -138,73 +296,95 @@ ENTITY_STOPLIST = {
     "October",
     "November",
     "December",
-    "North America",
-    "South America",
-    "United States",
     "United Kingdom",
+    "Great Britain",
 }
 
-# Two-word capitalized phrases that look like names but are places/orgs.
 PERSON_STOPLIST = {
-    "New York",
-    "Los Angeles",
-    "San Francisco",
-    "Las Vegas",
-    "New Orleans",
-    "United States",
     "United Kingdom",
-    "North Korea",
-    "South Korea",
-    "North America",
-    "South America",
-    "Middle East",
-    "White House",
-    "Supreme Court",
-    "Federal Reserve",
-    "Wall Street",
-    "Main Street",
-    "Capitol Hill",
-    "Silicon Valley",
-    "World Cup",
-    "Super Bowl",
-    "New Jersey",
-    "New Mexico",
-    "New Hampshire",
-    "West Virginia",
-    "North Carolina",
-    "South Carolina",
-    "North Dakota",
-    "South Dakota",
-    "Rhode Island",
-    "Puerto Rico",
-    "Hong Kong",
-    "Saudi Arabia",
+    "Prime Minister",
+    "Labour Party",
+    "Conservative Party",
+    "House Commons",
+    "House Lords",
+    "Downing Street",
+    "Cabinet Office",
+    "New Labour",
+    "Northern Ireland",
+    "Westminster Abbey",
 }
 
-# ---------------------------------------------------------------------------
-# Main config
-# ---------------------------------------------------------------------------
+
+def build_news_query_string():
+    return " OR ".join(NEWS_QUERY_TERMS)
+
+
+def build_newsapi_everything_url():
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{NEWS_API_BASE}/everything?"
+        f"q={query}&"
+        f"language=en&"
+        f"sortBy=publishedAt&"
+        f"from={DATE_START}&"
+        f"to={DATE_END}&"
+        f"apiKey={NEWS_API_KEY}"
+    )
+
+
+def build_guardian_url():
+    section_filter = "|".join(GUARDIAN_SECTIONS)
+    fields = ",".join(GUARDIAN_FIELDS)
+    tag_filter = "|".join(GUARDIAN_TAGS)
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{GUARDIAN_API_BASE}?"
+        f"q={query}&"
+        f"from-date={DATE_START}&"
+        f"to-date={DATE_END}&"
+        f"section={section_filter}&"
+        f"tag={tag_filter}&"
+        f"show-fields={fields}&"
+        f"page-size=200&"
+        f"api-key={GUARDIAN_API_KEY}"
+    )
+
 
 CONFIG = {
-    "today": date.today(),
-    "NEWS_API_KEY": os.getenv("NEWS_API_KEY"),
-    "GUARDIAN_API_KEY": os.getenv("GUARDIAN_API_KEY"),
-    "Keywords": ["AI", "Machine Learning", "Robotics", "Artificial Intelligence"],
+    "project_scope": PROJECT_SCOPE,
+    "date_start": DATE_START,
+    "date_end": DATE_END,
+    "NEWS_API_KEY": NEWS_API_KEY,
+    "GUARDIAN_API_KEY": GUARDIAN_API_KEY,
+    "OPENAI_API_KEY": OPENAI_API_KEY,
+    "NEWS_API_BASE": NEWS_API_BASE,
+    "GUARDIAN_API_BASE": GUARDIAN_API_BASE,
+    "RAW_DATA_DIR": RAW_DATA_DIR,
+    "PROCESSED_DATA_DIR": PROCESSED_DATA_DIR,
+    "GENERATED_KG_DIR": GENERATED_KG_DIR,
+    "NEWS_QUERY_TERMS": NEWS_QUERY_TERMS,
+    "GUARDIAN_SECTIONS": GUARDIAN_SECTIONS,
+    "GUARDIAN_TAGS": GUARDIAN_TAGS,
+    "GUARDIAN_FIELDS": GUARDIAN_FIELDS,
     "TECHNOLOGY_KEYWORDS": TECHNOLOGY_KEYWORDS,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
+    "POLITICIAN_NAMES": POLITICIAN_NAMES,
+    "POLITICAL_PARTY_NAMES": POLITICAL_PARTY_NAMES,
+    "GOVERNMENT_BODY_NAMES": GOVERNMENT_BODY_NAMES,
+    "UK_LOCATION_NAMES": UK_LOCATION_NAMES,
+    "TOPIC_GROUPS": TOPIC_GROUPS,
+    "POLITICAL_EVENT_HINTS": POLITICAL_EVENT_HINTS,
+    "ECONOMIC_EVENT_HINTS": ECONOMIC_EVENT_HINTS,
+    "POSITIVE_SENTIMENT_TERMS": POSITIVE_SENTIMENT_TERMS,
+    "NEGATIVE_SENTIMENT_TERMS": NEGATIVE_SENTIMENT_TERMS,
+    "OPINION_SECTION_NAMES": OPINION_SECTION_NAMES,
+    "BREAKING_NEWS_HINTS": BREAKING_NEWS_HINTS,
     "CONTROLLED_PREDICATES": CONTROLLED_PREDICATES,
     "ENTITY_STOPLIST": ENTITY_STOPLIST,
     "PERSON_STOPLIST": PERSON_STOPLIST,
+    "url_newsapi_everything": build_newsapi_everything_url(),
+    "url_guardian": build_guardian_url(),
 }
 
-CONFIG["url_ai"] = (
-    "https://newsapi.org/v2/everything?"
-    f"q={' OR '.join(CONFIG['Keywords'])}&"
-    f"from={CONFIG['today']}&"
-    "sortBy=popularity&"
-    f"apiKey={CONFIG['NEWS_API_KEY']}"
-)
-
-CONFIG["url_headlines"] = (
-    f"https://newsapi.org/v2/top-headlines?country=us&apiKey={CONFIG['NEWS_API_KEY']}"
-)
+# Backwards-compatible alias used by the current prototype pipeline.
+CONFIG["url_headlines"] = CONFIG["url_newsapi_everything"]
