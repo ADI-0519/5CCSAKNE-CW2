@@ -97,7 +97,9 @@ def _generate_relations(article_id, entities, author=None, source_name=None):
     if author:
         relations.append({"subject": article_id, "predicate": "authored_by", "object": author})
     if source_name:
-        relations.append({"subject": article_id, "predicate": "published_by", "object": source_name})
+        relations.append(
+            {"subject": article_id, "predicate": "published_by", "object": source_name}
+        )
 
     # Co-occurrence signal: an org that appears alongside a technology likely uses it
     for org in entities["organizations"]:
@@ -148,7 +150,9 @@ def extract_relevant_information(raw_data):
                 "topics": _extract_topics(full_text),
             }
 
-            relations = _generate_relations(article_id, entities, author=author, source_name=source_name)
+            relations = _generate_relations(
+                article_id, entities, author=author, source_name=source_name
+            )
 
             extracted.append(
                 {

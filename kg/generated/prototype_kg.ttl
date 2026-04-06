@@ -410,4 +410,3 @@ news:worksFor a rdf:Property ;
 <http://example.org/news#tech/AI> a news:Technology,
         schema:Thing ;
     schema:name "AI" .
-

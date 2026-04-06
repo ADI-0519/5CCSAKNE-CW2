@@ -84,6 +84,7 @@ class TestNormaliseToRdfContract:
 
     def test_rdf_graph_has_article_nodes(self, normalised, rdf_graph):
         from rdflib import RDF
+
         from src.json_to_rdf import EX
 
         article_types = list(rdf_graph.subjects(RDF.type, EX.NewsArticle))
