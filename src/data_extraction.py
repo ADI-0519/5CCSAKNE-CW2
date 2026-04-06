@@ -1,5 +1,6 @@
 import hashlib
 import re
+from collections import defaultdict
 
 from src.config import CONFIG
 from src.data_normalisation import normalise_collected_sources, normalise_newsapi_articles
@@ -58,37 +59,89 @@ def find_named_matches(text, candidates):
     return unique_sorted(matches)
 
 
+def phrase_pattern(phrase):
+    escaped = re.escape(phrase.lower())
+    return re.compile(rf"(?<![a-z0-9]){escaped}(?![a-z0-9])")
+
+
+def phrase_in_text(text_lower, phrase):
+    return bool(phrase_pattern(phrase).search(text_lower))
+
+
+def phrase_match_count(text_lower, phrase):
+    return len(phrase_pattern(phrase).findall(text_lower))
+
+
 def extract_topics(text, tags=None, section=None):
     text_lower = text.lower()
-    found = set()
-
-    for keyword in CONFIG["TOPIC_KEYWORDS"]:
-        if keyword.lower() in text_lower:
-            found.add(keyword.title())
+    topic_scores = defaultdict(int)
 
     for topic_name, hints in CONFIG["TOPIC_GROUPS"].items():
-        if any(hint.lower() in text_lower for hint in hints):
-            found.add(topic_name)
+        hits = sum(phrase_match_count(text_lower, hint) for hint in hints)
+        if hits:
+            topic_scores[topic_name] += hits
 
     for tag in tags or []:
         tag_lower = tag.lower()
         for topic_name, hints in CONFIG["TOPIC_GROUPS"].items():
-            if topic_name.lower() in tag_lower or any(hint.lower() in tag_lower for hint in hints):
-                found.add(topic_name)
+            if phrase_in_text(tag_lower, topic_name):
+                topic_scores[topic_name] += 3
+            tag_hits = sum(phrase_match_count(tag_lower, hint) for hint in hints)
+            if tag_hits:
+                topic_scores[topic_name] += min(tag_hits, 2)
 
     if section:
         section_lower = section.lower()
         if "politics" in section_lower:
-            found.add("Politics")
+            topic_scores["Politics"] += 2
         if section_lower in CONFIG["OPINION_SECTION_NAMES"]:
-            found.add("Opinion")
+            topic_scores["Opinion"] += 2
 
-    return sorted(found)
+    if not topic_scores:
+        return []
+
+    ranked = sorted(topic_scores.items(), key=lambda item: (-item[1], item[0]))
+    selected = []
+    for topic_name, score in ranked:
+        if score <= 0:
+            continue
+        if topic_name in {"Government Policy", "Politics"} and score < 2:
+            continue
+        selected.append(topic_name)
+        if len(selected) == 4:
+            break
+
+    return selected
 
 
 def extract_people(text):
     entity_stoplist = CONFIG["ENTITY_STOPLIST"]
     person_stoplist = CONFIG["PERSON_STOPLIST"]
+    blocked_person_words = {
+        "Office",
+        "Council",
+        "Government",
+        "Parliament",
+        "Policy",
+        "Support",
+        "Returns",
+        "Committee",
+        "Department",
+        "Ministry",
+        "Treasury",
+        "Party",
+        "Commission",
+        "Agency",
+        "Bill",
+        "Statement",
+        "Budget",
+        "Review",
+        "Court",
+        "News",
+        "Media",
+        "Asylum",
+        "Immigration",
+    }
     found = set(find_named_matches(text, CONFIG["POLITICIAN_NAMES"]))
 
     for match in PERSON_PATTERN.finditer(text):
@@ -96,6 +149,19 @@ def extract_people(text):
         if name in entity_stoplist or name in person_stoplist:
             continue
         if any(char.isdigit() for char in name):
+            continue
+        parts = name.split()
+        if len(parts) < 2 or len(parts) > 3:
+            continue
+        if any(len(part) <= 2 for part in parts):
+            continue
+        if any(
+            part.lower() in {"the", "and", "for", "of", "to", "in", "on", "as"} for part in parts
+        ):
+            continue
+        if parts[0].endswith("ing"):
+            continue
+        if any(part in blocked_person_words for part in parts):
             continue
         found.add(name)
 
@@ -142,8 +208,12 @@ def classify_government_bodies(organisations):
 
 def classify_sentiment(text):
     text_lower = text.lower()
-    positive = sum(term in text_lower for term in CONFIG["POSITIVE_SENTIMENT_TERMS"])
-    negative = sum(term in text_lower for term in CONFIG["NEGATIVE_SENTIMENT_TERMS"])
+    positive = sum(
+        phrase_match_count(text_lower, term) for term in CONFIG["POSITIVE_SENTIMENT_TERMS"]
+    )
+    negative = sum(
+        phrase_match_count(text_lower, term) for term in CONFIG["NEGATIVE_SENTIMENT_TERMS"]
+    )
 
     if negative > positive:
         return "Negative"
@@ -161,10 +231,10 @@ def classify_article_type(article, text):
     if section in CONFIG["OPINION_SECTION_NAMES"] or "opinion" in title or "analysis" in title:
         return "OpinionArticle"
 
-    if article.get("updated_at") and article.get("updated_at") != article.get("published_at"):
+    breaking_hits = sum(hint in combined for hint in CONFIG["BREAKING_NEWS_HINTS"])
+    if title.startswith("live") or title.endswith("as it happened"):
         return "BreakingNewsArticle"
-
-    if any(hint in combined for hint in CONFIG["BREAKING_NEWS_HINTS"]):
+    if breaking_hits >= 2:
         return "BreakingNewsArticle"
 
     return "NewsArticle"
@@ -182,16 +252,18 @@ def extract_events(article, text, topics, locations):
     event_names = set()
 
     for hint in CONFIG["ECONOMIC_EVENT_HINTS"] + CONFIG["POLITICAL_EVENT_HINTS"]:
-        if hint in text_lower:
+        if phrase_in_text(text_lower, hint):
             event_names.add(hint.title())
 
-    if "spring statement" in text_lower:
+    if phrase_in_text(text_lower, "spring statement"):
         event_names.add("Spring Statement")
-    if "budget" in text_lower and "spring" in text_lower:
+    if phrase_in_text(text_lower, "budget") and phrase_in_text(text_lower, "spring"):
         event_names.add("UK Spring Budget")
-    if "leadership contest" in text_lower:
+    if phrase_in_text(text_lower, "leadership contest"):
         event_names.add("Leadership Contest")
-    if "parliamentary vote" in text_lower or "commons vote" in text_lower:
+    if phrase_in_text(text_lower, "parliamentary vote") or phrase_in_text(
+        text_lower, "commons vote"
+    ):
         event_names.add("Parliamentary Vote")
 
     event_date = (article.get("published_at") or "")[:10] or None
@@ -209,8 +281,24 @@ def extract_events(article, text, topics, locations):
             }
         )
 
-    if not events and any(
-        topic in topics for topic in ["Election", "Parliament", "Government Policy"]
+    policy_signal = any(
+        phrase_in_text(text_lower, phrase)
+        for phrase in [
+            "announced",
+            "announcement",
+            "unveiled",
+            "set out",
+            "proposal",
+            "proposed",
+            "plans",
+            "bill",
+        ]
+    )
+
+    if (
+        not events
+        and any(topic in topics for topic in ["Election", "Parliament", "Government Policy"])
+        and policy_signal
     ):
         events.append(
             {
@@ -227,11 +315,15 @@ def extract_events(article, text, topics, locations):
 
 def build_follow_up_candidates(article, topics, article_type):
     candidates = []
-    if article_type == "BreakingNewsArticle" and topics:
+    event_names = [
+        event.get("name") for event in article.get("event_candidates", []) if event.get("name")
+    ]
+    source_name = article.get("source_name")
+    if article_type == "BreakingNewsArticle" and source_name and event_names:
         candidates.append(
             {
-                "match_key": "|".join(sorted(topics[:3])),
-                "reason": "shared breaking-news topic cluster",
+                "match_key": f"{source_name}|{event_names[0]}",
+                "reason": "same source and event progression",
             }
         )
     return candidates
@@ -305,10 +397,15 @@ def extract_article_record(article):
     politicians = classify_politicians(people)
     political_parties = classify_political_parties(organisations)
     government_bodies = classify_government_bodies(organisations)
+    blocked_people = set(organisations) | set(political_parties) | set(government_bodies)
+    people = sorted(person for person in people if person not in blocked_people)
+    politicians = sorted(person for person in politicians if person not in blocked_people)
     sentiment = classify_sentiment(text)
     article_type = article.get("raw_article_type_hint") or classify_article_type(article, text)
     events = extract_events(article, text, topics, locations)
-    follow_up_candidates = build_follow_up_candidates(article, topics, article_type)
+    enriched_article = dict(article)
+    enriched_article["event_candidates"] = events
+    follow_up_candidates = build_follow_up_candidates(enriched_article, topics, article_type)
 
     entities = {
         "people": people,
