@@ -10,12 +10,12 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 
 PROJECT_SCOPE = (
-    "Current UK politics and policy news from March 1, 2026 to April 6, 2026, "
+    "Current UK politics and policy news from March 6, 2026 to April 6, 2026, "
     "collected from GuardianAPI and NewsAPI, with OpenAI used for extraction, "
     "classification, and completion."
 )
 
-DATE_START = "2026-03-01"
+DATE_START = "2026-03-06"
 DATE_END = "2026-04-06"
 
 # ---------------------------------------------------------------------------
@@ -28,6 +28,9 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 NEWS_API_BASE = "https://newsapi.org/v2"
 GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
+NEWS_API_PAGE_SIZE = 100
+GUARDIAN_PAGE_SIZE = 200
+GUARDIAN_SHOW_TAGS = ["keyword", "tone", "contributor"]
 
 RAW_DATA_DIR = "data/raw"
 PROCESSED_DATA_DIR = "data/processed"
@@ -326,6 +329,22 @@ def build_newsapi_everything_url():
         f"q={query}&"
         f"language=en&"
         f"sortBy=publishedAt&"
+        f"pageSize={NEWS_API_PAGE_SIZE}&"
+        f"from={DATE_START}&"
+        f"to={DATE_END}&"
+        f"apiKey={NEWS_API_KEY}"
+    )
+
+
+def build_newsapi_page_url(page):
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{NEWS_API_BASE}/everything?"
+        f"q={query}&"
+        f"language=en&"
+        f"sortBy=publishedAt&"
+        f"pageSize={NEWS_API_PAGE_SIZE}&"
+        f"page={page}&"
         f"from={DATE_START}&"
         f"to={DATE_END}&"
         f"apiKey={NEWS_API_KEY}"
@@ -336,6 +355,7 @@ def build_guardian_url():
     section_filter = "|".join(GUARDIAN_SECTIONS)
     fields = ",".join(GUARDIAN_FIELDS)
     tag_filter = "|".join(GUARDIAN_TAGS)
+    show_tags = ",".join(GUARDIAN_SHOW_TAGS)
     query = quote_plus(build_news_query_string())
     return (
         f"{GUARDIAN_API_BASE}?"
@@ -345,7 +365,29 @@ def build_guardian_url():
         f"section={section_filter}&"
         f"tag={tag_filter}&"
         f"show-fields={fields}&"
-        f"page-size=200&"
+        f"show-tags={show_tags}&"
+        f"page-size={GUARDIAN_PAGE_SIZE}&"
+        f"api-key={GUARDIAN_API_KEY}"
+    )
+
+
+def build_guardian_page_url(page):
+    section_filter = "|".join(GUARDIAN_SECTIONS)
+    fields = ",".join(GUARDIAN_FIELDS)
+    tag_filter = "|".join(GUARDIAN_TAGS)
+    show_tags = ",".join(GUARDIAN_SHOW_TAGS)
+    query = quote_plus(build_news_query_string())
+    return (
+        f"{GUARDIAN_API_BASE}?"
+        f"q={query}&"
+        f"from-date={DATE_START}&"
+        f"to-date={DATE_END}&"
+        f"section={section_filter}&"
+        f"tag={tag_filter}&"
+        f"show-fields={fields}&"
+        f"show-tags={show_tags}&"
+        f"page-size={GUARDIAN_PAGE_SIZE}&"
+        f"page={page}&"
         f"api-key={GUARDIAN_API_KEY}"
     )
 
@@ -359,6 +401,9 @@ CONFIG = {
     "OPENAI_API_KEY": OPENAI_API_KEY,
     "NEWS_API_BASE": NEWS_API_BASE,
     "GUARDIAN_API_BASE": GUARDIAN_API_BASE,
+    "NEWS_API_PAGE_SIZE": NEWS_API_PAGE_SIZE,
+    "GUARDIAN_PAGE_SIZE": GUARDIAN_PAGE_SIZE,
+    "GUARDIAN_SHOW_TAGS": GUARDIAN_SHOW_TAGS,
     "RAW_DATA_DIR": RAW_DATA_DIR,
     "PROCESSED_DATA_DIR": PROCESSED_DATA_DIR,
     "GENERATED_KG_DIR": GENERATED_KG_DIR,
