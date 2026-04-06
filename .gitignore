@@ -42,3 +42,4 @@ data/processed/
 kg/generated/*
 !kg/generated/prototype_kg.ttl
 output/
+data/cache
