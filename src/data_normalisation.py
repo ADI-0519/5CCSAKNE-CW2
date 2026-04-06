@@ -83,6 +83,9 @@ def normalise_tags(tags):
     cleaned = []
     for tag in tags or []:
         if isinstance(tag, dict):
+            tag_type = normalise_name(tag.get("type")).lower()
+            if tag_type == "contributor":
+                continue
             label = tag.get("webTitle") or tag.get("title") or tag.get("id")
         else:
             label = str(tag)
@@ -235,7 +238,7 @@ def normalise_collected_sources(collected_data):
 def save_normalised_articles(records, filename="normalised_articles.json"):
     output_path = Path(CONFIG["PROCESSED_DATA_DIR"]) / filename
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(records, indent=2, ensure_ascii=False))
+    output_path.write_text(json.dumps(records, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"[NORMALISE] Saved normalised article set to {output_path}")
     return output_path
 
