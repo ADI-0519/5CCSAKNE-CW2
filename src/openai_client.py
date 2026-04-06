@@ -1,4 +1,5 @@
 import json
+import os
 import re
 from pathlib import Path
 
@@ -97,6 +98,9 @@ def _save_cache(path, payload):
 
 
 def _build_client():
+    if os.getenv("PYTEST_CURRENT_TEST") and os.getenv("ALLOW_OPENAI_IN_TESTS") != "1":
+        return None
+
     api_key = CONFIG.get("OPENAI_API_KEY")
     if not api_key:
         return None
