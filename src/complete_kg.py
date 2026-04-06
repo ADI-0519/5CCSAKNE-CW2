@@ -7,9 +7,15 @@ from pathlib import Path
 from rdflib import RDF, XSD, Graph, Literal
 
 from src.build_ontology import NEWS, SCHEMA
-from src.run_queries import choose_default_kg, load_kg
+from src.config import CONFIG
+from src.openai_client import maybe_complete_article_with_openai
+from src.run_queries import load_kg
 
 DEFAULT_OUTPUT_PATH = Path("kg/generated/completed_kg.ttl")
+DEFAULT_INPUT_KG_CANDIDATES = (
+    Path("kg/generated/prototype_kg.ttl"),
+    Path("kg/generated/new_kg.ttl"),
+)
 
 POSITIVE_KEYWORDS = {
     "advance",
@@ -47,36 +53,28 @@ NEGATIVE_KEYWORDS = {
 }
 
 SECTION_RULES = {
-    "Politics": {"politics", "government", "policy", "regulation", "election"},
-    "Business": {"finance", "economy", "investment", "funding", "ipo", "merger"},
-    "Climate": {"climate", "energy", "sustainability"},
-    "Technology": {
-        "ai",
-        "artificial intelligence",
-        "machine learning",
-        "deep learning",
-        "gpt",
-        "robotics",
-        "automation",
-        "technology",
+    "Politics": {
+        "politics",
+        "government",
+        "policy",
+        "regulation",
+        "election",
+        "parliament",
+        "westminster",
     },
+    "Business": {"finance", "economy", "budget", "tax", "treasury", "spending"},
+    "Health": {"health", "healthcare", "hospital", "nhs"},
+    "Energy": {"climate", "energy", "net zero", "gas", "renewable"},
 }
 
 OPINION_KEYWORDS = {"analysis", "comment", "editorial", "opinion", "view"}
 BREAKING_KEYWORDS = {"breaking", "developing", "live", "urgent", "just in"}
 
 ADDITIONAL_TOPIC_RULES = {
-    "innovation": {
-        "ai",
-        "artificial intelligence",
-        "machine learning",
-        "deep learning",
-        "gpt",
-        "robotics",
-        "automation",
-    },
-    "research": {"openai", "research", "model", "breakthrough"},
-    "economy": {"market", "economy", "investment", "funding", "ipo"},
+    "Economic Policy": {"budget", "fiscal", "inflation", "interest rates", "growth"},
+    "Public Spending": {"public spending", "spending review", "funding", "spending cuts"},
+    "Government Policy": {"policy", "bill", "legislation", "white paper", "proposal"},
+    "Election": {"election", "campaign", "polling", "ballot"},
 }
 
 
@@ -90,6 +88,11 @@ def _slug(text):
 
 def _text_terms(text):
     return {term.lower() for term in re.findall(r"[A-Za-z][A-Za-z\\-]+", text)}
+
+
+def _contains_any(text, patterns):
+    lowered = text.lower()
+    return any(pattern in lowered for pattern in patterns)
 
 
 def _get_first_literal(graph, subject, predicate):
@@ -124,13 +127,11 @@ def infer_sentiment(text):
     return NEWS.Neutral
 
 
-def infer_section(article_text, topic_names, technology_names):
-    topic_terms = {topic.lower() for topic in topic_names}
-    tech_terms = {technology.lower() for technology in technology_names}
-    terms = _text_terms(article_text) | topic_terms | tech_terms
+def infer_section(article_text, topic_names):
+    combined_text = _normalize_whitespace(" ".join([article_text, *topic_names]))
 
     for section, keywords in SECTION_RULES.items():
-        if keywords & terms:
+        if _contains_any(combined_text, keywords):
             return section
     return "General"
 
@@ -149,20 +150,28 @@ def infer_article_subtypes(article_text, section):
     return subtypes
 
 
-def infer_additional_topics(article_text, topic_names, technology_names, organization_names):
+def infer_additional_topics(article_text, topic_names, organization_names):
     existing_topics = {topic.lower() for topic in topic_names}
-    joined_terms = _text_terms(article_text)
-    joined_terms.update(technology.lower() for technology in technology_names)
-    joined_terms.update(org.lower() for org in organization_names)
+    combined_text = _normalize_whitespace(" ".join([article_text, *organization_names]))
 
     inferred = set()
     for topic_label, triggers in ADDITIONAL_TOPIC_RULES.items():
         if topic_label in existing_topics:
             continue
-        if joined_terms & triggers:
+        if _contains_any(combined_text, triggers):
             inferred.add(topic_label)
 
     return sorted(inferred)
+
+
+def choose_default_input_kg():
+    for candidate in DEFAULT_INPUT_KG_CANDIDATES:
+        if candidate.exists():
+            return candidate
+    raise FileNotFoundError(
+        "No source KG file found. Expected one of: "
+        + ", ".join(str(candidate) for candidate in DEFAULT_INPUT_KG_CANDIDATES)
+    )
 
 
 def _parse_datetime(value):
@@ -231,6 +240,40 @@ def infer_follow_up_links(graph, max_gap_days=7):
     return follow_ups
 
 
+def _apply_openai_completion(article_key, article_payload, heuristic_result):
+    llm_result = maybe_complete_article_with_openai(article_key, article_payload, heuristic_result)
+    if not llm_result:
+        return heuristic_result
+
+    merged = dict(heuristic_result)
+
+    sentiment = llm_result.get("sentiment")
+    if sentiment in {"Positive", "Negative", "Neutral"}:
+        merged["sentiment"] = sentiment
+
+    section = str(llm_result.get("section") or "").strip()
+    if section:
+        merged["section"] = section
+
+    article_types = set(merged["article_types"])
+    article_types.update(
+        article_type
+        for article_type in llm_result.get("article_types", [])
+        if article_type in {"NewsArticle", "OpinionArticle", "BreakingNewsArticle"}
+    )
+    merged["article_types"] = sorted(article_types)
+
+    additional_topics = set(merged["additional_topics"])
+    additional_topics.update(
+        topic
+        for topic in llm_result.get("additional_topics", [])
+        if topic in CONFIG["TOPIC_GROUPS"]
+    )
+    merged["additional_topics"] = sorted(additional_topics)
+
+    return merged
+
+
 def enrich_graph(graph):
     enriched = Graph()
     for prefix, namespace in graph.namespace_manager.namespaces():
@@ -249,21 +292,43 @@ def enrich_graph(graph):
         )
 
         topic_names = _get_named_entities(enriched, article_uri, NEWS.hasTopic)
-        technology_names = _get_named_entities(enriched, article_uri, NEWS.mentionsTechnology)
         organization_names = _get_named_entities(enriched, article_uri, NEWS.mentionsOrganisation)
 
         if article_text:
             word_count = len(re.findall(r"\b\w+\b", article_text))
             enriched.set((article_uri, NEWS.wordCount, Literal(word_count, datatype=XSD.integer)))
 
-            sentiment_uri = infer_sentiment(article_text)
+            heuristic_completion = _apply_openai_completion(
+                str(article_uri),
+                {
+                    "headline": headline,
+                    "description": description,
+                    "existing_topics": topic_names,
+                    "organizations": organization_names,
+                },
+                {
+                    "sentiment": str(infer_sentiment(article_text).split("#")[-1]),
+                    "section": infer_section(article_text, topic_names),
+                    "article_types": sorted(
+                        str(article_type).split("#")[-1]
+                        for article_type in infer_article_subtypes(
+                            article_text, infer_section(article_text, topic_names)
+                        )
+                    ),
+                    "additional_topics": infer_additional_topics(
+                        article_text, topic_names, organization_names
+                    ),
+                },
+            )
+
+            sentiment_uri = NEWS[heuristic_completion["sentiment"]]
             enriched.set((article_uri, NEWS.hasSentiment, sentiment_uri))
 
-            section = infer_section(article_text, topic_names, technology_names)
+            section = heuristic_completion["section"]
             enriched.set((article_uri, NEWS.hasSection, Literal(section)))
 
-            article_types = infer_article_subtypes(article_text, section)
-            for article_type in article_types:
+            for article_type_name in heuristic_completion["article_types"]:
+                article_type = NEWS[article_type_name]
                 enriched.add((article_uri, RDF.type, article_type))
 
         published_date = _get_first_literal(enriched, article_uri, NEWS.publishedDate)
@@ -273,9 +338,9 @@ def enrich_graph(graph):
         ):
             enriched.set((article_uri, NEWS.hasUpdateTimestamp, published_date))
 
-        inferred_topics = infer_additional_topics(
-            article_text, topic_names, technology_names, organization_names
-        )
+        inferred_topics = []
+        if article_text:
+            inferred_topics = heuristic_completion["additional_topics"]
         for topic_label in inferred_topics:
             topic_uri = topic_nodes[topic_label]
             if topic_uri is None:
@@ -321,7 +386,7 @@ def main():
     parser = build_arg_parser()
     args = parser.parse_args()
 
-    kg_path = args.kg or choose_default_kg()
+    kg_path = args.kg or choose_default_input_kg()
     graph = load_kg(kg_path)
     enriched = enrich_graph(graph)
     save_graph(enriched, args.output)

@@ -1,27 +1,10 @@
 """Tests for KG completion/enrichment."""
 
-import json
-from pathlib import Path
-
 from rdflib import RDF, Literal
 from rdflib.namespace import XSD
 
 from src.build_ontology import NEWS, SCHEMA, build_ontology
 from src.complete_kg import enrich_graph
-from src.data_extraction import extract_relevant_information
-from src.data_normalisation import normalise_data
-from src.json_to_rdf import convert_json_to_rdf
-
-FIXTURE_PATH = Path(__file__).parent / "fixtures" / "sample_response.json"
-
-
-def _build_fixture_graph():
-    raw_data = json.loads(FIXTURE_PATH.read_text())
-    rdf_graph = convert_json_to_rdf(normalise_data(extract_relevant_information(raw_data)))
-    graph = build_ontology()
-    for triple in rdf_graph:
-        graph.add(triple)
-    return graph
 
 
 def _add_named_entity(graph, entity_uri, label, rdf_types):
@@ -31,7 +14,23 @@ def _add_named_entity(graph, entity_uri, label, rdf_types):
 
 
 def test_enrich_graph_adds_article_completion_metadata():
-    enriched = enrich_graph(_build_fixture_graph())
+    graph = build_ontology()
+    article_uri = NEWS["article/completion_a"]
+    graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+    graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+    graph.add((article_uri, SCHEMA.headline, Literal("Treasury faces pressure over budget plan")))
+    graph.add(
+        (
+            article_uri,
+            SCHEMA.description,
+            Literal("Ministers defended public spending decisions after the spring budget."),
+        )
+    )
+    graph.add(
+        (article_uri, NEWS.publishedDate, Literal("2026-03-12T10:00:00Z", datatype=XSD.dateTime))
+    )
+
+    enriched = enrich_graph(graph)
     article_nodes = list(enriched.subjects(RDF.type, NEWS.NewsArticle))
 
     assert article_nodes
@@ -43,10 +42,28 @@ def test_enrich_graph_adds_article_completion_metadata():
 
 
 def test_enrich_graph_infers_additional_topics():
-    enriched = enrich_graph(_build_fixture_graph())
-    innovation_uri = NEWS["topic/innovation"]
-    assert (innovation_uri, RDF.type, NEWS.Topic) in enriched
-    assert any(enriched.triples((None, NEWS.hasTopic, innovation_uri)))
+    graph = build_ontology()
+    article_uri = NEWS["article/completion_topics"]
+    graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+    graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+    graph.add(
+        (article_uri, SCHEMA.headline, Literal("Treasury outlines new public spending plans"))
+    )
+    graph.add(
+        (
+            article_uri,
+            SCHEMA.description,
+            Literal("The government defended funding choices in its latest spending review."),
+        )
+    )
+    graph.add(
+        (article_uri, NEWS.publishedDate, Literal("2026-03-18T10:00:00Z", datatype=XSD.dateTime))
+    )
+
+    enriched = enrich_graph(graph)
+    topic_uri = NEWS["topic/Public_Spending"]
+    assert (topic_uri, RDF.type, NEWS.Topic) in enriched
+    assert (article_uri, NEWS.hasTopic, topic_uri) in enriched
 
 
 def test_enrich_graph_classifies_articles_and_adds_follow_up():
@@ -92,3 +109,38 @@ def test_enrich_graph_classifies_articles_and_adds_follow_up():
     assert (article_1, RDF.type, NEWS.BreakingNewsArticle) in enriched
     assert (article_2, RDF.type, NEWS.OpinionArticle) in enriched
     assert (article_1, NEWS.hasFollowUp, article_2) in enriched
+
+
+def test_enrich_graph_uses_openai_completion_when_available(monkeypatch):
+    monkeypatch.setattr(
+        "src.complete_kg.maybe_complete_article_with_openai",
+        lambda article_key, article_payload, heuristic_result: {
+            "sentiment": "Positive",
+            "section": "Politics",
+            "article_types": ["OpinionArticle"],
+            "additional_topics": ["Healthcare"],
+        },
+    )
+
+    graph = build_ontology()
+    article_uri = NEWS["article/llm_completion"]
+    graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+    graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+    graph.add((article_uri, SCHEMA.headline, Literal("Health secretary defends NHS plan")))
+    graph.add(
+        (
+            article_uri,
+            SCHEMA.description,
+            Literal("Ministers said the NHS proposal would improve services."),
+        )
+    )
+    graph.add(
+        (article_uri, NEWS.publishedDate, Literal("2026-03-22T10:00:00Z", datatype=XSD.dateTime))
+    )
+
+    enriched = enrich_graph(graph)
+
+    assert (article_uri, NEWS.hasSentiment, NEWS.Positive) in enriched
+    assert (article_uri, NEWS.hasSection, Literal("Politics")) in enriched
+    assert (article_uri, RDF.type, NEWS.OpinionArticle) in enriched
+    assert (article_uri, NEWS.hasTopic, NEWS["topic/Healthcare"]) in enriched
