@@ -10,7 +10,7 @@ CORE = Namespace("http://www.bbc.co.uk/ontologies/coreconcepts/")
 OUTPUT_PATH = Path(__file__).parent.parent / "ontology" / "news_ontology.ttl"
 
 
-def _add_class(graph, class_uri, label, comment, parent=None):
+def add_class(graph, class_uri, label, comment, parent=None):
     graph.add((class_uri, RDF.type, RDFS.Class))
     if parent is not None:
         graph.add((class_uri, RDFS.subClassOf, parent))
@@ -18,7 +18,7 @@ def _add_class(graph, class_uri, label, comment, parent=None):
     graph.add((class_uri, RDFS.comment, Literal(comment)))
 
 
-def _add_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
+def add_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
     graph.add((property_uri, RDF.type, RDF.Property))
     if parent is not None:
         graph.add((property_uri, RDFS.subPropertyOf, parent))
@@ -55,70 +55,70 @@ def build_ontology() -> Graph:
 
     # Classes extending Schema.org
 
-    _add_class(
+    add_class(
         g,
         NEWS.NewsArticle,
         "News Article",
         "A news article from any source in our knowledge graph.",
         SCHEMA.NewsArticle,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.BreakingNewsArticle,
         "Breaking News Article",
         "An article published as breaking news.",
         NEWS.NewsArticle,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.OpinionArticle,
         "Opinion Article",
         "An editorial or opinion piece.",
         NEWS.NewsArticle,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.Journalist,
         "Journalist",
         "A person who writes or reports news articles.",
         SCHEMA.Person,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.Politician,
         "Politician",
         "A political actor such as an MP, minister, mayor, or party leader.",
         SCHEMA.Person,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.Organisation,
         "Organisation",
         "An organisation mentioned in current UK politics and policy reporting.",
         SCHEMA.Organization,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.NewsOrganisation,
         "News Organisation",
         "A media company or news publisher.",
         NEWS.Organisation,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.Topic,
         "Topic",
         "A policy or public-affairs theme discussed in reporting.",
         SCHEMA.Thing,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.PoliticalParty,
         "Political Party",
         "A political party or party grouping active in UK politics.",
         NEWS.Organisation,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.GovernmentBody,
         "Government Body",
@@ -128,28 +128,28 @@ def build_ontology() -> Graph:
 
     # Classes extending BBC Core Concepts
 
-    _add_class(
+    add_class(
         g,
         NEWS.NewsEvent,
         "News Event",
         "A real-world event covered by news.",
         CORE.Event,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.PoliticalEvent,
         "Political Event",
         "An election, debate, or policy announcement.",
         NEWS.NewsEvent,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.EconomicEvent,
         "Economic Event",
         "A budget statement, fiscal announcement, spending review, or similar economic event.",
         NEWS.NewsEvent,
     )
-    _add_class(
+    add_class(
         g,
         NEWS.Location,
         "Location",
@@ -159,7 +159,7 @@ def build_ontology() -> Graph:
 
     # New classes
 
-    _add_class(
+    add_class(
         g,
         NEWS.Sentiment,
         "Sentiment",
@@ -172,7 +172,7 @@ def build_ontology() -> Graph:
 
     # Properties extending Schema.org
 
-    _add_property(
+    add_property(
         g,
         NEWS.hasAuthor,
         "has author",
@@ -181,7 +181,7 @@ def build_ontology() -> Graph:
         NEWS.Journalist,
         SCHEMA.author,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.publishedBy,
         "published by",
@@ -190,7 +190,7 @@ def build_ontology() -> Graph:
         NEWS.NewsOrganisation,
         SCHEMA.publisher,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.hasTopic,
         "has topic",
@@ -199,7 +199,7 @@ def build_ontology() -> Graph:
         NEWS.Topic,
         SCHEMA.about,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.mentionsPerson,
         "mentions person",
@@ -208,7 +208,7 @@ def build_ontology() -> Graph:
         SCHEMA.Person,
         SCHEMA.mentions,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.mentionsOrganisation,
         "mentions organisation",
@@ -217,7 +217,7 @@ def build_ontology() -> Graph:
         NEWS.Organisation,
         SCHEMA.mentions,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.mentionsLocation,
         "mentions location",
@@ -226,7 +226,7 @@ def build_ontology() -> Graph:
         NEWS.Location,
         SCHEMA.mentions,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.publishedDate,
         "published date",
@@ -235,7 +235,7 @@ def build_ontology() -> Graph:
         XSD.dateTime,
         SCHEMA.datePublished,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.hasUpdateTimestamp,
         "update timestamp",
@@ -244,7 +244,7 @@ def build_ontology() -> Graph:
         XSD.dateTime,
         SCHEMA.dateModified,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.hasSection,
         "has section",
@@ -253,7 +253,7 @@ def build_ontology() -> Graph:
         XSD.string,
         SCHEMA.articleSection,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.articleURL,
         "article URL",
@@ -262,7 +262,7 @@ def build_ontology() -> Graph:
         XSD.anyURI,
         SCHEMA.url,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.worksFor,
         "works for",
@@ -274,7 +274,7 @@ def build_ontology() -> Graph:
 
     # Properties extending BBC Core Concepts
 
-    _add_property(
+    add_property(
         g,
         NEWS.eventLocation,
         "event location",
@@ -283,16 +283,16 @@ def build_ontology() -> Graph:
         NEWS.Location,
         CORE.eventPlace,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.eventDate,
         "event date",
         "The date on which a news event occurred.",
         NEWS.NewsEvent,
-        XSD.dateTime,
+        XSD.date,
         CORE.startDate,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.coversEvent,
         "covers event",
@@ -304,7 +304,7 @@ def build_ontology() -> Graph:
 
     # New properties
 
-    _add_property(
+    add_property(
         g,
         NEWS.hasSentiment,
         "has sentiment",
@@ -312,7 +312,7 @@ def build_ontology() -> Graph:
         NEWS.NewsArticle,
         NEWS.Sentiment,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.wordCount,
         "word count",
@@ -320,7 +320,7 @@ def build_ontology() -> Graph:
         NEWS.NewsArticle,
         XSD.integer,
     )
-    _add_property(
+    add_property(
         g,
         NEWS.hasFollowUp,
         "has follow-up",
@@ -333,7 +333,7 @@ def build_ontology() -> Graph:
 
 
 def main():
-    print("Building Current News Ontology (TBox)...\n")
+    print("Building UK Politics and Policy News Ontology (TBox)...\n")
     g = build_ontology()
 
     classes = set(g.subjects(RDF.type, RDFS.Class))

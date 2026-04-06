@@ -111,7 +111,7 @@ news:eventDate a rdf:Property ;
     rdfs:label "event date" ;
     rdfs:comment "The date on which a news event occurred." ;
     rdfs:domain news:NewsEvent ;
-    rdfs:range xsd:dateTime ;
+    rdfs:range xsd:date ;
     rdfs:subPropertyOf core:startDate .
 
 news:eventLocation a rdf:Property ;

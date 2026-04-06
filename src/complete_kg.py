@@ -78,45 +78,45 @@ ADDITIONAL_TOPIC_RULES = {
 }
 
 
-def _normalize_whitespace(text):
+def normalize_whitespace(text):
     return " ".join(text.split())
 
 
-def _slug(text):
+def slug_text(text):
     return re.sub(r"[^a-zA-Z0-9_-]", "_", text.strip())
 
 
-def _text_terms(text):
+def text_terms(text):
     return {term.lower() for term in re.findall(r"[A-Za-z][A-Za-z\\-]+", text)}
 
 
-def _contains_any(text, patterns):
+def contains_any(text, patterns):
     lowered = text.lower()
     return any(pattern in lowered for pattern in patterns)
 
 
-def _get_first_literal(graph, subject, predicate):
+def first_literal(graph, subject, predicate):
     for value in graph.objects(subject, predicate):
         return value
     return None
 
 
-def _get_text(graph, subject, predicate):
-    literal = _get_first_literal(graph, subject, predicate)
+def text_value(graph, subject, predicate):
+    literal = first_literal(graph, subject, predicate)
     return "" if literal is None else str(literal)
 
 
-def _get_named_entities(graph, subject, predicate):
+def named_entities(graph, subject, predicate):
     names = []
     for obj in graph.objects(subject, predicate):
-        name = _get_first_literal(graph, obj, SCHEMA.name)
+        name = first_literal(graph, obj, SCHEMA.name)
         if name is not None:
             names.append(str(name))
     return names
 
 
 def infer_sentiment(text):
-    terms = _text_terms(text)
+    terms = text_terms(text)
     positive_hits = len(terms & POSITIVE_KEYWORDS)
     negative_hits = len(terms & NEGATIVE_KEYWORDS)
 
@@ -128,16 +128,16 @@ def infer_sentiment(text):
 
 
 def infer_section(article_text, topic_names):
-    combined_text = _normalize_whitespace(" ".join([article_text, *topic_names]))
+    combined_text = normalize_whitespace(" ".join([article_text, *topic_names]))
 
     for section, keywords in SECTION_RULES.items():
-        if _contains_any(combined_text, keywords):
+        if contains_any(combined_text, keywords):
             return section
     return "General"
 
 
 def infer_article_subtypes(article_text, section):
-    terms = _text_terms(article_text)
+    terms = text_terms(article_text)
     subtypes = set()
 
     if OPINION_KEYWORDS & terms:
@@ -152,13 +152,13 @@ def infer_article_subtypes(article_text, section):
 
 def infer_additional_topics(article_text, topic_names, organization_names):
     existing_topics = {topic.lower() for topic in topic_names}
-    combined_text = _normalize_whitespace(" ".join([article_text, *organization_names]))
+    combined_text = normalize_whitespace(" ".join([article_text, *organization_names]))
 
     inferred = set()
     for topic_label, triggers in ADDITIONAL_TOPIC_RULES.items():
         if topic_label in existing_topics:
             continue
-        if _contains_any(combined_text, triggers):
+        if contains_any(combined_text, triggers):
             inferred.add(topic_label)
 
     return sorted(inferred)
@@ -174,20 +174,20 @@ def choose_default_input_kg():
     )
 
 
-def _parse_datetime(value):
+def parse_datetime_value(value):
     return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
 
 
-def _article_metadata(graph, article_uri):
+def article_metadata(graph, article_uri):
     publisher = next(graph.objects(article_uri, NEWS.publishedBy), None)
-    published_date = _get_first_literal(graph, article_uri, NEWS.publishedDate)
+    published_date = first_literal(graph, article_uri, NEWS.publishedDate)
     organizations = set(graph.objects(article_uri, NEWS.mentionsOrganisation))
     topics = set(graph.objects(article_uri, NEWS.hasTopic))
 
     return {
         "article": article_uri,
         "publisher": publisher,
-        "published_date": None if published_date is None else _parse_datetime(published_date),
+        "published_date": None if published_date is None else parse_datetime_value(published_date),
         "organizations": organizations,
         "topics": topics,
     }
@@ -196,9 +196,9 @@ def _article_metadata(graph, article_uri):
 def infer_follow_up_links(graph, max_gap_days=7):
     article_nodes = sorted(
         graph.subjects(RDF.type, NEWS.NewsArticle),
-        key=lambda uri: (_article_metadata(graph, uri)["published_date"], str(uri)),
+        key=lambda uri: (article_metadata(graph, uri)["published_date"], str(uri)),
     )
-    metadata = {article_uri: _article_metadata(graph, article_uri) for article_uri in article_nodes}
+    metadata = {article_uri: article_metadata(graph, article_uri) for article_uri in article_nodes}
     follow_ups = []
 
     for earlier in article_nodes:
@@ -240,7 +240,7 @@ def infer_follow_up_links(graph, max_gap_days=7):
     return follow_ups
 
 
-def _apply_openai_completion(article_key, article_payload, heuristic_result):
+def apply_openai_completion(article_key, article_payload, heuristic_result):
     llm_result = maybe_complete_article_with_openai(article_key, article_payload, heuristic_result)
     if not llm_result:
         return heuristic_result
@@ -285,20 +285,29 @@ def enrich_graph(graph):
     topic_nodes = defaultdict(lambda: None)
 
     for article_uri in article_nodes:
-        headline = _get_text(enriched, article_uri, SCHEMA.headline)
-        description = _get_text(enriched, article_uri, SCHEMA.description)
-        article_text = _normalize_whitespace(
+        headline = text_value(enriched, article_uri, SCHEMA.headline)
+        description = text_value(enriched, article_uri, SCHEMA.description)
+        article_text = normalize_whitespace(
             " ".join(part for part in (headline, description) if part)
         )
 
-        topic_names = _get_named_entities(enriched, article_uri, NEWS.hasTopic)
-        organization_names = _get_named_entities(enriched, article_uri, NEWS.mentionsOrganisation)
+        topic_names = named_entities(enriched, article_uri, NEWS.hasTopic)
+        organization_names = named_entities(enriched, article_uri, NEWS.mentionsOrganisation)
+        existing_word_count = first_literal(enriched, article_uri, NEWS.wordCount)
+        existing_section = first_literal(enriched, article_uri, NEWS.hasSection)
 
         if article_text:
-            word_count = len(re.findall(r"\b\w+\b", article_text))
-            enriched.set((article_uri, NEWS.wordCount, Literal(word_count, datatype=XSD.integer)))
+            if existing_word_count is None:
+                inferred_word_count = len(re.findall(r"\b\w+\b", article_text))
+                enriched.set(
+                    (
+                        article_uri,
+                        NEWS.wordCount,
+                        Literal(inferred_word_count, datatype=XSD.integer),
+                    )
+                )
 
-            heuristic_completion = _apply_openai_completion(
+            heuristic_completion = apply_openai_completion(
                 str(article_uri),
                 {
                     "headline": headline,
@@ -324,14 +333,16 @@ def enrich_graph(graph):
             sentiment_uri = NEWS[heuristic_completion["sentiment"]]
             enriched.set((article_uri, NEWS.hasSentiment, sentiment_uri))
 
-            section = heuristic_completion["section"]
-            enriched.set((article_uri, NEWS.hasSection, Literal(section)))
+            if existing_section is None:
+                section = heuristic_completion["section"]
+                if section:
+                    enriched.set((article_uri, NEWS.hasSection, Literal(section)))
 
             for article_type_name in heuristic_completion["article_types"]:
                 article_type = NEWS[article_type_name]
                 enriched.add((article_uri, RDF.type, article_type))
 
-        published_date = _get_first_literal(enriched, article_uri, NEWS.publishedDate)
+        published_date = first_literal(enriched, article_uri, NEWS.publishedDate)
         if (
             published_date is not None
             and (article_uri, NEWS.hasUpdateTimestamp, None) not in enriched
@@ -344,7 +355,7 @@ def enrich_graph(graph):
         for topic_label in inferred_topics:
             topic_uri = topic_nodes[topic_label]
             if topic_uri is None:
-                topic_uri = NEWS[f"topic/{_slug(topic_label)}"]
+                topic_uri = NEWS[f"topic/{slug_text(topic_label)}"]
                 topic_nodes[topic_label] = topic_uri
                 enriched.add((topic_uri, RDF.type, NEWS.Topic))
                 enriched.add((topic_uri, RDF.type, SCHEMA.Thing))
