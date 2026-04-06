@@ -2,7 +2,6 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from src.build_ontology import build_ontology
 from src.config import CONFIG
 from src.data_collection import collect_all_sources
 from src.data_extraction import extract_relevant_information
