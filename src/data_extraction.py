@@ -507,6 +507,12 @@ def extract_article_record(article):
     government_bodies = merged_extraction["government_bodies"]
     sentiment = merged_extraction["sentiment"]
     article_type = merged_extraction["article_type"]
+    if article.get("raw_article_type_hint") in {
+        "NewsArticle",
+        "OpinionArticle",
+        "BreakingNewsArticle",
+    }:
+        article_type = article["raw_article_type_hint"]
     events = merged_extraction["events"]
     enriched_article = dict(article)
     enriched_article["event_candidates"] = events
