@@ -49,6 +49,16 @@ def _extract_topics(text):
     return sorted(found)
 
 
+def _extract_topics_from_tags(tags):
+    found = set()
+    for tag in tags:
+        tag_lower = tag.lower()
+        for term in CONFIG["TOPIC_KEYWORDS"]:
+            if term.lower() in tag_lower:
+                found.add(term)
+    return sorted(found)
+
+
 def _extract_organizations(text):
     found = set()
     for m in _ORG_PATTERN.finditer(text):
@@ -123,10 +133,23 @@ def extract_relevant_information(raw_data):
     for i, article in enumerate(articles):
         try:
             url = article.get("url") or ""
-            title = article.get("title") or ""
-            published_at = article.get("publishedAt") or ""
-            source_name = (article.get("source") or {}).get("name") or ""
+            title = article.get("title") or article.get("webTitle") or ""
+            published_at = (
+                article.get("published_at")
+                or article.get("publishedAt")
+                or article.get("webPublicationDate")
+                or ""
+            )
+            updated_at = article.get("updated_at") or ""
+            source_name = article.get("source_name") or (article.get("source") or {}).get("name") or ""
+            source_system = article.get("source_system")
             author = article.get("author")
+            section = article.get("section")
+            tags = article.get("tags") or []
+            summary = article.get("summary") or article.get("description") or ""
+            content = article.get("content") or ""
+            word_count = article.get("word_count")
+            raw_article_type_hint = article.get("raw_article_type_hint")
 
             # Concatenate all text for entity detection
             full_text = " ".join(
@@ -134,8 +157,10 @@ def extract_relevant_information(raw_data):
                     None,
                     [
                         title,
-                        article.get("description") or "",
-                        article.get("content") or "",
+                        summary,
+                        content,
+                        section or "",
+                        " ".join(tags),
                     ],
                 )
             )
@@ -147,7 +172,7 @@ def extract_relevant_information(raw_data):
                 "people": _extract_people(full_text),
                 "locations": _extract_locations(full_text),
                 "technologies": _extract_technologies(full_text),
-                "topics": _extract_topics(full_text),
+                "topics": sorted(set(_extract_topics(full_text)) | set(_extract_topics_from_tags(tags))),
             }
 
             relations = _generate_relations(
@@ -160,9 +185,16 @@ def extract_relevant_information(raw_data):
                     "title": title,
                     "url": url,
                     "published_at": published_at,
+                    "updated_at": updated_at,
                     "source_name": source_name,
+                    "source_system": source_system,
                     "author": author,
-                    "summary": article.get("description") or article.get("content"),
+                    "section": section,
+                    "tags": tags,
+                    "summary": summary or content,
+                    "content": content,
+                    "word_count": word_count,
+                    "raw_article_type_hint": raw_article_type_hint,
                     "entities": entities,
                     "relations": relations,
                 }

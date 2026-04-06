@@ -1,13 +1,66 @@
 import os
-from datetime import date
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ---------------------------------------------------------------------------
-# Entity extraction dictionaries
+# Fixed coursework scope
 # ---------------------------------------------------------------------------
+
+FIXED_SCOPE = (
+    "A knowledge graph for current UK politics and policy news, using articles "
+    "published between March 1, 2026 and April 6, 2026 from GuardianAPI and "
+    "NewsAPI, with OpenAI used for extraction, classification, and completion."
+)
+
+DATE_WINDOW_START = "2026-03-01"
+DATE_WINDOW_END = "2026-04-06"
+
+UK_POLITICS_QUERY = (
+    '"UK government" OR Westminster OR Parliament OR Labour OR Conservative '
+    'OR budget OR regulation OR policy OR minister OR "public affairs"'
+)
+
+POLITICAL_PERSON_TITLES = {
+    "chancellor",
+    "councillor",
+    "deputy prime minister",
+    "foreign secretary",
+    "home secretary",
+    "lord",
+    "mayor",
+    "minister",
+    "mp",
+    "prime minister",
+    "secretary",
+    "shadow chancellor",
+    "shadow minister",
+    "sir",
+}
+
+POLITICAL_PARTIES = {
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Plaid Cymru",
+    "Reform UK",
+    "Scottish National Party",
+}
+
+GOVERNMENT_BODIES = {
+    "Cabinet Office",
+    "Department for Education",
+    "Department for Transport",
+    "HM Treasury",
+    "House of Commons",
+    "House of Lords",
+    "No 10",
+    "Parliament",
+    "UK Government",
+    "Westminster",
+}
 
 TECHNOLOGY_KEYWORDS = [
     "AI",
@@ -55,32 +108,32 @@ TECHNOLOGY_KEYWORDS = [
 ]
 
 TOPIC_KEYWORDS = [
-    "healthcare",
-    "finance",
-    "economy",
+    "budget",
     "climate",
+    "economy",
     "education",
-    "politics",
-    "security",
-    "privacy",
-    "regulation",
-    "policy",
-    "research",
-    "startup",
-    "investment",
-    "funding",
-    "acquisition",
-    "merger",
-    "IPO",
-    "innovation",
-    "sustainability",
+    "election",
     "energy",
-    "space",
-    "defense",
+    "finance",
+    "funding",
     "government",
+    "healthcare",
+    "housing",
+    "innovation",
+    "investment",
+    "migration",
+    "parliament",
+    "policy",
+    "politics",
+    "public services",
+    "regulation",
+    "research",
+    "security",
+    "tax",
+    "transport",
+    "welfare",
 ]
 
-# Allowed predicate names; any other predicate causes a validation failure.
 CONTROLLED_PREDICATES = {
     "mentions",
     "developed_by",
@@ -93,118 +146,98 @@ CONTROLLED_PREDICATES = {
     "part_of",
 }
 
-# Words that look like entity names but should be ignored.
 ENTITY_STOPLIST = {
-    "The",
-    "This",
-    "That",
-    "These",
-    "Those",
+    "April",
+    "Britain",
+    "February",
     "It",
     "Its",
-    "He",
-    "She",
-    "They",
-    "We",
-    "You",
-    "I",
-    "Me",
-    "Us",
-    "Them",
-    "New",
+    "January",
+    "June",
+    "Last",
+    "Monday",
     "More",
     "Most",
-    "First",
-    "Last",
-    "Next",
-    "Other",
-    "Some",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "New",
     "North America",
+    "Other",
+    "Prime Minister",
+    "Saturday",
+    "September",
+    "Some",
     "South America",
+    "Sunday",
+    "The",
+    "Those",
+    "Tuesday",
+    "This",
+    "Thursday",
     "United States",
+    "UK",
     "United Kingdom",
+    "Wednesday",
+    "Westminster",
 }
 
-# Two-word capitalized phrases that look like names but are places/orgs.
 PERSON_STOPLIST = {
-    "New York",
-    "Los Angeles",
-    "San Francisco",
-    "Las Vegas",
-    "New Orleans",
-    "United States",
-    "United Kingdom",
-    "North Korea",
-    "South Korea",
-    "North America",
-    "South America",
-    "Middle East",
-    "White House",
-    "Supreme Court",
-    "Federal Reserve",
-    "Wall Street",
-    "Main Street",
     "Capitol Hill",
-    "Silicon Valley",
-    "World Cup",
-    "Super Bowl",
+    "Federal Reserve",
+    "Hong Kong",
+    "House of Commons",
+    "House of Lords",
+    "Labour Party",
+    "Liberal Democrats",
+    "Los Angeles",
+    "Middle East",
+    "New Hampshire",
     "New Jersey",
     "New Mexico",
-    "New Hampshire",
-    "West Virginia",
+    "New Orleans",
+    "New York",
+    "North America",
     "North Carolina",
-    "South Carolina",
     "North Dakota",
-    "South Dakota",
-    "Rhode Island",
+    "Prime Minister",
     "Puerto Rico",
-    "Hong Kong",
+    "Reform UK",
+    "Rhode Island",
+    "Scottish National Party",
     "Saudi Arabia",
+    "Silicon Valley",
+    "South America",
+    "South Carolina",
+    "South Dakota",
+    "Supreme Court",
+    "UK Government",
+    "United Kingdom",
+    "United States",
+    "Wall Street",
+    "Westminster",
+    "White House",
+    "World Cup",
 }
 
-# ---------------------------------------------------------------------------
-# Main config
-# ---------------------------------------------------------------------------
-
 CONFIG = {
-    "today": date.today(),
+    "scope_sentence": FIXED_SCOPE,
+    "dataset_start": DATE_WINDOW_START,
+    "dataset_end": DATE_WINDOW_END,
+    "dataset_query": UK_POLITICS_QUERY,
     "NEWS_API_KEY": os.getenv("NEWS_API_KEY"),
     "GUARDIAN_API_KEY": os.getenv("GUARDIAN_API_KEY"),
-    "Keywords": ["AI", "Machine Learning", "Robotics", "Artificial Intelligence"],
+    "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
     "TECHNOLOGY_KEYWORDS": TECHNOLOGY_KEYWORDS,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
     "CONTROLLED_PREDICATES": CONTROLLED_PREDICATES,
     "ENTITY_STOPLIST": ENTITY_STOPLIST,
     "PERSON_STOPLIST": PERSON_STOPLIST,
+    "POLITICAL_PERSON_TITLES": POLITICAL_PERSON_TITLES,
+    "POLITICAL_PARTIES": POLITICAL_PARTIES,
+    "GOVERNMENT_BODIES": GOVERNMENT_BODIES,
+    "guardian_base_url": "https://content.guardianapis.com/search",
+    "guardian_section": "politics",
+    "guardian_page_size": 50,
+    "guardian_max_pages": 4,
+    "newsapi_base_url": "https://newsapi.org/v2/everything",
+    "newsapi_page_size": 100,
+    "newsapi_max_pages": 2,
 }
-
-CONFIG["url_ai"] = (
-    "https://newsapi.org/v2/everything?"
-    f"q={' OR '.join(CONFIG['Keywords'])}&"
-    f"from={CONFIG['today']}&"
-    "sortBy=popularity&"
-    f"apiKey={CONFIG['NEWS_API_KEY']}"
-)
-
-CONFIG["url_headlines"] = (
-    f"https://newsapi.org/v2/top-headlines?country=us&apiKey={CONFIG['NEWS_API_KEY']}"
-)

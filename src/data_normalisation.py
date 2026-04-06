@@ -83,6 +83,12 @@ def normalise_data(extracted_data):
         url = record.get("url")
         published_at = record.get("published_at")
         source_name = record.get("source_name")
+        updated_at = record.get("updated_at")
+        section = record.get("section")
+        tags = record.get("tags") or []
+        source_system = record.get("source_system")
+        raw_article_type_hint = record.get("raw_article_type_hint")
+        word_count = record.get("word_count")
 
         # --- Required field validation (fail-fast) ---
         if not title:
@@ -115,6 +121,7 @@ def normalise_data(extracted_data):
         }
 
         author = record.get("author")
+        canonical_updated_at = _canonicalise_date(updated_at) if updated_at else canonical_date
 
         normalised.append(
             {
@@ -122,9 +129,18 @@ def normalise_data(extracted_data):
                 "title": _normalise_name(title),
                 "url": url,
                 "published_at": canonical_date,
+                "updated_at": canonical_updated_at,
                 "source_name": _normalise_name(source_name),
+                "source_system": _normalise_name(source_system) if source_system else None,
                 "author": _normalise_name(author) if author else None,
+                "section": _normalise_name(section) if section else None,
+                "tags": _dedup_list([_normalise_name(tag) for tag in tags if tag]),
                 "summary": record.get("summary"),
+                "content": record.get("content"),
+                "word_count": int(word_count) if word_count is not None else None,
+                "raw_article_type_hint": _normalise_name(raw_article_type_hint)
+                if raw_article_type_hint
+                else None,
                 "entities": normalised_entities,
                 "relations": _normalise_relations(record.get("relations", []), i),
             }

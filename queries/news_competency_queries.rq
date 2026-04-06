@@ -1,251 +1,319 @@
 PREFIX news: <http://example.org/news#>
 PREFIX schema: <https://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-# CQ01: Which articles mention a target technology such as AI or Robotics?
-SELECT ?article ?headline
+# CQ01: Which journalists wrote politics-section articles about government or policy issues during the project time window?
+SELECT DISTINCT ?journalistName ?headline ?publishedDate
 WHERE {
   ?article a news:NewsArticle ;
-           schema:headline ?headline ;
-           news:mentionsTechnology ?technology .
-  ?technology schema:name "AI" .
-}
-ORDER BY ?headline
-
-
-# CQ02: Which organisations are mentioned in articles about a target technology?
-SELECT DISTINCT ?organisation ?organisationName
-WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsTechnology ?technology ;
-           news:mentionsOrganisation ?organisation .
-  ?technology schema:name "AI" .
-  ?organisation schema:name ?organisationName .
-}
-ORDER BY ?organisationName
-
-
-# CQ03: Which journalists authored articles that mention a target organisation?
-SELECT DISTINCT ?journalist ?journalistName ?headline
-WHERE {
-  ?article a news:NewsArticle ;
-           schema:headline ?headline ;
            news:hasAuthor ?journalist ;
-           news:mentionsOrganisation ?organisation .
+           news:hasSection ?section ;
+           news:hasTopic ?topic ;
+           news:publishedDate ?publishedDate ;
+           schema:headline ?headline .
   ?journalist schema:name ?journalistName .
-  ?organisation schema:name "OpenAI Corporation" .
+  ?topic schema:name ?topicName .
+  FILTER(LCASE(STR(?section)) = "politics")
+  FILTER(LCASE(STR(?topicName)) IN ("government", "policy", "politics"))
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-ORDER BY ?journalistName ?headline
+ORDER BY ?journalistName ?publishedDate
 
 
-# CQ04: Which publishers have published articles about a target topic?
-SELECT DISTINCT ?publisher ?publisherName
+# CQ02: Which news organisations published politics-section articles between March 1, 2026 and April 6, 2026?
+SELECT DISTINCT ?publisherName
 WHERE {
   ?article a news:NewsArticle ;
            news:publishedBy ?publisher ;
-           news:hasTopic ?topic .
+           news:hasSection ?section ;
+           news:publishedDate ?publishedDate .
   ?publisher schema:name ?publisherName .
-  ?topic schema:name "research" .
+  FILTER(LCASE(STR(?section)) = "politics")
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?publisherName
 
 
-# CQ05: Which locations are mentioned in articles about a target technology?
-SELECT DISTINCT ?location ?locationName
+# CQ03: Which people were mentioned most often across the fixed article collection?
+SELECT ?personName (COUNT(DISTINCT ?article) AS ?articleCount)
 WHERE {
   ?article a news:NewsArticle ;
-           news:mentionsTechnology ?technology ;
-           news:mentionsLocation ?location .
-  ?technology schema:name "Robotics" .
-  ?location schema:name ?locationName .
-}
-ORDER BY ?locationName
-
-
-# CQ06: Which technologies are associated with a target organisation through news:usesTechnology?
-SELECT DISTINCT ?technology ?technologyName
-WHERE {
-  ?organisation a news:Organisation ;
-                schema:name "OpenAI Corporation" ;
-                news:usesTechnology ?technology .
-  ?technology schema:name ?technologyName .
-}
-ORDER BY ?technologyName
-
-
-# CQ07: Which articles mention the same organisation together with multiple technologies?
-SELECT ?article ?headline (COUNT(DISTINCT ?technology) AS ?technologyCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           schema:headline ?headline ;
-           news:mentionsOrganisation ?organisation ;
-           news:mentionsTechnology ?technology .
-  ?organisation schema:name "OpenAI Corporation" .
-}
-GROUP BY ?article ?headline
-HAVING (COUNT(DISTINCT ?technology) > 1)
-ORDER BY DESC(?technologyCount) ?headline
-
-
-# CQ08: Which people are mentioned most often in articles about a target topic?
-SELECT ?person ?personName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:hasTopic ?topic ;
-           news:mentionsPerson ?person .
-  ?topic schema:name "research" .
+           news:mentionsPerson ?person ;
+           news:publishedDate ?publishedDate .
   ?person schema:name ?personName .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?person ?personName
+GROUP BY ?personName
 ORDER BY DESC(?articleCount) ?personName
 
 
-# CQ09: Which publishers cover the widest range of topics?
-SELECT ?publisher ?publisherName (COUNT(DISTINCT ?topic) AS ?topicCount)
+# CQ04: Which political parties were mentioned in articles about elections or parliamentary politics?
+SELECT DISTINCT ?partyName ?headline
 WHERE {
   ?article a news:NewsArticle ;
-           news:publishedBy ?publisher ;
-           news:hasTopic ?topic .
-  ?publisher schema:name ?publisherName .
-}
-GROUP BY ?publisher ?publisherName
-ORDER BY DESC(?topicCount) ?publisherName
-
-
-# CQ10: Which topics co-occur most often with a target technology?
-SELECT ?topic ?topicName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsTechnology ?technology ;
-           news:hasTopic ?topic .
-  ?technology schema:name "AI" .
-  ?topic schema:name ?topicName .
-}
-GROUP BY ?topic ?topicName
-ORDER BY DESC(?articleCount) ?topicName
-
-
-# CQ11: Which articles mention both a target technology and a target location?
-SELECT DISTINCT ?article ?headline
-WHERE {
-  ?article a news:NewsArticle ;
+           news:mentionsOrganisation ?party ;
+           news:hasTopic ?topic ;
            schema:headline ?headline ;
-           news:mentionsTechnology ?technology ;
-           news:mentionsLocation ?location .
-  ?technology schema:name "AI" .
-  ?location schema:name "San Francisco" .
+           news:publishedDate ?publishedDate .
+  ?party a news:PoliticalParty ;
+         schema:name ?partyName .
+  ?topic schema:name ?topicName .
+  FILTER(LCASE(STR(?topicName)) IN ("election", "parliament", "politics"))
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-ORDER BY ?headline
+ORDER BY ?partyName ?headline
 
 
-# CQ12: Which publishers mention the same organisation across multiple articles?
-SELECT ?publisher ?publisherName (COUNT(DISTINCT ?article) AS ?articleCount)
+# CQ05: Which government bodies were mentioned in articles about tax, public services, or healthcare policy?
+SELECT DISTINCT ?bodyName ?headline
 WHERE {
   ?article a news:NewsArticle ;
-           news:publishedBy ?publisher ;
-           news:mentionsOrganisation ?organisation .
-  ?publisher schema:name ?publisherName .
-  ?organisation schema:name "OpenAI Corporation" .
+           news:mentionsOrganisation ?body ;
+           news:hasTopic ?topic ;
+           schema:headline ?headline ;
+           news:publishedDate ?publishedDate .
+  ?body a news:GovernmentBody ;
+        schema:name ?bodyName .
+  ?topic schema:name ?topicName .
+  FILTER(LCASE(STR(?topicName)) IN ("tax", "public services", "healthcare", "policy"))
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?publisher ?publisherName
-HAVING (COUNT(DISTINCT ?article) > 1)
-ORDER BY DESC(?articleCount) ?publisherName
+ORDER BY ?bodyName ?headline
 
 
-# CQ13: Which journalists write most often about a target technology?
-SELECT ?journalist ?journalistName (COUNT(DISTINCT ?article) AS ?articleCount)
+# CQ06: Which opinion articles were classified as negative in sentiment?
+SELECT DISTINCT ?headline ?publishedDate
 WHERE {
-  ?article a news:NewsArticle ;
-           news:hasAuthor ?journalist ;
-           news:mentionsTechnology ?technology .
-  ?journalist schema:name ?journalistName .
-  ?technology schema:name "AI" .
+  ?article a news:OpinionArticle ;
+           news:hasSentiment news:Negative ;
+           schema:headline ?headline ;
+           news:publishedDate ?publishedDate .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?journalist ?journalistName
-ORDER BY DESC(?articleCount) ?journalistName
+ORDER BY ?publishedDate ?headline
 
 
-# CQ14: Which locations are most frequently discussed within a target topic?
-SELECT ?location ?locationName (COUNT(DISTINCT ?article) AS ?articleCount)
+# CQ07: Which topics appeared most often in politics-section reporting during the project time window?
+SELECT ?topicName (COUNT(DISTINCT ?article) AS ?articleCount)
 WHERE {
   ?article a news:NewsArticle ;
            news:hasTopic ?topic ;
-           news:mentionsLocation ?location .
-  ?topic schema:name "research" .
-  ?location schema:name ?locationName .
+           news:hasSection ?section ;
+           news:publishedDate ?publishedDate .
+  ?topic schema:name ?topicName .
+  FILTER(LCASE(STR(?section)) = "politics")
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?location ?locationName
+GROUP BY ?topicName
+ORDER BY DESC(?articleCount) ?topicName
+
+
+# CQ08: Which articles were updated after their original publication time, and what are their canonical URLs?
+SELECT DISTINCT ?headline ?publishedDate ?updatedDate ?url
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:publishedDate ?publishedDate ;
+           news:hasUpdateTimestamp ?updatedDate ;
+           news:articleURL ?url .
+  FILTER(?updatedDate > ?publishedDate)
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+ORDER BY ?publishedDate ?headline
+
+
+# CQ09: How does the average word count of politics-section articles compare with the average word count of opinion articles?
+SELECT ?articleGroup (AVG(?words) AS ?averageWordCount)
+WHERE {
+  {
+    ?article a news:NewsArticle ;
+             news:hasSection ?section ;
+             news:wordCount ?words ;
+             news:publishedDate ?publishedDate .
+    FILTER(LCASE(STR(?section)) = "politics")
+    FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+    BIND("politics-section" AS ?articleGroup)
+  }
+  UNION
+  {
+    ?article a news:OpinionArticle ;
+             news:wordCount ?words ;
+             news:publishedDate ?publishedDate .
+    FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+    BIND("opinion" AS ?articleGroup)
+  }
+}
+GROUP BY ?articleGroup
+ORDER BY ?articleGroup
+
+
+# CQ10: Which articles have a follow-up article, and do the original and follow-up share at least one topic?
+SELECT DISTINCT ?headline ?followUpHeadline ?topicName
+WHERE {
+  ?article a news:NewsArticle ;
+           news:hasFollowUp ?followUp ;
+           news:hasTopic ?topic ;
+           schema:headline ?headline ;
+           news:publishedDate ?publishedDate .
+  ?followUp a news:NewsArticle ;
+            news:hasTopic ?topic ;
+            schema:headline ?followUpHeadline .
+  ?topic schema:name ?topicName .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+ORDER BY ?headline ?followUpHeadline ?topicName
+
+
+# CQ11: Which journalists from the same news organisation wrote about the same topic during the project time window?
+SELECT ?publisherName ?topicName (COUNT(DISTINCT ?journalist) AS ?journalistCount)
+WHERE {
+  ?journalist a news:Journalist ;
+              news:worksFor ?publisher .
+  ?publisher schema:name ?publisherName .
+  ?article a news:NewsArticle ;
+           news:hasAuthor ?journalist ;
+           news:hasTopic ?topic ;
+           news:publishedDate ?publishedDate .
+  ?topic schema:name ?topicName .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+GROUP BY ?publisherName ?topicName
+HAVING (COUNT(DISTINCT ?journalist) > 1)
+ORDER BY DESC(?journalistCount) ?publisherName ?topicName
+
+
+# CQ12: Which breaking news articles were published in the politics section?
+SELECT DISTINCT ?headline ?publishedDate
+WHERE {
+  ?article a news:BreakingNewsArticle ;
+           schema:headline ?headline ;
+           news:hasSection ?section ;
+           news:publishedDate ?publishedDate .
+  FILTER(LCASE(STR(?section)) = "politics")
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+ORDER BY ?publishedDate ?headline
+
+
+# CQ13: Which locations were mentioned most often in articles about migration, tax, or healthcare policy?
+SELECT ?locationName (COUNT(DISTINCT ?article) AS ?articleCount)
+WHERE {
+  ?article a news:NewsArticle ;
+           news:mentionsLocation ?location ;
+           news:hasTopic ?topic ;
+           news:publishedDate ?publishedDate .
+  ?location schema:name ?locationName .
+  ?topic schema:name ?topicName .
+  FILTER(LCASE(STR(?topicName)) IN ("migration", "tax", "healthcare", "policy"))
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+GROUP BY ?locationName
 ORDER BY DESC(?articleCount) ?locationName
 
 
-# CQ15: Which organisations appear in articles published by more than one publisher?
-SELECT ?organisation ?organisationName (COUNT(DISTINCT ?publisher) AS ?publisherCount)
+# CQ14: Which journalists wrote articles that were later updated?
+SELECT DISTINCT ?journalistName ?headline ?publishedDate ?updatedDate
+WHERE {
+  ?article a news:NewsArticle ;
+           news:hasAuthor ?journalist ;
+           schema:headline ?headline ;
+           news:publishedDate ?publishedDate ;
+           news:hasUpdateTimestamp ?updatedDate .
+  ?journalist schema:name ?journalistName .
+  FILTER(?updatedDate > ?publishedDate)
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+ORDER BY ?journalistName ?publishedDate
+
+
+# CQ15: Which articles mention both a person and an organisation?
+SELECT DISTINCT ?headline ?publishedDate
+WHERE {
+  ?article a news:NewsArticle ;
+           schema:headline ?headline ;
+           news:publishedDate ?publishedDate .
+  FILTER EXISTS { ?article news:mentionsPerson ?person . }
+  FILTER EXISTS { ?article news:mentionsOrganisation ?organisation . }
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+}
+ORDER BY ?publishedDate ?headline
+
+
+# CQ16: Which news organisations published the widest range of topics during the project time window?
+SELECT ?publisherName (COUNT(DISTINCT ?topic) AS ?topicCount)
 WHERE {
   ?article a news:NewsArticle ;
            news:publishedBy ?publisher ;
-           news:mentionsOrganisation ?organisation .
-  ?organisation schema:name ?organisationName .
+           news:hasTopic ?topic ;
+           news:publishedDate ?publishedDate .
+  ?publisher schema:name ?publisherName .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?organisation ?organisationName
-HAVING (COUNT(DISTINCT ?publisher) > 1)
-ORDER BY DESC(?publisherCount) ?organisationName
+GROUP BY ?publisherName
+ORDER BY DESC(?topicCount) ?publisherName
 
 
-# CQ16: Which technologies appear together in the same article?
-SELECT DISTINCT ?article ?headline ?technologyOneName ?technologyTwoName
+# CQ17: Which people and organisations were co-mentioned most often in the same articles?
+SELECT ?personName ?organisationName (COUNT(DISTINCT ?article) AS ?articleCount)
 WHERE {
   ?article a news:NewsArticle ;
-           schema:headline ?headline ;
-           news:mentionsTechnology ?technologyOne, ?technologyTwo .
-  ?technologyOne schema:name ?technologyOneName .
-  ?technologyTwo schema:name ?technologyTwoName .
-  FILTER(STR(?technologyOne) < STR(?technologyTwo))
-}
-ORDER BY ?headline ?technologyOneName ?technologyTwoName
-
-
-# CQ17: Which people and organisations co-occur in the same articles?
-SELECT DISTINCT ?article ?headline ?personName ?organisationName
-WHERE {
-  ?article a news:NewsArticle ;
-           schema:headline ?headline ;
            news:mentionsPerson ?person ;
-           news:mentionsOrganisation ?organisation .
+           news:mentionsOrganisation ?organisation ;
+           news:publishedDate ?publishedDate .
   ?person schema:name ?personName .
   ?organisation schema:name ?organisationName .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-ORDER BY ?headline ?personName ?organisationName
+GROUP BY ?personName ?organisationName
+ORDER BY DESC(?articleCount) ?personName ?organisationName
 
 
-# CQ18: Which articles are tagged with more than one topic?
-SELECT ?article ?headline (COUNT(DISTINCT ?topic) AS ?topicCount)
+# CQ18: Which political events took place in London during the project time window, and when did they occur?
+SELECT DISTINCT ?event ?eventDate ?headline
 WHERE {
+  ?event a news:PoliticalEvent ;
+         news:eventLocation ?location ;
+         news:eventDate ?eventDate .
+  ?location schema:name ?locationName .
   ?article a news:NewsArticle ;
+           news:coversEvent ?event ;
            schema:headline ?headline ;
-           news:hasTopic ?topic .
+           news:publishedDate ?publishedDate .
+  FILTER(LCASE(STR(?locationName)) = "london")
+  FILTER(?eventDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?eventDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?article ?headline
-HAVING (COUNT(DISTINCT ?topic) > 1)
-ORDER BY DESC(?topicCount) ?headline
+ORDER BY ?eventDate ?headline
 
 
-# CQ19: Which publishers mention the highest number of unique organisations?
-SELECT ?publisher ?publisherName (COUNT(DISTINCT ?organisation) AS ?organisationCount)
+# CQ19: Which political or economic events were covered by more than one news organisation?
+SELECT ?event (COUNT(DISTINCT ?publisher) AS ?publisherCount)
 WHERE {
   ?article a news:NewsArticle ;
+           news:coversEvent ?event ;
            news:publishedBy ?publisher ;
-           news:mentionsOrganisation ?organisation .
-  ?publisher schema:name ?publisherName .
+           news:publishedDate ?publishedDate .
+  ?event a ?eventType .
+  FILTER(?eventType IN (news:PoliticalEvent, news:EconomicEvent))
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?publisher ?publisherName
-ORDER BY DESC(?organisationCount) ?publisherName
+GROUP BY ?event
+HAVING (COUNT(DISTINCT ?publisher) > 1)
+ORDER BY DESC(?publisherCount) ?event
 
 
-# CQ20: Which topics have the highest number of articles overall?
-SELECT ?topic ?topicName (COUNT(DISTINCT ?article) AS ?articleCount)
+# CQ20: Which politicians and political parties were mentioned together most often in the same articles?
+SELECT ?politicianName ?partyName (COUNT(DISTINCT ?article) AS ?articleCount)
 WHERE {
   ?article a news:NewsArticle ;
-           news:hasTopic ?topic .
-  ?topic schema:name ?topicName .
+           news:mentionsPerson ?politician ;
+           news:mentionsOrganisation ?party ;
+           news:publishedDate ?publishedDate .
+  ?politician a news:Politician ;
+              schema:name ?politicianName .
+  ?party a news:PoliticalParty ;
+         schema:name ?partyName .
+  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?topic ?topicName
-ORDER BY DESC(?articleCount) ?topicName
+GROUP BY ?politicianName ?partyName
+ORDER BY DESC(?articleCount) ?politicianName ?partyName

@@ -120,6 +120,25 @@ def convert_json_to_rdf(normalised_data):
         g.add((article_uri, SCHEMA.headline, Literal(record["title"])))
         _add_relation(g, article_uri, EX.articleURL, url_literal)
         _add_relation(g, article_uri, EX.publishedDate, published_literal)
+        if record.get("updated_at"):
+            g.add(
+                (
+                    article_uri,
+                    EX.hasUpdateTimestamp,
+                    Literal(record["updated_at"], datatype=XSD.dateTime),
+                )
+            )
+        if record.get("section"):
+            g.add((article_uri, EX.hasSection, Literal(record["section"])))
+            g.add((article_uri, SCHEMA.articleSection, Literal(record["section"])))
+        if record.get("word_count") is not None:
+            g.add((article_uri, EX.wordCount, Literal(record["word_count"], datatype=XSD.integer)))
+
+        article_type_hint = (record.get("raw_article_type_hint") or "").lower()
+        if article_type_hint == "breaking":
+            g.add((article_uri, RDF.type, EX.BreakingNewsArticle))
+        elif article_type_hint == "opinion":
+            g.add((article_uri, RDF.type, EX.OpinionArticle))
 
         _add_typed_entity(
             g,
