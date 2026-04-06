@@ -39,20 +39,21 @@ def build_ontology() -> Graph:
     g.bind("xsd", XSD)
 
     g.add((NEWS[""], RDF.type, OWL.Ontology))
-    g.add((NEWS[""], RDFS.label, Literal("Current News Ontology")))
+    g.add((NEWS[""], RDFS.label, Literal("UK Politics and Policy News Ontology")))
     g.add(
         (
             NEWS[""],
             RDFS.comment,
             Literal(
-                "An ontology for representing current news articles, events, "
-                "journalists, organisations, and their relationships. "
-                "Extends Schema.org and the BBC Core Concepts Ontology."
+                "An ontology for representing current UK politics and policy news, "
+                "including articles, journalists, organisations, events, topics, "
+                "places, and analytical metadata. Extends Schema.org and the BBC "
+                "Core Concepts Ontology."
             ),
         )
     )
 
-    # ── Classes extending Schema.org ─────────────────────────────────────
+    # Classes extending Schema.org
 
     _add_class(
         g,
@@ -84,9 +85,16 @@ def build_ontology() -> Graph:
     )
     _add_class(
         g,
+        NEWS.Politician,
+        "Politician",
+        "A political actor such as an MP, minister, mayor, or party leader.",
+        SCHEMA.Person,
+    )
+    _add_class(
+        g,
         NEWS.Organisation,
         "Organisation",
-        "An organisation mentioned in current news coverage.",
+        "An organisation mentioned in current UK politics and policy reporting.",
         SCHEMA.Organization,
     )
     _add_class(
@@ -98,20 +106,27 @@ def build_ontology() -> Graph:
     )
     _add_class(
         g,
-        NEWS.Technology,
-        "Technology",
-        "A technology, platform, model, or technical capability mentioned in reporting.",
+        NEWS.Topic,
+        "Topic",
+        "A policy or public-affairs theme discussed in reporting.",
         SCHEMA.Thing,
     )
     _add_class(
         g,
-        NEWS.Topic,
-        "Topic",
-        "A thematic category or subject area.",
-        SCHEMA.Thing,
+        NEWS.PoliticalParty,
+        "Political Party",
+        "A political party or party grouping active in UK politics.",
+        NEWS.Organisation,
+    )
+    _add_class(
+        g,
+        NEWS.GovernmentBody,
+        "Government Body",
+        "A department, regulator, parliamentary body, or public institution.",
+        NEWS.Organisation,
     )
 
-    # ── Classes extending BBC Core Concepts ──────────────────────────────
+    # Classes extending BBC Core Concepts
 
     _add_class(
         g,
@@ -129,9 +144,9 @@ def build_ontology() -> Graph:
     )
     _add_class(
         g,
-        NEWS.NaturalDisasterEvent,
-        "Natural Disaster Event",
-        "An earthquake, flood, wildfire, or similar event.",
+        NEWS.EconomicEvent,
+        "Economic Event",
+        "A budget statement, fiscal announcement, spending review, or similar economic event.",
         NEWS.NewsEvent,
     )
     _add_class(
@@ -142,7 +157,7 @@ def build_ontology() -> Graph:
         CORE.Place,
     )
 
-    # ── New classes ────────────────────────────────────────────────────
+    # New classes
 
     _add_class(
         g,
@@ -155,7 +170,7 @@ def build_ontology() -> Graph:
         g.add((NEWS[label], RDF.type, NEWS.Sentiment))
         g.add((NEWS[label], RDFS.label, Literal(label)))
 
-    # ── Properties extending Schema.org ──────────────────────────────────
+    # Properties extending Schema.org
 
     _add_property(
         g,
@@ -217,7 +232,7 @@ def build_ontology() -> Graph:
         "mentions technology",
         "Links an article to a technology mentioned in its content.",
         NEWS.NewsArticle,
-        NEWS.Technology,
+        SCHEMA.Thing,
         SCHEMA.mentions,
     )
     _add_property(
@@ -266,7 +281,7 @@ def build_ontology() -> Graph:
         SCHEMA.worksFor,
     )
 
-    # ── Properties extending BBC Core Concepts ───────────────────────────
+    # Properties extending BBC Core Concepts
 
     _add_property(
         g,
@@ -296,7 +311,7 @@ def build_ontology() -> Graph:
         CORE.notablyAssociatedWith,
     )
 
-    # ── New properties ─────────────────────────────────────────────────
+    # New properties
 
     _add_property(
         g,
@@ -321,51 +336,6 @@ def build_ontology() -> Graph:
         "Links an article to a subsequent follow-up article.",
         NEWS.NewsArticle,
         NEWS.NewsArticle,
-    )
-    _add_property(
-        g,
-        NEWS.usesTechnology,
-        "uses technology",
-        "Links an organisation to a technology it is reported as using.",
-        NEWS.Organisation,
-        NEWS.Technology,
-    )
-    _add_property(
-        g,
-        NEWS.locatedIn,
-        "located in",
-        "Links an entity or event to a location.",
-        SCHEMA.Thing,
-        NEWS.Location,
-    )
-    _add_property(
-        g,
-        NEWS.developedBy,
-        "developed by",
-        "Links a technology or artefact to its developer.",
-        NEWS.Technology,
-        NEWS.Organisation,
-        SCHEMA.creator,
-    )
-    _add_property(
-        g,
-        NEWS.announced,
-        "announced",
-        "Links an organisation or person to something they announced.",
-    )
-    _add_property(
-        g,
-        NEWS.involvedIn,
-        "involved in",
-        "Links an entity to an event it is involved in.",
-        parent=CORE.notablyAssociatedWith,
-    )
-    _add_property(
-        g,
-        NEWS.partOf,
-        "part of",
-        "Links a thing to a larger thing it is part of.",
-        parent=SCHEMA.isPartOf,
     )
 
     return g
