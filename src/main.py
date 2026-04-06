@@ -1,9 +1,16 @@
+import argparse
 import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from rdflib import Graph
+
+from src.build_ontology import OUTPUT_PATH as ONTOLOGY_OUTPUT_PATH
+from src.build_ontology import build_ontology
+from src.complete_kg import DEFAULT_OUTPUT_PATH as COMPLETED_KG_PATH
+from src.complete_kg import enrich_graph
 from src.config import CONFIG
-from src.data_collection import collect_all_sources
+from src.data_collection import collect_all_sources, load_cached_sources
 from src.data_extraction import extract_relevant_information
 from src.data_normalisation import (
     normalise_collected_sources,
@@ -11,6 +18,11 @@ from src.data_normalisation import (
     save_normalised_articles,
 )
 from src.json_to_rdf import convert_json_to_rdf
+from src.run_queries import execute_queries, load_query_definitions, save_results
+
+INSTANCE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "new_kg.ttl"
+PROTOTYPE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "prototype_kg.ttl"
+LATEST_QUERY_RESULTS_PATH = Path("output/query_results.json")
 
 
 def build_timestamp():
@@ -37,13 +49,59 @@ def save_rdf(graph, filename):
     return output_path
 
 
+def merge_graphs(*graphs):
+    merged = Graph()
+    for graph in graphs:
+        for prefix, namespace in graph.namespace_manager.namespaces():
+            merged.bind(prefix, namespace)
+        for triple in graph:
+            merged.add(triple)
+    return merged
+
+
+def build_arg_parser():
+    parser = argparse.ArgumentParser(description="Build the UK politics and policy news KG.")
+    parser.add_argument(
+        "--from-cache",
+        action="store_true",
+        help="Load the latest saved raw JSON snapshots instead of calling external APIs.",
+    )
+    parser.add_argument(
+        "--newsapi-snapshot",
+        type=Path,
+        default=None,
+        help="Optional path to a cached NewsAPI JSON snapshot.",
+    )
+    parser.add_argument(
+        "--guardian-snapshot",
+        type=Path,
+        default=None,
+        help="Optional path to a cached Guardian JSON snapshot.",
+    )
+    parser.add_argument(
+        "--no-save-snapshots",
+        action="store_true",
+        help="Do not write fresh raw API snapshots during live collection.",
+    )
+    return parser
+
+
 def main():
+    args = build_arg_parser().parse_args()
     timestamp = build_timestamp()
     print(f"[PIPELINE] Starting news KG pipeline at {timestamp}")
     print(f"[PIPELINE] Scope: {CONFIG['project_scope']}")
 
     print("[PIPELINE] Stage 1: Collect source data")
-    collected_data = collect_all_sources(save_snapshots=True)
+    if args.from_cache:
+        print("[PIPELINE] Mode: offline cached snapshots")
+        collected_data = load_cached_sources(
+            newsapi_snapshot=args.newsapi_snapshot,
+            guardian_snapshot=args.guardian_snapshot,
+        )
+    else:
+        print("[PIPELINE] Mode: live API collection")
+        collected_data = collect_all_sources(save_snapshots=not args.no_save_snapshots)
 
     print("[PIPELINE] Stage 2: Normalise source records")
     source_records = normalise_collected_sources(collected_data)
@@ -62,12 +120,36 @@ def main():
     kg_records = normalise_data(extracted_records)
     save_json(kg_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_kg_records.json")
 
-    print("[PIPELINE] Stage 5: Convert to RDF")
-    rdf_graph = convert_json_to_rdf(kg_records)
+    print("[PIPELINE] Stage 5: Build ontology")
+    ontology_graph = build_ontology()
+    save_rdf(ontology_graph, ONTOLOGY_OUTPUT_PATH)
 
-    print("[PIPELINE] Stage 6: Save knowledge graph")
-    save_rdf(rdf_graph, f"{CONFIG['GENERATED_KG_DIR']}/new_kg.ttl")
-    save_rdf(rdf_graph, f"output/{timestamp}_kg.ttl")
+    print("[PIPELINE] Stage 6: Convert records to RDF instances")
+    instance_graph = convert_json_to_rdf(kg_records)
+    save_rdf(instance_graph, INSTANCE_KG_PATH)
+    save_rdf(instance_graph, f"output/{timestamp}_instance_kg.ttl")
+
+    print("[PIPELINE] Stage 7: Merge ontology and instance triples")
+    prototype_graph = merge_graphs(ontology_graph, instance_graph)
+    save_rdf(prototype_graph, PROTOTYPE_KG_PATH)
+    save_rdf(prototype_graph, f"output/{timestamp}_prototype_kg.ttl")
+
+    print("[PIPELINE] Stage 8: Enrich the KG")
+    completed_graph = enrich_graph(prototype_graph)
+    save_rdf(completed_graph, COMPLETED_KG_PATH)
+    save_rdf(completed_graph, f"output/{timestamp}_completed_kg.ttl")
+
+    print("[PIPELINE] Stage 9: Run competency queries")
+    query_results = execute_queries(completed_graph, load_query_definitions())
+    timestamped_results = Path("output") / f"{timestamp}_query_results.json"
+    save_results(query_results, LATEST_QUERY_RESULTS_PATH)
+    save_results(query_results, timestamped_results)
+
+    answered_queries = sum(1 for result in query_results if result["row_count"] > 0)
+    print(
+        f"[PIPELINE] Query coverage: {answered_queries}/{len(query_results)} "
+        "queries returned at least one row."
+    )
 
     print("[PIPELINE] Done.")
 
