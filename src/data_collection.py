@@ -41,6 +41,45 @@ def save_raw_json(data, source_name, filename=None):
     return output_path
 
 
+def load_json_file(path):
+    input_path = Path(path)
+    if not input_path.exists():
+        raise FileNotFoundError(f"[COLLECT] JSON file not found: {input_path}")
+    return json.loads(input_path.read_text(encoding="utf-8"))
+
+
+def latest_snapshot_path(source_name):
+    source_dir = Path(CONFIG["RAW_DATA_DIR"]) / source_name
+    if not source_dir.exists():
+        raise FileNotFoundError(f"[COLLECT] Snapshot directory not found: {source_dir}")
+
+    snapshots = sorted(source_dir.glob("*.json"))
+    if not snapshots:
+        raise FileNotFoundError(f"[COLLECT] No JSON snapshots found in {source_dir}")
+    return snapshots[-1]
+
+
+def load_cached_source(source_name, snapshot_path=None):
+    source_path = (
+        Path(snapshot_path) if snapshot_path is not None else latest_snapshot_path(source_name)
+    )
+    data = load_json_file(source_path)
+    print(f"[COLLECT] Loaded cached {source_name} payload from {source_path}")
+    return data
+
+
+def build_collection_payload(sources, errors=None):
+    return {
+        "scope": {
+            "project_scope": CONFIG["project_scope"],
+            "date_start": CONFIG["date_start"],
+            "date_end": CONFIG["date_end"],
+        },
+        "sources": sources,
+        "collection_errors": errors or {},
+    }
+
+
 def fetch_newsapi_data(save_snapshot=True):
     first_page = fetch_json(build_newsapi_page_url(page=1))
     total_results = first_page.get("totalResults", 0)
@@ -106,15 +145,27 @@ def collect_all_sources(save_snapshots=True):
     if not sources:
         raise RuntimeError("[COLLECT] No source data could be collected from any provider.")
 
-    return {
-        "scope": {
-            "project_scope": CONFIG["project_scope"],
-            "date_start": CONFIG["date_start"],
-            "date_end": CONFIG["date_end"],
-        },
-        "sources": sources,
-        "collection_errors": errors,
-    }
+    return build_collection_payload(sources, errors)
+
+
+def load_cached_sources(newsapi_snapshot=None, guardian_snapshot=None):
+    sources = {}
+    errors = {}
+
+    for source_name, snapshot_path in (
+        ("newsapi", newsapi_snapshot),
+        ("guardian", guardian_snapshot),
+    ):
+        try:
+            sources[source_name] = load_cached_source(source_name, snapshot_path=snapshot_path)
+        except Exception as exc:
+            errors[source_name] = str(exc)
+            print(f"[COLLECT] Cached {source_name} load failed: {exc}")
+
+    if not sources:
+        raise RuntimeError("[COLLECT] No cached source data could be loaded from disk.")
+
+    return build_collection_payload(sources, errors)
 
 
 def load_data_from_url(url):
