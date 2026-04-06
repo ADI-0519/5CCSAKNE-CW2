@@ -1,44 +1,243 @@
-# Code to convert normalised JSON data to RDF format
-
 import re
 
-from rdflib import RDF, XSD, Graph, Literal, Namespace
+from rdflib import RDF, RDFS, XSD, Graph, Literal, Namespace
 
-EX = Namespace("http://example.org/news/")
-SCHEMA = Namespace("http://schema.org/")
-
-# Maps controlled predicate names to RDF predicate URIs
-PREDICATE_URI_MAP = {
-    "mentions": EX.mentions,
-    "developed_by": EX.developedBy,
-    "announced": EX.announced,
-    "located_in": EX.locatedIn,
-    "authored_by": EX.authoredBy,
-    "published_by": EX.publishedBy,
-    "uses_technology": EX.usesTechnology,
-    "involved_in": EX.involvedIn,
-    "part_of": EX.partOf,
-}
+NEWS = Namespace("http://example.org/news#")
+SCHEMA = Namespace("https://schema.org/")
 
 
-def _slug(text):
-    """Convert arbitrary text to a URI-safe slug."""
-    return re.sub(r"[^a-zA-Z0-9_-]", "_", text.strip())
+def slugify(text):
+    return re.sub(r"[^a-zA-Z0-9_-]", "_", str(text).strip())
 
 
-def _entity_uri(name, entities_sets):
-    """Return the typed entity URI for a name by checking which entity list it belongs to."""
-    if name in entities_sets["organizations"]:
-        return EX[f"org/{_slug(name)}"]
-    if name in entities_sets["people"]:
-        return EX[f"person/{_slug(name)}"]
-    if name in entities_sets["locations"]:
-        return EX[f"location/{_slug(name)}"]
-    if name in entities_sets["technologies"]:
-        return EX[f"tech/{_slug(name)}"]
-    if name in entities_sets["topics"]:
-        return EX[f"topic/{_slug(name)}"]
-    return EX[f"entity/{_slug(name)}"]
+def article_uri(article_id):
+    return NEWS[f"article/{slugify(article_id)}"]
+
+
+def person_uri(name):
+    return NEWS[f"person/{slugify(name)}"]
+
+
+def organisation_uri(name):
+    return NEWS[f"organisation/{slugify(name)}"]
+
+
+def location_uri(name):
+    return NEWS[f"location/{slugify(name)}"]
+
+
+def topic_uri(name):
+    return NEWS[f"topic/{slugify(name)}"]
+
+
+def event_uri(article_id, event_name):
+    return NEWS[f"event/{slugify(article_id)}_{slugify(event_name)}"]
+
+
+def sentiment_uri(name):
+    return NEWS[slugify(name)]
+
+
+def add_literal(graph, subject, predicate, value, datatype=None):
+    if value is None or value == "":
+        return
+    if datatype is not None:
+        graph.add((subject, predicate, Literal(value, datatype=datatype)))
+    else:
+        graph.add((subject, predicate, Literal(value)))
+
+
+def add_name(graph, subject, name):
+    add_literal(graph, subject, SCHEMA.name, name)
+
+
+def bind_namespaces(graph):
+    graph.bind("news", NEWS)
+    graph.bind("schema", SCHEMA)
+
+
+def add_sentiment_scheme(graph):
+    for label in ("Positive", "Negative", "Neutral"):
+        uri = sentiment_uri(label)
+        graph.add((uri, RDF.type, NEWS.Sentiment))
+        add_name(graph, uri, label)
+
+
+def add_article_node(graph, record):
+    uri = article_uri(record["id"])
+    article_type = record.get("article_type") or "NewsArticle"
+
+    graph.add((uri, RDF.type, NEWS.NewsArticle))
+    if article_type != "NewsArticle":
+        graph.add((uri, RDF.type, NEWS[article_type]))
+
+    add_literal(graph, uri, SCHEMA.headline, record.get("title"))
+    add_literal(graph, uri, NEWS.articleURL, record.get("url"))
+    add_literal(graph, uri, SCHEMA.url, record.get("url"))
+    add_literal(graph, uri, NEWS.publishedDate, record.get("published_at"), XSD.dateTime)
+    add_literal(graph, uri, SCHEMA.datePublished, record.get("published_at"), XSD.dateTime)
+    add_literal(graph, uri, NEWS.hasUpdateTimestamp, record.get("updated_at"), XSD.dateTime)
+    add_literal(graph, uri, SCHEMA.dateModified, record.get("updated_at"), XSD.dateTime)
+    add_literal(graph, uri, NEWS.hasSection, record.get("section"))
+    add_literal(graph, uri, SCHEMA.articleSection, record.get("section"))
+    add_literal(graph, uri, SCHEMA.description, record.get("summary"))
+    add_literal(graph, uri, NEWS.wordCount, record.get("word_count"), XSD.integer)
+    add_literal(graph, uri, SCHEMA.wordCount, record.get("word_count"), XSD.integer)
+    return uri
+
+
+def add_publisher(graph, article, record):
+    source_name = record.get("source_name")
+    if not source_name:
+        return None
+
+    publisher = organisation_uri(source_name)
+    graph.add((publisher, RDF.type, NEWS.Organisation))
+    graph.add((publisher, RDF.type, NEWS.NewsOrganisation))
+    graph.add((publisher, RDF.type, SCHEMA.Organization))
+    add_name(graph, publisher, source_name)
+    graph.add((article, NEWS.publishedBy, publisher))
+    graph.add((article, SCHEMA.publisher, publisher))
+    return publisher
+
+
+def add_author(graph, article, record, publisher):
+    author_name = record.get("author")
+    if not author_name:
+        return None
+
+    author = person_uri(author_name)
+    graph.add((author, RDF.type, NEWS.Journalist))
+    graph.add((author, RDF.type, SCHEMA.Person))
+    add_name(graph, author, author_name)
+    graph.add((article, NEWS.hasAuthor, author))
+    graph.add((article, SCHEMA.author, author))
+    if publisher is not None:
+        graph.add((author, NEWS.worksFor, publisher))
+        graph.add((author, SCHEMA.worksFor, publisher))
+    return author
+
+
+def add_person_entities(graph, article, entities):
+    politicians = set(entities.get("politicians", []))
+    all_people = set(entities.get("people", []))
+
+    for name in sorted(all_people):
+        uri = person_uri(name)
+        graph.add((uri, RDF.type, SCHEMA.Person))
+        if name in politicians:
+            graph.add((uri, RDF.type, NEWS.Politician))
+        add_name(graph, uri, name)
+        graph.add((article, NEWS.mentionsPerson, uri))
+        graph.add((article, SCHEMA.mentions, uri))
+
+
+def add_organisation_entities(graph, article, entities):
+    parties = set(entities.get("political_parties", []))
+    bodies = set(entities.get("government_bodies", []))
+    organisations = set(entities.get("organizations", []))
+
+    for name in sorted(organisations):
+        uri = organisation_uri(name)
+        graph.add((uri, RDF.type, NEWS.Organisation))
+        graph.add((uri, RDF.type, SCHEMA.Organization))
+        if name in parties:
+            graph.add((uri, RDF.type, NEWS.PoliticalParty))
+        if name in bodies:
+            graph.add((uri, RDF.type, NEWS.GovernmentBody))
+        add_name(graph, uri, name)
+        graph.add((article, NEWS.mentionsOrganisation, uri))
+        graph.add((article, SCHEMA.mentions, uri))
+
+
+def add_location_entities(graph, article, entities):
+    for name in sorted(set(entities.get("locations", []))):
+        uri = location_uri(name)
+        graph.add((uri, RDF.type, NEWS.Location))
+        graph.add((uri, RDF.type, SCHEMA.Place))
+        add_name(graph, uri, name)
+        graph.add((article, NEWS.mentionsLocation, uri))
+        graph.add((article, SCHEMA.mentions, uri))
+
+
+def add_topic_entities(graph, article, entities):
+    for name in sorted(set(entities.get("topics", []))):
+        uri = topic_uri(name)
+        graph.add((uri, RDF.type, NEWS.Topic))
+        add_name(graph, uri, name)
+        graph.add((article, NEWS.hasTopic, uri))
+        graph.add((article, SCHEMA.about, uri))
+
+
+def add_sentiment(graph, article, record):
+    sentiment_name = record.get("sentiment") or "Neutral"
+    sentiment = sentiment_uri(sentiment_name)
+    graph.add((article, NEWS.hasSentiment, sentiment))
+
+
+def add_events(graph, article, record):
+    created_events = []
+    for event in record.get("event_candidates", []):
+        event_name = event.get("name")
+        if not event_name:
+            continue
+
+        uri = event_uri(record["id"], event_name)
+        event_type = event.get("type") or "NewsEvent"
+
+        graph.add((uri, RDF.type, NEWS.NewsEvent))
+        if event_type != "NewsEvent":
+            graph.add((uri, RDF.type, NEWS[event_type]))
+        add_name(graph, uri, event_name)
+        graph.add((article, NEWS.coversEvent, uri))
+
+        if event.get("date"):
+            add_literal(graph, uri, NEWS.eventDate, event["date"], XSD.date)
+
+        if event.get("location"):
+            loc_uri = location_uri(event["location"])
+            graph.add((loc_uri, RDF.type, NEWS.Location))
+            graph.add((loc_uri, RDF.type, SCHEMA.Place))
+            add_name(graph, loc_uri, event["location"])
+            graph.add((uri, NEWS.eventLocation, loc_uri))
+
+        created_events.append(uri)
+
+    return created_events
+
+
+def build_follow_up_links(graph, records):
+    groups = {}
+    for record in records:
+        for candidate in record.get("follow_up_candidates", []):
+            match_key = candidate.get("match_key")
+            if not match_key:
+                continue
+            groups.setdefault(match_key, []).append(record)
+
+    for records_with_key in groups.values():
+        ordered = sorted(records_with_key, key=lambda item: item.get("published_at") or "")
+        for current, follow_up in zip(ordered, ordered[1:]):
+            current_uri = article_uri(current["id"])
+            follow_uri = article_uri(follow_up["id"])
+            graph.add((current_uri, NEWS.hasFollowUp, follow_uri))
+
+
+def add_rdfs_hints(graph):
+    graph.add((NEWS.NewsArticle, RDFS.subClassOf, SCHEMA.NewsArticle))
+    graph.add((NEWS.Journalist, RDFS.subClassOf, SCHEMA.Person))
+    graph.add((NEWS.Organisation, RDFS.subClassOf, SCHEMA.Organization))
+    graph.add((NEWS.Location, RDFS.subClassOf, SCHEMA.Place))
+    graph.add((NEWS.hasAuthor, RDFS.subPropertyOf, SCHEMA.author))
+    graph.add((NEWS.publishedBy, RDFS.subPropertyOf, SCHEMA.publisher))
+    graph.add((NEWS.hasTopic, RDFS.subPropertyOf, SCHEMA.about))
+    graph.add((NEWS.mentionsPerson, RDFS.subPropertyOf, SCHEMA.mentions))
+    graph.add((NEWS.mentionsOrganisation, RDFS.subPropertyOf, SCHEMA.mentions))
+    graph.add((NEWS.mentionsLocation, RDFS.subPropertyOf, SCHEMA.mentions))
+    graph.add((NEWS.publishedDate, RDFS.subPropertyOf, SCHEMA.datePublished))
+    graph.add((NEWS.hasUpdateTimestamp, RDFS.subPropertyOf, SCHEMA.dateModified))
+    graph.add((NEWS.hasSection, RDFS.subPropertyOf, SCHEMA.articleSection))
+    graph.add((NEWS.articleURL, RDFS.subPropertyOf, SCHEMA.url))
 
 
 def convert_json_to_rdf(normalised_data):
@@ -47,76 +246,24 @@ def convert_json_to_rdf(normalised_data):
     if not normalised_data:
         raise ValueError("[RDF] No normalised data to convert.")
 
-    g = Graph()
-    g.bind("ex", EX)
-    g.bind("schema", SCHEMA)
+    graph = Graph()
+    bind_namespaces(graph)
+    add_rdfs_hints(graph)
+    add_sentiment_scheme(graph)
 
     for record in normalised_data:
-        article_uri = EX[f"article/{record['id']}"]
-
-        # --- Article node ---
-        g.add((article_uri, RDF.type, SCHEMA.NewsArticle))
-        g.add((article_uri, SCHEMA.headline, Literal(record["title"])))
-        g.add((article_uri, SCHEMA.url, Literal(record["url"])))
-        g.add(
-            (
-                article_uri,
-                SCHEMA.datePublished,
-                Literal(record["published_at"], datatype=XSD.dateTime),
-            )
-        )
-        g.add((article_uri, SCHEMA.publisher, Literal(record["source_name"])))
-
-        if record.get("author"):
-            g.add((article_uri, SCHEMA.author, Literal(record["author"])))
-        if record.get("summary"):
-            g.add((article_uri, SCHEMA.description, Literal(record["summary"])))
-
+        article = add_article_node(graph, record)
+        publisher = add_publisher(graph, article, record)
+        add_author(graph, article, record, publisher)
         entities = record.get("entities", {})
+        add_person_entities(graph, article, entities)
+        add_organisation_entities(graph, article, entities)
+        add_location_entities(graph, article, entities)
+        add_topic_entities(graph, article, entities)
+        add_sentiment(graph, article, record)
+        add_events(graph, article, record)
 
-        # Pre-compute sets for fast lookup when resolving relation URIs
-        entities_sets = {k: set(v) for k, v in entities.items()}
+    build_follow_up_links(graph, normalised_data)
 
-        # --- Entity nodes ---
-        for org in entities.get("organizations", []):
-            org_uri = EX[f"org/{_slug(org)}"]
-            g.add((org_uri, RDF.type, SCHEMA.Organization))
-            g.add((org_uri, SCHEMA.name, Literal(org)))
-
-        for person in entities.get("people", []):
-            person_uri = EX[f"person/{_slug(person)}"]
-            g.add((person_uri, RDF.type, SCHEMA.Person))
-            g.add((person_uri, SCHEMA.name, Literal(person)))
-
-        for loc in entities.get("locations", []):
-            loc_uri = EX[f"location/{_slug(loc)}"]
-            g.add((loc_uri, RDF.type, SCHEMA.Place))
-            g.add((loc_uri, SCHEMA.name, Literal(loc)))
-
-        for tech in entities.get("technologies", []):
-            tech_uri = EX[f"tech/{_slug(tech)}"]
-            g.add((tech_uri, RDF.type, EX.Technology))
-            g.add((tech_uri, SCHEMA.name, Literal(tech)))
-
-        for topic in entities.get("topics", []):
-            topic_uri = EX[f"topic/{_slug(topic)}"]
-            g.add((topic_uri, RDF.type, EX.Topic))
-            g.add((topic_uri, SCHEMA.name, Literal(topic)))
-
-        # --- Relation triples ---
-        for rel in record.get("relations", []):
-            pred_name = rel["predicate"]
-            pred_uri = PREDICATE_URI_MAP.get(pred_name)
-            if pred_uri is None:
-                raise ValueError(f"[RDF] Unknown predicate: {pred_name!r}")
-
-            subj = rel["subject"]
-            obj = rel["object"]
-
-            subj_uri = article_uri if subj == record["id"] else _entity_uri(subj, entities_sets)
-            obj_uri = _entity_uri(obj, entities_sets)
-
-            g.add((subj_uri, pred_uri, obj_uri))
-
-    print(f"[RDF] Graph contains {len(g)} triples.")
-    return g
+    print(f"[RDF] Graph contains {len(graph)} triples.")
+    return graph
