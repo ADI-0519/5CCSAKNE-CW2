@@ -123,3 +123,36 @@ class TestExtractRelevantInformation:
         article = make_article(raw_article_type_hint="OpinionArticle", section="UK news")
         record = extract_relevant_information([article])[0]
         assert record["article_type"] == "OpinionArticle"
+
+    def test_merges_openai_extraction_when_available(self, monkeypatch):
+        monkeypatch.setattr(
+            "src.data_extraction.maybe_extract_article_with_openai",
+            lambda article, text, heuristic_result: {
+                "people": ["Wes Streeting"],
+                "organizations": ["NHS England"],
+                "locations": ["Manchester"],
+                "topics": ["Healthcare"],
+                "politicians": ["Wes Streeting"],
+                "political_parties": [],
+                "government_bodies": ["NHS England"],
+                "sentiment": "Positive",
+                "article_type": "OpinionArticle",
+                "events": [
+                    {
+                        "name": "NHS Reform Announcement",
+                        "type": "PoliticalEvent",
+                        "date": "2026-03-20",
+                        "location": "Manchester",
+                    }
+                ],
+            },
+        )
+
+        record = extract_relevant_information([make_article()])[0]
+
+        assert record["sentiment"] == "Positive"
+        assert record["article_type"] == "OpinionArticle"
+        assert "Wes Streeting" in record["entities"]["people"]
+        assert "NHS England" in record["entities"]["government_bodies"]
+        assert "Healthcare" in record["entities"]["topics"]
+        assert "NHS Reform Announcement" in record["entities"]["events"]
