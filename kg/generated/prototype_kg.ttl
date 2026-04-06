@@ -87,6 +87,72 @@ news:announced a rdf:Property ;
     rdfs:label "announced" ;
     rdfs:comment "Links an organisation or person to something they announced." .
 
+<http://example.org/news#article/32f4185c6418f40a> a news:NewsArticle,
+        schema:NewsArticle ;
+    news:articleURL "https://bbc.com/news/technology/robotics-ai-manufacturing"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/John_Doe> ;
+    news:mentionsLocation <http://example.org/news#location/Detroit> ;
+    news:mentionsOrganisation <http://example.org/news#org/Automation_Systems_Inc> ;
+    news:mentionsPerson <http://example.org/news#person/Automation_Systems>,
+        <http://example.org/news#person/Automation_Transforming>,
+        <http://example.org/news#person/Manufacturing_Industrial> ;
+    news:mentionsTechnology <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Automation>,
+        <http://example.org/news#tech/Machine_Learning>,
+        <http://example.org/news#tech/Robotics> ;
+    news:publishedBy <http://example.org/news#org/BBC_News> ;
+    news:publishedDate "2024-01-15T12:30:00+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/John_Doe> ;
+    schema:datePublished "2024-01-15T12:30:00+00:00"^^xsd:dateTime ;
+    schema:description "Industrial robotics powered by machine learning and AI are reshaping manufacturing in Detroit and across North America." ;
+    schema:headline "Robotics and AI Automation Transforming Manufacturing" ;
+    schema:mentions <http://example.org/news#location/Detroit>,
+        <http://example.org/news#org/Automation_Systems_Inc>,
+        <http://example.org/news#person/Automation_Systems>,
+        <http://example.org/news#person/Automation_Transforming>,
+        <http://example.org/news#person/Manufacturing_Industrial>,
+        <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Automation>,
+        <http://example.org/news#tech/Machine_Learning>,
+        <http://example.org/news#tech/Robotics> ;
+    schema:publisher <http://example.org/news#org/BBC_News> ;
+    schema:url "https://bbc.com/news/technology/robotics-ai-manufacturing"^^xsd:anyURI .
+
+<http://example.org/news#article/cc18f94e547b6ecc> a news:NewsArticle,
+        schema:NewsArticle ;
+    news:articleURL "https://techcrunch.com/2024/01/15/openai-gpt-breakthrough"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Jane_Smith> ;
+    news:hasTopic <http://example.org/news#topic/research> ;
+    news:mentionsLocation <http://example.org/news#location/San_Francisco> ;
+    news:mentionsOrganisation <http://example.org/news#org/Machine_Learning_OpenAI_Corporation>,
+        <http://example.org/news#org/OpenAI_Corporation> ;
+    news:mentionsPerson <http://example.org/news#person/Machine_Learning>,
+        <http://example.org/news#person/Model_Breakthrough>,
+        <http://example.org/news#person/Sam_Altman> ;
+    news:mentionsTechnology <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Artificial_Intelligence>,
+        <http://example.org/news#tech/Deep_Learning>,
+        <http://example.org/news#tech/GPT> ;
+    news:publishedBy <http://example.org/news#org/TechCrunch> ;
+    news:publishedDate "2024-01-15T10:00:00+00:00"^^xsd:dateTime ;
+    schema:about <http://example.org/news#topic/research> ;
+    schema:author <http://example.org/news#person/Jane_Smith> ;
+    schema:datePublished "2024-01-15T10:00:00+00:00"^^xsd:dateTime ;
+    schema:description "OpenAI Corporation has released a new GPT model demonstrating advances in artificial intelligence and deep learning, unveiled in San Francisco." ;
+    schema:headline "OpenAI Announces GPT Model Breakthrough in Machine Learning" ;
+    schema:mentions <http://example.org/news#location/San_Francisco>,
+        <http://example.org/news#org/Machine_Learning_OpenAI_Corporation>,
+        <http://example.org/news#org/OpenAI_Corporation>,
+        <http://example.org/news#person/Machine_Learning>,
+        <http://example.org/news#person/Model_Breakthrough>,
+        <http://example.org/news#person/Sam_Altman>,
+        <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Artificial_Intelligence>,
+        <http://example.org/news#tech/Deep_Learning>,
+        <http://example.org/news#tech/GPT> ;
+    schema:publisher <http://example.org/news#org/TechCrunch> ;
+    schema:url "https://techcrunch.com/2024/01/15/openai-gpt-breakthrough"^^xsd:anyURI .
+
 news:articleURL a rdf:Property ;
     rdfs:label "article URL" ;
     rdfs:comment "The canonical URL of a news article." ;
@@ -173,6 +239,10 @@ news:locatedIn a rdf:Property ;
     rdfs:domain schema:Thing ;
     rdfs:range news:Location .
 
+<http://example.org/news#location/Machine_Learning> a news:Location,
+        core:Place ;
+    schema:name "Machine Learning" .
+
 news:mentionsLocation a rdf:Property ;
     rdfs:label "mentions location" ;
     rdfs:comment "Links an article to a location mentioned in its content." ;
@@ -238,3 +308,105 @@ news:worksFor a rdf:Property ;
     rdfs:domain news:Journalist ;
     rdfs:range news:NewsOrganisation ;
     rdfs:subPropertyOf schema:worksFor .
+
+<http://example.org/news#location/Detroit> a news:Location,
+        core:Place ;
+    schema:name "Detroit" .
+
+<http://example.org/news#location/San_Francisco> a news:Location,
+        core:Place ;
+    schema:name "San Francisco" .
+
+<http://example.org/news#org/Automation_Systems_Inc> a news:Organisation,
+        schema:Organization ;
+    news:usesTechnology <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Automation>,
+        <http://example.org/news#tech/Machine_Learning>,
+        <http://example.org/news#tech/Robotics> ;
+    schema:name "Automation Systems Inc" .
+
+<http://example.org/news#org/BBC_News> a news:NewsOrganisation,
+        news:Organisation,
+        schema:Organization ;
+    schema:name "BBC News" .
+
+<http://example.org/news#org/Machine_Learning_OpenAI_Corporation> a news:Organisation,
+        schema:Organization ;
+    news:usesTechnology <http://example.org/news#person/Machine_Learning>,
+        <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Artificial_Intelligence>,
+        <http://example.org/news#tech/Deep_Learning>,
+        <http://example.org/news#tech/GPT> ;
+    schema:name "Machine Learning OpenAI Corporation" .
+
+<http://example.org/news#org/OpenAI_Corporation> a news:Organisation,
+        schema:Organization ;
+    news:usesTechnology <http://example.org/news#person/Machine_Learning>,
+        <http://example.org/news#tech/AI>,
+        <http://example.org/news#tech/Artificial_Intelligence>,
+        <http://example.org/news#tech/Deep_Learning>,
+        <http://example.org/news#tech/GPT> ;
+    schema:name "OpenAI Corporation" .
+
+<http://example.org/news#org/TechCrunch> a news:NewsOrganisation,
+        news:Organisation,
+        schema:Organization ;
+    schema:name "TechCrunch" .
+
+<http://example.org/news#person/Automation_Systems> a schema:Person ;
+    schema:name "Automation Systems" .
+
+<http://example.org/news#person/Automation_Transforming> a schema:Person ;
+    schema:name "Automation Transforming" .
+
+<http://example.org/news#person/Jane_Smith> a news:Journalist,
+        schema:Person ;
+    schema:name "Jane Smith" .
+
+<http://example.org/news#person/John_Doe> a news:Journalist,
+        schema:Person ;
+    schema:name "John Doe" .
+
+<http://example.org/news#person/Manufacturing_Industrial> a schema:Person ;
+    schema:name "Manufacturing Industrial" .
+
+<http://example.org/news#person/Model_Breakthrough> a schema:Person ;
+    schema:name "Model Breakthrough" .
+
+<http://example.org/news#person/Sam_Altman> a schema:Person ;
+    schema:name "Sam Altman" .
+
+<http://example.org/news#topic/research> a news:Topic,
+        schema:Thing ;
+    schema:name "research" .
+
+<http://example.org/news#tech/Automation> a news:Technology,
+        schema:Thing ;
+    schema:name "Automation" .
+
+<http://example.org/news#tech/Machine_Learning> a news:Technology,
+        schema:Thing ;
+    schema:name "Machine Learning" .
+
+<http://example.org/news#tech/Robotics> a news:Technology,
+        schema:Thing ;
+    schema:name "Robotics" .
+
+<http://example.org/news#person/Machine_Learning> a schema:Person ;
+    schema:name "Machine Learning" .
+
+<http://example.org/news#tech/Artificial_Intelligence> a news:Technology,
+        schema:Thing ;
+    schema:name "Artificial Intelligence" .
+
+<http://example.org/news#tech/Deep_Learning> a news:Technology,
+        schema:Thing ;
+    schema:name "Deep Learning" .
+
+<http://example.org/news#tech/GPT> a news:Technology,
+        schema:Thing ;
+    schema:name "GPT" .
+
+<http://example.org/news#tech/AI> a news:Technology,
+        schema:Thing ;
+    schema:name "AI" .

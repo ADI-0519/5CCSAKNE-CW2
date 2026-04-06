@@ -39,5 +39,6 @@ data/interim/
 data/processed/
 
 # Optional generated KG artifacts only
-kg/generated/
+kg/generated/*
+!kg/generated/prototype_kg.ttl
 output/

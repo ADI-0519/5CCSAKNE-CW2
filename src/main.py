@@ -1,6 +1,7 @@
 import os
 from datetime import UTC, datetime
 
+from src.build_ontology import build_ontology
 from src.config import CONFIG
 from src.data_collection import load_data_from_url
 from src.data_extraction import extract_relevant_information
@@ -32,11 +33,16 @@ def main():
     print("[PIPELINE] Stage 4: Convert to RDF")
     rdf_graph = convert_json_to_rdf(normalised_data)
 
-    print("[PIPELINE] Stage 5: Save")
-    save_rdf_to_file(rdf_graph, "kg/generated/new_kg.ttl")
+    print("[PIPELINE] Stage 5: Merge ontology and instance data")
+    kg_graph = build_ontology()
+    for triple in rdf_graph:
+        kg_graph.add(triple)
+
+    print("[PIPELINE] Stage 6: Save")
+    save_rdf_to_file(kg_graph, "kg/generated/new_kg.ttl")
 
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    save_rdf_to_file(rdf_graph, f"output/{timestamp}_kg.ttl")
+    save_rdf_to_file(kg_graph, f"output/{timestamp}_kg.ttl")
 
     print("[PIPELINE] Done.")
 
