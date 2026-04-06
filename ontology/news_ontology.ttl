@@ -182,13 +182,6 @@ news:mentionsPerson a rdf:Property ;
     rdfs:range schema:Person ;
     rdfs:subPropertyOf schema:mentions .
 
-news:mentionsTechnology a rdf:Property ;
-    rdfs:label "mentions technology" ;
-    rdfs:comment "Links an article to a technology mentioned in its content." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range schema:Thing ;
-    rdfs:subPropertyOf schema:mentions .
-
 news:publishedBy a rdf:Property ;
     rdfs:label "published by" ;
     rdfs:comment "Links an article to the news organisation that published it." ;

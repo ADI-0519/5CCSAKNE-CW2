@@ -228,15 +228,6 @@ def build_ontology() -> Graph:
     )
     _add_property(
         g,
-        NEWS.mentionsTechnology,
-        "mentions technology",
-        "Links an article to a technology mentioned in its content.",
-        NEWS.NewsArticle,
-        SCHEMA.Thing,
-        SCHEMA.mentions,
-    )
-    _add_property(
-        g,
         NEWS.publishedDate,
         "published date",
         "The publication date of a news article.",
