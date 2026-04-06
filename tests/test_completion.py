@@ -7,7 +7,7 @@ from src.build_ontology import NEWS, SCHEMA, build_ontology
 from src.complete_kg import enrich_graph
 
 
-def _add_named_entity(graph, entity_uri, label, rdf_types):
+def add_named_entity(graph, entity_uri, label, rdf_types):
     for rdf_type in rdf_types:
         graph.add((entity_uri, RDF.type, rdf_type))
     graph.add((entity_uri, SCHEMA.name, Literal(label)))
@@ -71,13 +71,13 @@ def test_enrich_graph_classifies_articles_and_adds_follow_up():
     publisher_uri = NEWS["org/Daily_News"]
     org_uri = NEWS["org/City_Council"]
 
-    _add_named_entity(
+    add_named_entity(
         graph,
         publisher_uri,
         "Daily News",
         (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization),
     )
-    _add_named_entity(graph, org_uri, "City Council", (NEWS.Organisation, SCHEMA.Organization))
+    add_named_entity(graph, org_uri, "City Council", (NEWS.Organisation, SCHEMA.Organization))
 
     article_1 = NEWS["article/a1"]
     article_2 = NEWS["article/a2"]

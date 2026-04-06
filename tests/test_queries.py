@@ -12,7 +12,7 @@ from src.run_queries import execute_queries, load_query_definitions, save_result
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "sample_response.json"
 
 
-def _build_fixture_graph():
+def build_fixture_graph():
     raw_data = json.loads(FIXTURE_PATH.read_text())
     rdf_graph = convert_json_to_rdf(normalise_data(extract_relevant_information(raw_data)))
     graph = build_ontology()
@@ -35,7 +35,7 @@ def test_query_definitions_include_prefixes():
 
 
 def test_execute_queries_runs_against_fixture_graph():
-    graph = _build_fixture_graph()
+    graph = build_fixture_graph()
     definitions = load_query_definitions()
     results = execute_queries(graph, definitions)
 
@@ -48,7 +48,7 @@ def test_execute_queries_runs_against_fixture_graph():
 
 
 def test_query_execution_is_stable_against_fixture_graph():
-    graph = _build_fixture_graph()
+    graph = build_fixture_graph()
     definitions = load_query_definitions()
     results = execute_queries(graph, definitions)
     results_again = execute_queries(graph, definitions)
@@ -60,7 +60,7 @@ def test_query_execution_is_stable_against_fixture_graph():
 
 
 def test_save_results_writes_json(tmp_path):
-    graph = _build_fixture_graph()
+    graph = build_fixture_graph()
     definitions = load_query_definitions()
     results = execute_queries(graph, definitions)
     output_file = tmp_path / "results.json"
