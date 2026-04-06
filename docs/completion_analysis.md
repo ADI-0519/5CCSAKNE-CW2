@@ -4,7 +4,7 @@ This document records the remaining incompleteness in the fixed-scope UK politic
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 1, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
 
 Current state:
 

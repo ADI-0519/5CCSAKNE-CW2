@@ -4,7 +4,7 @@ This document contains the final wording for the 20 competency questions used in
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 1, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
 
 The first 10 questions are the manually authored set. The second 10 were LLM-assisted and then revised so they align with the fixed time window, the current ontology, and the planned pipeline outputs.
 
@@ -14,7 +14,7 @@ Implementation difficulty and current pipeline support are tracked separately in
 
 `CQ01.` Which journalists wrote politics-section articles about government or policy issues during the project time window?
 
-`CQ02.` Which news organisations published politics-section articles between March 1, 2026 and April 6, 2026?
+`CQ02.` Which news organisations published politics-section articles between March 6, 2026 and April 6, 2026?
 
 `CQ03.` Which people were mentioned most often across the fixed article collection?
 
@@ -56,6 +56,6 @@ Implementation difficulty and current pipeline support are tracked separately in
 
 ## Notes
 
-- This set is now fully aligned to the fixed March 1, 2026 to April 6, 2026 dataset window.
+- This set is now fully aligned to the fixed March 6, 2026 to April 6, 2026 dataset window.
 - The wording avoids the earlier generic news and technology framing.
 - The blocked questions were kept deliberately where they exercise ontology areas that still need modelling work, especially `news:worksFor`, event modelling, and political-actor classification.
