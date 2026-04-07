@@ -89,3 +89,16 @@ Return the methodology as a concise, coursework-ready plan.
 ```
 
 Used for: `docs/evaluation_methodology.md`
+
+
+## P06: Report Generation
+Prompts:
+-Read and understand my project. Then generate a complete report for it.
+-Analysis this coursework description and modify the report based on it.
+-Reduce the report from 25 pages to at most 8 pages, keep the important information.
+-check again for this coursework description, make sure the report has everything that was required to be written in the report. Add and modify if there are things missing
+
+Justification:
+Start with a complete report which includes everything. Then modify the report based on the coureswork description. After that, reduce the page count to a reasonable number. At the end, double check with the missing information in the description. 
+
+Used for: `/Report.tex`

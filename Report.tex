@@ -50,6 +50,14 @@ the fixed window 6 March 2026 to 6 April 2026, extracts entities and events from
 article text, maps the results into RDF, enriches the prototype graph with a
 completion stage, and executes 20 SPARQL competency queries over the final graph.
 
+\subsection{Team Roles}
+
+The repository and report follow the coursework's team-role model. The domain
+expert defined the scope and kept documentation coherent; the modelling experts
+designed the ontology, mappings, queries, and evaluation methodology; and the
+data-ingestion/LLM pipeline roles implemented collection, extraction, cleaning,
+completion, and automation scripts.
+
 \subsection{Requirements and Tech Stack}
 
 \begin{itemize}[leftmargin=*,nosep]
@@ -78,10 +86,10 @@ returns only the first 100 results, so in the evaluated run it contributed only
 NewsAPI as a supplementary source rather than a co-equal corpus.
 
 %------------------------------------------------------------------
-\section{Methodology}\label{sec:methodology}
+\section{Data Source Selection}\label{sec:data_sources}
 %------------------------------------------------------------------
 
-\subsection{Data Collection}\label{sec:data_collection}
+\subsection{Structured and Textual Sources}\label{sec:data_collection}
 
 Data collection is implemented in \filepath{src/data_collection.py}. The pipeline
 calls the Guardian API page by page and fetches the first available NewsAPI page
@@ -89,16 +97,43 @@ for the fixed project window. Query construction and scope restrictions are defi
 in \filepath{src/config.py}, including 14 domain query terms, Guardian section/tag
 filters, a whitelist of accepted NewsAPI publishers, and UK-scope keyword checks.
 
+The coursework requires at least one textual and one structured data source. This
+project satisfies that requirement as follows:
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{Structured data source:} JSON metadata from the Guardian API and NewsAPI, including titles, URLs, publication dates, authors, sections, publishers, and related tags.
+    \item \textbf{Textual data source:} article summaries and body text from the same APIs, used for named-entity extraction, topic assignment, event detection, sentiment classification, and completion.
+\end{itemize}
+
 The evaluated run (\code{20260407T010208Z}) produced 258 articles: 255 from the
 Guardian and 3 from NewsAPI. Raw snapshots are saved under
 \filepath{data/raw/}, which makes later offline reruns possible.
 
-\subsection{Ontology Design}\label{sec:ontology_design}
+\subsection{How the Sources Were Selected}
+
+The specification allows LLMs and web search to help identify relevant sources, as
+long as the queries and prompts are documented. The project keeps these prompt logs
+in \filepath{prompts/prompts.md}. In practice, the final source choice was guided by
+two constraints from the specification: the data had to match the domain of current
+news, and it had to support both structured mapping and text extraction in an
+automatable pipeline.
+
+%------------------------------------------------------------------
+\section{Extension of Existing Ontologies}\label{sec:ontology_design}
+%------------------------------------------------------------------
+
+\subsection{Reused Ontologies}
 
 The ontology is generated programmatically in \filepath{src/build_ontology.py}
 and written to \filepath{ontology/news_ontology.ttl}. It extends
 Schema.org and BBC Core Concepts with a local \code{news:} namespace for
-domain-specific classes and properties.
+domain-specific classes and properties. These reused ontologies are directly aligned
+with the chosen domain:
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{Schema.org} for articles, people, organisations, publishers, and article metadata.
+    \item \textbf{BBC Core Concepts} for event and place modelling in a news setting.
+\end{itemize}
+
+\subsection{Extensions Implemented}
 
 \begin{table}[t]
 \centering
@@ -114,6 +149,29 @@ Reused vocabularies & Schema.org for articles, people, organisations, and articl
 \bottomrule
 \end{tabular}
 \end{table}
+
+This exceeds the minimum coursework requirement of at least two subclasses and two
+subproperties. For example, \ns{NewsArticle} extends \code{schema:NewsArticle},
+\ns{Location} extends \code{core:Place}, \ns{hasAuthor} extends
+\code{schema:author}, and \ns{eventLocation} extends \code{core:eventPlace}.
+
+%------------------------------------------------------------------
+\section{Competency Questions}\label{sec:cq}
+%------------------------------------------------------------------
+
+The coursework requires 20 competency questions: 10 manually produced and 10
+generated with LLM assistance. This project follows that structure. Ten questions
+were elicited manually from the domain requirements, and ten more were generated
+with prompt support and then revised manually to ensure they were relevant,
+non-duplicative, and answerable from the planned KG.
+
+The prompt used for competency-question augmentation is documented in
+\filepath{prompts/prompts.md}. The resulting questions are operationalised by the
+20 SPARQL queries stored in \filepath{queries/news_competency_queries.rq}.
+
+%------------------------------------------------------------------
+\section{Mappings}\label{sec:mappings}
+%------------------------------------------------------------------
 
 \subsection{Extraction and Normalisation}\label{sec:extraction}
 
@@ -135,6 +193,15 @@ formats for both extraction and completion. Responses are validated before use a
 cached under \filepath{data/cache/openai/} so that later runs can reuse previous
 outputs. If the OpenAI client is unavailable, the pipeline falls back to heuristic
 results without failing end to end.
+
+\subsection{Mapping Structured and Textual Sources to the KG}
+
+The specification notes that mapping structured data and mapping text require
+different techniques. The project addresses that directly:
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{Structured mapping:} deterministic field-to-property conversion from source JSON into RDF terms such as article URL, publication date, author, publisher, section, and word count.
+    \item \textbf{Text mapping:} heuristic and LLM-assisted extraction from article text into entities, topics, sentiment, article subtype, and event candidates before RDF conversion.
+\end{itemize}
 
 \subsection{RDF Construction and Completion}\label{sec:rdf_completion}
 
@@ -170,7 +237,11 @@ word counts, update timestamps, and editorial follow-up links.
 \caption{End-to-end pipeline used in the coursework repository.}\label{fig:pipeline}
 \end{figure}
 
-\subsection{Competency Questions and Query Layer}\label{sec:cq_method}
+%------------------------------------------------------------------
+\section{Queries}\label{sec:queries}
+%------------------------------------------------------------------
+
+\subsection{SPARQL Query Layer}\label{sec:cq_method}
 
 The project defines 20 competency questions, implemented as 20 SPARQL queries in
 \filepath{queries/news_competency_queries.rq}. Ten were written manually and ten
@@ -193,7 +264,7 @@ This prompt use was supportive rather than autonomous: outputs were revised by t
 team and encoded into the implemented ontology, mappings, code, and report.
 
 %------------------------------------------------------------------
-\section{Evaluation}\label{sec:evaluation}
+\section{Evaluation Methodology}\label{sec:evaluation}
 %------------------------------------------------------------------
 
 \subsection{Experimental Design}
@@ -276,6 +347,20 @@ measurable gain is follow-up coverage: \ns{hasFollowUp} increases from 14 links 
 the prototype KG to 90 links in the completed KG. Sentiment and event coverage are
 also maintained consistently at graph level because completion adds validated values
 instead of free-form text.
+
+\subsection{Performance and Comparison Criteria}
+
+The specification asks for both performance-oriented and quality-oriented evaluation.
+This report therefore treats evaluation along two axes:
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{Performance and reproducibility:} whether the pipeline can run end to end, save intermediate artefacts, and rerun from cached snapshots and cached OpenAI outputs.
+    \item \textbf{Quality:} whether the completed KG answers the competency questions, how clean those answers are, and where graph quality remains limited by noisy extraction or source imbalance.
+\end{itemize}
+
+The evaluation design also follows the coursework suggestion of comparing KG-based
+answers with simpler direct LLM answering. The discussion in
+\filepath{docs/evaluation_results.md} frames the KG as more reproducible and
+traceable, while direct prompting is more fluent but less auditable.
 
 %------------------------------------------------------------------
 \section{Testing}\label{sec:testing}
