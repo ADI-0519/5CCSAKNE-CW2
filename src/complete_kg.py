@@ -52,6 +52,37 @@ NEGATIVE_KEYWORDS = {
     "warning",
 }
 
+FOLLOW_UP_STOPWORDS = {
+    "a",
+    "after",
+    "analysis",
+    "and",
+    "bill",
+    "budget",
+    "comment",
+    "commentary",
+    "debate",
+    "different",
+    "government",
+    "minister",
+    "ministers",
+    "new",
+    "officials",
+    "on",
+    "opinion",
+    "plan",
+    "policy",
+    "proposal",
+    "response",
+    "review",
+    "separate",
+    "the",
+    "today",
+    "transport",
+    "treasury",
+    "update",
+}
+
 SECTION_RULES = {
     "Politics": {
         "politics",
@@ -183,6 +214,12 @@ def article_metadata(graph, article_uri):
     published_date = first_literal(graph, article_uri, NEWS.publishedDate)
     organizations = set(graph.objects(article_uri, NEWS.mentionsOrganisation))
     topics = set(graph.objects(article_uri, NEWS.hasTopic))
+    events = set(graph.objects(article_uri, NEWS.coversEvent))
+    article_types = set(graph.objects(article_uri, RDF.type))
+    headline = text_value(graph, article_uri, SCHEMA.headline)
+    headline_terms = {
+        term for term in text_terms(headline) if term not in FOLLOW_UP_STOPWORDS and len(term) >= 4
+    }
 
     return {
         "article": article_uri,
@@ -190,6 +227,9 @@ def article_metadata(graph, article_uri):
         "published_date": None if published_date is None else parse_datetime_value(published_date),
         "organizations": organizations,
         "topics": topics,
+        "events": events,
+        "article_types": article_types,
+        "headline_terms": headline_terms,
     }
 
 
@@ -223,15 +263,43 @@ def infer_follow_up_links(graph, max_gap_days=7):
 
             shared_orgs = earlier_data["organizations"] & later_data["organizations"]
             shared_topics = earlier_data["topics"] & later_data["topics"]
+            shared_events = earlier_data["events"] & later_data["events"]
+            shared_headline_terms = earlier_data["headline_terms"] & later_data["headline_terms"]
             same_publisher = (
                 earlier_data["publisher"] is not None
                 and later_data["publisher"] is not None
                 and earlier_data["publisher"] == later_data["publisher"]
             )
+            earlier_is_opinion = NEWS.OpinionArticle in earlier_data["article_types"]
+            later_is_opinion = NEWS.OpinionArticle in later_data["article_types"]
+            earlier_is_breaking = NEWS.BreakingNewsArticle in earlier_data["article_types"]
+            later_is_breaking = NEWS.BreakingNewsArticle in later_data["article_types"]
 
-            if shared_orgs and (shared_topics or same_publisher):
-                score = (len(shared_orgs) * 2) + len(shared_topics) + (1 if same_publisher else 0)
+            # Follow-up links should represent editorial progression, not just broad topical overlap.
+            # We therefore require either a shared event, or a stricter combination of same publisher,
+            # shared organisations, and shared topics.
+            if shared_events:
+                score = (len(shared_events) * 5) + len(shared_orgs) + len(shared_topics)
                 candidates.append((score, later_data["published_date"], later))
+                continue
+
+            if not same_publisher:
+                continue
+            if earlier_is_opinion:
+                continue
+            if not shared_orgs or not shared_topics:
+                continue
+            if not shared_headline_terms and not shared_events:
+                continue
+            if not (earlier_is_breaking or later_is_breaking):
+                continue
+            if len(shared_topics) < 2 and not (later_is_opinion and not earlier_is_opinion):
+                continue
+
+            score = (len(shared_orgs) * 3) + (len(shared_topics) * 2) + len(shared_headline_terms)
+            if later_is_opinion and not earlier_is_opinion:
+                score += 1
+            candidates.append((score, later_data["published_date"], later))
 
         if candidates:
             _, _, best_later = max(candidates, key=lambda item: (item[0], item[1]))
