@@ -111,6 +111,191 @@ def test_enrich_graph_classifies_articles_and_adds_follow_up():
     assert (article_1, NEWS.hasFollowUp, article_2) in enriched
 
 
+def test_enrich_graph_does_not_add_follow_up_for_cross_publisher_topic_overlap():
+    graph = build_ontology()
+    publisher_a = NEWS["org/Publisher_A"]
+    publisher_b = NEWS["org/Publisher_B"]
+    topic_uri = NEWS["topic/Parliament"]
+
+    add_named_entity(
+        graph,
+        publisher_a,
+        "Publisher A",
+        (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization),
+    )
+    add_named_entity(
+        graph,
+        publisher_b,
+        "Publisher B",
+        (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization),
+    )
+
+    graph.add((topic_uri, RDF.type, NEWS.Topic))
+    graph.add((topic_uri, SCHEMA.name, Literal("Parliament")))
+
+    article_1 = NEWS["article/cross_pub_a"]
+    article_2 = NEWS["article/cross_pub_b"]
+
+    for article_uri, publisher_uri, headline, published in (
+        (
+            article_1,
+            publisher_a,
+            "Parliament debates welfare proposal",
+            "2026-03-10T08:00:00Z",
+        ),
+        (
+            article_2,
+            publisher_b,
+            "Parliament update on different budget issue",
+            "2026-03-11T09:00:00Z",
+        ),
+    ):
+        graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+        graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+        graph.add((article_uri, SCHEMA.headline, Literal(headline)))
+        graph.add((article_uri, NEWS.publishedDate, Literal(published, datatype=XSD.dateTime)))
+        graph.add((article_uri, NEWS.publishedBy, publisher_uri))
+        graph.add((article_uri, NEWS.hasTopic, topic_uri))
+
+    enriched = enrich_graph(graph)
+
+    assert (article_1, NEWS.hasFollowUp, article_2) not in enriched
+
+
+def test_enrich_graph_requires_strong_same_publisher_signal_for_follow_up():
+    graph = build_ontology()
+    publisher_uri = NEWS["org/Local_Press"]
+    org_uri = NEWS["org/Treasury"]
+    topic_uri = NEWS["topic/Government_Policy"]
+
+    add_named_entity(
+        graph,
+        publisher_uri,
+        "Local Press",
+        (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization),
+    )
+    add_named_entity(
+        graph, org_uri, "Treasury", (NEWS.GovernmentBody, NEWS.Organisation, SCHEMA.Organization)
+    )
+    graph.add((topic_uri, RDF.type, NEWS.Topic))
+    graph.add((topic_uri, SCHEMA.name, Literal("Government Policy")))
+
+    article_1 = NEWS["article/weak_follow_up_a"]
+    article_2 = NEWS["article/weak_follow_up_b"]
+
+    for article_uri, headline, description, published in (
+        (
+            article_1,
+            "Treasury outlines fiscal proposal",
+            "Officials discussed a policy change.",
+            "2026-03-10T10:00:00Z",
+        ),
+        (
+            article_2,
+            "Treasury comment on transport funding",
+            "A separate government policy debate continues.",
+            "2026-03-12T09:00:00Z",
+        ),
+    ):
+        graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+        graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+        graph.add((article_uri, SCHEMA.headline, Literal(headline)))
+        graph.add((article_uri, SCHEMA.description, Literal(description)))
+        graph.add((article_uri, NEWS.publishedDate, Literal(published, datatype=XSD.dateTime)))
+        graph.add((article_uri, NEWS.publishedBy, publisher_uri))
+        graph.add((article_uri, NEWS.mentionsOrganisation, org_uri))
+        graph.add((article_uri, NEWS.hasTopic, topic_uri))
+
+    enriched = enrich_graph(graph)
+
+    assert (article_1, NEWS.hasFollowUp, article_2) not in enriched
+
+
+def test_enrich_graph_does_not_link_opinion_articles_as_follow_up_seeds():
+    graph = build_ontology()
+    publisher_uri = NEWS["org/Guardian"]
+    org_uri = NEWS["org/Reform_UK"]
+    topic_one = NEWS["topic/Parliament"]
+    topic_two = NEWS["topic/Government_Policy"]
+
+    add_named_entity(
+        graph,
+        publisher_uri,
+        "The Guardian",
+        (NEWS.NewsOrganisation, NEWS.Organisation, SCHEMA.Organization),
+    )
+    add_named_entity(
+        graph,
+        org_uri,
+        "Reform UK",
+        (NEWS.PoliticalParty, NEWS.Organisation, SCHEMA.Organization),
+    )
+    for topic_uri, label in ((topic_one, "Parliament"), (topic_two, "Government Policy")):
+        graph.add((topic_uri, RDF.type, NEWS.Topic))
+        graph.add((topic_uri, SCHEMA.name, Literal(label)))
+
+    opinion_article = NEWS["article/opinion_seed"]
+    live_article = NEWS["article/live_target"]
+
+    graph.add((opinion_article, RDF.type, NEWS.NewsArticle))
+    graph.add((opinion_article, RDF.type, NEWS.OpinionArticle))
+    graph.add((opinion_article, RDF.type, SCHEMA.NewsArticle))
+    graph.add(
+        (
+            opinion_article,
+            SCHEMA.headline,
+            Literal("Opinion: Nigel Farage and Reform UK are warping British politics"),
+        )
+    )
+    graph.add(
+        (
+            opinion_article,
+            SCHEMA.description,
+            Literal("A comment piece about Parliament and government policy."),
+        )
+    )
+    graph.add(
+        (
+            opinion_article,
+            NEWS.publishedDate,
+            Literal("2026-03-22T10:00:00Z", datatype=XSD.dateTime),
+        )
+    )
+    graph.add((opinion_article, NEWS.publishedBy, publisher_uri))
+    graph.add((opinion_article, NEWS.mentionsOrganisation, org_uri))
+    graph.add((opinion_article, NEWS.hasTopic, topic_one))
+    graph.add((opinion_article, NEWS.hasTopic, topic_two))
+
+    graph.add((live_article, RDF.type, NEWS.NewsArticle))
+    graph.add((live_article, RDF.type, NEWS.BreakingNewsArticle))
+    graph.add((live_article, RDF.type, SCHEMA.NewsArticle))
+    graph.add(
+        (
+            live_article,
+            SCHEMA.headline,
+            Literal("UK politics live: Starmer faces Reform UK attacks in Parliament"),
+        )
+    )
+    graph.add(
+        (
+            live_article,
+            SCHEMA.description,
+            Literal("Rolling coverage of Parliament and government policy updates."),
+        )
+    )
+    graph.add(
+        (live_article, NEWS.publishedDate, Literal("2026-03-23T10:00:00Z", datatype=XSD.dateTime))
+    )
+    graph.add((live_article, NEWS.publishedBy, publisher_uri))
+    graph.add((live_article, NEWS.mentionsOrganisation, org_uri))
+    graph.add((live_article, NEWS.hasTopic, topic_one))
+    graph.add((live_article, NEWS.hasTopic, topic_two))
+
+    enriched = enrich_graph(graph)
+
+    assert (opinion_article, NEWS.hasFollowUp, live_article) not in enriched
+
+
 def test_enrich_graph_uses_openai_completion_when_available(monkeypatch):
     monkeypatch.setattr(
         "src.complete_kg.maybe_complete_article_with_openai",

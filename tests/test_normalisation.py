@@ -5,6 +5,7 @@ import pytest
 from src.data_normalisation import (
     build_stable_id,
     canonicalise_date,
+    is_relevant_newsapi_article,
     is_valid_url,
     normalise_collected_sources,
     normalise_data,
@@ -80,6 +81,45 @@ class TestSourceNormalisation:
         result = normalise_collected_sources(collected)
         assert len(result) == 2
         assert {record["source_system"] for record in result} == {"newsapi", "guardian"}
+
+    def test_newsapi_scope_filter_rejects_blocked_off_scope_source(self):
+        article = {
+            "source": {"name": "Screen Rant"},
+            "author": "Reporter",
+            "title": "10 Near-Perfect Forgotten Horror TV Shows That Deserve A Second Chance",
+            "description": "A television feature with no UK politics relevance.",
+            "url": "https://example.com/off-scope",
+            "publishedAt": "2026-03-06T08:00:00Z",
+            "content": "Entertainment coverage only.",
+        }
+
+        assert is_relevant_newsapi_article(article) is False
+
+    def test_newsapi_scope_filter_keeps_uk_politics_article(self):
+        article = {
+            "source": {"name": "BBC News"},
+            "author": "Reporter",
+            "title": "Keir Starmer faces pressure over UK budget plans",
+            "description": "The prime minister and Treasury are under pressure in Westminster.",
+            "url": "https://example.com/on-scope",
+            "publishedAt": "2026-03-06T08:00:00Z",
+            "content": "Labour MPs said the UK government must rethink the budget.",
+        }
+
+        assert is_relevant_newsapi_article(article) is True
+
+    def test_newsapi_scope_filter_rejects_unapproved_publisher_even_if_text_matches(self):
+        article = {
+            "source": {"name": "Japan Today"},
+            "author": "Reporter",
+            "title": "Keir Starmer discusses UK budget in Westminster",
+            "description": "The prime minister and Treasury remain under pressure.",
+            "url": "https://example.com/matching-but-unapproved",
+            "publishedAt": "2026-03-06T08:00:00Z",
+            "content": "UK politics coverage from an out-of-scope publisher.",
+        }
+
+        assert is_relevant_newsapi_article(article) is False
 
     def test_guardian_contributor_tags_are_not_kept_as_topics(self):
         collected = {
