@@ -287,6 +287,8 @@ def extract_events(article, text, topics, locations):
         for phrase in [
             "announced",
             "announcement",
+            "ban",
+            "banned",
             "unveiled",
             "set out",
             "proposal",
@@ -310,6 +312,108 @@ def extract_events(article, text, topics, locations):
                 "source": "heuristic",
             }
         )
+
+    if not events:
+        if "Election" in topics:
+            events.append(
+                {
+                    "name": "Election",
+                    "type": "PoliticalEvent",
+                    "date": event_date,
+                    "location": default_location,
+                    "source": "heuristic",
+                }
+            )
+        elif "Government Policy" in topics and (
+            policy_signal
+            or any(
+                phrase_in_text(text_lower, phrase)
+                for phrase in ["government", "minister", "ministers", "prime minister", "treasury"]
+            )
+        ):
+            events.append(
+                {
+                    "name": "Policy Announcement",
+                    "type": "PoliticalEvent",
+                    "date": event_date,
+                    "location": default_location,
+                    "source": "heuristic",
+                }
+            )
+        elif {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
+            events.append(
+                {
+                    "name": "Budget",
+                    "type": "EconomicEvent",
+                    "date": event_date,
+                    "location": default_location,
+                    "source": "heuristic",
+                }
+            )
+
+    return events
+
+
+def add_topic_based_fallback_events(article, text, topics, locations, events):
+    if events:
+        return events
+
+    event_date = (article.get("published_at") or "")[:10] or None
+    default_location = locations[0] if locations else None
+    text_lower = text.lower()
+    policy_signal = any(
+        phrase_in_text(text_lower, phrase)
+        for phrase in [
+            "announced",
+            "announcement",
+            "ban",
+            "banned",
+            "unveiled",
+            "set out",
+            "proposal",
+            "proposed",
+            "plans",
+            "bill",
+            "government",
+            "minister",
+            "ministers",
+            "prime minister",
+            "treasury",
+        ]
+    )
+
+    if "Election" in topics:
+        return [
+            {
+                "name": "Election",
+                "type": "PoliticalEvent",
+                "date": event_date,
+                "location": default_location,
+                "source": "heuristic",
+            }
+        ]
+
+    if "Government Policy" in topics and policy_signal:
+        return [
+            {
+                "name": "Policy Announcement",
+                "type": "PoliticalEvent",
+                "date": event_date,
+                "location": default_location,
+                "source": "heuristic",
+            }
+        ]
+
+    if {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
+        return [
+            {
+                "name": "Budget",
+                "type": "EconomicEvent",
+                "date": event_date,
+                "location": default_location,
+                "source": "heuristic",
+            }
+        ]
 
     return events
 
@@ -367,7 +471,7 @@ def build_relations(article_id, article, entities, events):
     return relations
 
 
-def _merge_event_candidates(
+def merge_event_candidates(
     existing_events, suggested_events, default_date=None, default_location=None
 ):
     merged = {event["name"]: dict(event) for event in existing_events if event.get("name")}
@@ -388,7 +492,7 @@ def _merge_event_candidates(
     return [merged[name] for name in sorted(merged)]
 
 
-def _apply_openai_extraction(article, text, heuristic_result):
+def apply_openai_extraction(article, text, heuristic_result):
     llm_result = maybe_extract_article_with_openai(article, text, heuristic_result)
     if not llm_result:
         return heuristic_result
@@ -423,7 +527,7 @@ def _apply_openai_extraction(article, text, heuristic_result):
     if llm_result.get("sentiment") in {"Positive", "Negative", "Neutral"}:
         sentiment = llm_result["sentiment"]
 
-    events = _merge_event_candidates(
+    events = merge_event_candidates(
         heuristic_result["events"],
         llm_result.get("events", []),
         default_date=heuristic_result["default_event_date"],
@@ -481,7 +585,7 @@ def extract_article_record(article):
     sentiment = classify_sentiment(text)
     article_type = article.get("raw_article_type_hint") or classify_article_type(article, text)
     events = extract_events(article, text, topics, locations)
-    merged_extraction = _apply_openai_extraction(
+    merged_extraction = apply_openai_extraction(
         article,
         text,
         {
@@ -513,7 +617,13 @@ def extract_article_record(article):
         "BreakingNewsArticle",
     }:
         article_type = article["raw_article_type_hint"]
-    events = merged_extraction["events"]
+    events = add_topic_based_fallback_events(
+        article,
+        text,
+        topics,
+        locations,
+        merged_extraction["events"],
+    )
     enriched_article = dict(article)
     enriched_article["event_candidates"] = events
     follow_up_candidates = build_follow_up_candidates(enriched_article, topics, article_type)
