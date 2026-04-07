@@ -165,7 +165,7 @@ class TestConvertJsonToRdf:
         )
 
         graph = convert_json_to_rdf([record])
-        event = NEWS["event/abc123def456789a_New_measures_to_support_cost_of_living"]
+        event = NEWS["event/New_measures_to_support_cost_of_living_2026-04-05"]
         event_names = {str(value) for value in graph.objects(event, SCHEMA.name)}
         alternate_names = {str(value) for value in graph.objects(event, SCHEMA.alternateName)}
 
