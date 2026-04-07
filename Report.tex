@@ -1,1270 +1,377 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[runningheads]{llncs}
 
-\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{amsmath,amssymb}
 \usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{url}
 \usepackage{xcolor}
-\usepackage{listings}
-\usepackage{amsmath}
 \usepackage{enumitem}
-\usepackage{parskip}
-\usepackage{titlesec}
-\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{microtype}
 \usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue
-}
+\newcommand{\filepath}[1]{%
+  \begingroup\hypersetup{urlcolor=black}\nolinkurl{#1}\endgroup}
 
-\definecolor{codegray}{gray}{0.95}
-\lstset{
-    basicstyle=\ttfamily\footnotesize,
-    breaklines=true,
-    frame=single,
-    backgroundcolor=\color{codegray},
-    keywordstyle=\color{blue}\bfseries,
-    commentstyle=\color{green!55!black},
-    stringstyle=\color{red!70!black},
-    showstringspaces=false,
-    columns=flexible,
-    keepspaces=true,
-    numbers=none,
-    xleftmargin=4pt,
-    xrightmargin=4pt
-}
-
-\pagestyle{fancy}
-\fancyhf{}
-\rhead{5CCSAKNE Knowledge Engineering -- Coursework 2}
-\lhead{UK Politics KG Report}
-\cfoot{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
-
-\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}[{\titlerule[0.4pt]}]
-\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}{\normalsize\itshape\bfseries}{\thesubsubsection}{1em}{}
-
-\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\ns}[1]{\texttt{news:#1}}
-\newcommand{\req}[1]{\textbf{[#1]}}
 
-%------------------------------------------------------------------
 \begin{document}
 
-\begin{titlepage}
-    \centering
-    \vspace*{1.5cm}
-    {\Large King's College London\\
-    5CCSAKNE -- Knowledge Engineering\par}
-    \vspace{0.8cm}
-    \rule{\textwidth}{1.5pt}
-    \vspace{0.5cm}
-    {\LARGE\bfseries Knowledge Graph Report:\\[0.4em]
-    UK Politics and Policy News\par}
-    \vspace{0.5cm}
-    \rule{\textwidth}{1.5pt}
-    \vspace{1.5cm}
-    {\large\bfseries Coursework 2\par}
-    \vspace{1cm}
-    {\normalsize
-    \begin{tabular}{ll}
-        \textbf{Authors:} & Yingtao Zheng, Adi Rajan \\[4pt]
-        \textbf{Repository:} & \url{https://github.com/ADI-0519/5CCSAKNE-CW2} \\[4pt]
-        \textbf{Domain:} & Current UK Politics and Policy News \\[4pt]
-        \textbf{Date window:} & 6 March 2026 -- 6 April 2026 \\[4pt]
-        \textbf{Submitted:} & \today \\
-    \end{tabular}
-    \par}
-    \vspace{1.5cm}
-    \begin{abstract}
-    \noindent
-    This report describes the design and implementation of an automated knowledge-graph (KG)
-    pipeline for current UK politics and policy news. The system ingests articles from the
-    Guardian API (structured JSON metadata) and NewsAPI (structured JSON), extracts named
-    entities, events, and sentiment from article body text (unstructured), and converts the
-    result to RDF aligned with a domain ontology that extends Schema.org and BBC Core Concepts.
-    A constrained RAG-based completion stage enriches the prototype graph. Twenty competency
-    questions, ten manually authored and ten LLM-augmented, are answered by a set of twenty
-    SPARQL queries over the completed KG. An evaluation snapshot of 258 articles confirms that
-    all twenty queries execute successfully and return meaningful results.
-    \end{abstract}
-\end{titlepage}
+\title{Automated Knowledge Graph Construction for\\UK Politics and Policy News}
+\titlerunning{UK Politics and Policy News KG}
+\author{5CCSAKNE Coursework 2}
+\authorrunning{5CCSAKNE CW2}
+\institute{
+    King's College London, London, United Kingdom\\
+    \textbf{Repository:}
+    \url{https://github.com/ADI-0519/5CCSAKNE-CW2}
+}
 
-\tableofcontents
+\maketitle
+
+%------------------------------------------------------------------
+\section{Introduction}\label{sec:introduction}
+%------------------------------------------------------------------
+
+\subsection{Purpose of the Project}
+
+This project builds an automated knowledge graph (KG) for current UK politics and
+policy news. The pipeline collects articles from the Guardian API and NewsAPI for
+the fixed window 6 March 2026 to 6 April 2026, extracts entities and events from
+article text, maps the results into RDF, enriches the prototype graph with a
+completion stage, and executes 20 SPARQL competency queries over the final graph.
+
+\subsection{Requirements and Tech Stack}
+
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{Programming language:} Python.
+    \item \textbf{Knowledge graph stack:} RDF, Turtle, SPARQL, \code{rdflib}.
+    \item \textbf{Sources:} Guardian API and NewsAPI.
+    \item \textbf{LLM integration:} OpenAI structured outputs with JSON-schema validation and local caching.
+    \item \textbf{Project artefacts:} ontology in \filepath{ontology/news_ontology.ttl}, queries in \filepath{queries/news_competency_queries.rq}, prompts in \filepath{prompts/prompts.md}.
+    \item \textbf{Testing:} \code{pytest} suite covering ontology construction, extraction, normalisation, RDF conversion, completion, and query execution.
+\end{itemize}
+
+\subsection{Deviations from Original Specifications}
+
+The current implementation is clearly a news-focused KG, but the repository still
+contains a small amount of legacy prototype structure from an earlier
+technology-oriented extractor. This is visible in \filepath{src/config.py}, where
+backwards-compatibility aliases and older keyword groups were retained to avoid
+breaking the pipeline while the final domain shifted to UK politics and policy
+news. Rather than fully rewriting the prototype from scratch, the team stabilised
+the working pipeline and aligned the final ontology, mappings, and queries to the
+politics domain.
+
+Another practical deviation concerns source balance. NewsAPI developer-tier access
+returns only the first 100 results, so in the evaluated run it contributed only
+3 retained articles, while the Guardian supplied 255. The report therefore treats
+NewsAPI as a supplementary source rather than a co-equal corpus.
+
+%------------------------------------------------------------------
+\section{Methodology}\label{sec:methodology}
+%------------------------------------------------------------------
+
+\subsection{Data Collection}\label{sec:data_collection}
+
+Data collection is implemented in \filepath{src/data_collection.py}. The pipeline
+calls the Guardian API page by page and fetches the first available NewsAPI page
+for the fixed project window. Query construction and scope restrictions are defined
+in \filepath{src/config.py}, including 14 domain query terms, Guardian section/tag
+filters, a whitelist of accepted NewsAPI publishers, and UK-scope keyword checks.
+
+The evaluated run (\code{20260407T010208Z}) produced 258 articles: 255 from the
+Guardian and 3 from NewsAPI. Raw snapshots are saved under
+\filepath{data/raw/}, which makes later offline reruns possible.
+
+\subsection{Ontology Design}\label{sec:ontology_design}
+
+The ontology is generated programmatically in \filepath{src/build_ontology.py}
+and written to \filepath{ontology/news_ontology.ttl}. It extends
+Schema.org and BBC Core Concepts with a local \code{news:} namespace for
+domain-specific classes and properties.
+
+\begin{table}[t]
+\centering
+\caption{Core ontology extensions implemented in the project.}\label{tab:ontology}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}p{2.7cm}p{9.2cm}@{}}
+\toprule
+\textbf{Element type} & \textbf{Examples} \\
+\midrule
+Classes & \ns{NewsArticle}, \ns{OpinionArticle}, \ns{BreakingNewsArticle}, \ns{Journalist}, \ns{Politician}, \ns{NewsEvent}, \ns{PoliticalEvent}, \ns{EconomicEvent}, \ns{Topic}, \ns{Sentiment} \\
+Properties & \ns{hasAuthor}, \ns{publishedBy}, \ns{hasTopic}, \ns{mentionsPerson}, \ns{mentionsOrganisation}, \ns{mentionsLocation}, \ns{coversEvent}, \ns{eventDate}, \ns{eventLocation}, \ns{hasSentiment}, \ns{hasFollowUp} \\
+Reused vocabularies & Schema.org for articles, people, organisations, and article metadata; BBC Core Concepts for events and places \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Extraction and Normalisation}\label{sec:extraction}
+
+The processing pipeline is orchestrated by \filepath{src/main.py}. After source
+records are normalised, \filepath{src/data_extraction.py} constructs KG-ready
+records by combining heuristic extraction with optional OpenAI-assisted extraction.
+
+The heuristic layer identifies:
+\begin{itemize}[leftmargin=*,nosep]
+    \item people, organisations, and locations through controlled lists plus regex patterns;
+    \item topics through weighted keyword groups defined in \filepath{src/config.py};
+    \item article subtype as \code{NewsArticle}, \code{OpinionArticle}, or \code{BreakingNewsArticle};
+    \item sentiment as \code{Positive}, \code{Negative}, or \code{Neutral};
+    \item event candidates such as \code{Election}, \code{Budget}, or \code{Policy Announcement}.
+\end{itemize}
+
+The OpenAI layer in \filepath{src/openai_client.py} uses strict JSON-schema
+formats for both extraction and completion. Responses are validated before use and
+cached under \filepath{data/cache/openai/} so that later runs can reuse previous
+outputs. If the OpenAI client is unavailable, the pipeline falls back to heuristic
+results without failing end to end.
+
+\subsection{RDF Construction and Completion}\label{sec:rdf_completion}
+
+RDF instance generation is implemented in \filepath{src/json_to_rdf.py}. The
+prototype graph is then enriched by \filepath{src/complete_kg.py}, which adds
+or refines graph content using a constrained completion stage. This enrichment
+focuses on sentiment, section labels, article subtypes, additional topics, inferred
+word counts, update timestamps, and editorial follow-up links.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=0.55cm and 0.7cm,
+  block/.style={draw, rounded corners=3pt, fill=blue!6, minimum height=0.72cm, minimum width=2.5cm, font=\small, align=center},
+  output/.style={draw, rounded corners=3pt, fill=green!10, minimum height=0.75cm, minimum width=2.7cm, font=\small\bfseries, align=center},
+  arrow/.style={-{Stealth[length=4pt]}, thick, color=black!65}
+]
+  \node[block, fill=green!8] (api) {Guardian API + NewsAPI};
+  \node[block, below=of api] (norm) {Normalisation\\{\scriptsize data\_normalisation.py}};
+  \node[block, below=of norm] (extract) {Heuristic + OpenAI Extraction\\{\scriptsize data\_extraction.py}};
+  \node[block, below=of extract] (rdf) {JSON to RDF\\{\scriptsize json\_to\_rdf.py}};
+  \node[block, right=2.4cm of extract] (onto) {Ontology Build\\{\scriptsize build\_ontology.py}};
+  \node[block, below=of rdf] (complete) {KG Completion\\{\scriptsize complete\_kg.py}};
+  \node[output, below=of complete] (query) {Completed KG + 20 SPARQL Queries};
+
+  \draw[arrow] (api) -- (norm);
+  \draw[arrow] (norm) -- (extract);
+  \draw[arrow] (extract) -- (rdf);
+  \draw[arrow] (rdf) -- (complete);
+  \draw[arrow] (complete) -- (query);
+  \draw[arrow] (onto.west) |- (rdf.east);
+\end{tikzpicture}
+\caption{End-to-end pipeline used in the coursework repository.}\label{fig:pipeline}
+\end{figure}
+
+\subsection{Competency Questions and Query Layer}\label{sec:cq_method}
+
+The project defines 20 competency questions, implemented as 20 SPARQL queries in
+\filepath{queries/news_competency_queries.rq}. Ten were written manually and ten
+were generated with LLM assistance and then revised manually. Prompt logs are kept
+in \filepath{prompts/prompts.md}. Query execution is handled by
+\filepath{src/run_queries.py}, which stores results in \filepath{output/query_results.json}
+and a timestamped output file.
+
+\subsection{Prompt Use}\label{sec:prompts}
+
+Five prompts were explicitly versioned and reused:
+\begin{itemize}[leftmargin=*,nosep]
+    \item competency-question augmentation;
+    \item ontology review against reused vocabularies;
+    \item source-to-ontology mapping draft;
+    \item completion gap analysis;
+    \item evaluation methodology design.
+\end{itemize}
+This prompt use was supportive rather than autonomous: outputs were revised by the
+team and encoded into the implemented ontology, mappings, code, and report.
+
+%------------------------------------------------------------------
+\section{Evaluation}\label{sec:evaluation}
+%------------------------------------------------------------------
+
+\subsection{Experimental Design}
+
+Evaluation combines structural validation, competency-question coverage, manual
+inspection of extracted records, and graph-completion analysis. The main evidence
+comes from the concrete validated run \code{20260407T010208Z}, documented in
+\filepath{docs/evaluation_results.md}.
+
+\subsection{Dataset and Graph Statistics}
+
+\begin{table}[t]
+\centering
+\caption{Summary statistics for the evaluated run.}\label{tab:stats}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Measure} & \textbf{Value} \\
+\midrule
+Total articles & 258 \\
+Guardian articles & 255 \\
+NewsAPI articles & 3 \\
+\code{NewsArticle} & 172 \\
+\code{OpinionArticle} & 60 \\
+\code{BreakingNewsArticle} & 26 \\
+Negative sentiment & 132 \\
+Neutral sentiment & 99 \\
+Positive sentiment & 27 \\
+Articles with event candidates & 228 \\
+Prototype \ns{hasFollowUp} links & 14 \\
+Completed \ns{hasFollowUp} links & 90 \\
+Queries returning at least one row & 20 / 20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Competency Query Results}
+
+All 20 competency queries returned at least one row in the latest validated run.
+This is the strongest quantitative claim the project can make confidently: the
+pipeline is operational from data collection through to SPARQL answering.
+
+\begin{table}[t]
+\centering
+\caption{Representative query outcomes from the completed KG.}\label{tab:queries}
+\begin{tabular}{@{}lp{2.3cm}p{7.0cm}@{}}
+\toprule
+\textbf{Query} & \textbf{Result count} & \textbf{Interpretation} \\
+\midrule
+CQ02 & 3 & clean list of retained publishers \\
+CQ06 & 9 & negative-sentiment opinion articles found \\
+CQ10 & 297 & follow-up pairs; useful but heuristic \\
+CQ17 & 30,900 & large co-mention space; answerable but noisy \\
+CQ18 & 21 & political events in London with dates \\
+CQ19 & 2 & event types covered by more than one publisher \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Strengths and Error Analysis}
+
+Manual audit notes in \filepath{docs/evaluation_results.md} indicate that the KG is
+most reliable for article metadata, publisher and author information, broad topic
+assignment, article subtype, sentiment, and coarse event grouping. This is
+consistent with the implementation: these fields are either mapped directly from
+source metadata or validated against constrained vocabularies.
+
+The weaker areas are also clear:
+\begin{itemize}[leftmargin=*,nosep]
+    \item person and organisation extraction sometimes over-generate because of regex matching;
+    \item some location labels are noisy;
+    \item event labels such as ``Policy Announcement'' remain generic;
+    \item follow-up links are editorial heuristics rather than ground-truth relations;
+    \item the corpus is strongly imbalanced toward the Guardian.
+\end{itemize}
+
+\subsection{Completion Impact}
+
+Completion improves graph density without changing the overall ontology. The clearest
+measurable gain is follow-up coverage: \ns{hasFollowUp} increases from 14 links in
+the prototype KG to 90 links in the completed KG. Sentiment and event coverage are
+also maintained consistently at graph level because completion adds validated values
+instead of free-form text.
+
+%------------------------------------------------------------------
+\section{Testing}\label{sec:testing}
+%------------------------------------------------------------------
+
+The repository includes an automated \code{pytest} suite under \filepath{tests/}.
+These tests do not prove extraction correctness exhaustively, but they do provide
+useful regression coverage over the implemented pipeline stages.
+
+\begin{itemize}[leftmargin=*,nosep]
+    \item \filepath{tests/test_build_ontology.py} checks ontology construction, subclass/subproperty alignment, and Turtle serialisation.
+    \item \filepath{tests/test_pipeline.py} checks end-to-end flow from source normalisation to RDF generation on fixture data.
+    \item \filepath{tests/test_queries.py} checks that all 20 query definitions load and execute stably.
+    \item Additional tests cover collection, extraction, normalisation, completion, RDF generation, and smoke-level repository behaviour.
+\end{itemize}
+
+This testing setup is especially valuable because the system combines deterministic
+code with optional LLM-assisted stages. The tests enforce that the deterministic
+fallback path remains usable even when the OpenAI client is unavailable.
+
+%------------------------------------------------------------------
+\section{Conclusions}\label{sec:conclusions}
+%------------------------------------------------------------------
+
+The coursework repository delivers a working automated KG pipeline for UK politics
+and policy news. It collects articles, builds a domain ontology, extracts and
+normalises article content, converts the data to RDF, enriches the graph through a
+constrained completion stage, and answers 20 competency questions with SPARQL.
+
+The most defensible conclusion is not that the KG is perfect, but that it is
+successful, reproducible, and queryable. Its strongest outputs are structured
+metadata and broad analytical relations; its remaining weaknesses lie in entity
+precision, generic events, follow-up semantics, and source imbalance.
+
+\paragraph{Future Work.}
+The next improvements are clear from both the code and evaluation: broaden the
+source mix beyond the Guardian, add provenance for completed triples, improve
+named-entity precision with stronger disambiguation, and replace heuristic follow-up
+links with better evidence-grounded editorial progression modelling.
+
+%------------------------------------------------------------------
+\section{Project Management}\label{sec:management}
+%------------------------------------------------------------------
+
+The repository is organised to support reproducibility and division of work. Source
+code lives in \filepath{src/}, ontology files in \filepath{ontology/}, query files
+in \filepath{queries/}, prompt logs in \filepath{prompts/}, evaluation notes in
+\filepath{docs/}, and automated tests in \filepath{tests/}. This separation is one
+of the project's practical strengths because it keeps modelling artefacts, code, and
+evaluation evidence versioned together.
+
+\paragraph{Risks and Mitigations.}
+The main project risks were API availability, noisy extraction, and non-determinism
+from LLM assistance. These were mitigated through raw-data snapshotting, strict
+schema validation of OpenAI outputs, local caching of responses, deterministic
+fallback heuristics, and automated regression tests.
+
+%------------------------------------------------------------------
+\section{AI Usage}\label{sec:ai_usage}
+%------------------------------------------------------------------
+
+AI tools were used in a constrained and supportive role. OpenAI was integrated into
+the implemented system for structured extraction and completion, but only through
+schema-constrained JSON outputs that were validated before being merged into the KG.
+Separate prompt use supported competency-question ideation, ontology review, mapping
+design, completion analysis, and evaluation planning.
+
+The key point is that AI outputs were not treated as authoritative free text. They
+were either revised manually for coursework artefacts or passed through explicit
+validation logic in the codebase before becoming part of the final graph.
+
 \newpage
+%------------------------------------------------------------------
+\begin{thebibliography}{9}
 
-%==================================================================
-\section{Introduction}
-\label{sec:intro}
+\bibitem{schema}
+Schema.org: \url{https://schema.org/}
 
-This coursework constructs a knowledge graph for the domain of \textbf{current UK politics and
-policy news}. The project was chosen from the recommended domain list and fulfils the requirement
-for at least one textual and one structured data source, two existing ontologies for extension,
-twenty competency questions, twenty SPARQL queries, a completion analysis with RAG, and a full
-evaluation methodology.
+\bibitem{bbc}
+BBC Core Concepts Ontology: \url{http://www.bbc.co.uk/ontologies/coreconcepts/}
 
-\subsection{Team Roles}
+\bibitem{rdf}
+W3C: RDF 1.1 Concepts and Abstract Syntax. \url{https://www.w3.org/TR/rdf11-concepts/}
 
-The team assigned roles in accordance with the coursework specification:
+\bibitem{sparql}
+W3C: SPARQL 1.1 Query Language. \url{https://www.w3.org/TR/sparql11-query/}
 
-\begin{description}
-    \item[Domain expert / client (1 member):] Set the project scope, defined the political
-          news domain, led the competency-question elicitation sessions, and ensured documentation
-          completeness.
-    \item[Modelling experts (2 members):] Designed the ontology, mapped it to Schema.org and
-          BBC Core Concepts, produced the subclass/subproperty extensions, wrote the SPARQL
-          queries, and led the evaluation methodology.
-    \item[Requirements, data ingestion and LLM pipeline (2 members):] Identified and accessed
-          the data sources, implemented the data collection and normalisation modules, built the
-          OpenAI extraction and completion pipeline, and produced the mapping specification.
-\end{description}
+\bibitem{guardian}
+The Guardian Open Platform: \url{https://open-platform.theguardian.com/}
 
-\subsection{Domain and Scope}
+\bibitem{newsapi}
+NewsAPI: \url{https://newsapi.org/}
 
-The chosen domain is UK politics and policy news, covering:
+\bibitem{openai}
+OpenAI API documentation: \url{https://platform.openai.com/docs}
 
-\begin{itemize}
-    \item Parliamentary debate, legislation, and votes
-    \item Government spending, taxation, and fiscal policy
-    \item Healthcare (NHS), education, immigration, housing, energy, and defence policy
-    \item Electoral activity, party politics, and political-actor relationships
-    \item Public-affairs events such as cabinet announcements, speeches, and protests
-\end{itemize}
-
-The data window is fixed at \textbf{6 March 2026 to 6 April 2026} to ensure a
-reproducible, time-bounded dataset.
-
-\subsection{System Architecture}
-
-The system executes nine sequential stages, each implemented as a Python module under
-\code{src/}, orchestrated by \code{src/main.py}:
-
-\begin{enumerate}
-    \item \textbf{Collect} -- Fetch articles from APIs or load cached snapshots.
-    \item \textbf{Normalise} -- Convert both API formats to a unified article schema.
-    \item \textbf{Extract} -- Run heuristic and OpenAI-assisted extraction over article text.
-    \item \textbf{Prepare KG records} -- Produce ontology-aligned JSON records.
-    \item \textbf{Build ontology} -- Generate the ontology Turtle file programmatically.
-    \item \textbf{Convert to RDF} -- Create instance triples from KG records.
-    \item \textbf{Merge} -- Combine ontology and instance graph into the prototype KG.
-    \item \textbf{Complete} -- Enrich the prototype KG with the RAG completion stage.
-    \item \textbf{Query} -- Execute all twenty SPARQL queries and export results.
-\end{enumerate}
-
-%==================================================================
-\section{Data Source Selection}
-\label{sec:data}
-
-The coursework requires \textbf{at least one textual} and \textbf{at least one structured}
-data source. Both requirements are met by the two selected APIs.
-
-\subsection{Structured Data Source: Guardian API (JSON)}
-
-The Guardian Open Platform API returns richly structured JSON responses. Each article record
-contains the following structured fields that are mapped directly to ontology properties:
-
-\begin{center}
-\begin{tabular}{ll}
-    \toprule
-    \textbf{JSON field} & \textbf{Type / description} \\
-    \midrule
-    \code{webPublicationDate} & ISO 8601 datetime -- publication timestamp \\
-    \code{fields.lastModified} & ISO 8601 datetime -- update timestamp \\
-    \code{fields.byline} & String -- author byline \\
-    \code{fields.wordcount} & Integer -- word count \\
-    \code{sectionName} & String -- editorial section \\
-    \code{webUrl} & URI -- canonical article URL \\
-    \code{tags[]} & Array of typed tag objects (keyword, tone, contributor) \\
-    \code{publication.code} & String -- publisher identifier \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-These fields constitute the \textbf{structured data source}. They are ingested as
-machine-readable JSON and mapped directly to RDF without any natural language processing.
-
-\subsection{Textual Data Source: Article Body Text}
-
-Both the Guardian API (\code{fields.bodyText}) and NewsAPI (\code{description},
-\code{content}) return \textbf{unstructured natural language text}. This constitutes the
-\textbf{textual data source}. Named entities (persons, organisations, locations), topics,
-events, and sentiment are extracted from this text using:
-
-\begin{itemize}
-    \item Keyword matching against controlled vocabulary lists defined in \code{src/config.py}.
-    \item Regular expression patterns for multi-word named-entity candidates.
-    \item OpenAI GPT-4o-mini structured extraction over article headline, summary, and body text.
-\end{itemize}
-
-\subsection{NewsAPI as a Complementary Structured Source}
-
-NewsAPI returns structured JSON (\code{source.name}, \code{author}, \code{publishedAt},
-\code{title}, \code{url}, \code{description}, \code{content}), providing a second structured
-source from a different publisher ecosystem. The developer tier restricts retrieval to 100
-results per query, which is documented as a data-source limitation.
-
-\subsection{Source Selection Justification}
-
-LLM-assisted web search was used to identify candidate APIs for the UK news domain. The query:
-
-\begin{quote}
-\textit{``Find structured REST APIs that provide full-text UK political news articles with metadata
-including author, section, publication date, and word count. The API should be freely accessible
-for research.''}
-\end{quote}
-
-led to the selection of the Guardian Open Platform and NewsAPI as the two primary sources, on
-the basis that both provide machine-readable structured JSON and include article body text.
-
-\subsection{Source Filtering}
-
-To enforce domain scope, collection applies three filters (implemented in
-\code{src/data\_collection.py} and configured in \code{src/config.py}):
-
-\begin{itemize}
-    \item \textbf{Query terms:} 14 UK-politics-specific search terms (e.g.\ ``UK government'',
-          ``Parliament'', ``Labour'', ``NHS'', ``immigration'').
-    \item \textbf{Publisher whitelist} (NewsAPI only): BBC News, Financial Times, Reuters,
-          Sky News, The Independent, The Irish Times.
-    \item \textbf{UK-scope keyword filter:} At least one of 24 UK-indicator terms must appear
-          in the article (e.g.\ ``parliament'', ``westminster'', ``starmer'', ``nhs'').
-\end{itemize}
-
-\subsection{Dataset Statistics}
-
-The evaluated snapshot (run ID \code{20260407T010208Z}) produced:
-
-\begin{center}
-\begin{tabular}{lrl}
-    \toprule
-    \textbf{Metric} & \textbf{Value} & \textbf{Notes} \\
-    \midrule
-    Total articles (post-filter) & 258 & After deduplication \\
-    Guardian API articles & 255 & 98.8\% of total \\
-    NewsAPI articles & 3 & Developer-tier restriction \\
-    NewsArticle instances & 172 & 66.7\% \\
-    OpinionArticle instances & 60 & 23.3\% \\
-    BreakingNewsArticle instances & 26 & 10.1\% \\
-    Sentiment: Negative & 132 & 51.2\% \\
-    Sentiment: Neutral & 99 & 38.4\% \\
-    Sentiment: Positive & 27 & 10.5\% \\
-    Articles with event candidates & 228 & 88.4\% \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-%==================================================================
-\section{Extension of Existing Ontologies}
-\label{sec:ontology}
-
-\subsection{Selected Existing Ontologies}
-
-Two existing ontologies were identified and selected for extension:
-
-\begin{description}
-    \item[Schema.org (\code{schema:})] A widely adopted web vocabulary maintained by the
-          major search engines. It provides \code{schema:NewsArticle}, \code{schema:Person},
-          \code{schema:Organization}, \code{schema:Event}, \code{schema:Place}, and a set of
-          metadata properties (\code{schema:author}, \code{schema:publisher},
-          \code{schema:datePublished}, \code{schema:about}, \code{schema:mentions}) that
-          align naturally with the news article domain.
-    \item[BBC Core Concepts (\code{core:})] A vocabulary maintained by the BBC that provides
-          \code{core:Event}, \code{core:Place}, \code{core:startDate}, \code{core:eventPlace},
-          and \code{core:notablyAssociatedWith}. This vocabulary is purpose-built for the
-          news-event layer required by political-event competency questions.
-\end{description}
-
-Both ontologies were located through LLM-assisted web search (see Prompt P02,
-Section~\ref{sec:prompts}).
-
-\subsection{Local Ontology Classes}
-
-The local ontology uses the prefix \code{news:} bound to
-\code{http://example.org/news\#}. It defines the following classes:
-
-\begin{center}
-\begin{tabular}{lll}
-    \toprule
-    \textbf{Class} & \textbf{Description} & \textbf{External alignment} \\
-    \midrule
-    \ns{NewsArticle} & Root article class & \code{rdfs:subClassOf schema:NewsArticle} \\
-    \ns{BreakingNewsArticle} & Breaking news articles & \code{rdfs:subClassOf news:NewsArticle} \\
-    \ns{OpinionArticle} & Editorials and columns & \code{rdfs:subClassOf news:NewsArticle} \\
-    \ns{Journalist} & Article author & \code{rdfs:subClassOf schema:Person} \\
-    \ns{Politician} & Political office holder & \code{rdfs:subClassOf schema:Person} \\
-    \ns{Organisation} & General organisation & \code{rdfs:subClassOf schema:Organization} \\
-    \ns{NewsOrganisation} & Media publisher & \code{rdfs:subClassOf news:Organisation} \\
-    \ns{PoliticalParty} & UK political party & \code{rdfs:subClassOf news:Organisation} \\
-    \ns{GovernmentBody} & Ministry / public body & \code{rdfs:subClassOf news:Organisation} \\
-    \ns{Topic} & Policy or news theme & \code{rdfs:subClassOf schema:Thing} \\
-    \ns{Location} & Geographic place & \code{rdfs:subClassOf core:Place} \\
-    \ns{NewsEvent} & Real-world event in news & \code{rdfs:subClassOf core:Event} \\
-    \ns{PoliticalEvent} & Election, vote, speech & \code{rdfs:subClassOf news:NewsEvent} \\
-    \ns{EconomicEvent} & Budget, fiscal statement & \code{rdfs:subClassOf news:NewsEvent} \\
-    \ns{Sentiment} & Controlled sentiment class & (local, three named individuals) \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-\subsection{Subclass Extensions}
-
-The following \code{rdfs:subClassOf} declarations constitute the \textbf{subclass extension}
-of the two external ontologies. A representative excerpt from the generated Turtle file
-(\code{ontology/news\_ontology.ttl}) is shown:
-
-\begin{lstlisting}
-news:NewsArticle       rdfs:subClassOf schema:NewsArticle .
-news:BreakingNewsArticle rdfs:subClassOf news:NewsArticle .
-news:OpinionArticle    rdfs:subClassOf news:NewsArticle .
-news:Journalist        rdfs:subClassOf schema:Person .
-news:Politician        rdfs:subClassOf schema:Person .
-news:Organisation      rdfs:subClassOf schema:Organization .
-news:NewsOrganisation  rdfs:subClassOf news:Organisation .
-news:PoliticalParty    rdfs:subClassOf news:Organisation .
-news:GovernmentBody    rdfs:subClassOf news:Organisation .
-news:Topic             rdfs:subClassOf schema:Thing .
-news:Location          rdfs:subClassOf core:Place .
-news:NewsEvent         rdfs:subClassOf core:Event .
-news:PoliticalEvent    rdfs:subClassOf news:NewsEvent .
-news:EconomicEvent     rdfs:subClassOf news:NewsEvent .
-\end{lstlisting}
-
-This provides a four-level class hierarchy: external ontology class $\to$ local root class
-$\to$ local subclass $\to$ local leaf class.
-
-\subsection{Subproperty Extensions}
-
-The following \code{rdfs:subPropertyOf} declarations extend the two external ontologies:
-
-\begin{center}
-\begin{tabular}{lll}
-    \toprule
-    \textbf{Local property} & \textbf{Domain} $\to$ \textbf{Range} & \textbf{Extends} \\
-    \midrule
-    \ns{hasAuthor} & \ns{NewsArticle} $\to$ \ns{Journalist} & \code{schema:author} \\
-    \ns{publishedBy} & \ns{NewsArticle} $\to$ \ns{NewsOrganisation} & \code{schema:publisher} \\
-    \ns{publishedDate} & \ns{NewsArticle} $\to$ \code{xsd:dateTime} & \code{schema:datePublished} \\
-    \ns{hasUpdateTimestamp} & \ns{NewsArticle} $\to$ \code{xsd:dateTime} & \code{schema:dateModified} \\
-    \ns{hasSection} & \ns{NewsArticle} $\to$ \code{xsd:string} & \code{schema:articleSection} \\
-    \ns{articleURL} & \ns{NewsArticle} $\to$ \code{xsd:anyURI} & \code{schema:url} \\
-    \ns{wordCount} & \ns{NewsArticle} $\to$ \code{xsd:integer} & \code{schema:wordCount} \\
-    \ns{hasTopic} & \ns{NewsArticle} $\to$ \ns{Topic} & \code{schema:about} \\
-    \ns{mentionsPerson} & \ns{NewsArticle} $\to$ \code{schema:Person} & \code{schema:mentions} \\
-    \ns{mentionsOrganisation} & \ns{NewsArticle} $\to$ \ns{Organisation} & \code{schema:mentions} \\
-    \ns{mentionsLocation} & \ns{NewsArticle} $\to$ \ns{Location} & \code{schema:mentions} \\
-    \ns{worksFor} & \ns{Journalist} $\to$ \ns{NewsOrganisation} & \code{schema:worksFor} \\
-    \ns{coversEvent} & \ns{NewsArticle} $\to$ \ns{NewsEvent} & \code{core:notablyAssociatedWith} \\
-    \ns{eventDate} & \ns{NewsEvent} $\to$ \code{xsd:date} & \code{core:startDate} \\
-    \ns{eventLocation} & \ns{NewsEvent} $\to$ \ns{Location} & \code{core:eventPlace} \\
-    \ns{hasSentiment} & \ns{NewsArticle} $\to$ \ns{Sentiment} & (local) \\
-    \ns{hasFollowUp} & \ns{NewsArticle} $\to$ \ns{NewsArticle} & (local) \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-The ontology is generated \textbf{programmatically} by \code{src/build\_ontology.py} using
-the \code{rdflib} Python library. The output file \code{ontology/news\_ontology.ttl} is a
-valid Turtle document and is version-controlled in the repository.
-
-\subsection{Sentiment Named Individuals}
-
-The \ns{Sentiment} class uses three OWL named individuals rather than a literal string to
-enable SPARQL filtering by identity:
-
-\begin{lstlisting}
-news:Positive a news:Sentiment ; rdfs:label "Positive" .
-news:Negative a news:Sentiment ; rdfs:label "Negative" .
-news:Neutral  a news:Sentiment ; rdfs:label "Neutral"  .
-\end{lstlisting}
-
-%==================================================================
-\section{Competency Questions}
-\label{sec:cq}
-
-\subsection{Manual Competency Questions (CQ01--CQ10)}
-
-The domain expert led elicitation sessions with the modelling experts to produce ten manually
-authored competency questions grounded in the UK politics and policy scope:
-
-\begin{enumerate}[label=\textbf{CQ\protect\twodigit{\arabic*}.}]
-    \item Which journalists wrote politics-section articles about government or policy issues
-          during the project time window?
-    \item Which news organisations published politics-section articles between 6 March 2026 and
-          6 April 2026?
-    \item Which people were mentioned most often across the fixed article collection?
-    \item Which political parties were mentioned in articles about elections or parliamentary
-          politics?
-    \item Which government bodies were mentioned in articles about taxation, public spending,
-          or healthcare policy?
-    \item Which opinion articles were classified as negative in sentiment?
-    \item Which topics appeared most often in politics-section reporting during the project time
-          window?
-    \item Which articles were updated after their original publication time, and what are their
-          canonical URLs?
-    \item How does the average word count of politics-section articles compare with the average
-          word count of opinion articles?
-    \item Which articles have a follow-up article, and do the original and follow-up share at
-          least one topic?
-\end{enumerate}
-
-\newcommand{\twodigit}[1]{\ifnum#1<10 0\fi#1}
-
-\subsection{LLM-Augmented Competency Questions (CQ11--CQ20)}
-
-The modelling experts used the following prompt (P01) to generate ten additional competency
-questions:
-
-\begin{lstlisting}
-You are helping with a knowledge-engineering coursework on the domain of current news.
-We already have 10 manually written competency questions for a news knowledge graph.
-Generate 10 additional competency questions that:
-- stay within the same domain
-- are answerable from a KG built around articles, journalists, organisations,
-  locations, technologies, topics, and publishers
-- complement the manual questions instead of repeating them
-- vary the query style, including counting, comparison, co-occurrence, and trend questions
-
-Return the result as a numbered list.
-For each question, add a one-line justification explaining what new information
-need it covers.
-\end{lstlisting}
-
-\textbf{Prompt design justification.} The prompt was structured to produce questions that
-are \emph{complementary} (not repetitive) to the manual set by explicitly naming the query
-styles (counting, comparison, co-occurrence, trend) that the manual set did not cover.
-The domain was constrained to ``current news'' and the KG entity types were listed explicitly
-so the LLM could not generate questions about entity types outside the ontology. The
-justification requirement forced the LLM to ground each question in a specific information
-need, which the team used as a filter to reject questions that duplicated manual CQs.
-
-The generated candidates were reviewed and revised to align with the fixed 2026 time window
-and the implemented pipeline. The ten accepted questions are:
-
-\begin{enumerate}[label=\textbf{CQ\protect\twodigit{\arabic{enumi}}.}, start=11]
-    \item Which journalists from the same news organisation wrote about the same topic during
-          the project time window?
-          [\emph{Covers journalist collaboration and the \ns{worksFor} relation.}]
-    \item Which breaking news articles were published in the politics section?
-          [\emph{Exercises the \ns{BreakingNewsArticle} subtype and section filtering.}]
-    \item Which locations were mentioned most often in articles about immigration, taxation,
-          or healthcare policy?
-          [\emph{Combines location mention with policy topic -- not in the manual set.}]
-    \item Which journalists wrote articles that were later updated?
-          [\emph{Joins author and update-timestamp metadata.}]
-    \item Which articles mention both a person and an organisation?
-          [\emph{Co-occurrence query across two entity types.}]
-    \item Which news organisations published the widest range of topics during the project
-          time window?
-          [\emph{Publisher-level topic diversity -- comparison query.}]
-    \item Which people and organisations were co-mentioned most often in the same articles?
-          [\emph{Ranked co-occurrence across persons and organisations.}]
-    \item Which political events took place in London during the project time window, and when
-          did they occur?
-          [\emph{Event-location-date combination -- exercises \ns{PoliticalEvent}.}]
-    \item Which political or economic events were covered by more than one news organisation?
-          [\emph{Cross-publisher event sharing -- exercises event identity.}]
-    \item Which politicians and political parties were mentioned together most often in the
-          same articles?
-          [\emph{Actor-party co-mention -- exercises \ns{Politician} and \ns{PoliticalParty}.}]
-\end{enumerate}
-
-%==================================================================
-\section{Data Source Mappings}
-\label{sec:mappings}
-
-\subsection{Overview}
-
-The mapping pipeline converts raw API data to RDF in three distinct stages: direct metadata
-mapping from structured JSON fields, extraction-based mapping from unstructured article text,
-and completion-based enrichment. Each stage uses different techniques, as required by the
-coursework specification.
-
-\subsection{Stage 1: Structured JSON $\to$ RDF (Direct Metadata Mapping)}
-
-Structured fields from the Guardian API JSON response and the NewsAPI JSON response are mapped
-deterministically to ontology properties by \code{src/json\_to\_rdf.py}. No NLP is required.
-
-\begin{longtable}{p{3.2cm}p{2.2cm}p{3.0cm}p{3.5cm}}
-    \caption{Stage 1: structured JSON field to RDF mapping.}
-    \label{tab:stage1}\\
-    \toprule
-    \textbf{Source field} & \textbf{Source} & \textbf{Ontology term} & \textbf{RDF representation} \\
-    \midrule
-    \endfirsthead
-    \multicolumn{4}{c}{\tablename~\thetable\ (continued)}\\
-    \toprule
-    \textbf{Source field} & \textbf{Source} & \textbf{Ontology term} & \textbf{RDF representation} \\
-    \midrule
-    \endhead
-    \bottomrule
-    \endlastfoot
-    \code{webUrl} / \code{url} & Both & \ns{articleURL}, \code{schema:url} & \code{xsd:anyURI} literal \\
-    \code{webTitle} / \code{title} & Both & \code{schema:headline} & \code{xsd:string} literal \\
-    \code{webPublicationDate} / \code{publishedAt} & Both & \ns{publishedDate}, \code{schema:datePublished} & \code{xsd:dateTime} literal \\
-    \code{fields.lastModified} & Guardian & \ns{hasUpdateTimestamp}, \code{schema:dateModified} & \code{xsd:dateTime} literal \\
-    \code{publication.code} / \code{source.name} & Both & \ns{NewsOrganisation}, \ns{publishedBy} & Named RDF resource \\
-    \code{fields.byline} / \code{author} & Both & \ns{Journalist}, \ns{hasAuthor} & Named RDF resource \\
-    \code{sectionName} & Guardian & \ns{hasSection}, \code{schema:articleSection} & \code{xsd:string} literal \\
-    \code{fields.trailText} / \code{description} & Both & \code{schema:description} & \code{xsd:string} literal \\
-    \code{fields.wordcount} & Guardian & \ns{wordCount}, \code{schema:wordCount} & \code{xsd:integer} literal \\
-    \code{tags[].webTitle} & Guardian & \ns{Topic}, \ns{hasTopic} & Named RDF resources \\
-\end{longtable}
-
-Each article is assigned a URI of the form:
-\begin{lstlisting}
-<http://example.org/news/article/{slugified-id}>
-\end{lstlisting}
-Journalist and publisher entities receive stable URIs based on normalised labels, ensuring that
-the same author appearing across multiple articles resolves to a single RDF node.
-
-\subsection{Stage 2: Unstructured Text $\to$ RDF (Extraction-Based Mapping)}
-
-Article body text (\code{fields.bodyText} / \code{content}) is the \textbf{textual data
-source}. Extraction over this text uses two complementary techniques.
-
-\subsubsection{Heuristic Extraction (src/data\_extraction.py)}
-
-\begin{description}
-    \item[Named entities] Matched against controlled lists defined in \code{src/config.py}:
-          13 known politicians, 14 political parties, 15 government bodies, 16 UK locations.
-          A regex pattern also extracts novel capitalised multi-word phrases as candidate
-          person and organisation mentions.
-    \item[Topics] Thirteen topic groups (e.g.\ Taxation, Immigration, Healthcare, Election,
-          Parliament) are matched by keyword search across title, summary, content, and Guardian
-          tags. Matching keywords are drawn from the \code{TOPIC\_GROUPS} dictionary in
-          \code{src/config.py}.
-    \item[Article subtype] Three classification rules:
-          (1) Guardian sections \code{commentisfree} / \code{opinion} $\to$ \ns{OpinionArticle};
-          (2) title keywords ``breaking'', ``live'', ``just in'' $\to$ \ns{BreakingNewsArticle};
-          (3) default $\to$ \ns{NewsArticle}.
-    \item[Sentiment] Keyword counting: positive-polarity terms (``success'', ``growth'',
-          ``backing'', etc.) and negative-polarity terms (``crisis'', ``backlash'',
-          ``warning'', etc.) are counted over title and summary; the dominant polarity is
-          assigned as the sentiment label.
-    \item[Events] Article-level event candidates are produced from contextual hints:
-          political-event hints (``election'', ``parliamentary vote'', ``policy announcement'',
-          etc.) map to \ns{PoliticalEvent}; economic hints (``budget'', ``spending review'')
-          map to \ns{EconomicEvent}. Event date defaults to the article publication date;
-          event location is taken from the most-mentioned location entity.
-    \item[Follow-up candidates] Articles that share a high-overlap topic set and were
-          published within the collection window are flagged as candidate follow-up pairs.
-\end{description}
-
-\subsubsection{OpenAI-Assisted Extraction (src/openai\_client.py)}
-
-An optional second extraction pass submits the article headline, summary, and a content
-snippet to GPT-4o-mini with a strict JSON schema (\code{EXTRACTION\_RESPONSE\_FORMAT}).
-The schema enforces:
-
-\begin{lstlisting}
-{
-  "persons":       [string, ...],
-  "organisations": [string, ...],
-  "locations":     [string, ...],
-  "topics":        [string, ...],   // constrained to TOPIC_GROUPS keys
-  "articleType":   "NewsArticle" | "OpinionArticle" | "BreakingNewsArticle",
-  "sentiment":     "Positive" | "Negative" | "Neutral",
-  "events":        [{name, type, date, location}, ...]
-}
-\end{lstlisting}
-
-The LLM response is validated before merging with heuristic results. Responses are cached
-under \code{data/cache/openai/} (keyed by content hash) to prevent recomputation on reruns.
-If the API is unavailable, the pipeline falls back to heuristic-only extraction without
-interruption.
-
-\subsubsection{Extraction-to-RDF Mapping}
-
-\begin{longtable}{p{4.0cm}p{3.5cm}p{4.8cm}}
-    \caption{Stage 2: extracted entity to RDF mapping.}
-    \label{tab:stage2}\\
-    \toprule
-    \textbf{Extracted signal} & \textbf{Ontology target} & \textbf{RDF representation} \\
-    \midrule
-    \endfirsthead
-    \multicolumn{3}{c}{\tablename~\thetable\ (continued)}\\
-    \toprule
-    \textbf{Extracted signal} & \textbf{Ontology target} & \textbf{RDF representation} \\
-    \midrule
-    \endhead
-    \bottomrule
-    \endlastfoot
-    Person mentions & \code{schema:Person}, \ns{mentionsPerson} & Named resource, \code{schema:name} label \\
-    Politician match & \ns{Politician} & \code{rdf:type news:Politician} assertion \\
-    Organisation mentions & \ns{Organisation}, \ns{mentionsOrganisation} & Named resource, \code{schema:name} label \\
-    Political party match & \ns{PoliticalParty} & \code{rdf:type news:PoliticalParty} assertion \\
-    Government body match & \ns{GovernmentBody} & \code{rdf:type news:GovernmentBody} assertion \\
-    Location mentions & \ns{Location}, \ns{mentionsLocation} & Named resource, \code{schema:name} label \\
-    Topic keywords & \ns{Topic}, \ns{hasTopic} & Named resource, \code{schema:name} label \\
-    Article subtype & \ns{OpinionArticle}, \ns{BreakingNewsArticle} & \code{rdf:type} assertion \\
-    Sentiment label & \ns{hasSentiment} & Link to \ns{Positive} / \ns{Negative} / \ns{Neutral} \\
-    Event candidate & \ns{NewsEvent} subtype, \ns{coversEvent} & Event node with \ns{eventDate}, \ns{eventLocation} \\
-    Follow-up pair & \ns{hasFollowUp} & Inter-article link \\
-    Author--publisher pair & \ns{worksFor} & Journalist to \ns{NewsOrganisation} link \\
-\end{longtable}
-
-\subsection{Stage 3: Completion-Based Mapping}
-
-After the prototype KG is built, \code{src/complete\_kg.py} enriches it further. This stage
-constitutes the \textbf{RAG completion layer} described in Section~\ref{sec:completion}.
-Properties added or strengthened by completion are: \ns{hasSentiment},
-\ns{hasSection}, \ns{wordCount}, \ns{hasUpdateTimestamp}, additional \ns{hasTopic} links,
-article subtype reinforcement, and \ns{hasFollowUp} links.
-
-\subsection{Full Mapping Table}
-
-\begin{longtable}{p{3.5cm}p{2.2cm}p{3.5cm}p{2.5cm}}
-    \caption{Complete source-to-ontology mapping across all three stages.}
-    \label{tab:full-mapping}\\
-    \toprule
-    \textbf{Source or signal} & \textbf{Stage} & \textbf{Ontology term} & \textbf{Status} \\
-    \midrule
-    \endfirsthead
-    \multicolumn{4}{c}{\tablename~\thetable\ (continued)}\\
-    \toprule
-    \textbf{Source or signal} & \textbf{Stage} & \textbf{Ontology term} & \textbf{Status} \\
-    \midrule
-    \endhead
-    \bottomrule
-    \endlastfoot
-    Article URL & S1 (structured) & \ns{articleURL} & Implemented \\
-    Headline & S1 (structured) & \code{schema:headline} & Implemented \\
-    Publication date & S1 (structured) & \ns{publishedDate} & Implemented \\
-    Update timestamp & S1 (structured) & \ns{hasUpdateTimestamp} & Implemented \\
-    Publisher name & S1 (structured) & \ns{publishedBy} & Implemented \\
-    Author byline & S1 (structured) & \ns{hasAuthor} & Implemented \\
-    Section name & S1 (structured) & \ns{hasSection} & Implemented \\
-    Summary text & S1 (structured) & \code{schema:description} & Implemented \\
-    Word count & S1 (structured) & \ns{wordCount} & Implemented \\
-    Guardian tags & S1 (structured) & \ns{hasTopic} & Implemented \\
-    Author--publisher & S1 (derived) & \ns{worksFor} & Implemented \\
-    Person mentions & S2 (text) & \ns{mentionsPerson} & Implemented \\
-    Politician typing & S2 (text) & \ns{Politician} & Partial \\
-    Organisation mentions & S2 (text) & \ns{mentionsOrganisation} & Implemented \\
-    Party typing & S2 (text) & \ns{PoliticalParty} & Partial \\
-    Gov.\ body typing & S2 (text) & \ns{GovernmentBody} & Partial \\
-    Location mentions & S2 (text) & \ns{mentionsLocation} & Implemented \\
-    Topic extraction & S2 (text) & \ns{hasTopic} & Implemented \\
-    Article subtype & S2 (text) & \ns{OpinionArticle}, \ns{BreakingNewsArticle} & Implemented \\
-    Sentiment & S2 (text) & \ns{hasSentiment} & Implemented \\
-    Event candidates & S2 (text) & \ns{coversEvent}, \ns{eventDate}, \ns{eventLocation} & Partial \\
-    Follow-up signal & S2 (text) & \ns{hasFollowUp} & Partial \\
-    Completion topics & S3 (RAG) & \ns{hasTopic} & Implemented \\
-    Completion sentiment & S3 (RAG) & \ns{hasSentiment} & Implemented \\
-    Completion follow-ups & S3 (RAG) & \ns{hasFollowUp} & Implemented \\
-    Completion subtype & S3 (RAG) & Article subtype & Implemented \\
-\end{longtable}
-
-%==================================================================
-\section{Queries}
-\label{sec:queries}
-
-Twenty SPARQL SELECT queries answer the twenty competency questions. All queries are
-stored in \code{queries/news\_competency\_queries.rq} and executed by
-\code{src/run\_queries.py}. The namespace declarations used by all queries are:
-
-\begin{lstlisting}
-PREFIX news:   <http://example.org/news#>
-PREFIX schema: <https://schema.org/>
-PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
-\end{lstlisting}
-
-\subsection{Representative Queries}
-
-Four representative queries are shown in full; the remaining sixteen follow the same
-structural patterns.
-
-\subsubsection{CQ02: Publishers of politics-section articles}
-
-\begin{lstlisting}[language=SPARQL]
-SELECT DISTINCT ?publisherName
-WHERE {
-  ?article a news:NewsArticle ;
-           news:publishedBy ?publisher ;
-           news:hasSection ?section ;
-           news:publishedDate ?publishedDate .
-  ?publisher schema:name ?publisherName .
-  FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime &&
-         ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?publisherName
-\end{lstlisting}
-
-\subsubsection{CQ09: Average word count by article type (UNION query)}
-
-\begin{lstlisting}[language=SPARQL]
-SELECT ?articleGroup (AVG(?words) AS ?averageWordCount)
-WHERE {
-  { ?article a news:NewsArticle ;
-             news:hasSection ?section ;
-             news:wordCount ?words ;
-             news:publishedDate ?publishedDate .
-    FILTER(LCASE(STR(?section)) = "politics")
-    BIND("politics-section" AS ?articleGroup) }
-  UNION
-  { ?article a news:OpinionArticle ;
-             news:wordCount ?words ;
-             news:publishedDate ?publishedDate .
-    BIND("opinion" AS ?articleGroup) }
-  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime &&
-         ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
-}
-GROUP BY ?articleGroup
-\end{lstlisting}
-
-\subsubsection{CQ18: Political events in London}
-
-\begin{lstlisting}[language=SPARQL]
-SELECT DISTINCT ?eventName ?eventDate ?headline
-WHERE {
-  ?event a news:PoliticalEvent ;
-         schema:name ?eventName ;
-         news:eventLocation ?location ;
-         news:eventDate ?eventDate .
-  ?location schema:name ?locationName .
-  ?article a news:NewsArticle ;
-           news:coversEvent ?event ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
-  FILTER(LCASE(STR(?locationName)) = "london")
-  FILTER(?eventDate >= "2026-03-06"^^xsd:date &&
-         ?eventDate <= "2026-04-06"^^xsd:date)
-}
-ORDER BY ?eventDate
-\end{lstlisting}
-
-\subsubsection{CQ19: Events covered by more than one publisher}
-
-\begin{lstlisting}[language=SPARQL]
-SELECT ?eventName (COUNT(DISTINCT ?publisher) AS ?publisherCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:coversEvent ?event ;
-           news:publishedBy ?publisher ;
-           news:publishedDate ?publishedDate .
-  ?event a ?eventType ;
-         schema:name ?eventName .
-  FILTER(?eventType IN (news:PoliticalEvent, news:EconomicEvent))
-  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime &&
-         ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
-}
-GROUP BY ?eventName
-HAVING (COUNT(DISTINCT ?publisher) > 1)
-ORDER BY DESC(?publisherCount)
-\end{lstlisting}
-
-\subsection{Query Coverage Results}
-
-All twenty queries executed successfully on the completed KG. Table~\ref{tab:cq-results}
-summarises the result.
-
-\begin{longtable}{p{0.8cm}p{6.0cm}p{2.5cm}p{2.5cm}}
-    \caption{SPARQL query execution results over the completed KG.}
-    \label{tab:cq-results}\\
-    \toprule
-    \textbf{CQ} & \textbf{Summary} & \textbf{Support level} & \textbf{Notable result} \\
-    \midrule
-    \endfirsthead
-    \multicolumn{4}{c}{\tablename~\thetable\ (continued)}\\
-    \toprule
-    \textbf{CQ} & \textbf{Summary} & \textbf{Support level} & \textbf{Notable result} \\
-    \midrule
-    \endhead
-    \bottomrule
-    \endlastfoot
-    01 & Politics journalists by topic & Answered & Multiple journalists \\
-    02 & Publishers by section \& date & Answered & 3 publishers \\
-    03 & Most-mentioned people & Answered & Ranked list \\
-    04 & Parties in election articles & Partially answered & Heuristic typing \\
-    05 & Gov.\ bodies in policy articles & Partially answered & Heuristic typing \\
-    06 & Negative opinion articles & Partially answered & 9 articles \\
-    07 & Most-covered topics & Answered & Ranked list \\
-    08 & Updated articles with URLs & Answered & Multiple articles \\
-    09 & Avg word count by type & Partially answered & Heuristic classification \\
-    10 & Follow-up pairs with shared topics & Partially answered & 297 pairs \\
-    11 & Journalist collaboration by org & Partially answered & \ns{worksFor} populated \\
-    12 & Breaking news in politics & Partially answered & Heuristic classification \\
-    13 & Locations in policy articles & Partially answered & Regex noise \\
-    14 & Journalists with updated articles & Answered & Multiple journalists \\
-    15 & Articles with person+org & Answered & Multiple articles \\
-    16 & Publisher topic diversity & Answered & Ranked publishers \\
-    17 & Person-org co-mentions & Answered & 30,900 pairs \\
-    18 & Political events in London & Answered & 21 events \\
-    19 & Events covered by 2+ publishers & Answered & 2 event types \\
-    20 & Politician-party co-mentions & Partially answered & Controlled-list coverage \\
-    \midrule
-    \multicolumn{2}{l}{\textbf{Total: 20/20 queries executable}} & & \\
-\end{longtable}
-
-%==================================================================
-\section{Knowledge Graph Completion}
-\label{sec:completion}
-
-\subsection{Gap Analysis}
-
-After the initial extraction and prototype KG construction, the team conducted a structured
-gap analysis identifying five incomplete ontology elements and five incomplete instance elements,
-as required by the specification.
-
-\subsubsection{Incomplete Ontology Elements}
-
-\begin{description}
-    \item[O1. \ns{worksFor} population is mechanically derived.] The property is populated
-          (124 triples) by pairing article authors with their publishers, but this does not
-          represent genuine employment data. Competency questions about journalist collaboration
-          (CQ11) are supported but only shallowly grounded.
-    \item[O2. Event identity is article-local.] Event nodes are created per article rather
-          than canonically resolved across articles. This weakens CQ19, which requires multiple
-          publishers to share the same event node. Currently only two canonical event types emerge.
-    \item[O3. Provenance is absent.] The ontology defines no provenance mechanism. The completed
-          graph cannot distinguish metadata-derived triples from LLM-generated triples. PROV-O
-          was identified as the appropriate vocabulary for this but was not implemented in the
-          current pipeline.
-    \item[O4. Confidence scores are not modelled.] Extraction and completion outputs of varying
-          quality are merged into the graph without any reliability weighting. This affects all
-          CQs that depend on heuristic extraction (CQ04, CQ05, CQ12, CQ20).
-    \item[O5. Political actor hierarchy is incomplete.] \ns{Politician} is defined as a
-          subclass of \code{schema:Person} but the pipeline can only type a person as a politician
-          if their name appears in the controlled list in \code{config.py}. Unknown politicians
-          remain typed as generic \code{schema:Person}.
-\end{description}
-
-\subsubsection{Incomplete Instance Elements}
-
-\begin{description}
-    \item[I1. Source imbalance.] 255 of 258 articles are from the Guardian. NewsAPI's developer
-          tier limited retrieval to 100 results, of which only 3 passed the UK-scope filter.
-          Cross-source comparison CQs are structurally supported but practically limited.
-    \item[I2. Political-actor typing is incomplete.] Many politicians and party names that do not
-          appear in the controlled list remain as generic person or organisation mentions. This
-          directly reduces the result sets for CQ04, CQ05, and CQ20.
-    \item[I3. Event instances are partially generic.] Some event nodes carry labels such as
-          ``Policy Announcement'' inferred from section name rather than from explicit event
-          text. These broad labels limit the usefulness of event-based queries.
-    \item[I4. Completion triples lack evidence grounding.] The completion stage adds triples for
-          sentiment, section, subtype, and topics, but the graph does not record the evidence span
-          or source that motivated each addition.
-    \item[I5. Follow-up links are heuristic.] The 90 follow-up links in the completed KG are
-          generated by topic-overlap matching, not by editorial annotation. Some links are
-          spurious (e.g.\ any two articles about ``Election'' will be linked).
-\end{description}
-
-\subsection{RAG-Based Completion Strategy}
-
-The completion stage implements a constrained retrieve-generate-merge loop:
-
-\textbf{Step 1 -- Retrieve.} For each article in the prototype KG, the completion module
-(\code{src/complete\_kg.py}) retrieves:
-\begin{itemize}
-    \item the article headline, summary, and content snippet from the KG;
-    \item the existing graph context: topics, persons, organisations, locations, event candidates.
-\end{itemize}
-This retrieval constitutes the ``R'' (retrieval) component of the RAG pattern.
-
-\textbf{Step 2 -- Generate.} The retrieved context is submitted to GPT-4o-mini with the
-completion prompt and a strict JSON schema (\code{COMPLETION\_RESPONSE\_FORMAT}):
-\begin{lstlisting}
-{
-  "sentiment":     "Positive" | "Negative" | "Neutral",
-  "articleType":   "NewsArticle" | "OpinionArticle" | "BreakingNewsArticle",
-  "section":       string,
-  "additionalTopics": [string, ...]   // constrained to TOPIC_GROUPS keys
-}
-\end{lstlisting}
-
-\textbf{Step 3 -- Validate.} The response is validated before any graph modification:
-values outside the ontology-controlled vocabulary are rejected; canonical labels and dates
-are enforced; only recognised article types, sentiment values, and topic labels are accepted.
-
-\textbf{Step 4 -- Merge.} Validated completions are merged into the enriched graph.
-Heuristic completion (section reassignment, follow-up link inference) runs alongside the LLM
-step and does not require an API call.
-
-\subsection{Completion Results}
-
-\begin{center}
-\begin{tabular}{lrr}
-    \toprule
-    \textbf{Property} & \textbf{Prototype KG} & \textbf{Completed KG} \\
-    \midrule
-    \ns{hasFollowUp} triples & 14 & 90 \\
-    \ns{hasSentiment} triples & 259 & 259 \\
-    \ns{coversEvent} triples & 229 & 229 \\
-    \ns{worksFor} triples & 124 & 124 \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-The most material improvement is the 6.4$\times$ increase in follow-up links (14 $\to$ 90).
-Sentiment, event, and journalist-affiliation triples are already populated in the prototype
-and are reinforced but not significantly increased by completion.
-
-%==================================================================
-\section{Prompts}
-\label{sec:prompts}
-
-Five structured prompts were developed during the project. Each prompt is documented with its
-text, the knowledge engineering task it served, and the artefact it produced.
-
-\subsection{P01: Competency Question Augmentation}
-
-\textbf{KE task:} Requirements engineering -- generating LLM-assisted competency questions to
-complement the manually authored set.
-
-\begin{lstlisting}
-You are helping with a knowledge-engineering coursework on the domain of current news.
-We already have 10 manually written competency questions for a news knowledge graph.
-Generate 10 additional competency questions that:
-- stay within the same domain
-- are answerable from a KG built around articles, journalists, organisations,
-  locations, technologies, topics, and publishers
-- complement the manual questions instead of repeating them
-- vary the query style: counting, comparison, co-occurrence, and trend questions
-
-Return the result as a numbered list.
-For each question, add a one-line justification explaining what new information
-need it covers.
-\end{lstlisting}
-
-\textbf{Produced:} CQ11--CQ20 (after manual revision for time window and ontology alignment).
-Logged in \code{prompts/prompts.md}.
-
-\subsection{P02: Ontology Review Against Reused Vocabularies}
-
-\textbf{KE task:} Ontology engineering -- identifying alignment gaps between the local ontology
-and Schema.org / BBC Core Concepts.
-
-\begin{lstlisting}
-Review this ontology draft for a current-news knowledge graph.
-The ontology reuses Schema.org and BBC Core Concepts.
-
-Identify:
-1. classes that should be aligned more explicitly
-2. properties that should become typed subproperties rather than generic relations
-3. missing modelling distinctions between publishers and mentioned organisations
-4. any class or property defined in the ontology but not represented in the generated RDF
-
-Return:
-- concrete modelling issues
-- a revised alignment proposal
-- the minimum code changes needed in the RDF generation step
-\end{lstlisting}
-
-\textbf{Produced:} Revisions to the subclass/subproperty declarations and the distinction
-between \ns{NewsOrganisation} (publisher) and \ns{Organisation} (mentioned entity).
-Documented in \code{docs/mapping\_specification.md}.
-
-\subsection{P03: Source-to-Ontology Mapping Draft}
-
-\textbf{KE task:} Data integration -- producing the initial mapping table from API fields to
-ontology terms.
-
-\begin{lstlisting}
-Given a news API response with fields such as source.name, author, title, url,
-publishedAt, description, content, plus extracted entities (organisation, person,
-location, technology, topic), produce a mapping table from source data to ontology
-classes and properties.
-
-Include:
-- source field or extraction output
-- ontology class or property
-- expected RDF representation
-- validation notes and ambiguity warnings
-\end{lstlisting}
-
-\textbf{Produced:} Initial version of the mapping specification in
-\code{docs/mapping\_specification.md}, which was subsequently updated as the pipeline matured.
-
-\subsection{P04: Completion Analysis}
-
-\textbf{KE task:} KG completion -- identifying incomplete ontology and instance elements and
-designing the RAG completion workflow.
-
-\begin{lstlisting}
-Analyse the current-news KG prototype and identify:
-- at least 5 incomplete ontology elements
-- at least 5 incomplete instance-level elements
-
-For each item, explain:
-- why it is incomplete
-- how it affects competency-question coverage
-- what additional retrieval or enrichment source could help complete it
-
-Then propose a RAG-based completion workflow that constrains outputs to the ontology.
-\end{lstlisting}
-
-\textbf{Produced:} The gap analysis in \code{docs/completion\_analysis.md} and the
-retrieve-generate-validate-merge design implemented in \code{src/complete\_kg.py}.
-
-\subsection{P05: Evaluation Methodology Design}
-
-\textbf{KE task:} Evaluation -- designing quantitative metrics for the automated KG pipeline.
-
-\begin{lstlisting}
-Design an evaluation methodology for an automated current-news KG pipeline.
-It should cover:
-- performance metrics such as runtime, memory, and triples produced
-- quality metrics for entity extraction, relation extraction, and
-  competency-question coverage
-- a comparison between SPARQL over the KG and direct prompting of an LLM
-- what data should be sampled manually for annotation
-
-Return the methodology as a concise, coursework-ready plan.
-\end{lstlisting}
-
-\textbf{Produced:} The evaluation methodology in \code{docs/evaluation\_methodology.md} and
-the evaluation results in \code{docs/evaluation\_results.md}.
-
-%==================================================================
-\section{Evaluation Methodology}
-\label{sec:eval}
-
-\subsection{Overview}
-
-The evaluation covers five dimensions: structural correctness, competency-question coverage,
-extraction and classification quality, completion quality, and performance/reproducibility.
-
-\subsection{Structural Correctness}
-
-\textbf{Goal:} Confirm that the pipeline produces syntactically valid and structurally coherent
-artefacts.
-
-\textbf{Metrics:}
-\begin{itemize}
-    \item JSON generation success rate (all stages).
-    \item Turtle parse success rate (ontology, prototype KG, completed KG).
-    \item Total triple count and triples-per-article ratio.
-    \item Percentage of articles retaining required metadata fields (title, URL, date, publisher,
-          section, word count).
-\end{itemize}
-
-\textbf{Results:} All artefacts from the evaluated run parse without errors. The ontology,
-prototype KG, and completed KG all load successfully into \code{rdflib}. All 258 articles
-retain required metadata fields.
-
-\subsection{Competency-Question Coverage}
-
-\textbf{Goal:} Measure how well the completed KG supports the twenty competency questions.
-
-\textbf{Method:} Each query is classified as:
-\begin{itemize}
-    \item \textbf{Answered} -- executes and returns meaningful, clean results.
-    \item \textbf{Partially answered} -- executes and returns results but with heuristic noise
-          or limited coverage.
-    \item \textbf{Unanswered} -- executes but returns no rows, or results are meaningless.
-\end{itemize}
-
-\textbf{Results:} 20/20 queries execute successfully. Approximately 11 are answered cleanly
-and 9 are partially answered due to heuristic extraction noise. Zero are unanswered.
-The prototype KG (before completion) supports approximately 14 queries cleanly; the completed
-KG improves this to 20, primarily through follow-up link expansion and sentiment refinement.
-
-\subsection{Extraction and Classification Quality}
-
-\textbf{Goal:} Assess accuracy of the extraction stage for ontology-critical elements.
-
-\textbf{Method:} A stratified manual audit sample was drawn from the 258 articles, covering
-all three article subtypes and all NewsAPI articles. For each sampled article, the following
-were checked against the source article:
-
-\begin{itemize}
-    \item Metadata accuracy: author, publisher, section, date, URL, word count.
-    \item Entity extraction: persons, organisations, locations.
-    \item Topic assignment correctness.
-    \item Sentiment label correctness.
-    \item Article subtype classification.
-\end{itemize}
-
-\textbf{Findings:}
-
-\begin{center}
-\begin{tabular}{lll}
-    \toprule
-    \textbf{Aspect} & \textbf{Finding} & \textbf{Primary error source} \\
-    \midrule
-    Metadata (title, URL, date, publisher) & High accuracy & None \\
-    Topic assignment & Broadly correct & Over-broad keyword matching \\
-    Sentiment classification & Reasonable & Keyword-polarity heuristic \\
-    Article subtype & Reasonable & Section-name heuristic \\
-    Person extraction & Over-generates & Regex captures org fragments \\
-    Organisation extraction & Partial & Weak for novel entity names \\
-    Location extraction & Noisy & Captures publication strings \\
-    Event labels & Partially generic & Section-level event inference \\
-    Follow-up links & Heuristic noise & Topic-overlap false positives \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Concrete audit examples:}
-\begin{enumerate}
-    \item \emph{``Rachel Reeves rules out universal support on energy bills''} -- Good topic
-          fit; person list includes ``Markets Authority'' (organisation fragment extracted as person).
-    \item \emph{``Senior Labour figures warn government amid fears of political earthquake in
-          London''} -- Useful election structure; location list contains ``London Exclusive''
-          and ``Deltapoll'' as noise.
-    \item \emph{``UK has detained 76 age-disputed children under one-in-one-out scheme''} --
-          Correctly captures immigration focus; event extraction adds a spurious ``Election'' event.
-\end{enumerate}
-
-\subsection{Completion Quality}
-
-\textbf{Goal:} Determine whether the RAG completion stage genuinely improves the graph.
-
-\textbf{Metrics:}
-\begin{itemize}
-    \item Number of triples added by the completion stage.
-    \item Number of CQs improved after completion.
-    \item Percentage of completion triples that are ontology-compatible.
-    \item Manual precision of a sampled subset of completion-generated triples.
-\end{itemize}
-
-\textbf{Results:} The most significant improvement is the increase in \ns{hasFollowUp} triples
-(14 $\to$ 90). All completion-generated values are validated against the controlled vocabulary
-before insertion, so 100\% of merged triples are ontology-compatible. Approximately 6 additional
-competency questions return richer result sets after completion.
-
-\subsection{Performance and Reproducibility}
-
-\textbf{Goal:} Quantify runtime and confirm reproducibility.
-
-\textbf{Metrics:}
-\begin{itemize}
-    \item End-to-end runtime of \code{main.py}.
-    \item Runtime per pipeline stage.
-    \item Total triples generated.
-    \item Reproducibility: can the pipeline produce identical outputs from cached snapshots?
-\end{itemize}
-
-\textbf{Reproducibility mechanisms:}
-\begin{itemize}
-    \item Raw API responses saved as timestamped JSON snapshots under \code{data/raw/}.
-    \item OpenAI extraction and completion responses cached under
-          \code{data/cache/openai/} (keyed by content hash).
-    \item Normalised and extracted records saved under \code{data/processed/}.
-    \item Output KG and query results saved with run-ID timestamps under \code{output/}.
-\end{itemize}
-
-The pipeline can be rerun offline from cached snapshots, producing bit-identical outputs
-without any external API calls.
-
-\subsection{KG vs.\ Direct LLM Comparison}
-
-\textbf{Goal:} Compare the KG+SPARQL approach with direct LLM prompting on a subset of CQs.
-
-\textbf{Method:} Five representative CQs (CQ02, CQ03, CQ07, CQ18, CQ19) were answered both
-by executing the SPARQL query over the completed KG and by submitting the question directly to
-GPT-4o-mini with a sample of article headlines as context.
-
-\textbf{Comparison criteria and findings:}
-
-\begin{center}
-\begin{tabular}{p{3.5cm}p{4.5cm}p{4.5cm}}
-    \toprule
-    \textbf{Criterion} & \textbf{KG + SPARQL} & \textbf{Direct LLM prompting} \\
-    \midrule
-    Reproducibility & Identical results on reruns & Non-deterministic \\
-    Traceability & Every result traceable to RDF triple and source article & Cannot be audited \\
-    Structural alignment & Enforced by ontology and SPARQL schema & May invent non-existent relations \\
-    Completeness & Limited by extraction quality & May hallucinate entities \\
-    Scalability & Linear with graph size & Linear with token cost \\
-    Fluency & Tabular output & Natural language -- more readable \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Conclusion:} The KG+SPARQL approach is more reproducible, traceable, and structurally
-sound. Direct LLM answers are more fluent but cannot be reliably audited or repeated.
-
-%==================================================================
-\section{Conclusion}
-\label{sec:conclusion}
-
-This report has described the design and implementation of an automated knowledge graph for UK
-politics and policy news. The pipeline:
-
-\begin{itemize}
-    \item Ingests structured JSON metadata from the Guardian API and NewsAPI (structured sources)
-          and extracts entities from article body text (textual source).
-    \item Maps all data to a domain ontology that extends Schema.org and BBC Core Concepts
-          through explicit subclass and subproperty declarations.
-    \item Answers all twenty competency questions via SPARQL over the completed KG.
-    \item Implements a constrained RAG completion stage that improves follow-up link coverage
-          from 14 to 90 triples.
-    \item Uses OpenAI GPT-4o-mini in a structured, cached, and validated manner for both
-          extraction and completion, not as an opaque one-off tool.
-\end{itemize}
-
-The strongest defensible evaluation claims are: (a) the system works end-to-end and is
-reproducible, (b) the ontology and SPARQL layer are internally consistent, (c) all 20
-competency questions are executable and return results, and (d) the graph is most reliable
-for metadata, publisher/author, topics, article subtype, sentiment, and major event groupings.
-Identified limitations (entity noise, event identity, source imbalance, absent provenance)
-are quantified and set a clear agenda for future work.
-
-\noindent\textbf{Repository:}
-\url{https://github.com/ADI-0519/5CCSAKNE-CW2}
-
-%==================================================================
-\appendix
-
-\section{Namespace Declarations}
-\label{app:ns}
-
-\begin{lstlisting}
-@prefix news:   <http://example.org/news#> .
-@prefix schema: <https://schema.org/> .
-@prefix core:   <http://www.bbc.co.uk/ontologies/coreconcepts/> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-\end{lstlisting}
-
-\section{Pipeline Stage Summary}
-\label{app:pipeline}
-
-\begin{center}
-\begin{tabular}{clll}
-    \toprule
-    \textbf{Stage} & \textbf{Name} & \textbf{Module} & \textbf{Primary output} \\
-    \midrule
-    1 & Collect & \code{data\_collection.py} & \code{data/raw/*.json} \\
-    2 & Normalise & \code{data\_normalisation.py} & \code{data/processed/*\_normalised.json} \\
-    3 & Extract & \code{data\_extraction.py} & \code{data/processed/*\_extracted.json} \\
-    4 & Prepare KG records & \code{data\_extraction.py} & \code{data/processed/*\_kg\_records.json} \\
-    5 & Build ontology & \code{build\_ontology.py} & \code{ontology/news\_ontology.ttl} \\
-    6 & Convert to RDF & \code{json\_to\_rdf.py} & \code{kg/generated/new\_kg.ttl} \\
-    7 & Merge & \code{main.py} & \code{kg/generated/prototype\_kg.ttl} \\
-    8 & Complete & \code{complete\_kg.py} & \code{kg/generated/completed\_kg.ttl} \\
-    9 & Query & \code{run\_queries.py} & \code{output/query\_results.json} \\
-    \bottomrule
-\end{tabular}
-\end{center}
-
-\section{All 20 SPARQL Queries (Reference)}
-\label{app:queries}
-
-The full text of all twenty SPARQL queries is contained in the file
-\code{queries/news\_competency\_queries.rq} in the repository. The four queries shown in
-Section~\ref{sec:queries} are representative of the patterns used. All queries:
-
-\begin{itemize}
-    \item Use \code{FILTER} clauses to restrict results to the project time window
-          (6 March -- 6 April 2026).
-    \item Use \code{DISTINCT} or \code{GROUP BY} / \code{HAVING} as appropriate for the
-          query type.
-    \item Access only properties and classes defined in the \code{news:} ontology or aligned
-          with \code{schema:} or \code{core:} terms.
-\end{itemize}
+\end{thebibliography}
 
 \end{document}
