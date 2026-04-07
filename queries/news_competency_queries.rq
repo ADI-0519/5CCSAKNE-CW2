@@ -14,13 +14,13 @@ WHERE {
   ?journalist schema:name ?journalistName .
   ?topic schema:name ?topicName .
   FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(LCASE(STR(?topicName)) IN ("government", "policy", "politics"))
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?topicName IN ("Government Policy", "Parliament", "Economic Policy", "Public Spending"))
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?journalistName ?publishedDate
 
 
-# CQ02: Which news organisations published politics-section articles between March 1, 2026 and April 6, 2026?
+# CQ02: Which news organisations published politics-section articles between March 6, 2026 and April 6, 2026?
 SELECT DISTINCT ?publisherName
 WHERE {
   ?article a news:NewsArticle ;
@@ -29,7 +29,7 @@ WHERE {
            news:publishedDate ?publishedDate .
   ?publisher schema:name ?publisherName .
   FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?publisherName
 
@@ -41,7 +41,7 @@ WHERE {
            news:mentionsPerson ?person ;
            news:publishedDate ?publishedDate .
   ?person schema:name ?personName .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?personName
 ORDER BY DESC(?articleCount) ?personName
@@ -58,13 +58,13 @@ WHERE {
   ?party a news:PoliticalParty ;
          schema:name ?partyName .
   ?topic schema:name ?topicName .
-  FILTER(LCASE(STR(?topicName)) IN ("election", "parliament", "politics"))
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?topicName IN ("Election", "Parliament"))
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?partyName ?headline
 
 
-# CQ05: Which government bodies were mentioned in articles about tax, public services, or healthcare policy?
+# CQ05: Which government bodies were mentioned in articles about taxation, public spending, or healthcare policy?
 SELECT DISTINCT ?bodyName ?headline
 WHERE {
   ?article a news:NewsArticle ;
@@ -75,8 +75,8 @@ WHERE {
   ?body a news:GovernmentBody ;
         schema:name ?bodyName .
   ?topic schema:name ?topicName .
-  FILTER(LCASE(STR(?topicName)) IN ("tax", "public services", "healthcare", "policy"))
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?topicName IN ("Taxation", "Public Spending", "Healthcare"))
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?bodyName ?headline
 
@@ -88,7 +88,7 @@ WHERE {
            news:hasSentiment news:Negative ;
            schema:headline ?headline ;
            news:publishedDate ?publishedDate .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?publishedDate ?headline
 
@@ -102,7 +102,7 @@ WHERE {
            news:publishedDate ?publishedDate .
   ?topic schema:name ?topicName .
   FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?topicName
 ORDER BY DESC(?articleCount) ?topicName
@@ -117,7 +117,7 @@ WHERE {
            news:hasUpdateTimestamp ?updatedDate ;
            news:articleURL ?url .
   FILTER(?updatedDate > ?publishedDate)
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?publishedDate ?headline
 
@@ -131,7 +131,7 @@ WHERE {
              news:wordCount ?words ;
              news:publishedDate ?publishedDate .
     FILTER(LCASE(STR(?section)) = "politics")
-    FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+    FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
     BIND("politics-section" AS ?articleGroup)
   }
   UNION
@@ -139,7 +139,7 @@ WHERE {
     ?article a news:OpinionArticle ;
              news:wordCount ?words ;
              news:publishedDate ?publishedDate .
-    FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+    FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
     BIND("opinion" AS ?articleGroup)
   }
 }
@@ -159,7 +159,7 @@ WHERE {
             news:hasTopic ?topic ;
             schema:headline ?followUpHeadline .
   ?topic schema:name ?topicName .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?headline ?followUpHeadline ?topicName
 
@@ -175,7 +175,7 @@ WHERE {
            news:hasTopic ?topic ;
            news:publishedDate ?publishedDate .
   ?topic schema:name ?topicName .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?publisherName ?topicName
 HAVING (COUNT(DISTINCT ?journalist) > 1)
@@ -190,12 +190,12 @@ WHERE {
            news:hasSection ?section ;
            news:publishedDate ?publishedDate .
   FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?publishedDate ?headline
 
 
-# CQ13: Which locations were mentioned most often in articles about migration, tax, or healthcare policy?
+# CQ13: Which locations were mentioned most often in articles about immigration, taxation, or healthcare policy?
 SELECT ?locationName (COUNT(DISTINCT ?article) AS ?articleCount)
 WHERE {
   ?article a news:NewsArticle ;
@@ -204,8 +204,8 @@ WHERE {
            news:publishedDate ?publishedDate .
   ?location schema:name ?locationName .
   ?topic schema:name ?topicName .
-  FILTER(LCASE(STR(?topicName)) IN ("migration", "tax", "healthcare", "policy"))
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?topicName IN ("Immigration", "Taxation", "Healthcare"))
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?locationName
 ORDER BY DESC(?articleCount) ?locationName
@@ -221,7 +221,7 @@ WHERE {
            news:hasUpdateTimestamp ?updatedDate .
   ?journalist schema:name ?journalistName .
   FILTER(?updatedDate > ?publishedDate)
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?journalistName ?publishedDate
 
@@ -234,7 +234,7 @@ WHERE {
            news:publishedDate ?publishedDate .
   FILTER EXISTS { ?article news:mentionsPerson ?person . }
   FILTER EXISTS { ?article news:mentionsOrganisation ?organisation . }
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?publishedDate ?headline
 
@@ -247,7 +247,7 @@ WHERE {
            news:hasTopic ?topic ;
            news:publishedDate ?publishedDate .
   ?publisher schema:name ?publisherName .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?publisherName
 ORDER BY DESC(?topicCount) ?publisherName
@@ -262,16 +262,17 @@ WHERE {
            news:publishedDate ?publishedDate .
   ?person schema:name ?personName .
   ?organisation schema:name ?organisationName .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?personName ?organisationName
 ORDER BY DESC(?articleCount) ?personName ?organisationName
 
 
 # CQ18: Which political events took place in London during the project time window, and when did they occur?
-SELECT DISTINCT ?event ?eventDate ?headline
+SELECT DISTINCT ?eventName ?eventDate ?headline
 WHERE {
   ?event a news:PoliticalEvent ;
+         schema:name ?eventName ;
          news:eventLocation ?location ;
          news:eventDate ?eventDate .
   ?location schema:name ?locationName .
@@ -280,26 +281,27 @@ WHERE {
            schema:headline ?headline ;
            news:publishedDate ?publishedDate .
   FILTER(LCASE(STR(?locationName)) = "london")
-  FILTER(?eventDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?eventDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?eventDate >= "2026-03-06"^^xsd:date && ?eventDate <= "2026-04-06"^^xsd:date)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 ORDER BY ?eventDate ?headline
 
 
 # CQ19: Which political or economic events were covered by more than one news organisation?
-SELECT ?event (COUNT(DISTINCT ?publisher) AS ?publisherCount)
+SELECT ?eventName (COUNT(DISTINCT ?publisher) AS ?publisherCount)
 WHERE {
   ?article a news:NewsArticle ;
            news:coversEvent ?event ;
            news:publishedBy ?publisher ;
            news:publishedDate ?publishedDate .
-  ?event a ?eventType .
+  ?event a ?eventType ;
+         schema:name ?eventName .
   FILTER(?eventType IN (news:PoliticalEvent, news:EconomicEvent))
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
-GROUP BY ?event
+GROUP BY ?eventName
 HAVING (COUNT(DISTINCT ?publisher) > 1)
-ORDER BY DESC(?publisherCount) ?event
+ORDER BY DESC(?publisherCount) ?eventName
 
 
 # CQ20: Which politicians and political parties were mentioned together most often in the same articles?
@@ -313,7 +315,7 @@ WHERE {
               schema:name ?politicianName .
   ?party a news:PoliticalParty ;
          schema:name ?partyName .
-  FILTER(?publishedDate >= "2026-03-01T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
+  FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?politicianName ?partyName
 ORDER BY DESC(?articleCount) ?politicianName ?partyName
