@@ -72,6 +72,61 @@ GUARDIAN_FIELDS = [
     "wordcount",
 ]
 
+NEWSAPI_BLOCKED_SOURCES = {
+    "Alltoc.com",
+    "Behance.net",
+    "Decider",
+    "Electrek",
+    "Football Italia",
+    "Fox News",
+    "Louder",
+    "MacRumors",
+    "OilPrice.com",
+    "Page Six",
+    "Pitchfork",
+    "Radaronline.com",
+    "Screen Rant",
+    "Slashdot.org",
+    "Techdirt",
+    "The Next Web",
+}
+
+NEWSAPI_ALLOWED_SOURCES = {
+    "BBC News",
+    "Financial Times",
+    "Reuters",
+    "Sky News",
+    "The Independent",
+    "The Irish Times",
+}
+
+NEWSAPI_UK_SCOPE_TERMS = {
+    "britain",
+    "british",
+    "england",
+    "great britain",
+    "house of commons",
+    "house of lords",
+    "labour",
+    "liberal democrats",
+    "london",
+    "nhs",
+    "no 10",
+    "northern ireland",
+    "parliament",
+    "prime minister",
+    "reform uk",
+    "scotland",
+    "scottish",
+    "starmer",
+    "treasury",
+    "uk",
+    "united kingdom",
+    "wales",
+    "westminster",
+    "whitehall",
+}
+
 # ---------------------------------------------------------------------------
 # Extraction dictionaries
 # ---------------------------------------------------------------------------
@@ -407,6 +462,9 @@ CONFIG = {
     "GUARDIAN_SECTIONS": GUARDIAN_SECTIONS,
     "GUARDIAN_TAGS": GUARDIAN_TAGS,
     "GUARDIAN_FIELDS": GUARDIAN_FIELDS,
+    "NEWSAPI_BLOCKED_SOURCES": NEWSAPI_BLOCKED_SOURCES,
+    "NEWSAPI_ALLOWED_SOURCES": NEWSAPI_ALLOWED_SOURCES,
+    "NEWSAPI_UK_SCOPE_TERMS": NEWSAPI_UK_SCOPE_TERMS,
     "TECHNOLOGY_KEYWORDS": TECHNOLOGY_KEYWORDS,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
     "POLITICIAN_NAMES": POLITICIAN_NAMES,
