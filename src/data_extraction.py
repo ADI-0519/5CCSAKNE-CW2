@@ -245,7 +245,27 @@ def infer_event_type(event_name):
     event_lower = event_name.lower()
     if any(hint in event_lower for hint in CONFIG["ECONOMIC_EVENT_HINTS"]):
         return "EconomicEvent"
+    if any(
+        phrase in event_lower
+        for phrase in [
+            "economic policy",
+            "public spending",
+            "tax",
+            "taxation",
+            "budget",
+            "fiscal",
+        ]
+    ):
+        return "EconomicEvent"
     return "PoliticalEvent"
+
+
+def choose_event_location(locations):
+    preferred_locations = set(CONFIG["UK_LOCATION_NAMES"])
+    for location in locations:
+        if location in preferred_locations:
+            return location
+    return locations[0] if locations else None
 
 
 def extract_events(article, text, topics, locations):
@@ -268,7 +288,7 @@ def extract_events(article, text, topics, locations):
         event_names.add("Parliamentary Vote")
 
     event_date = (article.get("published_at") or "")[:10] or None
-    default_location = locations[0] if locations else None
+    default_location = choose_event_location(locations)
 
     events = []
     for event_name in sorted(event_names):
@@ -287,6 +307,17 @@ def extract_events(article, text, topics, locations):
         for phrase in [
             "announced",
             "announcement",
+            "announces",
+            "comes to an end",
+            "comes into force",
+            "enters into force",
+            "takes effect",
+            "legal entitlement",
+            "brings in",
+            "brought in",
+            "scrapped",
+            "abolished",
+            "freeze",
             "unveiled",
             "set out",
             "proposal",
@@ -310,6 +341,41 @@ def extract_events(article, text, topics, locations):
                 "source": "heuristic",
             }
         )
+
+    if not events and policy_signal:
+        if any(
+            topic in topics for topic in ["Economic Policy", "Public Spending", "Taxation"]
+        ):
+            events.append(
+                {
+                    "name": "Economic Policy Update",
+                    "type": "EconomicEvent",
+                    "date": event_date,
+                    "location": default_location,
+                    "source": "heuristic",
+                }
+            )
+        elif any(
+            topic in topics
+            for topic in [
+                "Government Policy",
+                "Healthcare",
+                "Immigration",
+                "Education",
+                "Energy",
+                "Housing",
+                "Defence",
+            ]
+        ):
+            events.append(
+                {
+                    "name": "Government Policy Update",
+                    "type": "PoliticalEvent",
+                    "date": event_date,
+                    "location": default_location,
+                    "source": "heuristic",
+                }
+            )
 
     return events
 
