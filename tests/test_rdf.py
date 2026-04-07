@@ -99,12 +99,46 @@ class TestConvertJsonToRdf:
     def test_event_and_sentiment_triples_are_created(self):
         graph = convert_json_to_rdf([sample_record()])
         article = NEWS["article/abc123def456789a"]
-        event = NEWS["event/abc123def456789a_Budget"]
+        event = NEWS["event/Budget_2026-03-06_London"]
 
         assert (article, NEWS.hasSentiment, NEWS.Negative) in graph
         assert (article, NEWS.coversEvent, event) in graph
         assert (event, RDF.type, NEWS.EconomicEvent) in graph
         assert any(obj.datatype == XSD.date for obj in graph.objects(event, NEWS.eventDate))
+
+    def test_same_event_from_multiple_articles_reuses_event_node(self):
+        first = sample_record(
+            id="article-a",
+            source_name="The Guardian",
+            event_candidates=[
+                {
+                    "name": "Budget",
+                    "type": "EconomicEvent",
+                    "date": "2026-03-06",
+                    "location": "London",
+                    "source": "heuristic",
+                }
+            ],
+        )
+        second = sample_record(
+            id="article-b",
+            source_name="BBC News",
+            author="John Smith",
+            event_candidates=[
+                {
+                    "name": "Budget",
+                    "type": "EconomicEvent",
+                    "date": "2026-03-06",
+                    "location": "London",
+                    "source": "heuristic",
+                }
+            ],
+        )
+        graph = convert_json_to_rdf([first, second])
+        event = NEWS["event/Budget_2026-03-06_London"]
+
+        assert (NEWS["article/article-a"], NEWS.coversEvent, event) in graph
+        assert (NEWS["article/article-b"], NEWS.coversEvent, event) in graph
 
     def test_specific_event_names_gain_canonical_event_labels(self):
         record = sample_record(

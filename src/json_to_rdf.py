@@ -30,8 +30,23 @@ def topic_uri(name):
     return NEWS[f"topic/{slugify(name)}"]
 
 
-def event_uri(article_id, event_name):
-    return NEWS[f"event/{slugify(article_id)}_{slugify(event_name)}"]
+def normalise_event_date(value):
+    if not value:
+        return None
+    value = str(value).strip()
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        return value
+    return value[:10] if len(value) >= 10 else value
+
+
+def event_uri(event_name, event_date=None, event_location=None):
+    key_parts = [slugify(event_name)]
+    normalized_date = normalise_event_date(event_date)
+    if normalized_date:
+        key_parts.append(slugify(normalized_date))
+    if event_location:
+        key_parts.append(slugify(event_location))
+    return NEWS[f"event/{'_'.join(key_parts)}"]
 
 
 def sentiment_uri(name):
@@ -231,7 +246,7 @@ def add_events(graph, article, record):
         if not event_name:
             continue
 
-        uri = event_uri(record["id"], event_name)
+        uri = event_uri(event_name, event.get("date"), event.get("location"))
         event_type = event.get("type") or "NewsEvent"
         canonical_name = canonical_event_name(event, record) or event_name
 
@@ -244,7 +259,13 @@ def add_events(graph, article, record):
         graph.add((article, NEWS.coversEvent, uri))
 
         if event.get("date"):
-            add_literal(graph, uri, NEWS.eventDate, event["date"], XSD.date)
+            add_literal(
+                graph,
+                uri,
+                NEWS.eventDate,
+                normalise_event_date(event["date"]),
+                XSD.date,
+            )
 
         if event.get("location"):
             loc_uri = location_uri(event["location"])
