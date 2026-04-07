@@ -1,24 +1,39 @@
 import json
 from datetime import UTC, datetime
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 
 from src.config import CONFIG, build_guardian_page_url, build_newsapi_page_url
 
 
+def safe_url_for_logging(url):
+    parts = urlsplit(url)
+    query_params = []
+    for key, value in parse_qsl(parts.query, keep_blank_values=True):
+        if key.lower() in {"apikey", "api-key"}:
+            query_params.append((key, "REDACTED"))
+        else:
+            query_params.append((key, value))
+    return urlunsplit(
+        (parts.scheme, parts.netloc, parts.path, urlencode(query_params), parts.fragment)
+    )
+
+
 def fetch_json(url):
-    print(f"[COLLECT] Fetching data from URL: {url}")
+    safe_url = safe_url_for_logging(url)
+    print(f"[COLLECT] Fetching data from URL: {safe_url}")
     try:
         response = requests.get(url, timeout=30)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as e:
-        raise RuntimeError(f"[COLLECT] HTTP error fetching {url}: {e}") from e
+        raise RuntimeError(f"[COLLECT] HTTP error fetching {safe_url}: {e}") from e
     except requests.exceptions.RequestException as e:
-        raise RuntimeError(f"[COLLECT] Request failed for {url}: {e}") from e
+        raise RuntimeError(f"[COLLECT] Request failed for {safe_url}: {e}") from e
     except ValueError as e:
-        raise RuntimeError(f"[COLLECT] Failed to parse JSON response from {url}: {e}") from e
+        raise RuntimeError(f"[COLLECT] Failed to parse JSON response from {safe_url}: {e}") from e
 
 
 def build_timestamp():
