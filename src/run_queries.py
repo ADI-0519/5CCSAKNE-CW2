@@ -19,7 +19,7 @@ class QueryDefinition:
     query_text: str
 
 
-def _split_header(header_line):
+def split_header(header_line):
     if not header_line.startswith("# CQ"):
         raise ValueError(f"Invalid query header: {header_line!r}")
 
@@ -47,7 +47,7 @@ def load_query_definitions(query_file=DEFAULT_QUERY_PATH):
 
         if stripped.startswith("# CQ"):
             if current_header is not None:
-                query_id, title = _split_header(current_header)
+                query_id, title = split_header(current_header)
                 definitions.append(
                     QueryDefinition(
                         query_id=query_id,
@@ -63,7 +63,7 @@ def load_query_definitions(query_file=DEFAULT_QUERY_PATH):
             current_lines.append(line)
 
     if current_header is not None:
-        query_id, title = _split_header(current_header)
+        query_id, title = split_header(current_header)
         definitions.append(
             QueryDefinition(
                 query_id=query_id,
@@ -98,7 +98,7 @@ def choose_default_kg():
     )
 
 
-def _term_to_string(term):
+def term_to_string(term):
     return None if term is None else str(term)
 
 
@@ -110,7 +110,7 @@ def execute_queries(graph, query_definitions):
         variables = [str(var) for var in query_result.vars]
 
         for row in query_result:
-            rows.append({var: _term_to_string(row[var]) for var in query_result.vars})
+            rows.append({var: term_to_string(row[var]) for var in query_result.vars})
 
         results.append(
             {

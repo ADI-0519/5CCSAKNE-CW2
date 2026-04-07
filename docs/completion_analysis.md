@@ -1,61 +1,236 @@
 # Completion Analysis
 
-This document captures the main incompleteness issues already visible in the prototype and suggests a RAG-based strategy for completing them.
+This document explains what remains incomplete in the UK politics and policy knowledge graph after the main extraction pipeline, what the current completion stage already does, and what still needs to be improved for the final coursework submission.
 
-## Incomplete Ontology Elements
+Project scope:
 
-`O1.` `news:NewsEvent` is modelled but no events are currently extracted or instantiated.
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
 
-`O2.` `news:BreakingNewsArticle` and `news:OpinionArticle` exist but articles are not classified into these subclasses.
+## Current Pipeline State
 
-`O3.` `news:hasSentiment` and the sentiment individuals exist but no sentiment values are populated.
+The current codebase now has two distinct enrichment layers:
 
-`O4.` `news:hasFollowUp` exists but no inter-article continuity or follow-up relation is generated.
+1. an initial extraction stage over normalised Guardian and NewsAPI article records
+2. a later completion/enrichment stage over the prototype RDF graph
 
-`O5.` `news:developedBy`, `news:announced`, `news:involvedIn`, and `news:partOf` are available in the ontology but are not yet extracted from the data.
+This means completion is no longer a purely theoretical stage. It is already implemented in the pipeline and runs after ontology construction and instance graph generation.
 
-## Incomplete Instance Elements
+### What the base extraction stage already adds
 
-`I1.` Publisher entities are represented only by their display names and are not linked to canonical identifiers or websites.
+The extraction pipeline currently produces:
 
-`I2.` Journalist instances are name-based only and do not resolve ambiguity across name variants or duplicate names.
+- article instances with publication date, URL, author, publisher, section, summary, content, tags, and word count
+- article subtype labels such as `news:NewsArticle`, `news:OpinionArticle`, and `news:BreakingNewsArticle`
+- people, organisations, locations, and topics
+- typed political actors where they can be recognised heuristically:
+  - `news:Politician`
+  - `news:PoliticalParty`
+  - `news:GovernmentBody`
+- sentiment labels
+- event candidates with:
+  - event name
+  - event type
+  - event date
+  - event location
+- follow-up candidates
 
-`I3.` Location instances are plain labels and are not grounded to canonical geographic resources such as countries, regions, or external identifiers.
+The extraction stage is mainly heuristic, but it now also supports optional OpenAI-based extraction with a cached fallback. This means the project already uses AI in a structured and programmatic way rather than as a manual post-processing step.
 
-`I4.` Technology instances are keyword-based and do not distinguish between aliases, model families, and broader technology categories.
+### What the completion stage already adds
 
-`I5.` Topic instances are flat labels and do not yet support hierarchy, broader themes, or controlled vocabularies.
+The completion stage currently operates over the prototype KG and enriches it with:
 
-## Why These Gaps Matter
+- `news:hasSentiment`
+- `news:hasSection`
+- `news:wordCount`
+- `news:hasUpdateTimestamp`
+- additional topic assignments
+- article subtype reinforcement
+- inferred `news:hasFollowUp` links
 
-- Several competency questions depend on richer cross-article and cross-source identity resolution.
-- Event, sentiment, and follow-up modelling are required to move beyond simple mention graphs.
-- Completion quality directly affects whether the KG can answer analytical questions instead of only lookup questions.
+This stage can also use OpenAI completion in a constrained JSON format, with local response caching, to refine heuristic outputs.
 
-## RAG-Based Completion Strategy
+So the current system is best described as:
 
-### Retrieval Stage
+- extraction first
+- RDF graph construction second
+- graph completion/enrichment third
 
-- Retrieve the original article text and metadata for the article being enriched.
-- Retrieve supporting context from a second source such as a structured API, publisher metadata, or an external knowledge base.
-- Retrieve ontology constraints so the completion step knows the allowed classes and properties.
+That is important because the remaining completion discussion should now focus on what is still missing after both extraction and enrichment, not after extraction alone.
 
-### Generation Stage
+## What Is Already Covered Well
 
-- Ask the LLM to propose only triples that use the local ontology.
-- Require the LLM to cite the retrieved evidence span for each proposed triple.
-- Restrict outputs to a JSON or tabular intermediate form before RDF conversion.
+The following parts of the ontology are now populated to a useful extent:
 
-### Validation Stage
+- `news:NewsArticle`
+- `news:OpinionArticle`
+- `news:BreakingNewsArticle`
+- `news:Journalist`
+- `news:NewsOrganisation`
+- `news:Organisation`
+- `news:Topic`
+- `news:Location`
+- `news:Sentiment`
+- `news:NewsEvent`
+- `news:PoliticalEvent`
+- `news:EconomicEvent`
 
-- Reject any triple using a property outside the controlled set.
-- Check that entity types and property ranges are consistent with the ontology.
-- Keep low-confidence triples separate from high-confidence triples.
+And the following properties are also materially populated:
 
-### Priority Completion Backlog
+- `news:hasAuthor`
+- `news:publishedBy`
+- `news:hasTopic`
+- `news:mentionsPerson`
+- `news:mentionsOrganisation`
+- `news:mentionsLocation`
+- `news:publishedDate`
+- `news:hasUpdateTimestamp`
+- `news:hasSection`
+- `news:articleURL`
+- `news:coversEvent`
+- `news:eventDate`
+- `news:eventLocation`
+- `news:hasSentiment`
+- `news:wordCount`
+- `news:hasFollowUp`
 
-1. Add canonical grounding for publishers, journalists, locations, and technologies.
-2. Add event extraction so `news:NewsEvent`, `news:eventDate`, and `news:eventLocation` become populated.
-3. Add article classification for breaking news and opinion.
-4. Add sentiment extraction with validation.
-5. Add follow-up detection across article clusters.
+This is a much richer state than the earlier prototype, where event modelling, typed political actors, and completion outputs were mostly absent.
+
+## Remaining Incomplete Ontology Elements
+
+The ontology is now largely aligned with the implemented pipeline, but a few important terms remain weakly populated or unpopulated.
+
+`O1.` `news:worksFor` is still modelled but not populated in a robust way.
+
+The current pipeline identifies article authors and publishers, but it does not yet consistently materialise explicit journalist-to-organisation affiliation triples. This matters for competency questions about journalists working for the same organisation.
+
+`O2.` Event modelling exists, but event identity is still weak.
+
+The system now creates event candidates and event triples, but many events are still generic or article-local rather than canonically resolved across multiple articles. This weakens questions that depend on multiple publishers covering the same event.
+
+`O3.` `news:NewsEvent`, `news:PoliticalEvent`, and `news:EconomicEvent` are populated, but not yet strongly normalised.
+
+The issue is no longer whether events exist at all. The real issue is whether event instances are specific, stable, and reusable enough for strong cross-article querying.
+
+`O4.` Provenance and confidence are not modelled for completion outputs.
+
+The current ontology and pipeline do not yet attach confidence scores, evidence spans, or source provenance to completion-generated assertions. This is especially relevant for AI-assisted extraction and enrichment.
+
+## Remaining Incomplete Instance Elements
+
+`I1.` Cross-source coverage is still unbalanced.
+
+The dataset is now genuinely multi-source, but it remains Guardian-heavy because NewsAPI developer-tier access is restricted to the first 100 results in the fixed time window. This does not invalidate the source mix, but it does limit some cross-source comparisons.
+
+`I2.` Political-actor typing is present but still incomplete.
+
+The pipeline now identifies politicians, political parties, and government bodies heuristically, but this is still incomplete for ambiguous or previously unseen names. Some actors will still remain under generic person or organisation mentions.
+
+`I3.` Event instances are present but still somewhat generic.
+
+Some event nodes are still broad placeholders, such as policy-style events inferred from article language rather than clearly named canonical events. This makes event-based CQs only partially robust.
+
+`I4.` Completion outputs are not yet evidence-grounded in storage.
+
+OpenAI completion and heuristic completion can improve sentiment, section, article subtype, and topics, but the stored graph does not yet preserve why a given completion was accepted.
+
+`I5.` `news:worksFor` remains absent from the instance graph.
+
+This is the clearest important ontology-property gap still visible in the current KG.
+
+## Why These Remaining Gaps Matter
+
+These gaps do not stop the system from producing a useful KG, but they weaken the more ambitious competency questions.
+
+- CQs about politicians, parties, and government bodies are now much better supported than before, but still depend on the quality of heuristic or LLM-assisted typing.
+- CQs about events across multiple publishers depend on better event identity resolution.
+- CQs involving journalist affiliation remain weak until `news:worksFor` is populated.
+- CQs using sentiment and article subtype are now supported, but their quality still depends on heuristic or LLM classification accuracy.
+- CQs involving follow-up links are now more realistic, but still heuristic rather than fully editorially grounded.
+
+So the completion stage is no longer about making the KG minimally functional. It is now about improving quality, confidence, and semantic consistency.
+
+## Practical Completion Strategy
+
+The current codebase already implements a lightweight retrieve-generate-merge pattern. For the final submission, the completion strategy should be described as a constrained enrichment loop rather than a free-form chatbot step.
+
+### 1. Retrieve
+
+For each article or candidate entity, retrieve:
+
+- the article headline, summary, and content
+- source metadata such as section, author, publisher, tags, publication date, and update timestamp
+- existing KG context:
+  - people
+  - organisations
+  - locations
+  - topics
+  - event candidates
+
+This gives the completion stage both textual evidence and structured graph context.
+
+### 2. Generate
+
+Use OpenAI to produce only ontology-compatible JSON outputs.
+
+The current implementation already uses strict structured response formats for:
+
+- extraction
+- completion
+
+The most valuable completion tasks are:
+
+- refining sentiment when heuristic polarity is weak
+- refining article subtype classification
+- refining section assignment
+- proposing additional topics
+- later, extending this to stronger actor typing and event grounding
+
+### 3. Validate
+
+Before adding completions to the graph:
+
+- reject values outside the ontology
+- canonicalise labels and dates
+- merge only recognised article types and sentiment values
+- avoid overwriting strong source evidence with weaker generated guesses
+
+This is already partly reflected in the current code, where OpenAI completion is merged into heuristic outputs only for allowed fields and allowed values.
+
+### 4. Store
+
+Accepted completions are currently merged directly into the enriched graph.
+
+For a stronger final version, the project should either:
+
+- keep completion outputs in a separate enrichment layer before merge, or
+- attach completion provenance and confidence metadata
+
+This is one of the clearest remaining areas for improvement.
+
+## Recommended Completion Backlog
+
+The most important remaining completion tasks are:
+
+1. Materialise `news:worksFor` from reliable author-publisher evidence.
+2. Improve event grounding so the same real-world event is reused across related articles.
+3. Extend OpenAI completion beyond section, sentiment, subtype, and extra topics into stronger political-actor and event refinement.
+4. Add confidence or provenance tracking for completion-derived triples.
+5. Evaluate completion quality on a small manually reviewed article sample.
+
+## Final Assessment
+
+The completion stage is now a real implemented component of the KG pipeline, not just a proposed extension.
+
+That is a strong improvement over the earlier prototype. However, the most important remaining issue is no longer the existence of completion itself. The real issue is completion quality and traceability:
+
+- how reliably political actors are typed
+- how specific event instances are
+- how well cross-article event identity is maintained
+- how transparently AI-assisted enrichments are justified
+
+So the final submission should present completion as:
+
+- an implemented enrichment layer
+- already useful for sentiment, section, subtype, topic expansion, and follow-up links
+- but still improvable in event grounding, journalist affiliation, and provenance-aware AI enrichment

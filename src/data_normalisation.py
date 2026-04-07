@@ -60,6 +60,31 @@ def count_words(text):
     return len(str(text).split())
 
 
+def contains_scope_term(text, scope_terms):
+    lowered = str(text or "").lower()
+    return any(term in lowered for term in scope_terms)
+
+
+def is_relevant_newsapi_article(article):
+    source_name = normalise_name((article.get("source") or {}).get("name"))
+    if not source_name:
+        return False
+    if source_name not in CONFIG["NEWSAPI_ALLOWED_SOURCES"]:
+        return False
+    if source_name in CONFIG["NEWSAPI_BLOCKED_SOURCES"]:
+        return False
+
+    title = normalise_name(article.get("title"))
+    description = normalise_name(article.get("description"))
+    content = normalise_name(article.get("content"))
+    combined_text = " ".join(part for part in (title, description, content) if part)
+    if not combined_text:
+        return False
+
+    scope_terms = CONFIG["NEWSAPI_UK_SCOPE_TERMS"]
+    return contains_scope_term(combined_text, scope_terms)
+
+
 def normalise_relations(relations, record_index):
     normalised = []
     for rel in relations:
@@ -127,6 +152,8 @@ def normalise_newsapi_articles(raw_data):
         if not title or not url or not published_at or not source_name:
             continue
         if not is_valid_url(url):
+            continue
+        if not is_relevant_newsapi_article(article):
             continue
 
         summary = normalise_name(article.get("description"))

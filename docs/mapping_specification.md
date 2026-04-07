@@ -1,53 +1,292 @@
 # Mapping Specification
 
-This document records both the source-to-ontology mapping used by the pipeline and the alignment of the local ontology to reused external vocabularies.
+This document records how the current pipeline maps GuardianAPI and NewsAPI inputs into the local UK politics and policy ontology.
 
-## Source-to-Ontology Mapping
+Project scope:
 
-| Source or extraction output | RDF representation | Ontology target | Notes |
-| --- | --- | --- | --- |
-| `article.url` | Article URI and `news:articleURL` literal | `news:NewsArticle`, `news:articleURL` | Stable article identifiers are minted from the canonical URL. |
-| `article.title` | Literal headline | `schema:headline` | Kept as a literal for direct display and querying. |
-| `article.publishedAt` | DateTime literal | `news:publishedDate` | Also asserted as `schema:datePublished` via the subproperty mapping. |
-| `article.source.name` | Publisher IRI plus label | `news:NewsOrganisation`, `news:publishedBy` | Publisher is modelled as an entity, not a literal. |
-| `article.author` | Author IRI plus label | `news:Journalist`, `news:hasAuthor` | Author is modelled as an entity, not a literal. |
-| `article.description` or `article.content` | Summary literal | `schema:description` | Used as the article summary in the prototype. |
-| Extracted organisation mentions | Mentioned organisation IRI plus label | `news:Organisation`, `news:mentionsOrganisation` | Distinct from `news:NewsOrganisation`, which is reserved for publishers. |
-| Extracted person mentions | Person IRI plus label | `schema:Person`, `news:mentionsPerson` | Authors are additionally typed as `news:Journalist`. |
-| Extracted location mentions | Location IRI plus label | `news:Location`, `news:mentionsLocation` | Locations are mentioned entities, not article metadata. |
-| Extracted technology mentions | Technology IRI plus label | `news:Technology`, `news:mentionsTechnology` | Technology mentions are now typed explicitly instead of using a generic predicate. |
-| Extracted topic labels | Topic IRI plus label | `news:Topic`, `news:hasTopic` | Topics are treated as article themes rather than generic mentions. |
-| Organisation and technology co-occurrence | Relation triple | `news:usesTechnology` | This is a heuristic signal and should later be replaced or validated by stronger extraction. |
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+
+## Mapping Overview
+
+The mapping process is now multi-stage rather than a single direct source-to-RDF transformation.
+
+The current workflow is:
+
+1. collect article data from GuardianAPI and NewsAPI
+2. normalise both APIs into a shared internal article schema
+3. run extraction over the normalised records
+4. convert extracted records into RDF instances aligned with the ontology
+5. enrich the prototype KG with a completion stage
+
+This is important because some ontology terms are populated directly from source metadata, some are created by extraction, and some are only added or strengthened during completion.
+
+## Source Design
+
+The project combines both textual and structured data from the two APIs.
+
+### Textual source data
+
+- article title
+- summary / trail text / description
+- article body text or content snippet
+
+### Structured source data
+
+- source/publisher name
+- publication date
+- update timestamp
+- section name
+- URL
+- author/byline
+- tags
+- word count
+
+Both APIs are converted into one shared article schema before any extraction or RDF generation happens.
+
+## Unified Article Schema
+
+Each collected article is normalised into a record with these fields:
+
+- `id`
+- `source_system`
+- `source_name`
+- `title`
+- `url`
+- `published_at`
+- `updated_at`
+- `author`
+- `section`
+- `summary`
+- `content`
+- `tags`
+- `word_count`
+- `raw_article_type_hint`
+
+This schema is the bridge between raw API payloads and ontology population.
+
+## Stage 1: Direct Source Metadata Mapping
+
+The following ontology terms are populated directly from normalized source metadata.
+
+| Unified field | Source | RDF representation | Ontology target | Status |
+| --- | --- | --- | --- | --- |
+| `id` | Normalisation | Article URI | `news:NewsArticle` | `Implemented` |
+| `url` | GuardianAPI / NewsAPI | URL literal | `news:articleURL`, `schema:url` | `Implemented` |
+| `title` | GuardianAPI / NewsAPI | Headline literal | `schema:headline` | `Implemented` |
+| `published_at` | GuardianAPI / NewsAPI | Publication timestamp | `news:publishedDate`, `schema:datePublished` | `Implemented` |
+| `updated_at` | GuardianAPI metadata or fallback logic | Update timestamp | `news:hasUpdateTimestamp`, `schema:dateModified` | `Implemented` |
+| `source_name` | GuardianAPI / NewsAPI | Publisher entity and link | `news:NewsOrganisation`, `news:publishedBy`, `schema:publisher` | `Implemented` |
+| `author` | Guardian byline / NewsAPI author | Journalist entity and link | `news:Journalist`, `news:hasAuthor`, `schema:author` | `Implemented` |
+| `section` | Guardian section / normalized source metadata | Section literal | `news:hasSection`, `schema:articleSection` | `Implemented` |
+| `summary` | Guardian trail text / NewsAPI description | Description literal | `schema:description` | `Implemented` |
+| `word_count` | Guardian field or estimated count | Integer literal | `news:wordCount`, `schema:wordCount` | `Implemented` |
+
+## Stage 2: Extraction-Based Mapping
+
+The following ontology terms are populated through the extraction layer over the normalised article records.
+
+### Topic mapping
+
+Topics are produced from:
+
+- text matches in title, summary, and content
+- Guardian tags
+- section-level hints
+
+Mapped ontology terms:
+
+- `news:Topic`
+- `news:hasTopic`
+- `schema:about`
+
+Status:
+
+- `Implemented`
+
+### Person and political-actor mapping
+
+People are extracted from article text, then refined into political subtypes where possible.
+
+Mapped ontology terms:
+
+- `schema:Person`
+- `news:mentionsPerson`
+- `news:Politician`
+
+Status:
+
+- `Implemented`, but still partly heuristic
+
+Important note:
+
+Not every person mention is confidently typed as a politician. The subtype mapping exists and is used, but it is still incomplete for ambiguous names.
+
+### Organisation mapping
+
+Organisations are extracted from article text and then refined into political subtypes.
+
+Mapped ontology terms:
+
+- `news:Organisation`
+- `news:mentionsOrganisation`
+- `news:PoliticalParty`
+- `news:GovernmentBody`
+
+Status:
+
+- `Implemented`, but still partly heuristic
+
+### Location mapping
+
+Locations are extracted from article text and linked as both generic place mentions and event locations when relevant.
+
+Mapped ontology terms:
+
+- `news:Location`
+- `news:mentionsLocation`
+
+Status:
+
+- `Implemented`
+
+### Article subtype mapping
+
+Article subtype is inferred from:
+
+- source article-type hints
+- section information
+- article title and text heuristics
+- optional OpenAI refinement
+
+Mapped ontology terms:
+
+- `news:NewsArticle`
+- `news:OpinionArticle`
+- `news:BreakingNewsArticle`
+
+Status:
+
+- `Implemented`
+
+### Sentiment mapping
+
+Sentiment is first inferred heuristically and can later be refined in the completion stage.
+
+Mapped ontology terms:
+
+- `news:Sentiment`
+- `news:hasSentiment`
+
+Status:
+
+- `Implemented`
+
+### Event mapping
+
+The extractor now creates article-level event candidates from policy, election, parliamentary, and economic cues in article text.
+
+Mapped ontology terms:
+
+- `news:NewsEvent`
+- `news:PoliticalEvent`
+- `news:EconomicEvent`
+- `news:coversEvent`
+- `news:eventDate`
+- `news:eventLocation`
+
+Status:
+
+- `Implemented`, but event identity is still relatively weak and partly generic
+
+### Follow-up mapping
+
+The extractor creates candidate follow-up keys, and the RDF layer materialises cross-article follow-up links.
+
+Mapped ontology term:
+
+- `news:hasFollowUp`
+
+Status:
+
+- `Implemented`
+
+## Stage 3: Completion-Based Mapping
+
+After the prototype graph is built, the completion stage enriches it further.
+
+The current completion layer adds or strengthens:
+
+- `news:hasSentiment`
+- `news:hasSection`
+- `news:wordCount`
+- `news:hasUpdateTimestamp`
+- additional `news:hasTopic` links
+- subtype reinforcement for `news:OpinionArticle` and `news:BreakingNewsArticle`
+- `news:hasFollowUp`
+
+This stage is partly heuristic and can also use OpenAI completion with cached structured outputs.
+
+Status:
+
+- `Implemented`
+
+## Current Mapping Table
+
+| Unified field or derived signal | Source or stage | RDF representation | Ontology target | Status |
+| --- | --- | --- | --- | --- |
+| `id` + `url` | Collection + normalisation | Article URI and canonical URL literal | `news:NewsArticle`, `news:articleURL` | `Implemented` |
+| `title` | GuardianAPI / NewsAPI | Headline literal | `schema:headline` | `Implemented` |
+| `published_at` | GuardianAPI / NewsAPI | Publication datetime literal | `news:publishedDate` | `Implemented` |
+| `updated_at` | GuardianAPI metadata or completion fallback | Update datetime literal | `news:hasUpdateTimestamp` | `Implemented` |
+| `source_name` | GuardianAPI / NewsAPI | Publisher entity with label | `news:NewsOrganisation`, `news:publishedBy` | `Implemented` |
+| `author` | Guardian byline / NewsAPI author | Journalist entity with label | `news:Journalist`, `news:hasAuthor` | `Implemented` |
+| `section` | Guardian section / completion refinement | Section literal | `news:hasSection` | `Implemented` |
+| `summary` + `content` | Guardian text fields / NewsAPI snippet text | Description literal | `schema:description` | `Implemented` |
+| `word_count` | Guardian field, estimated count, or completion enrichment | Integer literal | `news:wordCount` | `Implemented` |
+| `tags` + topic cues | Extraction + completion | Topic entity with label | `news:Topic`, `news:hasTopic` | `Implemented` |
+| Person mentions | Extraction | Mentioned person entity with label | `schema:Person`, `news:mentionsPerson` | `Implemented` |
+| Politician typing | Extraction | Person subtype assertion | `news:Politician` | `Implemented` |
+| Organisation mentions | Extraction | Mentioned organisation entity with label | `news:Organisation`, `news:mentionsOrganisation` | `Implemented` |
+| Political party typing | Extraction | Organisation subtype assertion | `news:PoliticalParty` | `Implemented` |
+| Government body typing | Extraction | Organisation subtype assertion | `news:GovernmentBody` | `Implemented` |
+| Location mentions | Extraction | Mentioned location entity with label | `news:Location`, `news:mentionsLocation` | `Implemented` |
+| Article subtype hints + rules | Extraction + completion | Article subtype assertion | `news:BreakingNewsArticle`, `news:OpinionArticle` | `Implemented` |
+| Sentiment label | Extraction + completion | Sentiment link to controlled individual | `news:hasSentiment` | `Implemented` |
+| Event extraction | Extraction | Event node plus links from article | `news:NewsEvent`, `news:PoliticalEvent`, `news:EconomicEvent`, `news:coversEvent`, `news:eventDate`, `news:eventLocation` | `Implemented` |
+| Follow-up story signal | Extraction + RDF + completion | Inter-article link | `news:hasFollowUp` | `Implemented` |
+| Journalist affiliation | RDF derivation from author and publisher | Journalist to publisher link | `news:worksFor` | `Implemented` |
 
 ## External Ontology Alignment
 
-| Local term | External alignment | Reason |
+| Local term | External alignment | Role in the project |
 | --- | --- | --- |
-| `news:NewsArticle` | `rdfs:subClassOf schema:NewsArticle` | Core class for news items. |
-| `news:Journalist` | `rdfs:subClassOf schema:Person` | Preserves interoperability for person metadata. |
-| `news:Organisation` | `rdfs:subClassOf schema:Organization` | Covers general organisations mentioned in reporting. |
-| `news:NewsOrganisation` | `rdfs:subClassOf news:Organisation` | Distinguishes publishers from other organisations. |
-| `news:Technology` | `rdfs:subClassOf schema:Thing` | Supports technology entities referenced by articles. |
-| `news:Topic` | `rdfs:subClassOf schema:Thing` | Topics are modelled as named thematic entities. |
-| `news:NewsEvent` | `rdfs:subClassOf core:Event` | Prepares the ontology for later event extraction. |
-| `news:Location` | `rdfs:subClassOf core:Place` | Reuses the BBC place abstraction for geographic mentions. |
-| `news:hasAuthor` | `rdfs:subPropertyOf schema:author` | Keeps custom semantics while remaining interoperable. |
-| `news:publishedBy` | `rdfs:subPropertyOf schema:publisher` | Models publisher relations as entity links rather than literals. |
-| `news:hasTopic` | `rdfs:subPropertyOf schema:about` | Treats topics as the article’s aboutness relation. |
-| `news:mentionsPerson` | `rdfs:subPropertyOf schema:mentions` | Typed mention relation for people. |
-| `news:mentionsOrganisation` | `rdfs:subPropertyOf schema:mentions` | Typed mention relation for organisations. |
-| `news:mentionsLocation` | `rdfs:subPropertyOf schema:mentions` | Typed mention relation for locations. |
-| `news:mentionsTechnology` | `rdfs:subPropertyOf schema:mentions` | Typed mention relation for technologies. |
-| `news:publishedDate` | `rdfs:subPropertyOf schema:datePublished` | Keeps date semantics in the local ontology. |
-| `news:articleURL` | `rdfs:subPropertyOf schema:url` | Keeps canonical URLs queryable in both namespaces. |
-| `news:eventLocation` | `rdfs:subPropertyOf core:eventPlace` | Reuses BBC Core Concepts for event place modelling. |
-| `news:eventDate` | `rdfs:subPropertyOf core:startDate` | Reuses BBC Core Concepts for event date modelling. |
-| `news:coversEvent` | `rdfs:subPropertyOf core:notablyAssociatedWith` | Connects articles to covered events. |
+| `news:NewsArticle` | `rdfs:subClassOf schema:NewsArticle` | Main article class for all collected records. |
+| `news:Journalist` | `rdfs:subClassOf schema:Person` | Author entities. |
+| `news:Politician` | `rdfs:subClassOf schema:Person` | Typed political actors. |
+| `news:Organisation` | `rdfs:subClassOf schema:Organization` | General organisations mentioned in articles. |
+| `news:NewsOrganisation` | `rdfs:subClassOf news:Organisation` | Publisher entities. |
+| `news:PoliticalParty` | `rdfs:subClassOf news:Organisation` | Party mentions. |
+| `news:GovernmentBody` | `rdfs:subClassOf news:Organisation` | Departments, ministries, and parliamentary bodies. |
+| `news:Topic` | `rdfs:subClassOf schema:Thing` | Policy and politics themes. |
+| `news:Location` | `rdfs:subClassOf schema:Place` | Geographic mentions. |
+| `news:NewsEvent` | `rdfs:subClassOf schema:Event` or local event hierarchy | Covered event class. |
+| `news:PoliticalEvent` | `rdfs:subClassOf news:NewsEvent` | Political event subtype. |
+| `news:EconomicEvent` | `rdfs:subClassOf news:NewsEvent` | Economic event subtype. |
+| `news:hasAuthor` | `rdfs:subPropertyOf schema:author` | Article-to-journalist relation. |
+| `news:publishedBy` | `rdfs:subPropertyOf schema:publisher` | Article-to-publisher relation. |
+| `news:hasTopic` | `rdfs:subPropertyOf schema:about` | Article-to-topic relation. |
+| `news:mentionsPerson` | `rdfs:subPropertyOf schema:mentions` | Typed person mention relation. |
+| `news:mentionsOrganisation` | `rdfs:subPropertyOf schema:mentions` | Typed organisation mention relation. |
+| `news:mentionsLocation` | `rdfs:subPropertyOf schema:mentions` | Typed location mention relation. |
+| `news:publishedDate` | `rdfs:subPropertyOf schema:datePublished` | Publication timestamp. |
+| `news:hasUpdateTimestamp` | `rdfs:subPropertyOf schema:dateModified` | Update timestamp. |
+| `news:hasSection` | `rdfs:subPropertyOf schema:articleSection` | Section metadata. |
+| `news:articleURL` | `rdfs:subPropertyOf schema:url` | Canonical article URL. |
+| `news:worksFor` | `rdfs:subPropertyOf schema:worksFor` | Journalist affiliation relation. |
 
-## Key Modelling Decisions
+## Key Modelling Notes
 
-- Publishers are represented as IRIs so that articles can link to `news:NewsOrganisation` instances.
-- Mentioned organisations are separated from publishers by introducing `news:Organisation`.
-- Technology mentions use a typed property and class, which closes a previous gap between the TBox and ABox.
-- Topic links are modelled with `news:hasTopic` instead of the previous generic `mentions` relation.
-- The pipeline now produces a combined KG that merges ontology triples and instance triples into the final Turtle output.
+- The mapping is now explicitly politics-and-policy focused rather than generic current-news or technology-news focused.
+- Guardian and NewsAPI are treated as complementary sources and are normalised before ontology population.
+- The current system combines deterministic metadata mapping, heuristic extraction, and constrained OpenAI-assisted refinement.
+- The most important remaining weakness is not the absence of mapped ontology terms. It is the quality and stability of some mapped values, especially event identity, actor typing for ambiguous cases, and provenance for completion outputs.

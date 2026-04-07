@@ -30,8 +30,23 @@ def topic_uri(name):
     return NEWS[f"topic/{slugify(name)}"]
 
 
-def event_uri(article_id, event_name):
-    return NEWS[f"event/{slugify(article_id)}_{slugify(event_name)}"]
+def normalise_event_date(value):
+    if not value:
+        return None
+    value = str(value).strip()
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        return value
+    return value[:10] if len(value) >= 10 else value
+
+
+def event_uri(event_name, event_date=None, event_location=None):
+    key_parts = [slugify(event_name)]
+    normalized_date = normalise_event_date(event_date)
+    if normalized_date:
+        key_parts.append(slugify(normalized_date))
+    if event_location:
+        key_parts.append(slugify(event_location))
+    return NEWS[f"event/{'_'.join(key_parts)}"]
 
 
 def sentiment_uri(name):
@@ -49,6 +64,55 @@ def add_literal(graph, subject, predicate, value, datatype=None):
 
 def add_name(graph, subject, name):
     add_literal(graph, subject, SCHEMA.name, name)
+
+
+def event_name_keywords(text):
+    return {token.lower() for token in re.findall(r"[A-Za-z][A-Za-z'-]+", str(text or ""))}
+
+
+def canonical_event_name(event, record):
+    raw_name = str(event.get("name") or "").strip()
+    if not raw_name:
+        return ""
+
+    lowered_name = raw_name.lower()
+    event_type = str(event.get("type") or "NewsEvent").strip()
+    topics = {str(topic).strip() for topic in (record.get("entities", {}) or {}).get("topics", [])}
+    headline = str(record.get("title") or "")
+    summary = str(record.get("summary") or "")
+    keywords = event_name_keywords(" ".join([raw_name, headline, summary]))
+
+    if "spending review" in lowered_name:
+        return "Spending Review"
+    if "spring statement" in lowered_name:
+        return "Spring Statement"
+    if "budget" in keywords or "budget" in lowered_name:
+        return "Budget"
+    if (
+        "election" in keywords
+        or "campaign" in keywords
+        or "poll" in keywords
+        or "Election" in topics
+    ):
+        return "Election"
+    if (
+        "vote" in keywords
+        or "pmqs" in keywords
+        or "parliamentary" in keywords
+        or "debate" in keywords
+        or "Parliament" in topics
+    ):
+        return "Parliamentary Vote"
+    if event_type == "EconomicEvent" and (
+        {"Economic Policy", "Public Spending", "Taxation"} & topics
+    ):
+        return "Budget"
+    if event_type == "PoliticalEvent" and (
+        {"Government Policy", "Parliament", "Immigration", "Healthcare"} & topics
+    ):
+        return "Policy Announcement"
+
+    return raw_name
 
 
 def bind_namespaces(graph):
@@ -182,17 +246,26 @@ def add_events(graph, article, record):
         if not event_name:
             continue
 
-        uri = event_uri(record["id"], event_name)
+        uri = event_uri(event_name, event.get("date"), event.get("location"))
         event_type = event.get("type") or "NewsEvent"
+        canonical_name = canonical_event_name(event, record) or event_name
 
         graph.add((uri, RDF.type, NEWS.NewsEvent))
         if event_type != "NewsEvent":
             graph.add((uri, RDF.type, NEWS[event_type]))
-        add_name(graph, uri, event_name)
+        add_name(graph, uri, canonical_name)
+        if canonical_name != event_name:
+            add_literal(graph, uri, SCHEMA.alternateName, event_name)
         graph.add((article, NEWS.coversEvent, uri))
 
         if event.get("date"):
-            add_literal(graph, uri, NEWS.eventDate, event["date"], XSD.date)
+            add_literal(
+                graph,
+                uri,
+                NEWS.eventDate,
+                normalise_event_date(event["date"]),
+                XSD.date,
+            )
 
         if event.get("location"):
             loc_uri = location_uri(event["location"])
