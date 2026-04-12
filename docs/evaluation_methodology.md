@@ -52,7 +52,7 @@ Goal: confirm that the pipeline produces syntactically valid and structurally co
 - pipeline smoke tests
 - normalisation tests
 - RDF tests
-- successful execution of the end-to-end pipeline in [main.py](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/src/main.py)
+- successful execution of the end-to-end pipeline in `src/main.py`
 
 ## 2. Competency-Question Coverage
 
@@ -231,7 +231,7 @@ Goal: quantify runtime cost and show that the system can be rerun consistently.
 
 ### Metrics
 
-- end-to-end runtime of [main.py](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/src/main.py)
+- end-to-end runtime of `src/main.py`
 - runtime of each major stage:
   - collection
   - normalisation
