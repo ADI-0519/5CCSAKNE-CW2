@@ -35142,4 +35142,3 @@ news:Negative a news:Sentiment ;
         news:Organisation,
         schema:Organization ;
     schema:name "The Guardian" .
-
