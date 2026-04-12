@@ -100,21 +100,25 @@ This is a much richer state than the earlier prototype, where event modelling, t
 
 The ontology is now largely aligned with the implemented pipeline, but a few important terms remain weakly populated or unpopulated.
 
-`O1.` `news:worksFor` is still modelled but not populated in a robust way.
-
-The current pipeline identifies article authors and publishers, but it does not yet consistently materialise explicit journalist-to-organisation affiliation triples. This matters for competency questions about journalists working for the same organisation.
-
-`O2.` Event modelling exists, but event identity is still weak.
+`O1.` Event modelling exists, but event identity is still weak.
 
 The system now creates event candidates and event triples, but many events are still generic or article-local rather than canonically resolved across multiple articles. This weakens questions that depend on multiple publishers covering the same event.
 
-`O3.` `news:NewsEvent`, `news:PoliticalEvent`, and `news:EconomicEvent` are populated, but not yet strongly normalised.
+`O2.` `news:NewsEvent`, `news:PoliticalEvent`, and `news:EconomicEvent` are populated, but not yet strongly normalised.
 
 The issue is no longer whether events exist at all. The real issue is whether event instances are specific, stable, and reusable enough for strong cross-article querying.
 
-`O4.` Provenance and confidence are not modelled for completion outputs.
+`O3.` Provenance and confidence are not modelled for completion outputs.
 
 The current ontology and pipeline do not yet attach confidence scores, evidence spans, or source provenance to completion-generated assertions. This is especially relevant for AI-assisted extraction and enrichment.
+
+`O4.` No inverse or symmetric properties are declared.
+
+The ontology does not yet declare inverse properties (e.g. an inverse of `news:hasAuthor`) or mark symmetric relationships. This limits some advanced SPARQL reasoning patterns and would be needed for a production-grade ontology.
+
+`O5.` `news:worksFor` affiliations are inferred per-article rather than canonically asserted.
+
+The pipeline materialises `news:worksFor` triples whenever an author and publisher co-occur on an article, so the property is populated. However, affiliation is derived article-by-article rather than from a canonical journalist profile, which means a journalist who writes for multiple outlets would have multiple `worksFor` triples without temporal scoping or a primary affiliation marker.
 
 ## Remaining Incomplete Instance Elements
 
@@ -134,9 +138,9 @@ Some event nodes are still broad placeholders, such as policy-style events infer
 
 OpenAI completion and heuristic completion can improve sentiment, section, article subtype, and topics, but the stored graph does not yet preserve why a given completion was accepted.
 
-`I5.` `news:worksFor` remains absent from the instance graph.
+`I5.` Journalist identity is not deduplicated across sources.
 
-This is the clearest important ontology-property gap still visible in the current KG.
+The same journalist may appear under slightly different name forms (e.g. "Jessica Elgot" vs "Jessica Elgot and Rajeev Syal") and the pipeline creates separate person nodes for each variant. This weakens journalist-centric competency questions.
 
 ## Why These Remaining Gaps Matter
 
@@ -144,7 +148,7 @@ These gaps do not stop the system from producing a useful KG, but they weaken th
 
 - CQs about politicians, parties, and government bodies are now much better supported than before, but still depend on the quality of heuristic or LLM-assisted typing.
 - CQs about events across multiple publishers depend on better event identity resolution.
-- CQs involving journalist affiliation remain weak until `news:worksFor` is populated.
+- CQs involving journalist affiliation are now supported via `news:worksFor` triples, but could be strengthened with canonical journalist profiles and name deduplication.
 - CQs using sentiment and article subtype are now supported, but their quality still depends on heuristic or LLM classification accuracy.
 - CQs involving follow-up links are now more realistic, but still heuristic rather than fully editorially grounded.
 
@@ -212,7 +216,7 @@ This is one of the clearest remaining areas for improvement.
 
 The most important remaining completion tasks are:
 
-1. Materialise `news:worksFor` from reliable author-publisher evidence.
+1. Deduplicate journalist names and consolidate `news:worksFor` into canonical affiliation triples.
 2. Improve event grounding so the same real-world event is reused across related articles.
 3. Extend OpenAI completion beyond section, sentiment, subtype, and extra topics into stronger political-actor and event refinement.
 4. Add confidence or provenance tracking for completion-derived triples.
