@@ -208,3 +208,4 @@ news:worksFor a rdf:Property ;
     rdfs:domain news:Journalist ;
     rdfs:range news:NewsOrganisation ;
     rdfs:subPropertyOf schema:worksFor .
+
