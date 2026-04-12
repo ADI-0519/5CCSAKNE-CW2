@@ -33,7 +33,7 @@ Return the result as a numbered list.
 For each question, add a one-line justification explaining what new information need it covers.
 
 Justification:
-# TODO: Add justification
+The manually authored questions were written with the team's domain knowledge, but they risk being too narrow or overlapping. Using an LLM to generate a complementary set ensured broader coverage of query styles (counting, comparison, co-occurrence, trend) and surfaced information needs we had not considered, such as journalist collaboration, cross-publisher event coverage, and co-mention patterns. The generated questions were then manually reviewed and revised to align with the fixed March–April 2026 time window and the actual ontology terms before being accepted into the final set.
 
 Used for: `docs/competency_questions.md`
 
@@ -58,7 +58,7 @@ Return:
 - the minimum code changes needed in the RDF generation step
 
 Justification:
-# TODO: Add justification
+The ontology was initially drafted locally without a systematic check against established vocabularies. Running an LLM review against Schema.org and BBC Core Concepts helped identify where local classes should become explicit subclasses, where generic object properties should be typed subproperties, and where the distinction between publisher entities and mentioned organisations was underspecified. The output fed directly into the alignment table in the mapping specification and informed the RDF generation refactor that introduced typed subproperties such as `news:hasAuthor`, `news:publishedBy`, and `news:hasTopic`.
 
 Used for: `docs/mapping_specification.md` and the ontology/RDF alignment refactor.
 
@@ -79,7 +79,7 @@ Include:
 - validation notes and ambiguity warnings
 
 Justification:
-# TODO: Add justification
+Rather than writing the mapping table by hand from memory, we used the LLM to systematically enumerate every source field and every extracted entity type and propose its ontology target, expected RDF form, and any validation concerns. This forced an explicit, auditable record of every mapping decision and surfaced ambiguities early, for example the overlap between `source.name` as a publisher label and as an organisation entity, and the difference between direct metadata mappings and extraction-derived mappings. The result became the authoritative mapping specification that guided both `json_to_rdf.py` and `build_ontology.py`.
 
 Used for: `docs/mapping_specification.md`
 
@@ -100,7 +100,7 @@ For each item, explain:
 Then propose a RAG-based completion workflow that constrains outputs to the ontology.
 
 Justification:
-# TODO: Add justification
+Identifying incompleteness rigorously requires looking at the ontology, the instance graph, and the competency questions together, which is time-consuming to do manually. Using an LLM to analyse the prototype KG across all three layers produced a structured list of gaps, their impact on CQ coverage, and concrete enrichment suggestions. This became the basis for the completion analysis document and directly shaped the design of the `complete_kg.py` enrichment stage, including the decision to prioritise sentiment refinement, section assignment, topic expansion, article subtype reinforcement, and `news:hasFollowUp` materialisation.
 
 Used for: `docs/completion_analysis.md`
 
@@ -120,7 +120,7 @@ It should cover:
 Return the methodology as a concise, coursework-ready plan.
 
 Justification:
-# TODO: Add justification
+Designing an evaluation methodology that covers performance, extraction quality, completion quality, CQ coverage, and a KG-vs-LLM baseline comparison is complex enough that starting from scratch would risk missing important dimensions. Using an LLM to produce an initial coursework-ready plan gave us a comprehensive framework covering all relevant metric categories, which we then refined to match the actual pipeline stages and artefacts. The resulting methodology document directly informed the evaluation code in `src/evaluation/` and the manual audit template in `data/evaluation/`.
 
 Used for: `docs/evaluation_methodology.md`
 
