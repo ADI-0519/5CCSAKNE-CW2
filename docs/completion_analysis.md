@@ -4,20 +4,21 @@ This document explains what remains incomplete in the UK politics and policy kno
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with Wikidata as a structured data source and OpenAI used for extraction, classification, and completion.`
 
 ## Current Pipeline State
 
-The current codebase now has two distinct enrichment layers:
+The current codebase now has three data paths feeding into the KG:
 
-1. an initial extraction stage over normalised Guardian and NewsAPI article records
-2. a later completion/enrichment stage over the prototype RDF graph
+1. a textual extraction pipeline over normalised Guardian and NewsAPI article records (NLP-based)
+2. a direct structured mapping from Wikidata entity records (no NLP)
+3. a completion/enrichment stage over the merged prototype RDF graph
 
-This means completion is no longer a purely theoretical stage. It is already implemented in the pipeline and runs after ontology construction and instance graph generation.
+This means completion is no longer a purely theoretical stage. It is already implemented in the pipeline and runs after ontology construction, instance graph generation, and Wikidata integration.
 
-### What the base extraction stage already adds
+### What the base extraction stage already adds (textual path)
 
-The extraction pipeline currently produces:
+The extraction pipeline over Guardian and NewsAPI articles currently produces:
 
 - article instances with publication date, URL, author, publisher, section, summary, content, tags, and word count
 - article subtype labels such as `news:NewsArticle`, `news:OpinionArticle`, and `news:BreakingNewsArticle`
@@ -35,6 +36,17 @@ The extraction pipeline currently produces:
 - follow-up candidates
 
 The extraction stage is mainly heuristic, but it now also supports optional OpenAI-based extraction with a cached fallback. This means the project already uses AI in a structured and programmatic way rather than as a manual post-processing step.
+
+### What the Wikidata structured mapping adds
+
+The Wikidata collection and mapping stage queries the public Wikidata SPARQL endpoint and directly maps structured entity records to RDF without any NLP processing. This provides:
+
+- UK politicians with party affiliation, constituency, gender, and date of birth
+- political parties with founding date, dissolution date, headquarters, and leader
+- government bodies with headquarters
+- `rdfs:seeAlso` links back to Wikidata URIs for provenance
+
+This substantially strengthens the KG's coverage of political actors, parties, and government bodies beyond what heuristic extraction from article text alone can achieve.
 
 ### What the completion stage already adds
 
@@ -122,13 +134,13 @@ The pipeline materialises `news:worksFor` triples whenever an author and publish
 
 ## Remaining Incomplete Instance Elements
 
-`I1.` Cross-source coverage is still unbalanced.
+`I1.` Cross-source coverage is now multi-source but with different strengths.
 
-The dataset is now genuinely multi-source, but it remains Guardian-heavy because NewsAPI developer-tier access is restricted to the first 100 results in the fixed time window. This does not invalidate the source mix, but it does limit some cross-source comparisons.
+The article corpus is Guardian-heavy because NewsAPI developer-tier access is restricted. However, the Wikidata structured source now provides broad coverage of UK politicians, political parties, and government bodies independently of article extraction. The KG draws from both textual and structured sources as required by the coursework.
 
-`I2.` Political-actor typing is present but still incomplete.
+`I2.` Political-actor typing is present but still incomplete for article-extracted mentions.
 
-The pipeline now identifies politicians, political parties, and government bodies heuristically, but this is still incomplete for ambiguous or previously unseen names. Some actors will still remain under generic person or organisation mentions.
+The Wikidata path now provides strong baseline coverage of politicians, parties, and government bodies through direct structured mapping. However, political actors mentioned in article text are still typed heuristically, and some actors extracted from articles will remain under generic person or organisation types when they cannot be matched to known entities.
 
 `I3.` Event instances are present but still somewhat generic.
 
