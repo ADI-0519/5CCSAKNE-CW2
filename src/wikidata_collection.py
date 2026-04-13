@@ -191,13 +191,21 @@ def collect_wikidata(save_snapshot=True):
     body_bindings = run_sparql_query(GOVERNMENT_BODIES_QUERY, "government bodies")
 
     politicians = deduplicate_by_name(
-        [parse_politician(b) for b in politician_bindings if is_valid_label(binding_value(b, "personLabel"))]
+        [
+            parse_politician(b)
+            for b in politician_bindings
+            if is_valid_label(binding_value(b, "personLabel"))
+        ]
     )
     parties = deduplicate_by_name(
         [parse_party(b) for b in party_bindings if is_valid_label(binding_value(b, "partyLabel"))]
     )
     government_bodies = deduplicate_by_name(
-        [parse_government_body(b) for b in body_bindings if is_valid_label(binding_value(b, "bodyLabel"))]
+        [
+            parse_government_body(b)
+            for b in body_bindings
+            if is_valid_label(binding_value(b, "bodyLabel"))
+        ]
     )
 
     payload = {
@@ -216,7 +224,9 @@ def collect_wikidata(save_snapshot=True):
     if save_snapshot:
         RAW_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
         snapshot_path = RAW_SNAPSHOT_DIR / "wikidata_entities.json"
-        snapshot_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        snapshot_path.write_text(
+            json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
         print(f"[WIKIDATA] Saved snapshot to {snapshot_path}")
 
     return payload
