@@ -1,7 +1,7 @@
 # Prompt Log
 
-## P00: Initial Plan 
-Task: Generate an overall plan then refine it. 
+## P00: Initial Plan
+Task: Generate an overall plan then refine it.
 
 Prompts:
 -hey gpt get yourself familiar with our coursework content. this group chat is mean to focus on this knowledge engineering course. Our plan is to work on current news, where we write a python script to use LLM for data extraction and normalization from data sources, producing suitable output for importing into our own ontology. Ideal pipeline will be: data sources -> Python + AI extraction -> validated JSON -> RDF/OWL generation -> upload/import into WebProtégé.
@@ -11,7 +11,7 @@ Prompts:
 -implement the unfinished code based on this plan
 
 Justification:
-Moving our initial idea into a more concrete planning. Starting with the pipeline we discussed, giving it to AI for a concrete overall plan generation. Then, fine-tune it based on what we want and what we have. After that, modify it lively based on the change of situations. At the end, after putting initial pipeline and main.py, we asked AI to finish unfinished code part. All modification has been checked manually. 
+Moving our initial idea into a more concrete planning. Starting with the pipeline we discussed, giving it to AI for a concrete overall plan generation. Then, fine-tune it based on what we want and what we have. After that, modify it lively based on the change of situations. At the end, after putting initial pipeline and main.py, we asked AI to finish unfinished code part. All modification has been checked manually.
 
 Used for: Planning
 
@@ -135,6 +135,6 @@ Prompts:
 -check again for this coursework description, make sure the report has everything that was required to be written in the report. Add and modify if there are things missing
 
 Justification:
-Start with a complete report which includes everything. Then modify the report based on the coureswork description. After that, reduce the page count to a reasonable number. At the end, double check with the missing information in the description. All content has been check manually.  
+Start with a complete report which includes everything. Then modify the report based on the coureswork description. After that, reduce the page count to a reasonable number. At the end, double check with the missing information in the description. All content has been check manually.
 
 Used for: `/Report.tex`
