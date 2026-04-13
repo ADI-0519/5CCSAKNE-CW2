@@ -22,13 +22,45 @@ pip install -r requirements.txt
 pre-commit install
 ```
 
+## Running the Pipeline
+
+Use cached raw JSON snapshots for a reproducible offline run:
+
+```bash
+.venv/bin/python -m src.main --from-cache
+```
+
+Run against the live GuardianAPI and NewsAPI sources:
+
+```bash
+.venv/bin/python -m src.main
+```
+
+Live API mode reads `NEWS_API_KEY` and `GUARDIAN_API_KEY` from `.env` or the shell environment. By default, live runs save new raw snapshots under `data/raw`.
+
+To run from specific cached snapshots:
+
+```bash
+.venv/bin/python -m src.main --from-cache \
+  --newsapi-snapshot data/raw/newsapi/20260407T122854Z.json \
+  --guardian-snapshot data/raw/guardian/20260407T122859Z.json
+```
+
+To run live collection without writing new raw snapshots:
+
+```bash
+.venv/bin/python -m src.main --no-save-snapshots
+```
+
 
 ## Collaboration Rules
 
-- Work through feature branches and open pull requests into `main`.
+- Work through feature branches and open pull requests into `dev`.
+- Keep `dev` as the integration branch during development.
+- Merge `dev` into `main` only for the final coursework submission or release.
 - Keep prompts, mappings, and report artefacts versioned in the repository.
 - Do not commit secrets or private datasets.
-- Use the branch protection checklist in `.github/REPOSITORY_SETUP.md` after creating the GitHub repository.
+- Use the pull request template, CODEOWNERS review assignments, and CI checks in `.github/` before merging.
 
 ## Coursework Deliverables
 

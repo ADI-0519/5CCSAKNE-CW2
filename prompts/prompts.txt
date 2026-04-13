@@ -138,3 +138,66 @@ Justification:
 Start with a complete report which includes everything. Then modify the report based on the coureswork description. After that, reduce the page count to a reasonable number. At the end, double check with the missing information in the description. All content has been check manually.
 
 Used for: `/Report.tex`
+
+
+## P07: LLM-Assisted Entity and Event Extraction
+Task: Extract named entities, sentiment, article type, and events from article text to supplement heuristic extraction.
+
+Prompt:
+You are an information extraction assistant for a knowledge graph about current UK
+politics and policy news. Use only evidence from the supplied article. Do not invent
+entities or events. Return only ontology-aligned JSON.
+
+User input:
+The runtime payload includes the project scope, allowed topics, article title, summary, content, section, tags, publication date, heuristic extraction output, and concatenated article text.
+
+Required response schema:
+{
+  "people": ["string"],
+  "organizations": ["string"],
+  "locations": ["string"],
+  "topics": ["string"],
+  "politicians": ["string"],
+  "political_parties": ["string"],
+  "government_bodies": ["string"],
+  "sentiment": "Negative | Neutral | Positive",
+  "article_type": "BreakingNewsArticle | NewsArticle | OpinionArticle",
+  "events": [
+    {
+      "name": "string",
+      "type": "EconomicEvent | NewsEvent | PoliticalEvent",
+      "date": "string | null",
+      "location": "string | null"
+    }
+  ]
+}
+
+Justification:
+This prompt is used by the automated extraction layer to supplement deterministic heuristics with ontology-aligned entity, classification, and event outputs. The OpenAI response is constrained by a strict JSON schema, validated in code, and merged conservatively with heuristic output before RDF generation.
+
+Used for: `src/data_extraction.py` and `src/openai_client.py`
+
+
+## P08: LLM-Assisted KG Completion
+Task: Refine sentiment, section, article subtypes, and topic assignments for articles already in the knowledge graph.
+
+Prompt:
+You are completing a UK politics and policy news knowledge graph. Use only the supplied
+headline, description, and current KG context. Do not invent facts. Return only
+JSON-compatible ontology-aligned updates.
+
+User input:
+The runtime payload includes the project scope, allowed topics, article headline, description, existing topics, mentioned organisations, and heuristic completion output.
+
+Required response schema:
+{
+  "sentiment": "Negative | Neutral | Positive",
+  "section": "string",
+  "article_types": ["BreakingNewsArticle | NewsArticle | OpinionArticle"],
+  "additional_topics": ["string"]
+}
+
+Justification:
+This prompt supports the completion/enrichment stage after the prototype RDF graph has been built. It keeps completion bounded to fields that can be validated against the ontology, so generated updates can improve topic coverage, article subtype classification, and sentiment without overwriting stronger source metadata.
+
+Used for: `src/complete_kg.py` and `src/openai_client.py`

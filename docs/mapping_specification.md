@@ -22,24 +22,32 @@ This is important because some ontology terms are populated directly from source
 
 ## Source Design
 
-The project combines both textual and structured data from the two APIs.
+The coursework requires at least one textual data source and one structured data source. The project satisfies this through two complementary APIs that provide different kinds of data.
 
-### Textual source data
+### Textual data source: Guardian API (full article body text)
 
-- article title
-- summary / trail text / description
-- article body text or content snippet
+The Guardian API serves as the primary **textual** data source. It returns the full article body text via the `bodyText` field, which provides complete unstructured natural-language content. This text is the primary input for NLP-based extraction: named entity recognition of people, organisations, locations, and topics; sentiment classification; event detection; and article subtype inference. The pipeline processes this free text using both heuristic pattern matching and LLM-assisted structured extraction to produce ontology-aligned triples.
 
-### Structured source data
+Key textual fields used for NLP extraction:
+- `fields.bodyText` — full unstructured article body (typically 500–2000 words)
+- `fields.trailText` — editorial summary paragraph
+- `webTitle` — article headline
 
-- source/publisher name
-- publication date
-- update timestamp
-- section name
-- URL
-- author/byline
-- tags
-- word count
+### Structured data source: NewsAPI (JSON metadata records)
+
+NewsAPI serves as the primary **structured** data source. It returns well-typed JSON records with explicit metadata fields that map directly to ontology properties without NLP extraction. These fields are already structured key-value pairs that can be transformed into RDF triples via direct field-to-property mapping.
+
+Key structured fields mapped directly to RDF:
+- `source.name` — publisher name, mapped to `news:publishedBy`
+- `author` — byline string, mapped to `news:hasAuthor`
+- `publishedAt` — ISO 8601 timestamp, mapped to `news:publishedDate`
+- `url` — canonical article URL, mapped to `news:articleURL`
+- `title` — headline string, mapped to `schema:headline`
+- `description` — summary string, mapped to `schema:description`
+
+### Why both sources are needed
+
+The Guardian API provides rich unstructured text that enables deep entity and relationship extraction, while NewsAPI provides structured metadata from multiple UK news publishers (BBC News, Reuters, Sky News, Financial Times, The Independent) that broadens source coverage. Both APIs deliver JSON responses, but the critical distinction is in what the pipeline does with them: Guardian body text undergoes NLP extraction, while NewsAPI metadata fields are mapped directly to ontology terms.
 
 Both APIs are converted into one shared article schema before any extraction or RDF generation happens.
 
