@@ -45,6 +45,7 @@ WHERE {
 }
 GROUP BY ?personName
 ORDER BY DESC(?articleCount) ?personName
+LIMIT 50
 
 
 # CQ04: Which political parties were mentioned in articles about elections or parliamentary politics?
@@ -266,6 +267,7 @@ WHERE {
 }
 GROUP BY ?personName ?organisationName
 ORDER BY DESC(?articleCount) ?personName ?organisationName
+LIMIT 50
 
 
 # CQ18: Which political events took place in London during the project time window, and when did they occur?
@@ -287,12 +289,11 @@ WHERE {
 ORDER BY ?eventDate ?headline
 
 
-# CQ19: Which political or economic events were covered by more than one news organisation?
-SELECT ?eventName (COUNT(DISTINCT ?publisher) AS ?publisherCount)
+# CQ19: Which political or economic events were covered by more than one article?
+SELECT ?eventName (COUNT(DISTINCT ?article) AS ?articleCount)
 WHERE {
   ?article a news:NewsArticle ;
            news:coversEvent ?event ;
-           news:publishedBy ?publisher ;
            news:publishedDate ?publishedDate .
   ?event a ?eventType ;
          schema:name ?eventName .
@@ -300,8 +301,8 @@ WHERE {
   FILTER(?publishedDate >= "2026-03-06T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "2026-04-06T23:59:59Z"^^xsd:dateTime)
 }
 GROUP BY ?eventName
-HAVING (COUNT(DISTINCT ?publisher) > 1)
-ORDER BY DESC(?publisherCount) ?eventName
+HAVING (COUNT(DISTINCT ?article) > 1)
+ORDER BY DESC(?articleCount) ?eventName
 
 
 # CQ20: Which politicians and political parties were mentioned together most often in the same articles?
@@ -319,3 +320,4 @@ WHERE {
 }
 GROUP BY ?politicianName ?partyName
 ORDER BY DESC(?articleCount) ?politicianName ?partyName
+LIMIT 50

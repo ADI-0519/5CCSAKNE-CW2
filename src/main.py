@@ -19,8 +19,11 @@ from src.data_normalisation import (
 )
 from src.json_to_rdf import convert_json_to_rdf
 from src.run_queries import execute_queries, load_query_definitions, save_results
+from src.wikidata_collection import collect_wikidata, load_cached_wikidata
+from src.wikidata_to_rdf import convert_wikidata_to_rdf
 
 INSTANCE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "new_kg.ttl"
+WIKIDATA_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "wikidata_kg.ttl"
 PROTOTYPE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "prototype_kg.ttl"
 LATEST_QUERY_RESULTS_PATH = Path("output/query_results.json")
 
@@ -83,6 +86,17 @@ def build_arg_parser():
         action="store_true",
         help="Do not write fresh raw API snapshots during live collection.",
     )
+    parser.add_argument(
+        "--wikidata-snapshot",
+        type=Path,
+        default=None,
+        help="Optional path to a cached Wikidata JSON snapshot.",
+    )
+    parser.add_argument(
+        "--skip-wikidata",
+        action="store_true",
+        help="Skip the Wikidata structured data collection stage.",
+    )
     return parser
 
 
@@ -92,7 +106,10 @@ def main():
     print(f"[PIPELINE] Starting news KG pipeline at {timestamp}")
     print(f"[PIPELINE] Scope: {CONFIG['project_scope']}")
 
-    print("[PIPELINE] Stage 1: Collect source data")
+    # ------------------------------------------------------------------
+    # Stage 1: Collect all source data (textual + structured)
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 1a: Collect news source data (Guardian + NewsAPI)")
     if args.from_cache:
         print("[PIPELINE] Mode: offline cached snapshots")
         collected_data = load_cached_sources(
@@ -103,43 +120,88 @@ def main():
         print("[PIPELINE] Mode: live API collection")
         collected_data = collect_all_sources(save_snapshots=not args.no_save_snapshots)
 
-    print("[PIPELINE] Stage 2: Normalise source records")
+    print("[PIPELINE] Stage 1b: Collect Wikidata structured data")
+    wikidata_data = None
+    if args.skip_wikidata:
+        print("[PIPELINE] Wikidata stage skipped (--skip-wikidata)")
+    elif args.from_cache or args.wikidata_snapshot:
+        wikidata_data = load_cached_wikidata(snapshot_path=args.wikidata_snapshot)
+    else:
+        wikidata_data = collect_wikidata(save_snapshot=not args.no_save_snapshots)
+
+    # ------------------------------------------------------------------
+    # Stage 2: Normalise news source records
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 2: Normalise news source records")
     source_records = normalise_collected_sources(collected_data)
     save_normalised_articles(source_records, filename="normalised_articles.json")
     save_json(
         source_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_normalised_articles.json"
     )
 
+    # ------------------------------------------------------------------
+    # Stage 3: Extract KG-ready information (NLP over textual sources)
+    # ------------------------------------------------------------------
     print("[PIPELINE] Stage 3: Extract KG-ready information")
     extracted_records = extract_relevant_information(source_records)
     save_json(
         extracted_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_extracted_articles.json"
     )
 
+    # ------------------------------------------------------------------
+    # Stage 4: Normalise extracted records
+    # ------------------------------------------------------------------
     print("[PIPELINE] Stage 4: Normalise extracted records")
     kg_records = normalise_data(extracted_records)
     save_json(kg_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_kg_records.json")
 
+    # ------------------------------------------------------------------
+    # Stage 5: Build ontology (TBox)
+    # ------------------------------------------------------------------
     print("[PIPELINE] Stage 5: Build ontology")
     ontology_graph = build_ontology()
     save_rdf(ontology_graph, ONTOLOGY_OUTPUT_PATH)
 
-    print("[PIPELINE] Stage 6: Convert records to RDF instances")
+    # ------------------------------------------------------------------
+    # Stage 6: Convert news records to RDF (textual source → RDF)
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 6: Convert news records to RDF instances")
     instance_graph = convert_json_to_rdf(kg_records)
     save_rdf(instance_graph, INSTANCE_KG_PATH)
     save_rdf(instance_graph, f"output/{timestamp}_instance_kg.ttl")
 
-    print("[PIPELINE] Stage 7: Merge ontology and instance triples")
-    prototype_graph = merge_graphs(ontology_graph, instance_graph)
+    # ------------------------------------------------------------------
+    # Stage 7: Map Wikidata to RDF (structured source → RDF, no NLP)
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 7: Map Wikidata structured data to RDF")
+    wikidata_graph = Graph()
+    if wikidata_data is not None:
+        wikidata_graph = convert_wikidata_to_rdf(wikidata_data)
+        save_rdf(wikidata_graph, WIKIDATA_KG_PATH)
+        save_rdf(wikidata_graph, f"output/{timestamp}_wikidata_kg.ttl")
+    else:
+        print("[PIPELINE] No Wikidata data to map (skipped)")
+
+    # ------------------------------------------------------------------
+    # Stage 8: Merge all graphs into prototype KG
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 8: Merge ontology, news instances, and Wikidata triples")
+    prototype_graph = merge_graphs(ontology_graph, instance_graph, wikidata_graph)
     save_rdf(prototype_graph, PROTOTYPE_KG_PATH)
     save_rdf(prototype_graph, f"output/{timestamp}_prototype_kg.ttl")
 
-    print("[PIPELINE] Stage 8: Enrich the KG")
+    # ------------------------------------------------------------------
+    # Stage 9: Enrich / complete the KG
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 9: Enrich the KG")
     completed_graph = enrich_graph(prototype_graph)
     save_rdf(completed_graph, COMPLETED_KG_PATH)
     save_rdf(completed_graph, f"output/{timestamp}_completed_kg.ttl")
 
-    print("[PIPELINE] Stage 9: Run competency queries")
+    # ------------------------------------------------------------------
+    # Stage 10: Run SPARQL competency queries
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 10: Run competency queries")
     query_results = execute_queries(completed_graph, load_query_definitions())
     timestamped_results = Path("output") / f"{timestamp}_query_results.json"
     save_results(query_results, LATEST_QUERY_RESULTS_PATH)

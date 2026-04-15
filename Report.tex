@@ -46,8 +46,10 @@
 
 This project builds an automated knowledge graph (KG) for current UK politics and
 policy news. The pipeline collects articles from the Guardian API and NewsAPI for
-the fixed window 6 March 2026 to 6 April 2026, extracts entities and events from
-article text, maps the results into RDF, enriches the prototype graph with a
+the fixed window 6 March 2026 to 6 April 2026, queries the Wikidata SPARQL
+endpoint for structured entity data on UK politicians, political parties, and
+government bodies, extracts entities and events from article text, maps both
+textual and structured sources into RDF, enriches the prototype graph with a
 completion stage, and executes 20 SPARQL competency queries over the final graph.
 
 \subsection{Team Roles}
@@ -65,9 +67,9 @@ The data-ingestion/LLM pipeline experts --- \textbf{Yingtao Zheng} and \textbf{I
 \begin{itemize}[leftmargin=*,nosep]
     \item \textbf{Programming language:} Python.
     \item \textbf{Knowledge graph stack:} RDF, Turtle, SPARQL, \code{rdflib}.
-    \item \textbf{Sources:} Guardian API and NewsAPI.
+    \item \textbf{Sources:} Guardian API (textual), Wikidata SPARQL endpoint (structured), NewsAPI (supplementary).
     \item \textbf{LLM integration:} OpenAI structured outputs with JSON-schema validation and local caching.
-    \item \textbf{Project artefacts:} ontology in \filepath{ontology/news_ontology.ttl}, queries in \filepath{queries/news_competency_queries.rq}, prompts in \filepath{prompts/prompts.md}.
+    \item \textbf{Project artefacts:} ontology in \filepath{ontology/news_ontology.ttl}, queries in \filepath{queries/news_competency_queries.rq}, prompts in \filepath{prompts/prompts.txt}.
     \item \textbf{Testing:} \code{pytest} suite covering ontology construction, extraction, normalisation, RDF conversion, completion, and query execution.
 \end{itemize}
 
@@ -84,40 +86,55 @@ politics domain.
 
 Another practical deviation concerns source balance. NewsAPI developer-tier access
 returns only the first 100 results, so in the evaluated run it contributed only
-3 retained articles, while the Guardian supplied 255. The report therefore treats
-NewsAPI as a supplementary source rather than a co-equal corpus.
+3 retained articles, while the Guardian supplied 255. To strengthen the structured
+data path, the project added Wikidata as the primary structured data source,
+querying the public SPARQL endpoint for UK politicians, political parties, and
+government bodies. These entity records are mapped directly to RDF without NLP,
+complementing the textual extraction pipeline over Guardian article body text.
 
 %------------------------------------------------------------------
 \section{Data Source Selection}\label{sec:data_sources}
 %------------------------------------------------------------------
 
-\subsection{Structured and Textual Sources}\label{sec:data_collection}
+\subsection{Textual and Structured Sources}\label{sec:data_collection}
 
-Data collection is implemented in \filepath{src/data_collection.py}. The pipeline
-calls the Guardian API page by page and fetches the first available NewsAPI page
-for the fixed project window. Query construction and scope restrictions are defined
-in \filepath{src/config.py}, including 14 domain query terms, Guardian section/tag
-filters, a whitelist of accepted NewsAPI publishers, and UK-scope keyword checks.
+The coursework requires at least one textual data source and one structured data
+source. This project satisfies that requirement through three complementary sources:
 
-The coursework requires at least one textual and one structured data source. This
-project satisfies that requirement as follows:
 \begin{itemize}[leftmargin=*,nosep]
-    \item \textbf{Structured data source:} JSON metadata from the Guardian API and NewsAPI, including titles, URLs, publication dates, authors, sections, publishers, and related tags.
-    \item \textbf{Textual data source:} article summaries and body text from the same APIs, used for named-entity extraction, topic assignment, event detection, sentiment classification, and completion.
+    \item \textbf{Textual data source --- Guardian API:} The Guardian API returns full
+    article body text via the \code{bodyText} field. This unstructured natural-language
+    content is the primary input for NLP-based extraction: named-entity recognition,
+    topic assignment, event detection, sentiment classification, and article subtype
+    inference. Collection is implemented in \filepath{src/data_collection.py}.
+    \item \textbf{Structured data source --- Wikidata SPARQL endpoint:} The pipeline
+    queries the public Wikidata Query Service for UK politicians, political parties,
+    and government bodies. These typed entity records have explicit fields (name,
+    party, constituency, gender, date of birth, founding date, headquarters) that map
+    directly to ontology classes and properties without any NLP processing. Collection
+    is implemented in \filepath{src/wikidata_collection.py}; direct RDF mapping is
+    implemented in \filepath{src/wikidata_to_rdf.py}.
+    \item \textbf{Supplementary source --- NewsAPI:} NewsAPI provides structured article
+    metadata from multiple UK publishers. These records are normalised into the shared
+    article schema alongside Guardian articles and follow the same extraction pipeline.
+    NewsAPI broadens publisher coverage but is limited by developer-tier API access.
 \end{itemize}
 
-The evaluated run (\code{20260407T010208Z}) produced 258 articles: 255 from the
-Guardian and 3 from NewsAPI. Raw snapshots are saved under
-\filepath{data/raw/}, which makes later offline reruns possible.
+Article collection produced 258 articles (255 from the Guardian, 3 from NewsAPI).
+Wikidata collection produced approximately 5,600 politicians, 960 political parties,
+and 150 government bodies. Raw snapshots are saved under \filepath{data/raw/} for
+offline reruns.
 
 \subsection{How the Sources Were Selected}
 
 The specification allows LLMs and web search to help identify relevant sources, as
 long as the queries and prompts are documented. The project keeps these prompt logs
-in \filepath{prompts/prompts.md}. In practice, the final source choice was guided by
-two constraints from the specification: the data had to match the domain of current
-news, and it had to support both structured mapping and text extraction in an
-automatable pipeline.
+in \filepath{prompts/prompts.txt}. The Guardian API was chosen for its full article
+body text, which enables genuine textual extraction. Wikidata was chosen as the
+structured source because it provides typed entity records for UK political actors
+through a public SPARQL endpoint, requiring no API key and enabling direct
+field-to-property RDF mapping. NewsAPI was retained as a supplementary source for
+publisher diversity.
 
 %------------------------------------------------------------------
 \section{Extension of Existing Ontologies}\label{sec:ontology_design}
@@ -168,7 +185,7 @@ with prompt support and then revised manually to ensure they were relevant,
 non-duplicative, and answerable from the planned KG.
 
 The prompt used for competency-question augmentation is documented in
-\filepath{prompts/prompts.md}. The resulting questions are operationalised by the
+\filepath{prompts/prompts.txt}. The resulting questions are operationalised by the
 20 SPARQL queries stored in \filepath{queries/news_competency_queries.rq}.
 
 %------------------------------------------------------------------
@@ -199,10 +216,18 @@ results without failing end to end.
 \subsection{Mapping Structured and Textual Sources to the KG}
 
 The specification notes that mapping structured data and mapping text require
-different techniques. The project addresses that directly:
+different techniques. The project addresses that directly through two separate
+mapping paths:
 \begin{itemize}[leftmargin=*,nosep]
-    \item \textbf{Structured mapping:} deterministic field-to-property conversion from source JSON into RDF terms such as article URL, publication date, author, publisher, section, and word count.
-    \item \textbf{Text mapping:} heuristic and LLM-assisted extraction from article text into entities, topics, sentiment, article subtype, and event candidates before RDF conversion.
+    \item \textbf{Textual mapping (Guardian articles):} heuristic and LLM-assisted
+    extraction from article body text into entities, topics, sentiment, article
+    subtype, and event candidates, followed by RDF conversion in
+    \filepath{src/json_to_rdf.py}.
+    \item \textbf{Structured mapping (Wikidata entities):} direct field-to-property
+    conversion from Wikidata SPARQL results into RDF triples. Each entity field
+    (name, party, constituency, gender, date of birth, headquarters) maps to a
+    specific ontology class or property without NLP. Implemented in
+    \filepath{src/wikidata_to_rdf.py}.
 \end{itemize}
 
 \subsection{RDF Construction and Completion}\label{sec:rdf_completion}
@@ -226,15 +251,21 @@ word counts, update timestamps, and editorial follow-up links.
   \node[block, below=of norm] (extract) {Heuristic + OpenAI Extraction\\{\scriptsize data\_extraction.py}};
   \node[block, below=of extract] (rdf) {JSON to RDF\\{\scriptsize json\_to\_rdf.py}};
   \node[block, right=2.4cm of extract] (onto) {Ontology Build\\{\scriptsize build\_ontology.py}};
-  \node[block, below=of rdf] (complete) {KG Completion\\{\scriptsize complete\_kg.py}};
+  \node[block, right=2.4cm of api, fill=orange!10] (wiki) {Wikidata SPARQL\\{\scriptsize wikidata\_collection.py}};
+  \node[block, right=2.4cm of rdf, fill=orange!10] (wikirdf) {Wikidata to RDF\\{\scriptsize wikidata\_to\_rdf.py}};
+  \node[block, below=of rdf] (merge) {Merge Graphs};
+  \node[block, below=of merge] (complete) {KG Completion\\{\scriptsize complete\_kg.py}};
   \node[output, below=of complete] (query) {Completed KG + 20 SPARQL Queries};
 
   \draw[arrow] (api) -- (norm);
   \draw[arrow] (norm) -- (extract);
   \draw[arrow] (extract) -- (rdf);
-  \draw[arrow] (rdf) -- (complete);
+  \draw[arrow] (rdf) -- (merge);
+  \draw[arrow] (wiki) -- (wikirdf);
+  \draw[arrow] (wikirdf.south) |- (merge.east);
+  \draw[arrow] (onto.south) |- (merge.east);
+  \draw[arrow] (merge) -- (complete);
   \draw[arrow] (complete) -- (query);
-  \draw[arrow] (onto.west) |- (rdf.east);
 \end{tikzpicture}
 \caption{End-to-end pipeline used in the coursework repository.}\label{fig:pipeline}
 \end{figure}
@@ -248,19 +279,22 @@ word counts, update timestamps, and editorial follow-up links.
 The project defines 20 competency questions, implemented as 20 SPARQL queries in
 \filepath{queries/news_competency_queries.rq}. Ten were written manually and ten
 were generated with LLM assistance and then revised manually. Prompt logs are kept
-in \filepath{prompts/prompts.md}. Query execution is handled by
+in \filepath{prompts/prompts.txt}. Query execution is handled by
 \filepath{src/run_queries.py}, which stores results in \filepath{output/query_results.json}
 and a timestamped output file.
 
 \subsection{Prompt Use}\label{sec:prompts}
 
-Five prompts were explicitly versioned and reused:
+Eight prompts were explicitly versioned and reused:
 \begin{itemize}[leftmargin=*,nosep]
+    \item initial pipeline planning;
     \item competency-question augmentation;
     \item ontology review against reused vocabularies;
     \item source-to-ontology mapping draft;
     \item completion gap analysis;
-    \item evaluation methodology design.
+    \item evaluation methodology design;
+    \item LLM-assisted entity and event extraction (runtime);
+    \item LLM-assisted KG completion (runtime).
 \end{itemize}
 This prompt use was supportive rather than autonomous: outputs were revised by the
 team and encoded into the implemented ontology, mappings, code, and report.
@@ -288,6 +322,9 @@ comes from the concrete validated run \code{20260407T010208Z}, documented in
 Total articles & 258 \\
 Guardian articles & 255 \\
 NewsAPI articles & 3 \\
+Wikidata politicians & $\sim$5,600 \\
+Wikidata political parties & $\sim$960 \\
+Wikidata government bodies & $\sim$150 \\
 \code{NewsArticle} & 172 \\
 \code{OpinionArticle} & 60 \\
 \code{BreakingNewsArticle} & 26 \\
@@ -320,7 +357,7 @@ CQ06 & 9 & negative-sentiment opinion articles found \\
 CQ10 & 297 & follow-up pairs; useful but heuristic \\
 CQ17 & 30,900 & large co-mention space; answerable but noisy \\
 CQ18 & 21 & political events in London with dates \\
-CQ19 & 2 & event types covered by more than one publisher \\
+CQ19 & 6 & political or economic events covered by more than one article \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -339,7 +376,7 @@ The weaker areas are also clear:
     \item some location labels are noisy;
     \item event labels such as ``Policy Announcement'' remain generic;
     \item follow-up links are editorial heuristics rather than ground-truth relations;
-    \item the corpus is strongly imbalanced toward the Guardian.
+    \item the article corpus is Guardian-dominated, though Wikidata provides broad structured entity coverage independently.
 \end{itemize}
 
 \subsection{Completion Impact}
@@ -398,10 +435,11 @@ metadata and broad analytical relations; its remaining weaknesses lie in entity
 precision, generic events, follow-up semantics, and source imbalance.
 
 \paragraph{Future Work.}
-The next improvements are clear from both the code and evaluation: broaden the
-source mix beyond the Guardian, add provenance for completed triples, improve
-named-entity precision with stronger disambiguation, and replace heuristic follow-up
-links with better evidence-grounded editorial progression modelling.
+The next improvements are clear from both the code and evaluation: add provenance
+for completed triples, improve named-entity precision with stronger disambiguation,
+link article-extracted person mentions to Wikidata entities for cross-source entity
+resolution, and replace heuristic follow-up links with better evidence-grounded
+editorial progression modelling.
 
 %------------------------------------------------------------------
 \section{Project Management}\label{sec:management}
@@ -455,6 +493,9 @@ The Guardian Open Platform: \url{https://open-platform.theguardian.com/}
 
 \bibitem{newsapi}
 NewsAPI: \url{https://newsapi.org/}
+
+\bibitem{wikidata}
+Wikidata Query Service: \url{https://query.wikidata.org/}
 
 \bibitem{openai}
 OpenAI API documentation: \url{https://platform.openai.com/docs}

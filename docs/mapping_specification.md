@@ -4,7 +4,7 @@ This document records how the current pipeline maps GuardianAPI and NewsAPI inpu
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with Wikidata as a structured data source and OpenAI used for extraction, classification, and completion.`
 
 ## Mapping Overview
 
@@ -33,23 +33,29 @@ Key textual fields used for NLP extraction:
 - `fields.trailText` — editorial summary paragraph
 - `webTitle` — article headline
 
-### Structured data source: NewsAPI (JSON metadata records)
+### Structured data source: Wikidata SPARQL endpoint (entity records)
 
-NewsAPI serves as the primary **structured** data source. It returns well-typed JSON records with explicit metadata fields that map directly to ontology properties without NLP extraction. These fields are already structured key-value pairs that can be transformed into RDF triples via direct field-to-property mapping.
+Wikidata serves as the primary **structured** data source. The pipeline queries the public Wikidata Query Service via SPARQL to retrieve UK politicians, political parties, and government bodies. These are typed entity records with explicit fields that map directly to ontology classes and properties without any NLP processing.
 
 Key structured fields mapped directly to RDF:
-- `source.name` — publisher name, mapped to `news:publishedBy`
-- `author` — byline string, mapped to `news:hasAuthor`
-- `publishedAt` — ISO 8601 timestamp, mapped to `news:publishedDate`
-- `url` — canonical article URL, mapped to `news:articleURL`
-- `title` — headline string, mapped to `schema:headline`
-- `description` — summary string, mapped to `schema:description`
+- `name` — entity label, mapped to `schema:name`
+- `party` — politician's party affiliation, mapped to `schema:memberOf` → `news:PoliticalParty`
+- `constituency` — politician's constituency, mapped to `news:Location`
+- `gender` — mapped to `schema:gender`
+- `date_of_birth` — mapped to `schema:birthDate` (xsd:date)
+- `inception` / `dissolved` — party founding and dissolution dates, mapped to `schema:foundingDate` / `schema:dissolutionDate`
+- `headquarters` — mapped to `schema:location` → `news:Location`
+- `wikidata_uri` — linked via `rdfs:seeAlso` for provenance
 
-### Why both sources are needed
+### Supplementary source: NewsAPI (JSON metadata records)
 
-The Guardian API provides rich unstructured text that enables deep entity and relationship extraction, while NewsAPI provides structured metadata from multiple UK news publishers (BBC News, Reuters, Sky News, Financial Times, The Independent) that broadens source coverage. Both APIs deliver JSON responses, but the critical distinction is in what the pipeline does with them: Guardian body text undergoes NLP extraction, while NewsAPI metadata fields are mapped directly to ontology terms.
+NewsAPI provides additional structured article metadata from multiple UK news publishers (BBC News, Reuters, Sky News, Financial Times, The Independent). These records are normalised into the shared article schema alongside Guardian articles and follow the same extraction pipeline. NewsAPI broadens publisher coverage but is limited by developer-tier API access.
 
-Both APIs are converted into one shared article schema before any extraction or RDF generation happens.
+### Why these sources are needed
+
+The Guardian API provides rich unstructured text that enables deep entity and relationship extraction through NLP. Wikidata provides structured entity records that populate the KG's political actors, parties, and government bodies through direct field-to-property mapping without NLP. NewsAPI supplements the article corpus with additional publisher coverage.
+
+Guardian articles and NewsAPI articles are normalised into one shared article schema before extraction. Wikidata entities follow a separate direct mapping path into RDF.
 
 ## Unified Article Schema
 
@@ -88,6 +94,26 @@ The following ontology terms are populated directly from normalized source metad
 | `section` | Guardian section / normalized source metadata | Section literal | `news:hasSection`, `schema:articleSection` | `Implemented` |
 | `summary` | Guardian trail text / NewsAPI description | Description literal | `schema:description` | `Implemented` |
 | `word_count` | Guardian field or estimated count | Integer literal | `news:wordCount`, `schema:wordCount` | `Implemented` |
+
+## Stage 1b: Wikidata Structured Mapping
+
+The following ontology terms are populated directly from Wikidata SPARQL results through field-to-property mapping. No NLP is involved.
+
+| Wikidata field | Entity type | RDF representation | Ontology target | Status |
+| --- | --- | --- | --- | --- |
+| `name` | Politician | Person URI + label | `news:Politician`, `schema:Person`, `schema:name` | `Implemented` |
+| `party` | Politician | Party URI + membership link | `news:PoliticalParty`, `schema:memberOf` | `Implemented` |
+| `constituency` | Politician | Location URI + label | `news:Location`, `schema:Place`, `schema:name` | `Implemented` |
+| `gender` | Politician | Gender literal | `schema:gender` | `Implemented` |
+| `date_of_birth` | Politician | Date literal | `schema:birthDate` | `Implemented` |
+| `wikidata_uri` | All | seeAlso link | `rdfs:seeAlso` | `Implemented` |
+| `description` | All | Description literal | `schema:description` | `Implemented` |
+| `name` | Party | Organisation URI + label | `news:PoliticalParty`, `news:Organisation`, `schema:Organization`, `schema:name` | `Implemented` |
+| `inception` | Party | Date literal | `schema:foundingDate` | `Implemented` |
+| `dissolved` | Party | Date literal | `schema:dissolutionDate` | `Implemented` |
+| `headquarters` | Party / Body | Location URI + label | `news:Location`, `schema:location` | `Implemented` |
+| `leader` | Party | Person URI + label | `news:Politician`, `schema:Person`, `schema:name` | `Implemented` |
+| `name` | Government body | Organisation URI + label | `news:GovernmentBody`, `news:Organisation`, `schema:Organization`, `schema:name` | `Implemented` |
 
 ## Stage 2: Extraction-Based Mapping
 
@@ -263,6 +289,9 @@ Status:
 | Event extraction | Extraction | Event node plus links from article | `news:NewsEvent`, `news:PoliticalEvent`, `news:EconomicEvent`, `news:coversEvent`, `news:eventDate`, `news:eventLocation` | `Implemented` |
 | Follow-up story signal | Extraction + RDF + completion | Inter-article link | `news:hasFollowUp` | `Implemented` |
 | Journalist affiliation | RDF derivation from author and publisher | Journalist to publisher link | `news:worksFor` | `Implemented` |
+| Wikidata politician fields | Wikidata SPARQL (direct mapping) | Person URI with party, constituency, gender, DOB | `news:Politician`, `schema:Person`, `schema:memberOf` | `Implemented` |
+| Wikidata party fields | Wikidata SPARQL (direct mapping) | Organisation URI with founding date, HQ, leader | `news:PoliticalParty`, `news:Organisation` | `Implemented` |
+| Wikidata government body fields | Wikidata SPARQL (direct mapping) | Organisation URI with HQ | `news:GovernmentBody`, `news:Organisation` | `Implemented` |
 
 ## External Ontology Alignment
 
@@ -295,6 +324,7 @@ Status:
 ## Key Modelling Notes
 
 - The mapping is now explicitly politics-and-policy focused rather than generic current-news or technology-news focused.
-- Guardian and NewsAPI are treated as complementary sources and are normalised before ontology population.
-- The current system combines deterministic metadata mapping, heuristic extraction, and constrained OpenAI-assisted refinement.
+- Guardian and NewsAPI articles are treated as complementary textual sources and are normalised before ontology population.
+- Wikidata provides a separate structured data path: entity records are mapped directly to RDF without NLP extraction, populating politicians, political parties, and government bodies.
+- The current system combines deterministic metadata mapping, direct structured mapping, heuristic extraction, and constrained OpenAI-assisted refinement.
 - The most important remaining weakness is not the absence of mapped ontology terms. It is the quality and stability of some mapped values, especially event identity, actor typing for ambiguous cases, and provenance for completion outputs.
