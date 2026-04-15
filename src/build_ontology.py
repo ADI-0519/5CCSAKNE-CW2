@@ -341,6 +341,21 @@ def build_ontology() -> Graph:
         NEWS.NewsArticle,
     )
 
+    # property characteristics
+    g.add((NEWS.hasFollowUp, RDF.type, OWL.AsymmetricProperty))
+    g.add((NEWS.hasFollowUp, RDF.type, OWL.IrreflexiveProperty))
+    g.add((NEWS.worksFor, RDF.type, OWL.AsymmetricProperty))
+    g.add((NEWS.publishedBy, RDF.type, OWL.FunctionalProperty))
+
+    g.add((NEWS.authorOf, RDF.type, OWL.ObjectProperty))
+    g.add((NEWS.authorOf, OWL.inverseOf, NEWS.hasAuthor))
+    g.add((NEWS.authorOf, RDFS.domain, NEWS.Journalist))
+    g.add((NEWS.authorOf, RDFS.range, NEWS.NewsArticle))
+    g.add((NEWS.authorOf, RDFS.label, Literal("author of")))
+    g.add((NEWS.authorOf, RDFS.comment, Literal(
+        "Inverse of hasAuthor: links journalist to articles they have written."
+    )))
+
     return g
 
 
