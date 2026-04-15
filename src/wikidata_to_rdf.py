@@ -10,6 +10,7 @@ produce the same kinds of triples from unstructured article body text.
 """
 
 import re
+from datetime import date as _date
 
 from rdflib import RDF, RDFS, XSD, Graph, Literal, Namespace, URIRef
 
@@ -66,7 +67,11 @@ def add_politician(graph, record):
     if record.get("date_of_birth"):
         dob = record["date_of_birth"][:10]
         if len(dob) == 10 and dob[4] == "-":
-            add_literal(graph, uri, SCHEMA.birthDate, dob, XSD.date)
+            try:
+                _date.fromisoformat(dob)
+                add_literal(graph, uri, SCHEMA.birthDate, dob, XSD.date)
+            except ValueError:
+                pass
 
     # Link politician to their party
     party_name = record.get("party")
@@ -108,12 +113,20 @@ def add_party(graph, record):
     if record.get("inception"):
         inception = record["inception"][:10]
         if len(inception) == 10 and inception[4] == "-":
-            add_literal(graph, uri, SCHEMA.foundingDate, inception, XSD.date)
+            try:
+                _date.fromisoformat(inception)
+                add_literal(graph, uri, SCHEMA.foundingDate, inception, XSD.date)
+            except ValueError:
+                pass
 
     if record.get("dissolved"):
         dissolved = record["dissolved"][:10]
         if len(dissolved) == 10 and dissolved[4] == "-":
-            add_literal(graph, uri, SCHEMA.dissolutionDate, dissolved, XSD.date)
+            try:
+                _date.fromisoformat(dissolved)
+                add_literal(graph, uri, SCHEMA.dissolutionDate, dissolved, XSD.date)
+            except ValueError:
+                pass
 
     if record.get("headquarters"):
         hq_uri = location_uri(record["headquarters"])
