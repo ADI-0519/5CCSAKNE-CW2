@@ -20,7 +20,7 @@ REQUEST_HEADERS = {
     "Accept": "application/sparql-results+json",
     "User-Agent": "5CCSAKNE-CW2-KG-Pipeline/1.0 (university coursework project)",
 }
-REQUEST_TIMEOUT = 60
+REQUEST_TIMEOUT = 90
 
 RAW_SNAPSHOT_DIR = Path(CONFIG["RAW_DATA_DIR"]) / "wikidata"
 
@@ -34,10 +34,10 @@ SELECT DISTINCT
   ?partyLabel ?constituencyLabel
   ?genderLabel ?dateOfBirth
 WHERE {
-  ?person wdt:P31 wd:Q5 .
-  ?person wdt:P27 wd:Q145 .
-  ?person wdt:P102 ?party .
-  FILTER NOT EXISTS { ?person wdt:P570 [] }
+  ?person wdt:P31 wd:Q5 ;
+          wdt:P106 wd:Q82955 ;
+          wdt:P27 wd:Q145 ;
+          wdt:P102 ?party .
   OPTIONAL { ?person wdt:P768 ?constituency . }
   OPTIONAL { ?person wdt:P21 ?gender . }
   OPTIONAL { ?person wdt:P569 ?dateOfBirth . }
