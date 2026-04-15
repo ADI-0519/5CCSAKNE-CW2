@@ -1,6 +1,7 @@
 import re
+from datetime import date as _date
 
-from rdflib import RDF, RDFS, XSD, Graph, Literal, Namespace
+from rdflib import RDF, XSD, Graph, Literal, Namespace
 
 NEWS = Namespace("http://example.org/news#")
 SCHEMA = Namespace("https://schema.org/")
@@ -34,9 +35,14 @@ def normalise_event_date(value):
     if not value:
         return None
     value = str(value).strip()
-    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
-        return value
-    return value[:10] if len(value) >= 10 else value
+    candidate = value if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) else (value[:10] if len(value) >= 10 else value)
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", candidate):
+        return None
+    try:
+        _date.fromisoformat(candidate)
+    except ValueError:
+        return None
+    return candidate
 
 
 def event_uri(event_name, event_date=None, event_location=None):
@@ -158,7 +164,6 @@ def add_publisher(graph, article, record):
     publisher = organisation_uri(source_name)
     graph.add((publisher, RDF.type, NEWS.Organisation))
     graph.add((publisher, RDF.type, NEWS.NewsOrganisation))
-    graph.add((publisher, RDF.type, SCHEMA.Organization))
     add_name(graph, publisher, source_name)
     graph.add((article, NEWS.publishedBy, publisher))
     graph.add((article, SCHEMA.publisher, publisher))
@@ -172,7 +177,6 @@ def add_author(graph, article, record, publisher):
 
     author = person_uri(author_name)
     graph.add((author, RDF.type, NEWS.Journalist))
-    graph.add((author, RDF.type, SCHEMA.Person))
     add_name(graph, author, author_name)
     graph.add((article, NEWS.hasAuthor, author))
     graph.add((article, SCHEMA.author, author))
@@ -204,7 +208,6 @@ def add_organisation_entities(graph, article, entities):
     for name in sorted(organisations):
         uri = organisation_uri(name)
         graph.add((uri, RDF.type, NEWS.Organisation))
-        graph.add((uri, RDF.type, SCHEMA.Organization))
         if name in parties:
             graph.add((uri, RDF.type, NEWS.PoliticalParty))
         if name in bodies:
@@ -296,23 +299,6 @@ def build_follow_up_links(graph, records):
             graph.add((current_uri, NEWS.hasFollowUp, follow_uri))
 
 
-def add_rdfs_hints(graph):
-    graph.add((NEWS.NewsArticle, RDFS.subClassOf, SCHEMA.NewsArticle))
-    graph.add((NEWS.Journalist, RDFS.subClassOf, SCHEMA.Person))
-    graph.add((NEWS.Organisation, RDFS.subClassOf, SCHEMA.Organization))
-    graph.add((NEWS.Location, RDFS.subClassOf, SCHEMA.Place))
-    graph.add((NEWS.hasAuthor, RDFS.subPropertyOf, SCHEMA.author))
-    graph.add((NEWS.publishedBy, RDFS.subPropertyOf, SCHEMA.publisher))
-    graph.add((NEWS.hasTopic, RDFS.subPropertyOf, SCHEMA.about))
-    graph.add((NEWS.mentionsPerson, RDFS.subPropertyOf, SCHEMA.mentions))
-    graph.add((NEWS.mentionsOrganisation, RDFS.subPropertyOf, SCHEMA.mentions))
-    graph.add((NEWS.mentionsLocation, RDFS.subPropertyOf, SCHEMA.mentions))
-    graph.add((NEWS.publishedDate, RDFS.subPropertyOf, SCHEMA.datePublished))
-    graph.add((NEWS.hasUpdateTimestamp, RDFS.subPropertyOf, SCHEMA.dateModified))
-    graph.add((NEWS.hasSection, RDFS.subPropertyOf, SCHEMA.articleSection))
-    graph.add((NEWS.articleURL, RDFS.subPropertyOf, SCHEMA.url))
-
-
 def convert_json_to_rdf(normalised_data):
     print("[RDF] Starting RDF conversion stage...")
 
@@ -321,7 +307,6 @@ def convert_json_to_rdf(normalised_data):
 
     graph = Graph()
     bind_namespaces(graph)
-    add_rdfs_hints(graph)
     add_sentiment_scheme(graph)
 
     for record in normalised_data:
