@@ -18,8 +18,20 @@ def add_class(graph, class_uri, label, comment, parent=None):
     graph.add((class_uri, RDFS.comment, Literal(comment)))
 
 
-def add_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
-    graph.add((property_uri, RDF.type, RDF.Property))
+def add_object_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
+    graph.add((property_uri, RDF.type, OWL.ObjectProperty))
+    if parent is not None:
+        graph.add((property_uri, RDFS.subPropertyOf, parent))
+    if domain is not None:
+        graph.add((property_uri, RDFS.domain, domain))
+    if range_ is not None:
+        graph.add((property_uri, RDFS.range, range_))
+    graph.add((property_uri, RDFS.label, Literal(label)))
+    graph.add((property_uri, RDFS.comment, Literal(comment)))
+
+
+def add_datatype_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
+    graph.add((property_uri, RDF.type, OWL.DatatypeProperty))
     if parent is not None:
         graph.add((property_uri, RDFS.subPropertyOf, parent))
     if domain is not None:
@@ -172,7 +184,7 @@ def build_ontology() -> Graph:
 
     # Properties extending Schema.org
 
-    add_property(
+    add_object_property(
         g,
         NEWS.hasAuthor,
         "has author",
@@ -181,7 +193,7 @@ def build_ontology() -> Graph:
         NEWS.Journalist,
         SCHEMA.author,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.publishedBy,
         "published by",
@@ -190,7 +202,7 @@ def build_ontology() -> Graph:
         NEWS.NewsOrganisation,
         SCHEMA.publisher,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.hasTopic,
         "has topic",
@@ -199,7 +211,7 @@ def build_ontology() -> Graph:
         NEWS.Topic,
         SCHEMA.about,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.mentionsPerson,
         "mentions person",
@@ -208,7 +220,7 @@ def build_ontology() -> Graph:
         SCHEMA.Person,
         SCHEMA.mentions,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.mentionsOrganisation,
         "mentions organisation",
@@ -217,7 +229,7 @@ def build_ontology() -> Graph:
         NEWS.Organisation,
         SCHEMA.mentions,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.mentionsLocation,
         "mentions location",
@@ -226,7 +238,7 @@ def build_ontology() -> Graph:
         NEWS.Location,
         SCHEMA.mentions,
     )
-    add_property(
+    add_datatype_property(
         g,
         NEWS.publishedDate,
         "published date",
@@ -235,7 +247,7 @@ def build_ontology() -> Graph:
         XSD.dateTime,
         SCHEMA.datePublished,
     )
-    add_property(
+    add_datatype_property(
         g,
         NEWS.hasUpdateTimestamp,
         "update timestamp",
@@ -244,7 +256,7 @@ def build_ontology() -> Graph:
         XSD.dateTime,
         SCHEMA.dateModified,
     )
-    add_property(
+    add_datatype_property(
         g,
         NEWS.hasSection,
         "has section",
@@ -253,7 +265,7 @@ def build_ontology() -> Graph:
         XSD.string,
         SCHEMA.articleSection,
     )
-    add_property(
+    add_datatype_property(
         g,
         NEWS.articleURL,
         "article URL",
@@ -262,7 +274,7 @@ def build_ontology() -> Graph:
         XSD.anyURI,
         SCHEMA.url,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.worksFor,
         "works for",
@@ -274,7 +286,7 @@ def build_ontology() -> Graph:
 
     # Properties extending BBC Core Concepts
 
-    add_property(
+    add_object_property(
         g,
         NEWS.eventLocation,
         "event location",
@@ -283,7 +295,7 @@ def build_ontology() -> Graph:
         NEWS.Location,
         CORE.eventPlace,
     )
-    add_property(
+    add_datatype_property(
         g,
         NEWS.eventDate,
         "event date",
@@ -292,7 +304,7 @@ def build_ontology() -> Graph:
         XSD.date,
         CORE.startDate,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.coversEvent,
         "covers event",
@@ -304,7 +316,7 @@ def build_ontology() -> Graph:
 
     # New properties
 
-    add_property(
+    add_object_property(
         g,
         NEWS.hasSentiment,
         "has sentiment",
@@ -312,7 +324,7 @@ def build_ontology() -> Graph:
         NEWS.NewsArticle,
         NEWS.Sentiment,
     )
-    add_property(
+    add_datatype_property(
         g,
         NEWS.wordCount,
         "word count",
@@ -320,7 +332,7 @@ def build_ontology() -> Graph:
         NEWS.NewsArticle,
         XSD.integer,
     )
-    add_property(
+    add_object_property(
         g,
         NEWS.hasFollowUp,
         "has follow-up",
@@ -337,7 +349,8 @@ def main():
     g = build_ontology()
 
     classes = set(g.subjects(RDF.type, OWL.Class))
-    properties = set(g.subjects(RDF.type, RDF.Property))
+    obj_props = set(g.subjects(RDF.type, OWL.ObjectProperty))
+    dt_props = set(g.subjects(RDF.type, OWL.DatatypeProperty))
     subclass_triples = list(g.triples((None, RDFS.subClassOf, None)))
     subprop_triples = list(g.triples((None, RDFS.subPropertyOf, None)))
 
@@ -346,17 +359,16 @@ def main():
     bbc_subclasses = [s for s, _, o in subclass_triples if "bbc.co.uk" in str(o)]
     bbc_subprops = [s for s, _, o in subprop_triples if "bbc.co.uk" in str(o)]
 
-    print(f"  Classes:          {len(classes)}")
-    print(f"  Properties:       {len(properties)}")
-    print(f"  Total triples:    {len(g)}")
-    print(
-        f"\n  Schema.org — {len(schema_subclasses)} subclasses, {len(schema_subprops)} subproperties"
-    )
-    print(f"  BBC Core   — {len(bbc_subclasses)} subclasses, {len(bbc_subprops)} subproperties")
+    print(f"Classes: {len(classes)}")
+    print(f"Object properties: {len(obj_props)}")
+    print(f"Datatype properties: {len(dt_props)}")
+    print(f"Total triples: {len(g)}")
+    print(f"\nSchema.org: {len(schema_subclasses)} subclasses, {len(schema_subprops)} subproperties")
+    print(f"BBC Core: {len(bbc_subclasses)} subclasses, {len(bbc_subprops)} subproperties")
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     g.serialize(str(OUTPUT_PATH), format="turtle")
-    print(f"\n  Saved to: {OUTPUT_PATH}")
+    print(f"\nSaved to: {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":
