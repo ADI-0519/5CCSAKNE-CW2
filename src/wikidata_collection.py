@@ -34,18 +34,16 @@ SELECT DISTINCT
   ?partyLabel ?constituencyLabel
   ?genderLabel ?dateOfBirth
 WHERE {
-  ?person wdt:P39 ?position .
-  ?position wdt:P279* wd:Q16707842 .
-
+  ?person wdt:P31 wd:Q5 .
   ?person wdt:P27 wd:Q145 .
   ?person wdt:P102 ?party .
-
+  FILTER NOT EXISTS { ?person wdt:P570 [] }
   OPTIONAL { ?person wdt:P768 ?constituency . }
   OPTIONAL { ?person wdt:P21 ?gender . }
   OPTIONAL { ?person wdt:P569 ?dateOfBirth . }
-
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
 }
+LIMIT 800
 """
 
 POLITICAL_PARTIES_QUERY = """
@@ -250,3 +248,12 @@ def load_cached_wikidata(snapshot_path=None):
         f"{len(data.get('government_bodies', []))} government bodies"
     )
     return data
+
+
+if __name__ == "__main__":
+    payload = collect_wikidata(save_snapshot=True)
+    print(
+        f"\nResults: {len(payload['politicians'])} politicians, "
+        f"{len(payload['political_parties'])} parties, "
+        f"{len(payload['government_bodies'])} government bodies"
+    )
