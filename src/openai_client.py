@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import time
 from pathlib import Path
 
 from src.config import CONFIG
@@ -196,13 +197,22 @@ def request_structured_output(instructions, user_input, response_format):
         print(f"[OPENAI] Structured output skipped: {get_openai_unavailable_reason()}")
         return None
 
-    response = client.responses.create(
-        model=CONFIG["OPENAI_MODEL"],
-        instructions=instructions,
-        input=user_input,
-        text={"format": response_format},
-    )
-    return response_to_json(response)
+    last_exc = None
+    for attempt in range(3):
+        try:
+            response = client.responses.create(
+                model=CONFIG["OPENAI_MODEL"],
+                instructions=instructions,
+                input=user_input,
+                text={"format": response_format},
+            )
+            return response_to_json(response)
+        except Exception as exc:
+            last_exc = exc
+            if attempt < 2:
+                time.sleep(2 ** attempt)  # 1s, then 2s
+
+    raise last_exc
 
 
 def validate_event_payload(event):
