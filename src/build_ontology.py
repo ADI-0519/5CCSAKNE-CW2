@@ -11,7 +11,7 @@ OUTPUT_PATH = Path(__file__).parent.parent / "ontology" / "news_ontology.ttl"
 
 
 def add_class(graph, class_uri, label, comment, parent=None):
-    graph.add((class_uri, RDF.type, RDFS.Class))
+    graph.add((class_uri, RDF.type, OWL.Class))
     if parent is not None:
         graph.add((class_uri, RDFS.subClassOf, parent))
     graph.add((class_uri, RDFS.label, Literal(label)))
@@ -336,7 +336,7 @@ def main():
     print("Building UK Politics and Policy News Ontology (TBox)...\n")
     g = build_ontology()
 
-    classes = set(g.subjects(RDF.type, RDFS.Class))
+    classes = set(g.subjects(RDF.type, OWL.Class))
     properties = set(g.subjects(RDF.type, RDF.Property))
     subclass_triples = list(g.triples((None, RDFS.subClassOf, None)))
     subprop_triples = list(g.triples((None, RDFS.subPropertyOf, None)))
