@@ -61767,4 +61767,3 @@ news:Organisation a owl:Class ;
     rdfs:label "Organisation" ;
     rdfs:comment "An organisation mentioned in current UK politics and policy reporting." ;
     rdfs:subClassOf schema:Organization .
-

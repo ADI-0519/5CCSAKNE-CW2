@@ -1,6 +1,7 @@
-import pytest
 from pathlib import Path
-from rdflib import Graph, Namespace, RDF, RDFS
+
+import pytest
+from rdflib import RDF, RDFS, Graph, Namespace
 
 NEWS = Namespace("http://example.org/news#")
 SCHEMA = Namespace("https://schema.org/")
@@ -22,11 +23,9 @@ def test_politicians_have_seeAlso(kg):
     assert len(politicians) > 0, "no politicians found in KG"
 
     with_see_also = {
-        s for s in politicians
-        if any(
-            str(o).startswith("http://www.wikidata.org/")
-            for o in kg.objects(s, RDFS.seeAlso)
-        )
+        s
+        for s in politicians
+        if any(str(o).startswith("http://www.wikidata.org/") for o in kg.objects(s, RDFS.seeAlso))
     }
     ratio = len(with_see_also) / len(politicians)
     assert ratio >= 0.5, (

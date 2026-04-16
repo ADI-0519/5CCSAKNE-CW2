@@ -279,12 +279,12 @@ def preferred_event_location(locations, text_lower, topics):
     if not locations:
         return None
     if (
-        'Parliament' in topics
-        or 'parliament' in text_lower
-        or 'westminster' in text_lower
-        or 'house of commons' in text_lower
-    ) and 'London' in locations:
-        return 'London'
+        "Parliament" in topics
+        or "parliament" in text_lower
+        or "westminster" in text_lower
+        or "house of commons" in text_lower
+    ) and "London" in locations:
+        return "London"
     return locations[0]
 
 
@@ -381,7 +381,12 @@ def extract_events(article, text, topics, locations):
         elif {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
             fiscal_signal = any(
                 phrase_in_text(text_lower, phrase)
-                for phrase in ["spring budget", "autumn budget", "spending review", "fiscal statement"]
+                for phrase in [
+                    "spring budget",
+                    "autumn budget",
+                    "spending review",
+                    "fiscal statement",
+                ]
             )
             if fiscal_signal:
                 events.append(

@@ -218,4 +218,3 @@ news:NewsArticle a owl:Class ;
     rdfs:label "News Article" ;
     rdfs:comment "A news article from any source in our knowledge graph." ;
     rdfs:subClassOf schema:NewsArticle .
-

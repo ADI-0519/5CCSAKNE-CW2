@@ -35,7 +35,11 @@ def normalise_event_date(value):
     if not value:
         return None
     value = str(value).strip()
-    candidate = value if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) else (value[:10] if len(value) >= 10 else value)
+    candidate = (
+        value
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value)
+        else (value[:10] if len(value) >= 10 else value)
+    )
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", candidate):
         return None
     try:
