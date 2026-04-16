@@ -258,7 +258,6 @@ TOPIC_GROUPS = {
 }
 
 POLITICAL_EVENT_HINTS = [
-    "election",
     "leadership contest",
     "parliamentary vote",
     "commons vote",
@@ -267,10 +266,14 @@ POLITICAL_EVENT_HINTS = [
     "cabinet reshuffle",
     "bill debate",
     "spring statement",
+    "general election",
+    "local election",
+    "by-election",
 ]
 
 ECONOMIC_EVENT_HINTS = [
-    "budget",
+    "spring budget",
+    "autumn budget",
     "spring statement",
     "autumn statement",
     "spending review",
