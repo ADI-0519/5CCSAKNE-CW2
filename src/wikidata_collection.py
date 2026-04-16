@@ -43,7 +43,7 @@ WHERE {
   OPTIONAL { ?person wdt:P569 ?dateOfBirth . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
 }
-LIMIT 800
+LIMIT 2000
 """
 
 POLITICAL_PARTIES_QUERY = """
@@ -69,14 +69,21 @@ SELECT DISTINCT
   ?body ?bodyLabel ?bodyDescription
   ?headquartersLabel
 WHERE {
-  ?body wdt:P31 wd:Q11204 .
   ?body wdt:P17 wd:Q145 .
+  ?body wdt:P31 ?type .
+  FILTER(?type IN (
+    wd:Q11204,
+    wd:Q327333,
+    wd:Q2001305,
+    wd:Q476068,
+    wd:Q1752676
+  ))
 
   OPTIONAL { ?body wdt:P159 ?headquarters . }
 
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
 }
-LIMIT 150
+LIMIT 500
 """
 
 
