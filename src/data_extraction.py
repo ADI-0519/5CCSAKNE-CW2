@@ -248,6 +248,20 @@ def infer_event_type(event_name):
     return "PoliticalEvent"
 
 
+def preferred_event_location(locations, text_lower, topics):
+    # parliamentary events almost always happen in London so prefer it when signal is clear
+    if not locations:
+        return None
+    if (
+        'Parliament' in topics
+        or 'parliament' in text_lower
+        or 'westminster' in text_lower
+        or 'house of commons' in text_lower
+    ) and 'London' in locations:
+        return 'London'
+    return locations[0]
+
+
 def extract_events(article, text, topics, locations):
     text_lower = text.lower()
     event_names = set()
@@ -268,7 +282,7 @@ def extract_events(article, text, topics, locations):
         event_names.add("Parliamentary Vote")
 
     event_date = (article.get("published_at") or "")[:10] or None
-    default_location = locations[0] if locations else None
+    default_location = preferred_event_location(locations, text_lower, topics)
 
     events = []
     for event_name in sorted(event_names):
@@ -359,8 +373,8 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
         return events
 
     event_date = (article.get("published_at") or "")[:10] or None
-    default_location = locations[0] if locations else None
     text_lower = text.lower()
+    default_location = preferred_event_location(locations, text_lower, topics)
     policy_signal = any(
         phrase_in_text(text_lower, phrase)
         for phrase in [
@@ -531,7 +545,7 @@ def apply_openai_extraction(article, text, heuristic_result):
         heuristic_result["events"],
         llm_result.get("events", []),
         default_date=heuristic_result["default_event_date"],
-        default_location=locations[0] if locations else None,
+        default_location=preferred_event_location(locations, text.lower(), topics),
     )
 
     return {
