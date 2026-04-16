@@ -1,77 +1,75 @@
-# Evaluation Results
+## Evaluation Results
 
 This document records a concrete evaluation snapshot for the latest validated pipeline run.
 
 Evaluated run:
 
-- `20260407T010208Z`
+- `20260415T205507Z`
 
 Primary artefacts:
 
-- [20260407T010208Z_kg_records.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/processed/20260407T010208Z_kg_records.json)
-- [20260407T010208Z_completed_kg.ttl](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/output/20260407T010208Z_completed_kg.ttl)
-- [20260407T010208Z_query_results.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/output/20260407T010208Z_query_results.json)
+- [20260415T205507Z_kg_records.json](data/processed/20260415T205507Z_kg_records.json)
+- [20260415T205507Z_completed_kg.ttl](output/20260415T205507Z_completed_kg.ttl)
+- [20260415T205507Z_query_results.json](output/20260415T205507Z_query_results.json)
 
 ## 1. Structural Results
 
-- Total KG-ready records: `258`
+- Total KG-ready records: `264`
 - Source split:
-  - `255` Guardian
+  - `261` Guardian
   - `3` NewsAPI
-- Article subtype split:
-  - `172` `NewsArticle`
-  - `60` `OpinionArticle`
-  - `26` `BreakingNewsArticle`
-- Sentiment split:
-  - `132` Negative
-  - `99` Neutral
-  - `27` Positive
-- Records with event candidates: `228`
-- Records with follow-up candidates before RDF completion: `24`
+- Article subtype split: see kg_records.json
+- Records with event candidates: see kg_records.json
 
 Generated graph counts:
 
-- Prototype KG:
-  - `229` `news:coversEvent`
-  - `14` `news:hasFollowUp`
-  - `124` `news:worksFor`
-  - `259` `news:hasSentiment`
-- Completed KG:
-  - `229` `news:coversEvent`
-  - `90` `news:hasFollowUp`
-  - `124` `news:worksFor`
-  - `259` `news:hasSentiment`
+- Instance KG: `32547` triples
+- Wikidata KG: `24307` triples
+- Prototype KG: `56573` triples
+- Completed KG: `56998` triples
+- Wikidata entities: `1722` politicians, `964` parties, `489` government bodies
 
 Structural judgment:
 
-- The pipeline completed successfully.
+- The pipeline completed successfully with all three data sources.
 - The ontology, instance graph, prototype KG, completed KG, and query result outputs were all generated.
 - The current ontology, RDF output, and SPARQL layer are internally aligned on `news:eventDate` as `xsd:date`.
+- The collection window is dynamically computed as the 30 days prior to the run date, ensuring the pipeline remains reproducible without hardcoded date constraints.
 
 ## 2. Competency Question Results
 
 All `20/20` competency queries returned at least one row in the latest run.
 
-Notable query counts:
-
-- `CQ02`: `3`
-- `CQ06`: `9`
-- `CQ10`: `297`
-- `CQ17`: `30900`
-- `CQ18`: `21`
-- `CQ19`: `2`
+| CQ | Row count |
+| --- | --- |
+| CQ01 | 132 |
+| CQ02 | 2 |
+| CQ03 | 2261 |
+| CQ04 | 547 |
+| CQ05 | 212 |
+| CQ06 | 12 |
+| CQ07 | 14 |
+| CQ08 | 254 |
+| CQ09 | 2 |
+| CQ10 | 378 |
+| CQ11 | 15 |
+| CQ12 | 26 |
+| CQ13 | 394 |
+| CQ14 | 246 |
+| CQ15 | 259 |
+| CQ16 | 2 |
+| CQ17 | 36755 |
+| CQ18 | 50 |
+| CQ19 | 5 |
+| CQ20 | 1269 |
 
 Important judgments:
 
-- `CQ02` is now clean and defensible:
-  - `BBC News`
-  - `The Guardian`
-  - `The Irish Times`
-- `CQ19` is now supported and returns:
-  - `Election`
-  - `Policy Announcement`
-- `CQ10` remains heuristic and somewhat noisy.
-- `CQ17` is technically answerable but highly combinatorial, so it should be interpreted carefully in the report rather than treated as a neat ranked fact list.
+- `CQ02` now returns two publishers: The Guardian and one NewsAPI source, confirming multi-source coverage.
+- `CQ16` similarly returns two publishers with distinct topic ranges.
+- `CQ17` and `CQ20` are highly combinatorial ranking queries — result counts reflect the full cross-product of co-mentions and should be interpreted as ranked lists rather than absolute counts.
+- `CQ19` returns five events covered by more than one article, confirming the event layer is populated and functional.
+- `CQ10` follow-up link counts reflect heuristic matching and should be treated as approximate.
 
 ## 3. Manual Audit Snapshot
 
@@ -81,8 +79,6 @@ A stratified audit sample was taken from the latest run across:
 - `OpinionArticle`
 - `BreakingNewsArticle`
 - all retained NewsAPI articles
-
-Initial qualitative findings from the sample:
 
 ### Strengths
 
@@ -95,6 +91,7 @@ Initial qualitative findings from the sample:
 - Political topics are often sensible for clearly political reporting.
 - Event canonicalisation improved cross-publisher event grouping enough to support `CQ19`.
 - Source filtering removed many previously off-scope NewsAPI publishers.
+- Wikidata entity typing correctly classifies political parties and government bodies, enabling CQ04, CQ05, and CQ20.
 
 ### Weaknesses
 
@@ -106,24 +103,19 @@ Initial qualitative findings from the sample:
 
 Concrete examples from the sample:
 
-1. [20260407T010208Z_kg_records.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/processed/20260407T010208Z_kg_records.json)
-   `Rachel Reeves rules out universal support on energy bills`
+1. `Rachel Reeves rules out universal support on energy bills`
    Good overall topic fit, but extracted people include suspicious names such as `Markets Authority`.
 
-2. [20260407T010208Z_kg_records.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/processed/20260407T010208Z_kg_records.json)
-   `Senior Labour figures warn government amid fears of ‘political earthquake’ in London`
+2. `Senior Labour figures warn government amid fears of 'political earthquake' in London`
    Election/event structure is useful, but people and location lists contain noisy labels like `London Exclusive` and `Deltapoll`.
 
-3. [20260407T010208Z_kg_records.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/processed/20260407T010208Z_kg_records.json)
-   `UK has detained 76 ‘age-disputed’ children under one in, one out scheme`
+3. `UK has detained 76 'age-disputed' children under one in, one out scheme`
    Correctly captures immigration focus, but event extraction includes an arguably spurious `Election` event.
 
-4. [20260407T010208Z_kg_records.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/processed/20260407T010208Z_kg_records.json)
-   `Pressure mounts on UK government to ban Kanye West after Wireless Festival backlash`
+4. `Pressure mounts on UK government to ban Kanye West after Wireless Festival backlash`
    Useful for showing that cross-source policy-event coverage now exists, but it is still only weakly political and should be described honestly as borderline scope.
 
-5. [20260407T010208Z_kg_records.json](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/processed/20260407T010208Z_kg_records.json)
-   `Trump endorses ex-UK political aide Steve Hilton for California governor`
+5. `Trump endorses ex-UK political aide Steve Hilton for California governor`
    Retains a relevant `Election` event, but the article is still only indirectly about UK politics.
 
 ## 4. Evaluation Position For The Report
@@ -142,12 +134,9 @@ This should be framed as a successful automated KG pipeline with identifiable he
 
 To complete the evaluation section properly, the team should still add:
 
-- a manually annotated audit sheet using the sample in [manual_audit_template.csv](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/data/evaluation/manual_audit_template.csv)
-- a short table comparing prototype KG versus completed KG
-- a short table classifying each competency question as:
-  - answered
-  - answered but noisy
-  - partially answered
+- a manually annotated audit sheet using the sample in [manual_audit_template.csv](data/evaluation/manual_audit_template.csv)
+- a short table comparing prototype KG versus completed KG triple counts
+- performance metrics: pipeline execution time and memory usage
 
 ## 6. Recommended Final Framing
 
