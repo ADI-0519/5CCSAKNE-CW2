@@ -1,34 +1,32 @@
 # CQ Coverage Table
 
-This table records how each competency question maps to the ontology and whether the current pipeline can support it.
+This table records how each competency question maps to the current pipeline and what results it produces. The support assessment reflects the final pipeline state, including Wikidata-based entity typing and OpenAI-assisted triple completion. All 20 queries return results.
 
-Support legend:
+Classification legend:
 
-- `Supported`: answerable from the current pipeline without new modelling work.
-- `Partial`: answerable only with heuristic completion or weak extraction; usable but noisy.
-- `Blocked`: the ontology term exists, but the current pipeline does not populate the required data yet.
+- `Answered`: query returns clean, meaningful results grounded in well-populated data.
+- `Answered (noisy)`: query returns results but the underlying data has known quality issues such as over-extraction, heuristic links, or unvalidated classifications.
+- `Partial`: query returns results but only for a subset of the intended question due to data gaps.
 
-The support assessment below refers to the current implementation, including the enrichment step in [complete_kg.py](/home/kasim/5CCSAKNE-CW2/src/complete_kg.py).
-
-| CQ | Main classes | Main properties | Current support | Missing data or pipeline feature | Difficulty |
-| --- | --- | --- | --- | --- | --- |
-| `CQ01` | `news:NewsArticle`, `news:Journalist`, `news:Topic` | `news:hasAuthor`, `news:hasSection`, `news:hasTopic`, `news:publishedDate` | `Supported` | Better topic normalization would improve precision. | `Easy` |
-| `CQ02` | `news:NewsArticle`, `news:NewsOrganisation` | `news:publishedBy`, `news:hasSection`, `news:publishedDate` | `Supported` | None beyond routine data cleaning. | `Easy` |
-| `CQ03` | `news:NewsArticle`, `schema:Person` | `news:mentionsPerson`, `news:publishedDate` | `Supported` | Person disambiguation is still weak. | `Easy` |
-| `CQ04` | `news:NewsArticle`, `news:PoliticalParty`, `news:Topic` | `news:mentionsOrganisation`, `news:hasTopic`, `news:publishedDate` | `Blocked` | Organisation mentions are not yet classified as `news:PoliticalParty`. | `Hard` |
-| `CQ05` | `news:NewsArticle`, `news:GovernmentBody`, `news:Topic` | `news:mentionsOrganisation`, `news:hasTopic`, `news:publishedDate` | `Blocked` | Organisation mentions are not yet classified as `news:GovernmentBody`. | `Hard` |
-| `CQ06` | `news:OpinionArticle`, `news:Sentiment`, `news:NewsArticle` | `news:hasSentiment`, `news:publishedDate` | `Partial` | Sentiment and opinion labels currently come from heuristic completion, not validated extraction. | `Medium` |
-| `CQ07` | `news:NewsArticle`, `news:Topic` | `news:hasTopic`, `news:hasSection`, `news:publishedDate` | `Supported` | Topic labels are flat and not yet hierarchically normalized. | `Easy` |
-| `CQ08` | `news:NewsArticle` | `news:publishedDate`, `news:hasUpdateTimestamp`, `news:articleURL` | `Supported` | None. | `Easy` |
-| `CQ09` | `news:NewsArticle`, `news:OpinionArticle` | `news:wordCount`, `news:hasSection`, `news:publishedDate` | `Partial` | Opinion classification is still hint-based and heuristic. | `Medium` |
-| `CQ10` | `news:NewsArticle`, `news:Topic` | `news:hasFollowUp`, `news:hasTopic`, `news:publishedDate` | `Partial` | Follow-up links are heuristic and not yet evidence-backed. | `Medium` |
-| `CQ11` | `news:Journalist`, `news:NewsOrganisation`, `news:NewsArticle`, `news:Topic` | `news:worksFor`, `news:hasAuthor`, `news:hasTopic`, `news:publishedDate` | `Blocked` | `news:worksFor` links are modelled but not populated. | `Hard` |
-| `CQ12` | `news:BreakingNewsArticle`, `news:NewsArticle` | `news:hasSection`, `news:publishedDate` | `Partial` | Breaking-news classification currently relies on simple hints and keyword rules. | `Medium` |
-| `CQ13` | `news:NewsArticle`, `news:Location`, `news:Topic` | `news:mentionsLocation`, `news:hasTopic`, `news:publishedDate` | `Partial` | Location extraction is regex-based and policy-topic matching is still approximate. | `Medium` |
-| `CQ14` | `news:NewsArticle`, `news:Journalist` | `news:hasAuthor`, `news:publishedDate`, `news:hasUpdateTimestamp` | `Supported` | None. | `Easy` |
-| `CQ15` | `news:NewsArticle`, `schema:Person`, `news:Organisation` | `news:mentionsPerson`, `news:mentionsOrganisation`, `news:publishedDate` | `Supported` | Better entity grounding would improve result quality. | `Easy` |
-| `CQ16` | `news:NewsArticle`, `news:NewsOrganisation`, `news:Topic` | `news:publishedBy`, `news:hasTopic`, `news:publishedDate` | `Supported` | Cross-source breadth is limited when NewsAPI cannot supply the fixed window. | `Easy` |
-| `CQ17` | `news:NewsArticle`, `schema:Person`, `news:Organisation` | `news:mentionsPerson`, `news:mentionsOrganisation`, `news:publishedDate` | `Supported` | Co-mentions are supported, but entity disambiguation is still weak. | `Medium` |
-| `CQ18` | `news:PoliticalEvent`, `news:Location`, `news:NewsArticle` | `news:eventLocation`, `news:eventDate`, `news:coversEvent` | `Blocked` | Event extraction and event instance creation are not yet implemented. | `Hard` |
-| `CQ19` | `news:PoliticalEvent`, `news:EconomicEvent`, `news:NewsOrganisation`, `news:NewsArticle` | `news:coversEvent`, `news:publishedBy`, `news:publishedDate` | `Blocked` | No populated event layer exists yet. | `Hard` |
-| `CQ20` | `news:Politician`, `news:PoliticalParty`, `news:NewsArticle` | `news:mentionsPerson`, `news:mentionsOrganisation`, `news:publishedDate` | `Blocked` | Person and organisation mentions are not yet typed as politicians or political parties. | `Hard` |
+| CQ | Classification | Result count | Notes |
+| --- | --- | --- | --- |
+| CQ01 | Answered (noisy) | 128 | journalist-author deduplication is weak; Guardian bylines include appended job titles |
+| CQ02 | Answered | 2 | Guardian and one NewsAPI source pass the politics-section filter |
+| CQ03 | Answered (noisy) | 1860 | person entity list is now cleaner after extraction fixes; count reduction from 2261 reflects removal of spurious nav-phrase entries |
+| CQ04 | Answered (noisy) | 534 | PoliticalParty typing from Wikidata; not all article-extracted mentions resolved |
+| CQ05 | Answered (noisy) | 200 | GovernmentBody typing from Wikidata; article-level classification still heuristic |
+| CQ06 | Answered (noisy) | 11 | sentiment from combined heuristic and OpenAI completion; not validated against ground truth |
+| CQ07 | Answered | 14 | topic coverage is flat with no hierarchy |
+| CQ08 | Answered | 246 | direct metadata mapping, no extraction needed |
+| CQ09 | Answered | 2 | one row per article group, clean comparison |
+| CQ10 | Answered (noisy) | 314 | follow-up links are heuristic; count reduction from 378 reflects removal of links grounded in spurious events |
+| CQ11 | Answered (noisy) | 15 | worksFor derived per-article, not from canonical journalist profiles |
+| CQ12 | Answered (noisy) | 25 | live-blog classification now locked by structural title/URL signals; body-keyword-only cases remain heuristic |
+| CQ13 | Answered (noisy) | 383 | location extraction is regex-based and still noisy in long-form live blog articles |
+| CQ14 | Answered | 239 | metadata-driven, reliable |
+| CQ15 | Answered | 251 | both person and organisation triples well-populated; slight reduction reflects articles that had only spurious person mentions |
+| CQ16 | Answered (noisy) | 2 | Guardian-dominant dataset limits publisher range |
+| CQ17 | Answered (noisy) | 30500 | combinatorial co-mention space; count reduction from 36755 reflects removal of spurious person nodes, not loss of real data |
+| CQ18 | Answered (noisy) | 52 | event location matching is string comparison only; slight increase reflects more policy events correctly assigned London location |
+| CQ19 | Answered (noisy) | 5 | event canonicalisation is heuristic |
+| CQ20 | Answered (noisy) | 1249 | politician and party typing from Wikidata; article-level co-mention is reliable |

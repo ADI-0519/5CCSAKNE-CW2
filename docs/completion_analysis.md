@@ -224,6 +224,26 @@ For a stronger final version, the project should either:
 
 This is one of the clearest remaining areas for improvement.
 
+## Completion Results: Before and After
+
+The completion stage added 426 triples to the KG, bringing the total from 54,720 in the prototype to 55,146 in the completed graph. It also expanded `news:hasFollowUp` from 5 links to 106, updated sentiment on 153 articles, and added new topics to 102 articles.
+
+| Article | Property | Before completion | After completion |
+|---|---|---|---|
+| Rachel Reeves rules out universal support on energy bills | `news:hasSentiment` | `news:Negative` | `news:Neutral` |
+| Nigel Farage videos reveal support for rioter, neo-Nazi event and far-right slogans | `news:hasSentiment` | `news:Negative` | `news:Neutral` |
+| Nigel Farage videos reveal support for rioter, neo-Nazi event and far-right slogans | `news:hasTopic` | Election, Housing, Immigration, Parliament | + Defence, Government_Policy |
+| Next week's disability cuts will make people destitute | `news:hasSentiment` | `news:Negative` | `news:Neutral` |
+| Next week's disability cuts will make people destitute | `news:hasTopic` | Education, Healthcare, Opinion, Parliament | + Government_Policy, Public_Spending |
+| King Charles's state visit to US will be 'humiliation' amid Iran war | `news:hasFollowUp` | none | links to one follow-up article |
+
+The prototype had 5 follow-up links from the first extraction pass. The completion stage expanded this to 106 by running the keyword-match heuristic over the merged graph. Two of the prototype's 5 links give a sense of what a coherent follow-up chain looks like:
+
+* "Trump says he is 'not happy' with UK as he criticises Starmer for being 'very stupid'" (16 Mar) -> "UK politics: Trump says UK's aircraft carriers are just 'toys' - as it happened" (26 Mar)
+* "UK politics: Trump says UK's aircraft carriers are just 'toys' - as it happened" (26 Mar) -> "UK politics Q&A, as it happened: Andrew Sparrow answers your questions on Starmer, Reform and more" (2 Apr)
+
+The completion stage's follow-up heuristic occasionally links topically unrelated articles that share surface-level keyword matches, which is why follow-up link quality is classified as noisy in the CQ coverage table.
+
 ## Recommended Completion Backlog
 
 The most important remaining completion tasks are:

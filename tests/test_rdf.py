@@ -99,7 +99,8 @@ class TestConvertJsonToRdf:
     def test_event_and_sentiment_triples_are_created(self):
         graph = convert_json_to_rdf([sample_record()])
         article = NEWS["article/abc123def456789a"]
-        event = NEWS["event/Budget_2026-03-06_London"]
+        # generic event names get article-id suffix to avoid false merging across articles
+        event = NEWS["event/Budget_2026-03-06_London_abc123de"]
 
         assert (article, NEWS.hasSentiment, NEWS.Negative) in graph
         assert (article, NEWS.coversEvent, event) in graph
@@ -112,8 +113,8 @@ class TestConvertJsonToRdf:
             source_name="The Guardian",
             event_candidates=[
                 {
-                    "name": "Budget",
-                    "type": "EconomicEvent",
+                    "name": "NHS Reform Bill",
+                    "type": "PoliticalEvent",
                     "date": "2026-03-06",
                     "location": "London",
                     "source": "heuristic",
@@ -126,8 +127,8 @@ class TestConvertJsonToRdf:
             author="John Smith",
             event_candidates=[
                 {
-                    "name": "Budget",
-                    "type": "EconomicEvent",
+                    "name": "NHS Reform Bill",
+                    "type": "PoliticalEvent",
                     "date": "2026-03-06",
                     "location": "London",
                     "source": "heuristic",
@@ -135,7 +136,7 @@ class TestConvertJsonToRdf:
             ],
         )
         graph = convert_json_to_rdf([first, second])
-        event = NEWS["event/Budget_2026-03-06_London"]
+        event = NEWS["event/NHS_Reform_Bill_2026-03-06_London"]
 
         assert (NEWS["article/article-a"], NEWS.coversEvent, event) in graph
         assert (NEWS["article/article-b"], NEWS.coversEvent, event) in graph

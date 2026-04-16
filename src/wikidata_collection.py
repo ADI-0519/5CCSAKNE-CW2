@@ -20,7 +20,7 @@ REQUEST_HEADERS = {
     "Accept": "application/sparql-results+json",
     "User-Agent": "5CCSAKNE-CW2-KG-Pipeline/1.0 (university coursework project)",
 }
-REQUEST_TIMEOUT = 60
+REQUEST_TIMEOUT = 90
 
 RAW_SNAPSHOT_DIR = Path(CONFIG["RAW_DATA_DIR"]) / "wikidata"
 
@@ -34,18 +34,16 @@ SELECT DISTINCT
   ?partyLabel ?constituencyLabel
   ?genderLabel ?dateOfBirth
 WHERE {
-  ?person wdt:P39 ?position .
-  ?position wdt:P279* wd:Q16707842 .
-
-  ?person wdt:P27 wd:Q145 .
-  ?person wdt:P102 ?party .
-
+  ?person wdt:P31 wd:Q5 ;
+          wdt:P106 wd:Q82955 ;
+          wdt:P27 wd:Q145 ;
+          wdt:P102 ?party .
   OPTIONAL { ?person wdt:P768 ?constituency . }
   OPTIONAL { ?person wdt:P21 ?gender . }
   OPTIONAL { ?person wdt:P569 ?dateOfBirth . }
-
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
 }
+LIMIT 2000
 """
 
 POLITICAL_PARTIES_QUERY = """
@@ -71,14 +69,21 @@ SELECT DISTINCT
   ?body ?bodyLabel ?bodyDescription
   ?headquartersLabel
 WHERE {
-  ?body wdt:P31 wd:Q11204 .
   ?body wdt:P17 wd:Q145 .
+  ?body wdt:P31 ?type .
+  FILTER(?type IN (
+    wd:Q11204,
+    wd:Q327333,
+    wd:Q2001305,
+    wd:Q476068,
+    wd:Q1752676
+  ))
 
   OPTIONAL { ?body wdt:P159 ?headquarters . }
 
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
 }
-LIMIT 150
+LIMIT 500
 """
 
 
@@ -250,3 +255,12 @@ def load_cached_wikidata(snapshot_path=None):
         f"{len(data.get('government_bodies', []))} government bodies"
     )
     return data
+
+
+if __name__ == "__main__":
+    payload = collect_wikidata(save_snapshot=True)
+    print(
+        f"\nResults: {len(payload['politicians'])} politicians, "
+        f"{len(payload['political_parties'])} parties, "
+        f"{len(payload['government_bodies'])} government bodies"
+    )

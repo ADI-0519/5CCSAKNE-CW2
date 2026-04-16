@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta, timezone
 from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
@@ -10,13 +11,13 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 
 PROJECT_SCOPE = (
-    "Current UK politics and policy news from March 6, 2026 to April 6, 2026, "
-    "collected from GuardianAPI and NewsAPI, with OpenAI used for extraction, "
-    "classification, and completion."
+    "Current UK politics and policy news, collected from GuardianAPI and NewsAPI, "
+    "with OpenAI used for extraction, classification, and completion."
 )
 
-DATE_START = "2026-03-06"
-DATE_END = "2026-04-06"
+_today = datetime.now(timezone.utc).date()
+DATE_END = _today.strftime("%Y-%m-%d")
+DATE_START = (_today - timedelta(days=30)).strftime("%Y-%m-%d")
 
 # ---------------------------------------------------------------------------
 # Source configuration
@@ -257,7 +258,6 @@ TOPIC_GROUPS = {
 }
 
 POLITICAL_EVENT_HINTS = [
-    "election",
     "leadership contest",
     "parliamentary vote",
     "commons vote",
@@ -266,10 +266,14 @@ POLITICAL_EVENT_HINTS = [
     "cabinet reshuffle",
     "bill debate",
     "spring statement",
+    "general election",
+    "local election",
+    "by-election",
 ]
 
 ECONOMIC_EVENT_HINTS = [
-    "budget",
+    "spring budget",
+    "autumn budget",
     "spring statement",
     "autumn statement",
     "spending review",

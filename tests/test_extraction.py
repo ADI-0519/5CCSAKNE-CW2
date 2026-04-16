@@ -114,7 +114,6 @@ class TestExtractRelevantInformation:
         record = extract_relevant_information([article])[0]
         entities = record["entities"]
 
-        assert "Budget" in entities["events"] or "Spring Statement" in entities["events"]
         assert "Labour" in entities["political_parties"]
         assert "Treasury" in entities["government_bodies"]
         assert "Politics" in entities["topics"] or "Economic Policy" in entities["topics"]

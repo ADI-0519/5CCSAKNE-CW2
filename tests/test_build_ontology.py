@@ -54,9 +54,29 @@ class TestBuildOntology:
 
     def test_creates_sentiment_class_and_instances(self):
         graph = build_ontology.build_ontology()
-        assert (build_ontology.NEWS.Sentiment, RDF.type, RDFS.Class) in graph
+        assert (build_ontology.NEWS.Sentiment, RDF.type, OWL.Class) in graph
         for label in ("Positive", "Negative", "Neutral"):
             assert (build_ontology.NEWS[label], RDF.type, build_ontology.NEWS.Sentiment) in graph
+
+    def test_no_rdf_property_declarations(self):
+        graph = build_ontology.build_ontology()
+        assert len(list(graph.subjects(RDF.type, RDF.Property))) == 0
+
+    def test_no_rdfs_class_declarations(self):
+        graph = build_ontology.build_ontology()
+        assert len(list(graph.subjects(RDF.type, RDFS.Class))) == 0
+
+    def test_hasfollowup_is_asymmetric(self):
+        graph = build_ontology.build_ontology()
+        assert (build_ontology.NEWS.hasFollowUp, RDF.type, OWL.AsymmetricProperty) in graph
+
+    def test_publishedby_is_functional(self):
+        graph = build_ontology.build_ontology()
+        assert (build_ontology.NEWS.publishedBy, RDF.type, OWL.FunctionalProperty) in graph
+
+    def test_authorof_inverse(self):
+        graph = build_ontology.build_ontology()
+        assert (build_ontology.NEWS.authorOf, OWL.inverseOf, build_ontology.NEWS.hasAuthor) in graph
 
 
 class TestOntologyMain:

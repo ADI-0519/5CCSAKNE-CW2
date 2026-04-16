@@ -5,6 +5,8 @@ from pathlib import Path
 
 from rdflib import Graph
 
+from src.config import CONFIG
+
 DEFAULT_QUERY_PATH = Path("queries/news_competency_queries.rq")
 DEFAULT_KG_CANDIDATES = (
     Path("kg/generated/prototype_kg.ttl"),
@@ -33,7 +35,10 @@ def load_query_definitions(query_file=DEFAULT_QUERY_PATH):
     if not query_path.exists():
         raise FileNotFoundError(f"Query file not found: {query_path}")
 
-    lines = query_path.read_text().splitlines()
+    raw = query_path.read_text()
+    raw = raw.replace("{DATE_START}", CONFIG["date_start"])
+    raw = raw.replace("{DATE_END}", CONFIG["date_end"])
+    lines = raw.splitlines()
     prefix_lines = []
     definitions = []
     current_header = None
