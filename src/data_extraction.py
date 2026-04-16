@@ -142,6 +142,27 @@ def extract_people(text):
         "Media",
         "Asylum",
         "Immigration",
+        "Politics",
+        "Political",
+        "Election",
+        "Elections",
+        "Labour",
+        "Reform",
+        "Brexit",
+        "Opinion",
+        "Weekly",
+        "Exclusive",
+        "World",
+        "National",
+        "European",
+        "International",
+        "Comment",
+        "Analysis",
+        "Local",
+        "British",
+        "When",
+        "While",
+        "From",
     }
     found = set(find_named_matches(text, CONFIG["POLITICIAN_NAMES"]))
 
@@ -180,12 +201,17 @@ def extract_locations(text):
     return sorted(found)
 
 
+_ORG_LEAD_IN = {"As", "From", "For", "But", "And", "By", "In", "On", "With", "Via"}
+
+
 def extract_organisations(text):
     found = set(find_named_matches(text, CONFIG["POLITICAL_PARTY_NAMES"]))
     found.update(find_named_matches(text, CONFIG["GOVERNMENT_BODY_NAMES"]))
 
     for match in ORG_PATTERN.finditer(text):
         organisation = normalise_label(match.group(1))
+        if organisation.split()[0] in _ORG_LEAD_IN:
+            continue
         if organisation not in CONFIG["ENTITY_STOPLIST"]:
             found.add(organisation)
 
@@ -272,8 +298,6 @@ def extract_events(article, text, topics, locations):
 
     if phrase_in_text(text_lower, "spring statement"):
         event_names.add("Spring Statement")
-    if phrase_in_text(text_lower, "budget") and phrase_in_text(text_lower, "spring"):
-        event_names.add("UK Spring Budget")
     if phrase_in_text(text_lower, "leadership contest"):
         event_names.add("Leadership Contest")
     if phrase_in_text(text_lower, "parliamentary vote") or phrase_in_text(
@@ -355,15 +379,20 @@ def extract_events(article, text, topics, locations):
                 }
             )
         elif {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
-            events.append(
-                {
-                    "name": "Budget",
-                    "type": "EconomicEvent",
-                    "date": event_date,
-                    "location": default_location,
-                    "source": "heuristic",
-                }
+            fiscal_signal = any(
+                phrase_in_text(text_lower, phrase)
+                for phrase in ["spring budget", "autumn budget", "spending review", "fiscal statement"]
             )
+            if fiscal_signal:
+                events.append(
+                    {
+                        "name": "Budget",
+                        "type": "EconomicEvent",
+                        "date": event_date,
+                        "location": default_location,
+                        "source": "heuristic",
+                    }
+                )
 
     return events
 
@@ -419,15 +448,21 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
         ]
 
     if {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
-        return [
-            {
-                "name": "Budget",
-                "type": "EconomicEvent",
-                "date": event_date,
-                "location": default_location,
-                "source": "heuristic",
-            }
-        ]
+        # only generate Budget fallback if text actually names fiscal event
+        fiscal_signal = any(
+            phrase_in_text(text_lower, phrase)
+            for phrase in ["spring budget", "autumn budget", "spending review", "fiscal statement"]
+        )
+        if fiscal_signal:
+            return [
+                {
+                    "name": "Budget",
+                    "type": "EconomicEvent",
+                    "date": event_date,
+                    "location": default_location,
+                    "source": "heuristic",
+                }
+            ]
 
     return events
 
@@ -534,8 +569,19 @@ def apply_openai_extraction(article, text, heuristic_result):
     politicians = sorted(person for person in politicians if person not in blocked_people)
 
     article_type = heuristic_result["article_type"]
-    if llm_result.get("article_type") in {"NewsArticle", "OpinionArticle", "BreakingNewsArticle"}:
-        article_type = llm_result["article_type"]
+    llm_type = llm_result.get("article_type")
+    title_lower = (article.get("title") or "").lower()
+    url_lower = (article.get("url") or "").lower()
+    # title/URL live-blog signals are definitive -> ignore LLM when they fire
+    structural_signal = (
+        title_lower.startswith("live")
+        or title_lower.endswith("as it happened")
+        or "live/" in url_lower
+    )
+    if structural_signal:
+        article_type = "BreakingNewsArticle"
+    elif llm_type in {"NewsArticle", "OpinionArticle", "BreakingNewsArticle"}:
+        article_type = llm_type
 
     sentiment = heuristic_result["sentiment"]
     if llm_result.get("sentiment") in {"Positive", "Negative", "Neutral"}:
