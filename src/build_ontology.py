@@ -9,6 +9,32 @@ CORE = Namespace("http://www.bbc.co.uk/ontologies/coreconcepts/")
 
 OUTPUT_PATH = Path(__file__).parent.parent / "ontology" / "news_ontology.ttl"
 
+_SCHEMA_TERMS = {
+    "NewsArticle", "Journalist", "Politician", "Organisation", "Topic",
+    "hasAuthor", "publishedBy", "hasTopic", "mentionsPerson",
+    "mentionsOrganisation", "mentionsLocation", "publishedDate",
+    "hasUpdateTimestamp", "hasSection", "articleURL", "worksFor",
+}
+
+_BBC_TERMS = {
+    "NewsEvent", "Location",
+    "coversEvent", "eventDate", "eventLocation",
+}
+
+
+def _add_extension_comments(path):
+    lines = path.read_text().splitlines(keepends=True)
+    out = []
+    for line in lines:
+        if line.startswith("news:"):
+            term = line.split()[0].removeprefix("news:")
+            if term in _SCHEMA_TERMS:
+                out.append("# Schema.org extension\n")
+            elif term in _BBC_TERMS:
+                out.append("# BBC Core Concepts extension\n")
+        out.append(line)
+    path.write_text("".join(out))
+
 
 def add_class(graph, class_uri, label, comment, parent=None):
     graph.add((class_uri, RDF.type, OWL.Class))
@@ -383,6 +409,7 @@ def main():
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     g.serialize(str(OUTPUT_PATH), format="turtle")
+    _add_extension_comments(OUTPUT_PATH)
     print(f"\nSaved to: {OUTPUT_PATH}")
 
 
