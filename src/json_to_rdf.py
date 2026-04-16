@@ -45,13 +45,19 @@ def normalise_event_date(value):
     return candidate
 
 
-def event_uri(event_name, event_date=None, event_location=None):
+# names extraction uses as fallback placeholders rather than specific event names
+GENERIC_EVENT_NAMES = {"Budget", "Election", "Policy Announcement"}
+
+
+def event_uri(event_name, event_date=None, event_location=None, article_id=None):
     key_parts = [slugify(event_name)]
     normalized_date = normalise_event_date(event_date)
     if normalized_date:
         key_parts.append(slugify(normalized_date))
     if event_location:
         key_parts.append(slugify(event_location))
+    if article_id and event_name in GENERIC_EVENT_NAMES:
+        key_parts.append(str(article_id)[:8])
     return NEWS[f"event/{'_'.join(key_parts)}"]
 
 
@@ -109,14 +115,16 @@ def canonical_event_name(event, record):
         or "Parliament" in topics
     ):
         return "Parliamentary Vote"
-    if event_type == "EconomicEvent" and (
-        {"Economic Policy", "Public Spending", "Taxation"} & topics
-    ):
-        return "Budget"
-    if event_type == "PoliticalEvent" and (
-        {"Government Policy", "Parliament", "Immigration", "Healthcare"} & topics
-    ):
-        return "Policy Announcement"
+    # only use generic fallbacks when raw_name is already placeholder, not extracted specific name
+    if raw_name in {"Budget", "Policy Announcement", "Election", "News Event"}:
+        if event_type == "EconomicEvent" and (
+            {"Economic Policy", "Public Spending", "Taxation"} & topics
+        ):
+            return "Budget"
+        if event_type == "PoliticalEvent" and (
+            {"Government Policy", "Parliament", "Immigration", "Healthcare"} & topics
+        ):
+            return "Policy Announcement"
 
     return raw_name
 
@@ -249,7 +257,7 @@ def add_events(graph, article, record):
         if not event_name:
             continue
 
-        uri = event_uri(event_name, event.get("date"), event.get("location"))
+        uri = event_uri(event_name, event.get("date"), event.get("location"), record.get("id"))
         event_type = event.get("type") or "NewsEvent"
         canonical_name = canonical_event_name(event, record) or event_name
 
