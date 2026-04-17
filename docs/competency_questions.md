@@ -1,61 +1,69 @@
 # Final Competency Questions
 
-This document contains the final wording for the 20 competency questions used in the coursework.
+This document contains the current competency-question design for the coursework.
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published in the last 30 days from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for UK parliamentary and government policy events reported in UK news during a fixed time window, using automated mappings from textual and structured sources, with OpenAI used critically for augmentation, extraction support, completion, and evaluation baselines.`
 
-The first 10 questions are the manually authored set. The second 10 were LLM-assisted and then revised so they align with the current collection window, the current ontology, and the implemented pipeline outputs.
+The first 10 questions below are the revised manually authored set. They are intentionally event-centred and are designed to drive the ontology redesign before the SPARQL layer is rewritten. The LLM-assisted 10 should be generated later so they complement this set rather than duplicating it.
 
-Implementation difficulty and current pipeline support are tracked separately in [cq_coverage_table.md](5CCSAKNE-CW2/docs/cq_coverage_table.md).
+Implementation difficulty and runtime support should be tracked separately in [cq_coverage_table.md](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/docs/cq_coverage_table.md).
 
 ## Manual Competency Questions
 
-`CQ01.` Which journalists wrote politics-section articles about government or policy issues in the current collection window?
+`CQ01.` Which parliamentary debates in the selected time window concern which policy topics?
 
-`CQ02.` Which news organisations published politics-section articles in the current collection window?
+`CQ02.` Which ministerial statements in the selected time window are issued by which government departments?
 
-`CQ03.` Which people were mentioned most often across the fixed article collection?
+`CQ03.` Which political actors are involved in more than one policy event during the selected time window?
 
-`CQ04.` Which political parties were mentioned in articles about elections or parliamentary politics?
+`CQ04.` Which policy events are reported by news articles and are also represented in official parliamentary or government sources?
 
-`CQ05.` Which government bodies were mentioned in articles about taxation, public spending, or healthcare policy?
+`CQ05.` Which policy topics are common to both parliamentary events and government policy events during the selected time window?
 
-`CQ06.` Which opinion articles were classified as negative in sentiment?
+`CQ06.` Which parliamentary bodies are linked to events concerning a given policy topic during the selected time window?
 
-`CQ07.` Which topics appeared most often in politics-section reporting in the current collection window?
+`CQ07.` Which government departments are involved in the highest number of policy events during the selected time window?
 
-`CQ08.` Which articles were updated after their original publication time, and what are their canonical URLs?
+`CQ08.` Which political parties have members involved in events concerning more than one policy topic?
 
-`CQ09.` How does the average word count of politics-section articles compare with the average word count of opinion articles?
+`CQ09.` Which reported policy events lack a linked government body, parliamentary body, or policy topic in the knowledge graph?
 
-`CQ10.` Which articles have a follow-up article, and do the original and follow-up share at least one topic?
+`CQ10.` Which policy topics are most frequently linked to parliamentary and government policy events reported during the selected time window?
+
+## CQ-To-Ontology Mapping
+
+This table records the minimum ontology support each manual CQ requires. It should drive the redesign of [news_ontology.ttl](5CCSAKNE-CW2/ontology/news_ontology.ttl) and [build_ontology.py](5CCSAKNE-CW2/src/build_ontology.py).
+
+| CQ | Main classes justified | Main properties justified | Query shape / strict-marker rationale |
+| --- | --- | --- | --- |
+| CQ01 | `ParliamentaryDebate`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Event-topic retrieval; not article lookup; supports temporal filtering. |
+| CQ02 | `MinisterialStatement`, `GovernmentDepartment` | `issuedByDepartment`, `occursOnDate` | Official-source event-to-institution linkage; justifies department modelling. |
+| CQ03 | `PoliticalActor`, `PolicyEvent` | `involvesActor`, `occursOnDate` | Aggregation with `COUNT` / `HAVING`; easy to construct boundary cases. |
+| CQ04 | `PolicyEvent`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `reportedByArticle`, `representedInOfficialSource`, `matchedToSourceRecord` | Cross-source integration question; validates multi-source KG design without overclaiming identity. |
+| CQ05 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `concernsPolicyTopic` | Tests whether event subclasses are meaningfully distinguished but still connected by shared topics. |
+| CQ06 | `ParliamentaryBody`, `PolicyEvent`, `PolicyTopic` | `occursInParliamentaryBody`, `concernsPolicyTopic`, `occursOnDate` | Institution-event-topic linkage; supports non-trivial joins. |
+| CQ07 | `GovernmentDepartment`, `PolicyEvent` | `involvesGovernmentBody`, `occursOnDate` | Ranking / `ORDER BY` / `LIMIT`; requires true aggregation cases. |
+| CQ08 | `PoliticalParty`, `PoliticalActor`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic` | Multi-hop party-actor-event-topic query; stronger than simple party mention lookup. |
+| CQ09 | `PolicyEvent`, `GovernmentBody`, `ParliamentaryBody`, `PolicyTopic` | missing-link detection over `involvesGovernmentBody`, `occursInParliamentaryBody`, `concernsPolicyTopic` | Completion-oriented CQ; explicitly supports incompleteness analysis. |
+| CQ10 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent`, `NewsArticle` | `concernsPolicyTopic`, `reportedByArticle` | Frequency / topic ranking query; supports counterexamples and meaningful limits. |
 
 ## LLM-Assisted Competency Questions
 
-`CQ11.` Which journalists from the same news organisation wrote about the same topic in the current collection window?
+The LLM-assisted 10 should be designed after the ontology redesign and should complement the manual set across question types:
 
-`CQ12.` Which breaking news articles were published in the politics section?
+- boolean questions
+- comparative questions
+- additional aggregation questions
+- completion/incompleteness questions
+- cross-source validation questions
+- reasoning-aware questions that test inferred class or relation membership
 
-`CQ13.` Which locations were mentioned most often in articles about immigration, taxation, or healthcare policy?
-
-`CQ14.` Which journalists wrote articles that were later updated?
-
-`CQ15.` Which articles mention both a person and an organisation?
-
-`CQ16.` Which news organisations published the widest range of topics in the current collection window?
-
-`CQ17.` Which people and organisations were co-mentioned most often in the same articles?
-
-`CQ18.` Which political events took place in London in the current collection window, and when did they occur?
-
-`CQ19.` Which political or economic events were covered by more than one news organisation?
-
-`CQ20.` Which politicians and political parties were mentioned together most often in the same articles?
+They should not simply paraphrase the manual 10 or fall back to article-mention lookup.
 
 ## Notes
 
-- This set is aligned to the current 30-day collection window, the current ontology, and the implemented pipeline outputs.
-- The wording avoids the earlier generic news and technology framing.
-- The set is designed to exercise both the stronger metadata-driven parts of the KG and the harder analytical areas such as political-actor typing, sentiment, follow-up links, and event modelling.
+- This revised manual set is intentionally more TBox-aware and less ABox-retrieval-heavy than the earlier article-centric version.
+- The wording has been tightened to avoid vague relations such as `associated with` where more explicit ontology links are intended.
+- The set is designed to be safer against the CW1 feedback pattern: weak class-role distinctions, shallow retrieval CQs, and SPARQL that lacks meaningful aggregation or boundary cases.
