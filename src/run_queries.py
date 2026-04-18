@@ -88,7 +88,7 @@ def load_kg(kg_path):
     if not kg_file.exists():
         raise FileNotFoundError(f"KG file not found: {kg_file}")
 
-    graph = Graph()
+    graph = Graph(store="Oxigraph")
     graph.parse(data=kg_file.read_text(), format="turtle")
     return graph
 
