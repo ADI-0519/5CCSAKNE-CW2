@@ -24,7 +24,7 @@ def canonicalise_date(date_str):
     if not date_str:
         raise ValueError(f"Cannot parse date: {date_str!r}")
 
-    for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%d"):
+    for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
         try:
             dt = datetime.strptime(date_str, fmt)
             if dt.tzinfo is None:
