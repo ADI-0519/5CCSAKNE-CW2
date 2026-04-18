@@ -103,15 +103,13 @@ def build_collection_payload(sources, errors=None):
 
 
 def build_parliament_search_url(page=1):
-    query = quote_plus(" OR ".join(CONFIG["PARLIAMENT_QUERY_TERMS"]))
     skip = max(0, page - 1) * DEFAULT_PAGE_SIZE
     return (
-        f"{CONFIG['PARLIAMENT_API_BASE'].rstrip('/')}/search?"
-        f"q={query}&"
+        f"{CONFIG['PARLIAMENT_API_BASE'].rstrip('/')}/api/writtenstatements/statements?"
+        f"madeWhenFrom={CONFIG['date_start']}&"
+        f"madeWhenTo={CONFIG['date_end']}&"
         f"take={DEFAULT_PAGE_SIZE}&"
-        f"skip={skip}&"
-        f"from-date={CONFIG['date_start']}&"
-        f"to-date={CONFIG['date_end']}"
+        f"skip={skip}"
     )
 
 
@@ -178,9 +176,32 @@ def fetch_guardian_data(save_snapshot=True):
     return data
 
 
+def _flatten_parliament_item(item):
+    flat = dict(item.get("value") or {})
+    # rename fields to what normaliser looks for
+    if "dateMade" in flat:
+        flat["date"] = flat.pop("dateMade")
+    if "text" in flat:
+        flat["body"] = flat.pop("text")
+    if "answeringBodyName" in flat:
+        flat["bodyName"] = flat.pop("answeringBodyName")
+        
+    for link in (item.get("links") or []):
+        if link.get("rel") == "self" and link.get("href"):
+            href = link["href"]
+            if href.startswith("/"):
+                href = "https://questions-statements.parliament.uk" + href
+            flat["url"] = href
+            break
+    return flat
+
+
 def fetch_parliament_data(save_snapshot=True):
     url = build_parliament_search_url(page=1)
     first_page = fetch_json(url)
+    first_page["results"] = [
+        _flatten_parliament_item(item) for item in (first_page.get("results") or [])
+    ]
     data = {
         "query_terms": CONFIG["PARLIAMENT_QUERY_TERMS"],
         "date_start": CONFIG["date_start"],
