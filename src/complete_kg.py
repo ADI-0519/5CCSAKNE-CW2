@@ -275,9 +275,7 @@ def infer_follow_up_links(graph, max_gap_days=7):
             earlier_is_breaking = NEWS.BreakingNewsArticle in earlier_data["article_types"]
             later_is_breaking = NEWS.BreakingNewsArticle in later_data["article_types"]
 
-            # Follow-up links should represent editorial progression, not just broad topical overlap.
-            # We therefore require either a shared event, or a stricter combination of same publisher,
-            # shared organisations, and shared topics.
+            # require shared event or stricter publisher+org+topic combo to avoid broad overlap
             if shared_events:
                 score = (len(shared_events) * 5) + len(shared_orgs) + len(shared_topics)
                 candidates.append((score, later_data["published_date"], later))
@@ -340,6 +338,34 @@ def apply_openai_completion(article_key, article_payload, heuristic_result):
     merged["additional_topics"] = sorted(additional_topics)
 
     return merged
+
+
+def enrich_cross_source_links(graph):
+    # match guardian events to official records by shared title keywords
+    official_records = set(graph.subjects(RDF.type, NEWS.OfficialSourceRecord))
+    if not official_records:
+        return
+
+    guardian_events = [
+        event for event in graph.subjects(RDF.type, NEWS.PolicyEvent)
+        if (event, NEWS.reportedByArticle, None) in graph
+        and (event, NEWS.representedInOfficialSource, None) not in graph
+    ]
+
+    added = 0
+    for record in official_records:
+        record_title = first_literal(graph, record, NEWS.sourceTitle) or ""
+        record_terms = text_terms(record_title)
+        if not record_terms:
+            continue
+        for event in guardian_events:
+            event_name = first_literal(graph, event, SCHEMA.name) or ""
+            if text_terms(event_name) & record_terms:
+                graph.add((event, NEWS.matchedToSourceRecord, record))
+                added += 1
+
+    if added:
+        print(f"[COMPLETE] Added {added} matchedToSourceRecord links.")
 
 
 def enrich_graph(graph):
@@ -434,6 +460,8 @@ def enrich_graph(graph):
 
     for earlier, later in infer_follow_up_links(enriched):
         enriched.add((earlier, NEWS.hasFollowUp, later))
+
+    enrich_cross_source_links(enriched)
 
     return enriched
 
