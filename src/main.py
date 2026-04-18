@@ -18,7 +18,7 @@ from src.data_normalisation import (
     save_normalised_articles,
 )
 from src.json_to_rdf import convert_json_to_rdf
-from src.run_queries import execute_queries, load_query_definitions, save_results
+from src.run_queries import execute_queries, load_kg, load_query_definitions, save_results
 from src.wikidata_collection import collect_wikidata, load_cached_wikidata
 from src.wikidata_to_rdf import convert_wikidata_to_rdf
 
@@ -227,7 +227,8 @@ def main():
     # Stage 10: Run SPARQL competency queries
     # ------------------------------------------------------------------
     print("[PIPELINE] Stage 10: Run competency queries")
-    query_results = execute_queries(completed_graph, load_query_definitions())
+    query_graph = load_kg(COMPLETED_KG_PATH)
+    query_results = execute_queries(query_graph, load_query_definitions())
     timestamped_results = Path("output") / f"{timestamp}_query_results.json"
     save_results(query_results, LATEST_QUERY_RESULTS_PATH)
     save_results(query_results, timestamped_results)
