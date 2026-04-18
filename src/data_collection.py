@@ -1,10 +1,3 @@
-"""Source collection utilities for the CW2 KG pipeline.
-
-This module now treats Guardian, Parliament/Hansard, and GOV.UK as the core
-collection sources. NewsAPI is retained only as an explicit legacy option while
-the rest of the pipeline is migrated away from the original prototype design.
-"""
-
 import json
 from datetime import UTC, datetime
 from pathlib import Path
@@ -110,14 +103,6 @@ def build_collection_payload(sources, errors=None):
 
 
 def build_parliament_search_url(page=1):
-    """Build a best-effort Parliament search URL.
-
-    The Parliament API surface is wider than the current pipeline needs. At
-    this stage we keep collection conservative: one search endpoint, the
-    configured date window, and explicit query terms that can later be refined
-    once source-specific normalisation is in place.
-    """
-
     query = quote_plus(" OR ".join(CONFIG["PARLIAMENT_QUERY_TERMS"]))
     skip = max(0, page - 1) * DEFAULT_PAGE_SIZE
     return (
@@ -138,8 +123,6 @@ def derive_govuk_search_base():
 
 
 def build_govuk_search_url(page=1):
-    """Build a GOV.UK search request URL for the fixed coursework window."""
-
     query = quote_plus(" OR ".join(CONFIG["GOVUK_QUERY_TERMS"]))
     start = max(0, page - 1) * DEFAULT_PAGE_SIZE
     return (
@@ -196,13 +179,6 @@ def fetch_guardian_data(save_snapshot=True):
 
 
 def fetch_parliament_data(save_snapshot=True):
-    """Collect raw Parliament/Hansard search results.
-
-    We keep the result shape close to the source payload rather than attempting
-    any early harmonisation here. That keeps collection and normalisation
-    separate, which makes later source-specific cleanup much safer.
-    """
-
     url = build_parliament_search_url(page=1)
     first_page = fetch_json(url)
     data = {
@@ -219,8 +195,6 @@ def fetch_parliament_data(save_snapshot=True):
 
 
 def fetch_govuk_data(save_snapshot=True):
-    """Collect raw GOV.UK search results for policy-related documents."""
-
     url = build_govuk_search_url(page=1)
     first_page = fetch_json(url)
     data = {
