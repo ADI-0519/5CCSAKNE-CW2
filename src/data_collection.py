@@ -207,7 +207,8 @@ def fetch_parliament_data(save_snapshot=True):
     first_page = fetch_json(url)
     data = {
         "query_terms": CONFIG["PARLIAMENT_QUERY_TERMS"],
-        "date_window": CONFIG["date_window"],
+        "date_start": CONFIG["date_start"],
+        "date_end": CONFIG["date_end"],
         "request_url": safe_url_for_logging(url),
         "pagesFetched": 1,
         "response": first_page,
@@ -225,7 +226,8 @@ def fetch_govuk_data(save_snapshot=True):
     data = {
         "query_terms": CONFIG["GOVUK_QUERY_TERMS"],
         "document_formats": CONFIG["GOVUK_DOCUMENT_FORMATS"],
-        "date_window": CONFIG["date_window"],
+        "date_start": CONFIG["date_start"],
+        "date_end": CONFIG["date_end"],
         "request_url": safe_url_for_logging(url),
         "pagesFetched": 1,
         "response": first_page,

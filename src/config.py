@@ -7,6 +7,7 @@ run while we migrate the rest of the pipeline.
 """
 
 import os
+from datetime import datetime, timedelta, timezone
 from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
@@ -17,9 +18,9 @@ load_dotenv()
 # Project scope
 # ---------------------------------------------------------------------------
 
-DATE_START = "2026-03-06"
-DATE_END = "2026-04-06"
-DATE_WINDOW = {"start": DATE_START, "end": DATE_END}
+_today = datetime.now(timezone.utc).date()
+DATE_END = _today.strftime("%Y-%m-%d")
+DATE_START = (_today - timedelta(days=30)).strftime("%Y-%m-%d")
 
 PROJECT_SCOPE = (
     "UK parliamentary and government policy events reported in UK news, using "
@@ -534,7 +535,6 @@ CONFIG = {
     "project_scope": PROJECT_SCOPE,
     "date_start": DATE_START,
     "date_end": DATE_END,
-    "date_window": DATE_WINDOW,
     "GUARDIAN_API_KEY": GUARDIAN_API_KEY,
     "OPENAI_API_KEY": OPENAI_API_KEY,
     "OPENAI_MODEL": OPENAI_MODEL,
