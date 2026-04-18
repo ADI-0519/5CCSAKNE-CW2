@@ -34,7 +34,7 @@ NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 
 GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
 GOVUK_CONTENT_API_BASE = os.getenv("GOVUK_CONTENT_API_BASE", "https://www.gov.uk/api/content")
-PARLIAMENT_API_BASE = os.getenv("PARLIAMENT_API_BASE", "https://api.parliament.uk")
+PARLIAMENT_API_BASE = os.getenv("PARLIAMENT_API_BASE", "https://questions-statements-api.parliament.uk")
 
 # legacy migration endpoint
 NEWS_API_BASE = "https://newsapi.org/v2"
