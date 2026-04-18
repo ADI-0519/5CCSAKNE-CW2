@@ -8,7 +8,7 @@ Project scope:
 
 The first 10 questions below are the revised manually authored set. They are intentionally event-centred and are designed to drive the ontology redesign before the SPARQL layer is rewritten. The LLM-assisted 10 should be generated later so they complement this set rather than duplicating it.
 
-Implementation difficulty and runtime support should be tracked separately in [cq_coverage_table.md](/c:/Users/adirj/OneDrive/Documents/GitHub/5CCSAKNE-CW2/docs/cq_coverage_table.md).
+Implementation difficulty and runtime support should be tracked separately in [cq_coverage_table.md](docs/cq_coverage_table.md).
 
 ## Manual Competency Questions
 
