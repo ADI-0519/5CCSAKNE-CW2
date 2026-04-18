@@ -48,19 +48,38 @@ This table records the minimum ontology support each manual CQ requires. It shou
 | CQ08 | `PoliticalParty`, `PoliticalActor`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic` | Multi-hop party-actor-event-topic query; stronger than simple party mention lookup. |
 | CQ09 | `PolicyEvent`, `GovernmentBody`, `ParliamentaryBody`, `PolicyTopic` | missing-link detection over `involvesGovernmentBody`, `occursInParliamentaryBody`, `concernsPolicyTopic` | Completion-oriented CQ; explicitly supports incompleteness analysis. |
 | CQ10 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent`, `NewsArticle` | `concernsPolicyTopic`, `reportedByArticle` | Frequency / topic ranking query; supports counterexamples and meaningful limits. |
+| CQ11 | `PolicyEvent`, `OfficialSourceRecord` | `representedInOfficialSource` | Counting with `NOT EXISTS`; interlinking completeness metric (Week 10). |
+| CQ12 | `SourceRecord`, `PolicyEvent` | `matchedToSourceRecord`, `sourceSystem` | Provenance aggregation; validates three-source integration story. |
+| CQ13 | `PolicyEvent`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Topic co-occurrence via self-join with `HAVING`; non-trivial join pattern. |
+| CQ14 | `NewsOrganisation`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `publishedBy`, `reportedByArticle` | Comparison via correlated subqueries; exercises event subtype distinction. |
+| CQ15 | `Location`, `PolicyEvent` | `occursInLocation`, `occursOnDate` | Location aggregation; exercises the geographic dimension of the event model. |
+| CQ16 | `PoliticalActor`, `PoliticalParty`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic`, `occursOnDate` | Per-actor multi-topic aggregation; distinct from CQ08 which aggregates at party level. |
+| CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Four-hop retrieval linking reporters to institutional involvement. |
+| CQ18 | `ParliamentaryDebate`, `PoliticalActor` | `involvesActor` | Existence check with `NOT EXISTS`; directly targets actor-event incompleteness. |
+| CQ19 | `ParliamentaryEvent`, `MinisterialStatement` | `occursOnDate` | Temporal co-occurrence across disjoint event subclasses; tests date-based reasoning. |
+| CQ20 | `GovernmentDepartment`, `MinisterialStatement`, `PolicyTopic` | `issuedByDepartment`, `concernsPolicyTopic` | Property completeness per institution; measures topic coverage of official statements. |
 
 ## LLM-Assisted Competency Questions
 
-The LLM-assisted 10 should be designed after the ontology redesign and should complement the manual set across question types:
+`CQ11.` How many policy events in the knowledge graph have no linked official source record?
 
-- boolean questions
-- comparative questions
-- additional aggregation questions
-- completion/incompleteness questions
-- cross-source validation questions
-- reasoning-aware questions that test inferred class or relation membership
+`CQ12.` Which source systems contributed records matched to policy events in the knowledge graph, and how many matched events does each system account for?
 
-They should not simply paraphrase the manual 10 or fall back to article-mention lookup.
+`CQ13.` Which pairs of policy topics co-occur across more than one policy event during the selected time window?
+
+`CQ14.` Which news organisations published more articles reporting on parliamentary events than on government policy events during the selected time window?
+
+`CQ15.` Which locations are linked to more than one distinct policy event during the selected time window?
+
+`CQ16.` Which political actors are individually involved in events spanning at least two distinct policy topics, and which party do they belong to?
+
+`CQ17.` Which journalists authored articles that report on events involving a government department?
+
+`CQ18.` Are there parliamentary debates in the knowledge graph that have no linked political actor?
+
+`CQ19.` Which parliamentary events share an occurrence date with at least one ministerial statement?
+
+`CQ20.` For each government department that issued a ministerial statement, how many of those statements are not linked to any policy topic?
 
 ## Notes
 
