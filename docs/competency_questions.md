@@ -55,9 +55,9 @@ This table records the minimum ontology support each manual CQ requires. It shou
 | CQ15 | `Location`, `PolicyEvent` | `occursInLocation`, `occursOnDate` | Location aggregation; exercises the geographic dimension of the event model. |
 | CQ16 | `PoliticalActor`, `PoliticalParty`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic`, `occursOnDate` | Per-actor multi-topic aggregation; distinct from CQ08 which aggregates at party level. |
 | CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Four-hop retrieval linking reporters to institutional involvement. |
-| CQ18 | `ParliamentaryDebate`, `PoliticalActor` | `involvesActor` | Existence check with `NOT EXISTS`; directly targets actor-event incompleteness. |
+| CQ18 | `PolicyTopic`, `PolicyEvent`, `PoliticalActor`, `GovernmentBody` | `involvesActor`, `involvesGovernmentBody`, `concernsPolicyTopic` | Multi-constraint intersection query; tests joint actor-institution-topic linkage on the same event. |
 | CQ19 | `ParliamentaryEvent`, `MinisterialStatement` | `occursOnDate` | Temporal co-occurrence across disjoint event subclasses; tests date-based reasoning. |
-| CQ20 | `GovernmentDepartment`, `MinisterialStatement`, `PolicyTopic` | `issuedByDepartment`, `concernsPolicyTopic` | Property completeness per institution; measures topic coverage of official statements. |
+| CQ20 | `NewsOrganisation`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `publishedBy`, `reportedByArticle`, `involvesGovernmentBody` | Ranking query over 3-hop chain; measures institutional breadth of news coverage per publisher. |
 
 ## LLM-Assisted Competency Questions
 
@@ -75,11 +75,11 @@ This table records the minimum ontology support each manual CQ requires. It shou
 
 `CQ17.` Which journalists authored articles that report on events involving a government department?
 
-`CQ18.` Are there parliamentary debates in the knowledge graph that have no linked political actor?
+`CQ18.` Which policy topics appear in events that involve both a political actor and a government body?
 
 `CQ19.` Which parliamentary events share an occurrence date with at least one ministerial statement?
 
-`CQ20.` For each government department that issued a ministerial statement, how many of those statements are not linked to any policy topic?
+`CQ20.` Which news organisations published the most articles reporting on events that involved government departments, ranked by number of distinct departments covered?
 
 ## Notes
 
