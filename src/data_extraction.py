@@ -269,9 +269,17 @@ def classify_article_type(article, text):
 
 def infer_event_type(event_name):
     event_lower = event_name.lower()
+    if "debate" in event_lower:
+        return "ParliamentaryDebate"
+    if "statement" in event_lower:
+        return "MinisterialStatement"
     if any(hint in event_lower for hint in CONFIG["ECONOMIC_EVENT_HINTS"]):
-        return "EconomicEvent"
-    return "PoliticalEvent"
+        return "GovernmentPolicyEvent"
+    if any(
+        phrase in event_lower for phrase in ["bill", "reading", "committee", "commons", "lords"]
+    ):
+        return "ParliamentaryEvent"
+    return "PolicyEvent"
 
 
 def preferred_event_location(locations, text_lower, topics):
@@ -341,10 +349,15 @@ def extract_events(article, text, topics, locations):
         and any(topic in topics for topic in ["Election", "Parliament", "Government Policy"])
         and policy_signal
     ):
+        fallback_type = (
+            "ParliamentaryEvent"
+            if "Parliament" in topics or "parliament" in text_lower or "westminster" in text_lower
+            else "GovernmentPolicyEvent"
+        )
         events.append(
             {
                 "name": "Policy Announcement",
-                "type": "PoliticalEvent",
+                "type": fallback_type,
                 "date": event_date,
                 "location": default_location,
                 "source": "heuristic",
@@ -356,7 +369,7 @@ def extract_events(article, text, topics, locations):
             events.append(
                 {
                     "name": "Election",
-                    "type": "PoliticalEvent",
+                    "type": "PolicyEvent",
                     "date": event_date,
                     "location": default_location,
                     "source": "heuristic",
@@ -372,7 +385,7 @@ def extract_events(article, text, topics, locations):
             events.append(
                 {
                     "name": "Policy Announcement",
-                    "type": "PoliticalEvent",
+                    "type": "GovernmentPolicyEvent",
                     "date": event_date,
                     "location": default_location,
                     "source": "heuristic",
@@ -392,7 +405,7 @@ def extract_events(article, text, topics, locations):
                 events.append(
                     {
                         "name": "Budget",
-                        "type": "EconomicEvent",
+                        "type": "GovernmentPolicyEvent",
                         "date": event_date,
                         "location": default_location,
                         "source": "heuristic",
@@ -434,7 +447,7 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
         return [
             {
                 "name": "Election",
-                "type": "PoliticalEvent",
+                "type": "PolicyEvent",
                 "date": event_date,
                 "location": default_location,
                 "source": "heuristic",
@@ -445,7 +458,7 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
         return [
             {
                 "name": "Policy Announcement",
-                "type": "PoliticalEvent",
+                "type": "GovernmentPolicyEvent",
                 "date": event_date,
                 "location": default_location,
                 "source": "heuristic",
@@ -462,7 +475,7 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
             return [
                 {
                     "name": "Budget",
-                    "type": "EconomicEvent",
+                    "type": "GovernmentPolicyEvent",
                     "date": event_date,
                     "location": default_location,
                     "source": "heuristic",
@@ -537,7 +550,7 @@ def merge_event_candidates(
 
         merged[event_name] = {
             "name": event_name,
-            "type": normalise_label(event.get("type")) or "NewsEvent",
+            "type": normalise_label(event.get("type")) or "PolicyEvent",
             "date": event.get("date") or default_date,
             "location": normalise_label(event.get("location")) or default_location,
             "source": "openai",

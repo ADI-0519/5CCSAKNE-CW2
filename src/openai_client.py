@@ -8,7 +8,13 @@ from src.config import CONFIG
 
 VALID_SENTIMENTS = {"Positive", "Negative", "Neutral"}
 VALID_ARTICLE_TYPES = {"NewsArticle", "OpinionArticle", "BreakingNewsArticle"}
-VALID_EVENT_TYPES = {"NewsEvent", "PoliticalEvent", "EconomicEvent"}
+VALID_EVENT_TYPES = {
+    "PolicyEvent",
+    "ParliamentaryEvent",
+    "GovernmentPolicyEvent",
+    "ParliamentaryDebate",
+    "MinisterialStatement",
+}
 
 EXTRACTION_RESPONSE_FORMAT = {
     "type": "json_schema",

@@ -1,11 +1,23 @@
+"""Source collection utilities for the CW2 KG pipeline.
+
+This module now treats Guardian, Parliament/Hansard, and GOV.UK as the core
+collection sources. NewsAPI is retained only as an explicit legacy option while
+the rest of the pipeline is migrated away from the original prototype design.
+"""
+
 import json
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, quote_plus, urlencode, urlsplit, urlunsplit
 
 import requests
 
 from src.config import CONFIG, build_guardian_page_url, build_newsapi_page_url
+
+DEFAULT_TIMEOUT_SECONDS = 30
+DEFAULT_PAGE_SIZE = 100
+CORE_COLLECTION_SOURCES = tuple(CONFIG["CORE_SOURCE_ORDER"])
+LEGACY_COLLECTION_SOURCES = ("newsapi",)
 
 
 def safe_url_for_logging(url):
@@ -25,15 +37,17 @@ def fetch_json(url):
     safe_url = safe_url_for_logging(url)
     print(f"[COLLECT] Fetching data from URL: {safe_url}")
     try:
-        response = requests.get(url, timeout=30)
+        response = requests.get(url, timeout=DEFAULT_TIMEOUT_SECONDS)
         response.raise_for_status()
         return response.json()
-    except requests.exceptions.HTTPError as e:
-        raise RuntimeError(f"[COLLECT] HTTP error fetching {safe_url}: {e}") from e
-    except requests.exceptions.RequestException as e:
-        raise RuntimeError(f"[COLLECT] Request failed for {safe_url}: {e}") from e
-    except ValueError as e:
-        raise RuntimeError(f"[COLLECT] Failed to parse JSON response from {safe_url}: {e}") from e
+    except requests.exceptions.HTTPError as exc:
+        raise RuntimeError(f"[COLLECT] HTTP error fetching {safe_url}: {exc}") from exc
+    except requests.exceptions.RequestException as exc:
+        raise RuntimeError(f"[COLLECT] Request failed for {safe_url}: {exc}") from exc
+    except ValueError as exc:
+        raise RuntimeError(
+            f"[COLLECT] Failed to parse JSON response from {safe_url}: {exc}"
+        ) from exc
 
 
 def build_timestamp():
@@ -95,6 +109,48 @@ def build_collection_payload(sources, errors=None):
     }
 
 
+def build_parliament_search_url(page=1):
+    """Build a best-effort Parliament search URL.
+
+    The Parliament API surface is wider than the current pipeline needs. At
+    this stage we keep collection conservative: one search endpoint, the
+    configured date window, and explicit query terms that can later be refined
+    once source-specific normalisation is in place.
+    """
+
+    query = quote_plus(" OR ".join(CONFIG["PARLIAMENT_QUERY_TERMS"]))
+    skip = max(0, page - 1) * DEFAULT_PAGE_SIZE
+    return (
+        f"{CONFIG['PARLIAMENT_API_BASE'].rstrip('/')}/search?"
+        f"q={query}&"
+        f"take={DEFAULT_PAGE_SIZE}&"
+        f"skip={skip}&"
+        f"from-date={CONFIG['date_start']}&"
+        f"to-date={CONFIG['date_end']}"
+    )
+
+
+def derive_govuk_search_base():
+    content_base = CONFIG["GOVUK_CONTENT_API_BASE"].rstrip("/")
+    if content_base.endswith("/api/content"):
+        return f"{content_base[: -len('/api/content')]}/api/search.json"
+    return f"{content_base}/search.json"
+
+
+def build_govuk_search_url(page=1):
+    """Build a GOV.UK search request URL for the fixed coursework window."""
+
+    query = quote_plus(" OR ".join(CONFIG["GOVUK_QUERY_TERMS"]))
+    start = max(0, page - 1) * DEFAULT_PAGE_SIZE
+    return (
+        f"{derive_govuk_search_base()}?"
+        f"q={query}&"
+        f"count={DEFAULT_PAGE_SIZE}&"
+        f"start={start}&"
+        f"order=-public_timestamp"
+    )
+
+
 def fetch_newsapi_data(save_snapshot=True):
     first_page = fetch_json(build_newsapi_page_url(page=1))
     total_results = first_page.get("totalResults", 0)
@@ -108,7 +164,7 @@ def fetch_newsapi_data(save_snapshot=True):
         "resultLimitNote": (
             "NewsAPI developer-tier access is limited to the first 100 results. "
             "The pipeline therefore fetches page 1 only and treats NewsAPI as a "
-            "supplementary source."
+            "supplementary legacy source."
         ),
     }
     if save_snapshot:
@@ -139,23 +195,84 @@ def fetch_guardian_data(save_snapshot=True):
     return data
 
 
-def collect_all_sources(save_snapshots=True):
+def fetch_parliament_data(save_snapshot=True):
+    """Collect raw Parliament/Hansard search results.
+
+    We keep the result shape close to the source payload rather than attempting
+    any early harmonisation here. That keeps collection and normalisation
+    separate, which makes later source-specific cleanup much safer.
+    """
+
+    url = build_parliament_search_url(page=1)
+    first_page = fetch_json(url)
+    data = {
+        "query_terms": CONFIG["PARLIAMENT_QUERY_TERMS"],
+        "date_window": CONFIG["date_window"],
+        "request_url": safe_url_for_logging(url),
+        "pagesFetched": 1,
+        "response": first_page,
+    }
+    if save_snapshot:
+        save_raw_json(data, "parliament")
+    return data
+
+
+def fetch_govuk_data(save_snapshot=True):
+    """Collect raw GOV.UK search results for policy-related documents."""
+
+    url = build_govuk_search_url(page=1)
+    first_page = fetch_json(url)
+    data = {
+        "query_terms": CONFIG["GOVUK_QUERY_TERMS"],
+        "document_formats": CONFIG["GOVUK_DOCUMENT_FORMATS"],
+        "date_window": CONFIG["date_window"],
+        "request_url": safe_url_for_logging(url),
+        "pagesFetched": 1,
+        "response": first_page,
+    }
+    if save_snapshot:
+        save_raw_json(data, "govuk")
+    return data
+
+
+SOURCE_FETCHERS = {
+    "guardian": fetch_guardian_data,
+    "parliament": fetch_parliament_data,
+    "govuk": fetch_govuk_data,
+    "newsapi": fetch_newsapi_data,
+}
+
+
+def resolve_source_names(source_names=None, include_legacy_newsapi=False):
+    if source_names is None:
+        names = list(CORE_COLLECTION_SOURCES)
+    else:
+        names = list(source_names)
+
+    if include_legacy_newsapi and "newsapi" not in names:
+        names.append("newsapi")
+    return names
+
+
+def collect_all_sources(save_snapshots=True, source_names=None, include_legacy_newsapi=False):
     sources = {}
     errors = {}
 
-    print("[COLLECT] Collecting NewsAPI data...")
-    try:
-        sources["newsapi"] = fetch_newsapi_data(save_snapshot=save_snapshots)
-    except Exception as exc:
-        errors["newsapi"] = str(exc)
-        print(f"[COLLECT] NewsAPI collection failed: {exc}")
+    for source_name in resolve_source_names(
+        source_names=source_names, include_legacy_newsapi=include_legacy_newsapi
+    ):
+        fetcher = SOURCE_FETCHERS.get(source_name)
+        if fetcher is None:
+            errors[source_name] = f"Unsupported source {source_name!r}"
+            print(f"[COLLECT] Unsupported source configured: {source_name}")
+            continue
 
-    print("[COLLECT] Collecting Guardian data...")
-    try:
-        sources["guardian"] = fetch_guardian_data(save_snapshot=save_snapshots)
-    except Exception as exc:
-        errors["guardian"] = str(exc)
-        print(f"[COLLECT] Guardian collection failed: {exc}")
+        print(f"[COLLECT] Collecting {source_name} data...")
+        try:
+            sources[source_name] = fetcher(save_snapshot=save_snapshots)
+        except Exception as exc:
+            errors[source_name] = str(exc)
+            print(f"[COLLECT] {source_name} collection failed: {exc}")
 
     if not sources:
         raise RuntimeError("[COLLECT] No source data could be collected from any provider.")
@@ -163,16 +280,54 @@ def collect_all_sources(save_snapshots=True):
     return build_collection_payload(sources, errors)
 
 
-def load_cached_sources(newsapi_snapshot=None, guardian_snapshot=None):
+def build_snapshot_overrides(
+    source_snapshots=None,
+    *,
+    newsapi_snapshot=None,
+    guardian_snapshot=None,
+    parliament_snapshot=None,
+    govuk_snapshot=None,
+):
+    overrides = dict(source_snapshots or {})
+    named_overrides = {
+        "newsapi": newsapi_snapshot,
+        "guardian": guardian_snapshot,
+        "parliament": parliament_snapshot,
+        "govuk": govuk_snapshot,
+    }
+    for source_name, snapshot_path in named_overrides.items():
+        if snapshot_path is not None:
+            overrides[source_name] = snapshot_path
+    return overrides
+
+
+def load_cached_sources(
+    source_snapshots=None,
+    *,
+    newsapi_snapshot=None,
+    guardian_snapshot=None,
+    parliament_snapshot=None,
+    govuk_snapshot=None,
+    source_names=None,
+    include_legacy_newsapi=False,
+):
     sources = {}
     errors = {}
+    snapshot_overrides = build_snapshot_overrides(
+        source_snapshots,
+        newsapi_snapshot=newsapi_snapshot,
+        guardian_snapshot=guardian_snapshot,
+        parliament_snapshot=parliament_snapshot,
+        govuk_snapshot=govuk_snapshot,
+    )
 
-    for source_name, snapshot_path in (
-        ("newsapi", newsapi_snapshot),
-        ("guardian", guardian_snapshot),
+    for source_name in resolve_source_names(
+        source_names=source_names, include_legacy_newsapi=include_legacy_newsapi
     ):
         try:
-            sources[source_name] = load_cached_source(source_name, snapshot_path=snapshot_path)
+            sources[source_name] = load_cached_source(
+                source_name, snapshot_path=snapshot_overrides.get(source_name)
+            )
         except Exception as exc:
             errors[source_name] = str(exc)
             print(f"[COLLECT] Cached {source_name} load failed: {exc}")
