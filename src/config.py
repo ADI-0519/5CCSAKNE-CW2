@@ -1,11 +1,3 @@
-"""Central configuration for the CW2 KG construction pipeline.
-
-The final project architecture is now centred on three core sources:
-Guardian, Parliament/Hansard, and GOV.UK. A limited amount of NewsAPI
-configuration is retained temporarily so the older collection code can still
-run while we migrate the rest of the pipeline.
-"""
-
 import os
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote_plus
@@ -14,9 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ---------------------------------------------------------------------------
-# Project scope
-# ---------------------------------------------------------------------------
+# project scope
 
 _today = datetime.now(timezone.utc).date()
 DATE_END = _today.strftime("%Y-%m-%d")
@@ -29,9 +19,7 @@ PROJECT_SCOPE = (
     "augmentation, extraction support, completion, and evaluation baselines."
 )
 
-# ---------------------------------------------------------------------------
-# API keys and model configuration
-# ---------------------------------------------------------------------------
+# API keys and model config
 
 GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -39,24 +27,16 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 PARLIAMENT_API_KEY = os.getenv("PARLIAMENT_API_KEY")
 GOVUK_API_KEY = os.getenv("GOVUK_API_KEY")
 
-# NewsAPI is retained only as a temporary migration path while the collection
-# layer is moved over to the final three-source architecture.
+# only kept for the legacy newsapi fallback option
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 
-# ---------------------------------------------------------------------------
-# Source endpoints
-# ---------------------------------------------------------------------------
+# source endpoints
 
 GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
 GOVUK_CONTENT_API_BASE = os.getenv("GOVUK_CONTENT_API_BASE", "https://www.gov.uk/api/content")
 PARLIAMENT_API_BASE = os.getenv("PARLIAMENT_API_BASE", "https://api.parliament.uk")
 
-# GOV.UK Content API is officially public and does not require authentication.
-# Parliament endpoints are currently treated as public for this project too, but
-# optional keys are exposed here so the pipeline can adapt cleanly if access
-# requirements change or a different authenticated endpoint is adopted later.
-
-# Legacy / migration-only endpoint.
+# legacy migration endpoint
 NEWS_API_BASE = "https://newsapi.org/v2"
 
 SOURCE_CONFIG = {
@@ -88,18 +68,14 @@ TEXTUAL_SOURCE_SYSTEMS = {"guardian"}
 STRUCTURED_SOURCE_SYSTEMS = {"parliament", "govuk"}
 OFFICIAL_SOURCE_SYSTEMS = {"parliament", "hansard", "govuk", "gov.uk"}
 
-# ---------------------------------------------------------------------------
-# Directory layout
-# ---------------------------------------------------------------------------
+# directory layout
 
 RAW_DATA_DIR = "data/raw"
 PROCESSED_DATA_DIR = "data/processed"
 GENERATED_KG_DIR = "kg/generated"
 OPENAI_CACHE_DIR = "data/cache/openai"
 
-# ---------------------------------------------------------------------------
 # Guardian configuration
-# ---------------------------------------------------------------------------
 
 GUARDIAN_PAGE_SIZE = 200
 GUARDIAN_SHOW_TAGS = ["keyword", "tone", "contributor"]
@@ -136,9 +112,7 @@ GUARDIAN_QUERY_TERMS = [
     "NHS",
 ]
 
-# ---------------------------------------------------------------------------
 # Parliament / Hansard configuration
-# ---------------------------------------------------------------------------
 
 PARLIAMENT_QUERY_TERMS = [
     "debate",
@@ -166,9 +140,7 @@ PARLIAMENTARY_BODY_NAMES = [
     "Westminster Hall",
 ]
 
-# ---------------------------------------------------------------------------
 # GOV.UK configuration
-# ---------------------------------------------------------------------------
 
 GOVUK_QUERY_TERMS = [
     "policy",
@@ -192,9 +164,7 @@ GOVUK_DOCUMENT_FORMATS = [
     "statutory_guidance",
 ]
 
-# ---------------------------------------------------------------------------
-# Legacy NewsAPI configuration (temporary migration support only)
-# ---------------------------------------------------------------------------
+# legacy NewsAPI config
 
 NEWS_API_PAGE_SIZE = 100
 NEWS_QUERY_TERMS = GUARDIAN_QUERY_TERMS
@@ -254,9 +224,7 @@ NEWSAPI_UK_SCOPE_TERMS = {
     "whitehall",
 }
 
-# ---------------------------------------------------------------------------
-# Extraction dictionaries
-# ---------------------------------------------------------------------------
+# extraction dictionaries
 
 TOPIC_KEYWORDS = [
     "parliament",
@@ -589,5 +557,5 @@ CONFIG = {
     "url_newsapi_everything": build_newsapi_everything_url(),
 }
 
-# Backwards-compatible alias used by the current prototype pipeline.
+# backwards-compatible alias for older pipeline code
 CONFIG["url_headlines"] = CONFIG["url_newsapi_everything"]
