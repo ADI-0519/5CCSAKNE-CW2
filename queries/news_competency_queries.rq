@@ -178,3 +178,164 @@ WHERE {
 }
 GROUP BY ?topicName
 ORDER BY DESC(?eventCount) ?topicName
+
+
+# CQ11: How many policy events in the knowledge graph have no linked official source record?
+SELECT (COUNT(DISTINCT ?event) AS ?eventsWithoutOfficialSource)
+WHERE {
+  ?event a news:PolicyEvent .
+  FILTER NOT EXISTS { ?event news:representedInOfficialSource ?source . }
+}
+
+
+# CQ12: Which source systems contributed records matched to policy events, and how many matched events does each account for?
+SELECT ?sourceSystem (COUNT(DISTINCT ?event) AS ?matchedEventCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:matchedToSourceRecord ?record .
+  ?record news:sourceSystem ?sourceSystem .
+}
+GROUP BY ?sourceSystem
+ORDER BY DESC(?matchedEventCount)
+
+
+# CQ13: Which pairs of policy topics co-occur across more than one policy event during the selected time window?
+SELECT ?topicNameA ?topicNameB (COUNT(DISTINCT ?event) AS ?coOccurrenceCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:concernsPolicyTopic ?topicA ;
+         news:concernsPolicyTopic ?topicB ;
+         news:occursOnDate ?eventDate .
+  ?topicA a news:PolicyTopic ;
+          schema:name ?topicNameA .
+  ?topicB a news:PolicyTopic ;
+          schema:name ?topicNameB .
+  FILTER(STR(?topicNameA) < STR(?topicNameB))
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?topicNameA ?topicNameB
+HAVING(COUNT(DISTINCT ?event) > 1)
+ORDER BY DESC(?coOccurrenceCount) ?topicNameA ?topicNameB
+
+
+# CQ14: Which news organisations published more articles reporting on parliamentary events than on government policy events during the selected time window?
+SELECT ?orgName ?parliamentaryCount ?governmentCount
+WHERE {
+  {
+    SELECT ?org (COUNT(DISTINCT ?article) AS ?parliamentaryCount)
+    WHERE {
+      ?article a news:NewsArticle ;
+               news:publishedBy ?org .
+      ?event a news:ParliamentaryEvent ;
+             news:reportedByArticle ?article ;
+             news:occursOnDate ?eventDate .
+      FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+    }
+    GROUP BY ?org
+  }
+  {
+    SELECT ?org (COUNT(DISTINCT ?article) AS ?governmentCount)
+    WHERE {
+      ?article a news:NewsArticle ;
+               news:publishedBy ?org .
+      ?event a news:GovernmentPolicyEvent ;
+             news:reportedByArticle ?article ;
+             news:occursOnDate ?eventDate .
+      FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+    }
+    GROUP BY ?org
+  }
+  ?org schema:name ?orgName .
+  FILTER(?parliamentaryCount > ?governmentCount)
+}
+ORDER BY DESC(?parliamentaryCount) ?orgName
+
+
+# CQ15: Which locations are linked to more than one distinct policy event during the selected time window?
+SELECT ?locationName (COUNT(DISTINCT ?event) AS ?eventCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:occursInLocation ?location ;
+         news:occursOnDate ?eventDate .
+  ?location a news:Location ;
+            schema:name ?locationName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?locationName
+HAVING(COUNT(DISTINCT ?event) > 1)
+ORDER BY DESC(?eventCount) ?locationName
+
+
+# CQ16: Which political actors are individually involved in events spanning at least two distinct policy topics, and which party do they belong to?
+SELECT ?actorName ?partyName (COUNT(DISTINCT ?topic) AS ?topicCount)
+WHERE {
+  ?actor a news:PoliticalActor ;
+         schema:name ?actorName ;
+         news:memberOfParty ?party .
+  ?party a news:PoliticalParty ;
+         schema:name ?partyName .
+  ?event a news:PolicyEvent ;
+         news:involvesActor ?actor ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?actorName ?partyName
+HAVING(COUNT(DISTINCT ?topic) >= 2)
+ORDER BY DESC(?topicCount) ?actorName
+
+
+# CQ17: Which journalists authored articles that report on events involving a government department?
+SELECT DISTINCT ?journalistName ?headline ?departmentName
+WHERE {
+  ?journalist a news:Journalist ;
+              schema:name ?journalistName .
+  ?article a news:NewsArticle ;
+           news:hasAuthor ?journalist ;
+           schema:headline ?headline .
+  ?event a news:PolicyEvent ;
+         news:reportedByArticle ?article ;
+         news:involvesGovernmentBody ?department .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+}
+ORDER BY ?journalistName ?departmentName ?headline
+
+
+# CQ18: Are there parliamentary debates in the knowledge graph that have no linked political actor?
+SELECT DISTINCT ?debateName ?eventDate
+WHERE {
+  ?debate a news:ParliamentaryDebate ;
+          schema:name ?debateName ;
+          news:occursOnDate ?eventDate .
+  FILTER NOT EXISTS { ?debate news:involvesActor ?actor . }
+}
+ORDER BY ?eventDate ?debateName
+
+
+# CQ19: Which parliamentary events share an occurrence date with at least one ministerial statement?
+SELECT DISTINCT ?parliamentaryEventName ?statementName ?sharedDate
+WHERE {
+  ?parliamentaryEvent a news:ParliamentaryEvent ;
+                      schema:name ?parliamentaryEventName ;
+                      news:occursOnDate ?sharedDate .
+  ?statement a news:MinisterialStatement ;
+             schema:name ?statementName ;
+             news:occursOnDate ?sharedDate .
+  FILTER NOT EXISTS { ?parliamentaryEvent a news:MinisterialStatement . }
+}
+ORDER BY ?sharedDate ?parliamentaryEventName ?statementName
+
+
+# CQ20: For each government department that issued a ministerial statement, how many of those statements are not linked to any policy topic?
+SELECT ?departmentName (COUNT(DISTINCT ?statement) AS ?statementsWithoutTopic)
+WHERE {
+  ?statement a news:MinisterialStatement ;
+             news:issuedByDepartment ?department .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+  FILTER NOT EXISTS { ?statement news:concernsPolicyTopic ?topic . }
+}
+GROUP BY ?departmentName
+ORDER BY DESC(?statementsWithoutTopic) ?departmentName
+
