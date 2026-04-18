@@ -139,7 +139,7 @@ class TestExtractRelevantInformation:
                 "events": [
                     {
                         "name": "NHS Reform Announcement",
-                        "type": "PoliticalEvent",
+                        "type": "GovernmentPolicyEvent",
                         "date": "2026-03-20",
                         "location": "Manchester",
                     }

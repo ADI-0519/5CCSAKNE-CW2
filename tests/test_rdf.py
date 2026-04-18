@@ -1,4 +1,4 @@
-"""Tests for RDF generation from KG-ready records."""
+"""Tests for RDF generation against the redesigned event-centred ontology."""
 
 import pytest
 from rdflib import RDF
@@ -22,7 +22,7 @@ def sample_record(**overrides):
         "content": "Labour criticised the Treasury after the spring budget announcement in London.",
         "tags": ["Politics", "Budget"],
         "word_count": 250,
-        "article_type": "OpinionArticle",
+        "article_type": "NewsArticle",
         "sentiment": "Negative",
         "follow_up_candidates": [{"match_key": "The Guardian|Budget", "reason": "same source"}],
         "event_candidates": [
@@ -60,15 +60,14 @@ class TestConvertJsonToRdf:
         graph = convert_json_to_rdf([sample_record()])
         assert len(graph) > 0
 
-    def test_article_node_has_expected_types_and_metadata(self):
+    def test_article_node_has_expected_metadata(self):
         graph = convert_json_to_rdf([sample_record()])
         article = NEWS["article/abc123def456789a"]
 
         assert (article, RDF.type, NEWS.NewsArticle) in graph
-        assert (article, RDF.type, NEWS.OpinionArticle) in graph
         assert (article, SCHEMA.headline, None) in graph
-        assert (article, NEWS.hasSection, None) in graph
-        assert (article, NEWS.wordCount, None) in graph
+        assert (article, NEWS.articleURL, None) in graph
+        assert (article, NEWS.publishedDate, None) in graph
 
     def test_author_and_publisher_nodes_are_created(self):
         graph = convert_json_to_rdf([sample_record()])
@@ -81,67 +80,142 @@ class TestConvertJsonToRdf:
         assert (article, NEWS.publishedBy, publisher) in graph
         assert (publisher, RDF.type, NEWS.NewsOrganisation) in graph
 
-    def test_people_orgs_locations_and_topics_are_typed(self):
+    def test_core_domain_entities_are_typed(self):
         graph = convert_json_to_rdf([sample_record()])
 
-        politician = NEWS["person/Keir_Starmer"]
+        actor = NEWS["person/Keir_Starmer"]
         party = NEWS["organisation/Labour"]
         body = NEWS["organisation/Treasury"]
-        location = NEWS["location/London"]
         topic = NEWS["topic/Politics"]
+        location = NEWS["location/London"]
 
-        assert (politician, RDF.type, NEWS.Politician) in graph
+        assert (actor, RDF.type, NEWS.PoliticalActor) in graph
         assert (party, RDF.type, NEWS.PoliticalParty) in graph
         assert (body, RDF.type, NEWS.GovernmentBody) in graph
+        assert (body, RDF.type, NEWS.GovernmentDepartment) in graph
+        assert (topic, RDF.type, NEWS.PolicyTopic) in graph
         assert (location, RDF.type, NEWS.Location) in graph
-        assert (topic, RDF.type, NEWS.Topic) in graph
 
-    def test_event_and_sentiment_triples_are_created(self):
+    def test_policy_event_triples_are_created(self):
         graph = convert_json_to_rdf([sample_record()])
         article = NEWS["article/abc123def456789a"]
-        # generic event names get article-id suffix to avoid false merging across articles
         event = NEWS["event/Budget_2026-03-06_London_abc123de"]
+        topic = NEWS["topic/Economic_Policy"]
+        actor = NEWS["person/Keir_Starmer"]
+        body = NEWS["organisation/Treasury"]
+        location = NEWS["location/London"]
 
-        assert (article, NEWS.hasSentiment, NEWS.Negative) in graph
-        assert (article, NEWS.coversEvent, event) in graph
-        assert (event, RDF.type, NEWS.EconomicEvent) in graph
-        assert any(obj.datatype == XSD.date for obj in graph.objects(event, NEWS.eventDate))
+        assert (event, RDF.type, NEWS.PolicyEvent) in graph
+        assert (event, RDF.type, NEWS.GovernmentPolicyEvent) in graph
+        assert (event, NEWS.reportedByArticle, article) in graph
+        assert (event, NEWS.concernsPolicyTopic, topic) in graph
+        assert (event, NEWS.involvesActor, actor) in graph
+        assert (event, NEWS.involvesGovernmentBody, body) in graph
+        assert (event, NEWS.occursInLocation, location) in graph
+        assert any(obj.datatype == XSD.date for obj in graph.objects(event, NEWS.occursOnDate))
 
-    def test_same_event_from_multiple_articles_reuses_event_node(self):
-        first = sample_record(
-            id="article-a",
-            source_name="The Guardian",
+    def test_parliamentary_debate_is_classified_from_event_name(self):
+        record = sample_record(
             event_candidates=[
                 {
-                    "name": "NHS Reform Bill",
+                    "name": "Commons debate on immigration policy",
                     "type": "PoliticalEvent",
-                    "date": "2026-03-06",
-                    "location": "London",
-                    "source": "heuristic",
+                    "date": "2026-03-10",
+                    "location": "Westminster",
+                    "source": "openai",
                 }
             ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["House of Commons"],
+                "locations": ["Westminster"],
+                "technologies": [],
+                "topics": ["Immigration", "Parliament"],
+                "events": ["Commons debate on immigration policy"],
+            },
         )
-        second = sample_record(
-            id="article-b",
-            source_name="BBC News",
-            author="John Smith",
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Parliamentary_Debate_2026-03-10_Westminster_abc123de"]
+        body = NEWS["organisation/House_of_Commons"]
+
+        assert (event, RDF.type, NEWS.ParliamentaryDebate) in graph
+        assert (event, NEWS.occursInParliamentaryBody, body) in graph
+
+    def test_ministerial_statement_links_to_department(self):
+        record = sample_record(
+            source_system="govuk",
+            source_name="GOV.UK",
             event_candidates=[
                 {
-                    "name": "NHS Reform Bill",
+                    "name": "Ministerial statement on social care reform",
                     "type": "PoliticalEvent",
-                    "date": "2026-03-06",
+                    "date": "2026-03-12",
                     "location": "London",
-                    "source": "heuristic",
+                    "source": "official",
                 }
             ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["Department of Health and Social Care"],
+                "locations": ["London"],
+                "technologies": [],
+                "topics": ["Healthcare", "Government Policy"],
+                "events": ["Ministerial statement on social care reform"],
+            },
         )
-        graph = convert_json_to_rdf([first, second])
-        event = NEWS["event/NHS_Reform_Bill_2026-03-06_London"]
 
-        assert (NEWS["article/article-a"], NEWS.coversEvent, event) in graph
-        assert (NEWS["article/article-b"], NEWS.coversEvent, event) in graph
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Ministerial_Statement_2026-03-12_London_abc123de"]
+        department = NEWS["organisation/Department_of_Health_and_Social_Care"]
 
-    def test_specific_event_names_gain_canonical_event_labels(self):
+        assert (event, RDF.type, NEWS.MinisterialStatement) in graph
+        assert (department, RDF.type, NEWS.GovernmentDepartment) in graph
+        assert (event, NEWS.issuedByDepartment, department) in graph
+
+    def test_official_sources_create_source_records_and_link_events(self):
+        record = sample_record(
+            id="govuk-1",
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="Ministerial statement on planning reform",
+            event_candidates=[
+                {
+                    "name": "Ministerial statement on planning reform",
+                    "type": "PoliticalEvent",
+                    "date": "2026-03-20",
+                    "location": "London",
+                    "source": "official",
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["Department for Levelling Up"],
+                "locations": ["London"],
+                "technologies": [],
+                "topics": ["Housing", "Government Policy"],
+                "events": ["Ministerial statement on planning reform"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Ministerial_Statement_2026-03-20_London_govuk-1"]
+        source_record = NEWS["source-record/govuk/govuk-1"]
+
+        assert (source_record, RDF.type, NEWS.SourceRecord) in graph
+        assert (source_record, RDF.type, NEWS.GovernmentSourceRecord) in graph
+        assert (event, NEWS.representedInOfficialSource, source_record) in graph
+
+    def test_specific_event_names_gain_canonical_labels(self):
         record = sample_record(
             event_candidates=[
                 {
@@ -166,20 +240,7 @@ class TestConvertJsonToRdf:
         )
 
         graph = convert_json_to_rdf([record])
-        event = NEWS["event/New_measures_to_support_cost_of_living_2026-04-05"]
+        event = NEWS["event/Budget_2026-04-05_abc123de"]
         event_names = {str(value) for value in graph.objects(event, SCHEMA.name)}
-        alternate_names = {str(value) for value in graph.objects(event, SCHEMA.alternateName)}
 
         assert "Budget" in event_names
-        assert "New measures to support cost of living" in alternate_names
-
-    def test_follow_up_link_is_created_between_related_articles(self):
-        first = sample_record(id="article-a", published_at="2026-03-06T10:00:00Z")
-        second = sample_record(id="article-b", published_at="2026-03-06T12:00:00Z")
-        graph = convert_json_to_rdf([first, second])
-
-        assert (
-            NEWS["article/article-a"],
-            NEWS.hasFollowUp,
-            NEWS["article/article-b"],
-        ) in graph

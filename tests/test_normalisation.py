@@ -9,7 +9,9 @@ from src.data_normalisation import (
     is_valid_url,
     normalise_collected_sources,
     normalise_data,
+    normalise_govuk_records,
     normalise_name,
+    normalise_parliament_records,
 )
 
 
@@ -39,22 +41,9 @@ class TestUtilityFunctions:
 
 
 class TestSourceNormalisation:
-    def test_normalise_collected_sources_preserves_both_sources(self):
+    def test_normalise_collected_sources_preserves_core_sources(self):
         collected = {
             "sources": {
-                "newsapi": {
-                    "articles": [
-                        {
-                            "source": {"name": "BBC News"},
-                            "author": "Laura Kuenssberg",
-                            "title": "Labour responds to budget row",
-                            "description": "A Westminster update.",
-                            "url": "https://example.com/newsapi-1",
-                            "publishedAt": "2026-03-06T08:00:00Z",
-                            "content": "The Treasury and Labour traded criticism in Parliament.",
-                        }
-                    ]
-                },
                 "guardian": {
                     "response": {
                         "results": [
@@ -75,12 +64,44 @@ class TestSourceNormalisation:
                         ]
                     }
                 },
+                "parliament": {
+                    "response": {
+                        "results": [
+                            {
+                                "title": "Budget debate",
+                                "url": "https://api.parliament.uk/event/1",
+                                "date": "2026-03-06T11:00:00Z",
+                                "house": "House of Commons",
+                                "description": "Members debated the Spring Budget.",
+                                "topics": ["Budget", "Taxation"],
+                            }
+                        ]
+                    }
+                },
+                "govuk": {
+                    "response": {
+                        "results": [
+                            {
+                                "title": "New immigration policy paper",
+                                "link": "/government/publications/new-immigration-policy-paper",
+                                "public_timestamp": "2026-03-06T12:00:00Z",
+                                "description": "A new policy paper from the Home Office.",
+                                "format": "policy_paper",
+                                "organisations": ["Home Office"],
+                            }
+                        ]
+                    }
+                },
             }
         }
 
         result = normalise_collected_sources(collected)
-        assert len(result) == 2
-        assert {record["source_system"] for record in result} == {"newsapi", "guardian"}
+        assert len(result) == 3
+        assert {record["source_system"] for record in result} == {
+            "guardian",
+            "parliament",
+            "govuk",
+        }
 
     def test_newsapi_scope_filter_rejects_blocked_off_scope_source(self):
         article = {
@@ -152,6 +173,54 @@ class TestSourceNormalisation:
 
         result = normalise_collected_sources(collected)
         assert result[0]["tags"] == ["Labour"]
+
+    def test_normalise_parliament_records_maps_source_fields_to_shared_schema(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Health statement",
+                        "url": "https://api.parliament.uk/event/health-statement",
+                        "date": "2026-03-07T10:30:00Z",
+                        "house": "House of Commons",
+                        "description": "A statement on NHS performance.",
+                        "topics": ["NHS", "Healthcare"],
+                    }
+                ]
+            }
+        }
+
+        record = normalise_parliament_records(raw_data)[0]
+
+        assert record["source_system"] == "parliament"
+        assert record["source_name"] == "UK Parliament"
+        assert record["section"] == "House of Commons"
+        assert "Healthcare" in record["tags"]
+        assert record["published_at"] == "2026-03-07T10:30:00Z"
+
+    def test_normalise_govuk_records_maps_search_results_to_shared_schema(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Treasury growth plan",
+                        "link": "/government/publications/treasury-growth-plan",
+                        "public_timestamp": "2026-03-08T09:15:00Z",
+                        "description": "A policy paper about growth and investment.",
+                        "format": "policy_paper",
+                        "organisations": ["HM Treasury"],
+                    }
+                ]
+            }
+        }
+
+        record = normalise_govuk_records(raw_data)[0]
+
+        assert record["source_system"] == "govuk"
+        assert record["source_name"] == "GOV.UK"
+        assert record["section"] == "policy_paper"
+        assert record["url"] == "https://www.gov.uk/government/publications/treasury-growth-plan"
+        assert "HM Treasury" in record["tags"]
 
 
 class TestExtractedRecordNormalisation:
