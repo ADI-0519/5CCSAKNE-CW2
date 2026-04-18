@@ -347,6 +347,9 @@ def add_source_record(graph, record):
     source_class = classify_source_record_class(source_system)
     if source_class != NEWS.SourceRecord:
         graph.add((uri, RDF.type, source_class))
+    # SPARQL needs explicit superclass types since there is no reasoner
+    if source_class in (NEWS.ParliamentSourceRecord, NEWS.GovernmentSourceRecord):
+        graph.add((uri, RDF.type, NEWS.OfficialSourceRecord))
 
     add_literal(graph, uri, NEWS.sourceIdentifier, record.get("id"), XSD.string)
     add_literal(graph, uri, NEWS.sourceSystem, source_system, XSD.string)
