@@ -423,6 +423,17 @@ def build_ontology() -> Graph:
         XSD.string,
     )
 
+    # property characteristics
+    graph.add((NEWS.issuedByDepartment, RDF.type, OWL.FunctionalProperty))
+    graph.add((NEWS.issuedByDepartment, RDF.type, OWL.AsymmetricProperty))
+    graph.add((NEWS.memberOfParty, RDF.type, OWL.AsymmetricProperty))
+    graph.add((NEWS.occursInParliamentaryBody, RDF.type, OWL.FunctionalProperty))
+    graph.add((NEWS.reportsOn, RDF.type, OWL.ObjectProperty))
+    graph.add((NEWS.reportsOn, OWL.inverseOf, NEWS.reportedByArticle))
+    graph.add((NEWS.reportsOn, RDFS.domain, NEWS.NewsArticle))
+    graph.add((NEWS.reportsOn, RDFS.range, NEWS.PolicyEvent))
+    graph.add((NEWS.reportsOn, RDFS.label, Literal("reports on")))
+
     return graph
 
 
