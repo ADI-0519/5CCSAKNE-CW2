@@ -347,7 +347,8 @@ def enrich_cross_source_links(graph):
         return
 
     guardian_events = [
-        event for event in graph.subjects(RDF.type, NEWS.PolicyEvent)
+        event
+        for event in graph.subjects(RDF.type, NEWS.PolicyEvent)
         if (event, NEWS.reportedByArticle, None) in graph
         and (event, NEWS.representedInOfficialSource, None) not in graph
     ]

@@ -5,12 +5,11 @@ from urllib.parse import parse_qsl, quote_plus, urlencode, urlsplit, urlunsplit
 
 import requests
 
-from src.config import CONFIG, build_guardian_page_url, build_newsapi_page_url
+from src.config import CONFIG, build_guardian_page_url
 
 DEFAULT_TIMEOUT_SECONDS = 30
 DEFAULT_PAGE_SIZE = 100
 CORE_COLLECTION_SOURCES = tuple(CONFIG["CORE_SOURCE_ORDER"])
-LEGACY_COLLECTION_SOURCES = ("newsapi",)
 
 
 def safe_url_for_logging(url):
@@ -132,27 +131,6 @@ def build_govuk_search_url(page=1):
     )
 
 
-def fetch_newsapi_data(save_snapshot=True):
-    first_page = fetch_json(build_newsapi_page_url(page=1))
-    total_results = first_page.get("totalResults", 0)
-    articles = list(first_page.get("articles", []))
-
-    data = {
-        "status": first_page.get("status"),
-        "totalResults": total_results,
-        "articles": articles,
-        "pagesFetched": 1,
-        "resultLimitNote": (
-            "NewsAPI developer-tier access is limited to the first 100 results. "
-            "The pipeline therefore fetches page 1 only and treats NewsAPI as a "
-            "supplementary legacy source."
-        ),
-    }
-    if save_snapshot:
-        save_raw_json(data, "newsapi")
-    return data
-
-
 def fetch_guardian_data(save_snapshot=True):
     first_page = fetch_json(build_guardian_page_url(page=1))
     response = first_page.get("response") or {}
@@ -185,8 +163,8 @@ def _flatten_parliament_item(item):
         flat["body"] = flat.pop("text")
     if "answeringBodyName" in flat:
         flat["bodyName"] = flat.pop("answeringBodyName")
-        
-    for link in (item.get("links") or []):
+
+    for link in item.get("links") or []:
         if link.get("rel") == "self" and link.get("href"):
             href = link["href"]
             if href.startswith("/"):
@@ -236,28 +214,20 @@ SOURCE_FETCHERS = {
     "guardian": fetch_guardian_data,
     "parliament": fetch_parliament_data,
     "govuk": fetch_govuk_data,
-    "newsapi": fetch_newsapi_data,
 }
 
 
-def resolve_source_names(source_names=None, include_legacy_newsapi=False):
+def resolve_source_names(source_names=None):
     if source_names is None:
-        names = list(CORE_COLLECTION_SOURCES)
-    else:
-        names = list(source_names)
-
-    if include_legacy_newsapi and "newsapi" not in names:
-        names.append("newsapi")
-    return names
+        return list(CORE_COLLECTION_SOURCES)
+    return list(source_names)
 
 
-def collect_all_sources(save_snapshots=True, source_names=None, include_legacy_newsapi=False):
+def collect_all_sources(save_snapshots=True, source_names=None):
     sources = {}
     errors = {}
 
-    for source_name in resolve_source_names(
-        source_names=source_names, include_legacy_newsapi=include_legacy_newsapi
-    ):
+    for source_name in resolve_source_names(source_names=source_names):
         fetcher = SOURCE_FETCHERS.get(source_name)
         if fetcher is None:
             errors[source_name] = f"Unsupported source {source_name!r}"
@@ -280,14 +250,12 @@ def collect_all_sources(save_snapshots=True, source_names=None, include_legacy_n
 def build_snapshot_overrides(
     source_snapshots=None,
     *,
-    newsapi_snapshot=None,
     guardian_snapshot=None,
     parliament_snapshot=None,
     govuk_snapshot=None,
 ):
     overrides = dict(source_snapshots or {})
     named_overrides = {
-        "newsapi": newsapi_snapshot,
         "guardian": guardian_snapshot,
         "parliament": parliament_snapshot,
         "govuk": govuk_snapshot,
@@ -301,26 +269,21 @@ def build_snapshot_overrides(
 def load_cached_sources(
     source_snapshots=None,
     *,
-    newsapi_snapshot=None,
     guardian_snapshot=None,
     parliament_snapshot=None,
     govuk_snapshot=None,
     source_names=None,
-    include_legacy_newsapi=False,
 ):
     sources = {}
     errors = {}
     snapshot_overrides = build_snapshot_overrides(
         source_snapshots,
-        newsapi_snapshot=newsapi_snapshot,
         guardian_snapshot=guardian_snapshot,
         parliament_snapshot=parliament_snapshot,
         govuk_snapshot=govuk_snapshot,
     )
 
-    for source_name in resolve_source_names(
-        source_names=source_names, include_legacy_newsapi=include_legacy_newsapi
-    ):
+    for source_name in resolve_source_names(source_names=source_names):
         try:
             sources[source_name] = load_cached_source(
                 source_name, snapshot_path=snapshot_overrides.get(source_name)

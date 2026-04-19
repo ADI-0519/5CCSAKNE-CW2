@@ -65,26 +65,6 @@ def contains_scope_term(text, scope_terms):
     return any(term in lowered for term in scope_terms)
 
 
-def is_relevant_newsapi_article(article):
-    source_name = normalise_name((article.get("source") or {}).get("name"))
-    if not source_name:
-        return False
-    if source_name not in CONFIG["NEWSAPI_ALLOWED_SOURCES"]:
-        return False
-    if source_name in CONFIG["NEWSAPI_BLOCKED_SOURCES"]:
-        return False
-
-    title = normalise_name(article.get("title"))
-    description = normalise_name(article.get("description"))
-    content = normalise_name(article.get("content"))
-    combined_text = " ".join(part for part in (title, description, content) if part)
-    if not combined_text:
-        return False
-
-    scope_terms = CONFIG["NEWSAPI_UK_SCOPE_TERMS"]
-    return contains_scope_term(combined_text, scope_terms)
-
-
 def normalise_relations(relations, record_index):
     normalised = []
     for rel in relations:
@@ -324,54 +304,6 @@ def normalise_govuk_records(raw_data):
     return normalised
 
 
-def normalise_newsapi_articles(raw_data):
-    articles = raw_data.get("articles", [])
-    normalised = []
-
-    for i, article in enumerate(articles):
-        title = normalise_name(article.get("title"))
-        url = article.get("url") or ""
-        published_at = article.get("publishedAt") or ""
-        source_name = normalise_name((article.get("source") or {}).get("name"))
-
-        if not title or not url or not published_at or not source_name:
-            continue
-        if not is_valid_url(url):
-            continue
-        if not is_relevant_newsapi_article(article):
-            continue
-
-        summary = normalise_name(article.get("description"))
-        content = normalise_name(article.get("content"))
-        author = normalise_name(article.get("author"))
-        section = ""
-        updated_at = None
-        tags = []
-        text_for_word_count = content or summary or title
-
-        normalised.append(
-            {
-                "id": build_stable_id(url, title, published_at),
-                "source_system": "newsapi",
-                "source_name": source_name,
-                "title": title,
-                "url": url,
-                "published_at": canonicalise_date(published_at),
-                "updated_at": updated_at,
-                "author": author or None,
-                "section": section or None,
-                "summary": summary or None,
-                "content": content or None,
-                "tags": tags,
-                "word_count": count_words(text_for_word_count),
-                "raw_article_type_hint": None,
-            }
-        )
-
-    print(f"[NORMALISE] Normalised {len(normalised)} NewsAPI articles.")
-    return normalised
-
-
 def normalise_guardian_articles(raw_data):
     response = raw_data.get("response") or {}
     articles = response.get("results", [])
@@ -435,9 +367,6 @@ def normalise_collected_sources(collected_data):
     parliament_records = normalise_parliament_records(sources.get("parliament") or {})
     govuk_records = normalise_govuk_records(sources.get("govuk") or {})
     combined = guardian_records + parliament_records + govuk_records
-
-    if sources.get("newsapi"):
-        combined.extend(normalise_newsapi_articles(sources.get("newsapi") or {}))
 
     seen_ids = set()
     deduped = []

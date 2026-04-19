@@ -123,7 +123,7 @@ def add_party(graph, record):
 
     if record.get("leader"):
         leader_uri = person_uri(record["leader"])
-        graph.add((leader_uri, RDF.type, NEWS.Politician))
+        graph.add((leader_uri, RDF.type, NEWS.PoliticalActor))
         graph.add((leader_uri, RDF.type, SCHEMA.Person))
         add_literal(graph, leader_uri, SCHEMA.name, record["leader"])
 

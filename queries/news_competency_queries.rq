@@ -345,6 +345,3 @@ WHERE {
 }
 GROUP BY ?orgName
 ORDER BY DESC(?departmentCount) ?orgName
-
-
-

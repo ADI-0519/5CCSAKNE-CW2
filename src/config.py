@@ -26,9 +26,6 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 PARLIAMENT_API_KEY = os.getenv("PARLIAMENT_API_KEY")
 GOVUK_API_KEY = os.getenv("GOVUK_API_KEY")
 
-# only kept for the legacy newsapi fallback option
-NEWS_API_KEY = os.getenv("NEWS_API_KEY")
-
 # source endpoints
 
 GUARDIAN_API_BASE = "https://content.guardianapis.com/search"
@@ -36,9 +33,6 @@ GOVUK_CONTENT_API_BASE = os.getenv("GOVUK_CONTENT_API_BASE", "https://www.gov.uk
 PARLIAMENT_API_BASE = os.getenv(
     "PARLIAMENT_API_BASE", "https://questions-statements-api.parliament.uk"
 )
-
-# legacy migration endpoint
-NEWS_API_BASE = "https://newsapi.org/v2"
 
 SOURCE_CONFIG = {
     "guardian": {
@@ -164,66 +158,6 @@ GOVUK_DOCUMENT_FORMATS = [
     "consultation",
     "statutory_guidance",
 ]
-
-# legacy NewsAPI config
-
-NEWS_API_PAGE_SIZE = 100
-NEWS_QUERY_TERMS = GUARDIAN_QUERY_TERMS
-
-NEWSAPI_BLOCKED_SOURCES = {
-    "Alltoc.com",
-    "Behance.net",
-    "Decider",
-    "Electrek",
-    "Football Italia",
-    "Fox News",
-    "Louder",
-    "MacRumors",
-    "OilPrice.com",
-    "Page Six",
-    "Pitchfork",
-    "Radaronline.com",
-    "Screen Rant",
-    "Slashdot.org",
-    "Techdirt",
-    "The Next Web",
-}
-
-NEWSAPI_ALLOWED_SOURCES = {
-    "BBC News",
-    "Financial Times",
-    "Reuters",
-    "Sky News",
-    "The Independent",
-    "The Irish Times",
-}
-
-NEWSAPI_UK_SCOPE_TERMS = {
-    "britain",
-    "british",
-    "england",
-    "great britain",
-    "house of commons",
-    "house of lords",
-    "labour",
-    "liberal democrats",
-    "london",
-    "nhs",
-    "no 10",
-    "northern ireland",
-    "parliament",
-    "prime minister",
-    "reform uk",
-    "scotland",
-    "scottish",
-    "starmer",
-    "treasury",
-    "uk",
-    "united kingdom",
-    "wales",
-    "westminster",
-    "whitehall",
-}
 
 # extraction dictionaries
 
@@ -480,26 +414,6 @@ def build_guardian_page_url(page):
     return build_guardian_url(page=page)
 
 
-def build_newsapi_everything_url(page=None):
-    query = quote_plus(build_query_string(NEWS_QUERY_TERMS))
-    base = (
-        f"{NEWS_API_BASE}/everything?"
-        f"q={query}&"
-        f"language=en&"
-        f"sortBy=publishedAt&"
-        f"pageSize={NEWS_API_PAGE_SIZE}&"
-        f"from={DATE_START}&"
-        f"to={DATE_END}&"
-    )
-    if page is not None:
-        base += f"page={page}&"
-    return f"{base}apiKey={NEWS_API_KEY}"
-
-
-def build_newsapi_page_url(page):
-    return build_newsapi_everything_url(page=page)
-
-
 CONFIG = {
     "project_scope": PROJECT_SCOPE,
     "date_start": DATE_START,
@@ -533,13 +447,6 @@ CONFIG = {
     "PARLIAMENTARY_BODY_NAMES": PARLIAMENTARY_BODY_NAMES,
     "GOVUK_QUERY_TERMS": GOVUK_QUERY_TERMS,
     "GOVUK_DOCUMENT_FORMATS": GOVUK_DOCUMENT_FORMATS,
-    "NEWS_API_KEY": NEWS_API_KEY,
-    "NEWS_API_BASE": NEWS_API_BASE,
-    "NEWS_API_PAGE_SIZE": NEWS_API_PAGE_SIZE,
-    "NEWS_QUERY_TERMS": NEWS_QUERY_TERMS,
-    "NEWSAPI_BLOCKED_SOURCES": NEWSAPI_BLOCKED_SOURCES,
-    "NEWSAPI_ALLOWED_SOURCES": NEWSAPI_ALLOWED_SOURCES,
-    "NEWSAPI_UK_SCOPE_TERMS": NEWSAPI_UK_SCOPE_TERMS,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
     "POLITICIAN_NAMES": POLITICIAN_NAMES,
     "POLITICAL_PARTY_NAMES": POLITICAL_PARTY_NAMES,
@@ -556,8 +463,4 @@ CONFIG = {
     "ENTITY_STOPLIST": ENTITY_STOPLIST,
     "PERSON_STOPLIST": PERSON_STOPLIST,
     "url_guardian": build_guardian_url(),
-    "url_newsapi_everything": build_newsapi_everything_url(),
 }
-
-# backwards-compatible alias for older pipeline code
-CONFIG["url_headlines"] = CONFIG["url_newsapi_everything"]

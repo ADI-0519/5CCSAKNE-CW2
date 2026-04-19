@@ -3,7 +3,7 @@ import re
 from collections import defaultdict
 
 from src.config import CONFIG
-from src.data_normalisation import normalise_collected_sources, normalise_newsapi_articles
+from src.data_normalisation import normalise_collected_sources
 from src.openai_client import maybe_extract_article_with_openai
 
 ORG_SUFFIX = (
@@ -635,9 +635,6 @@ def prepare_articles(raw_data):
 
     if "sources" in raw_data:
         return normalise_collected_sources(raw_data)
-
-    if raw_data.get("articles"):
-        return normalise_newsapi_articles(raw_data)
 
     raise ValueError("[EXTRACT] Unsupported input format for extraction stage.")
 

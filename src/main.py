@@ -90,17 +90,6 @@ def build_arg_parser():
         help="Optional path to a cached GOV.UK JSON snapshot.",
     )
     parser.add_argument(
-        "--newsapi-snapshot",
-        type=Path,
-        default=None,
-        help="Optional path to a cached NewsAPI JSON snapshot used only for legacy migration.",
-    )
-    parser.add_argument(
-        "--include-legacy-newsapi",
-        action="store_true",
-        help="Include legacy NewsAPI collection/loading alongside the three core sources.",
-    )
-    parser.add_argument(
         "--no-save-snapshots",
         action="store_true",
         help="Do not write fresh raw API snapshots during live collection.",
@@ -135,14 +124,11 @@ def main():
             guardian_snapshot=args.guardian_snapshot,
             parliament_snapshot=args.parliament_snapshot,
             govuk_snapshot=args.govuk_snapshot,
-            newsapi_snapshot=args.newsapi_snapshot,
-            include_legacy_newsapi=args.include_legacy_newsapi,
         )
     else:
         print("[PIPELINE] Mode: live API collection")
         collected_data = collect_all_sources(
             save_snapshots=not args.no_save_snapshots,
-            include_legacy_newsapi=args.include_legacy_newsapi,
         )
 
     print("[PIPELINE] Stage 1b: Collect optional Wikidata enrichment data")
