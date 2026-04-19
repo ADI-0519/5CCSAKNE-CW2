@@ -111,6 +111,7 @@ news:publishedDate a owl:DatatypeProperty ;
 
 news:reportsOn a owl:ObjectProperty ;
     rdfs:label "reports on" ;
+    rdfs:comment "Links a news article to the policy event it reports on." .
     rdfs:domain news:NewsArticle ;
     rdfs:range news:PolicyEvent ;
     owl:inverseOf news:reportedByArticle .
