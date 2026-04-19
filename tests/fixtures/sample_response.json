@@ -1,31 +1,5 @@
 {
   "sources": {
-    "newsapi": {
-      "articles": [
-        {
-          "source": {
-            "name": "BBC News"
-          },
-          "author": "Laura Kuenssberg",
-          "title": "Keir Starmer faces pressure over UK budget plans",
-          "description": "The prime minister and Treasury are under pressure in Westminster over tax and public spending.",
-          "url": "https://example.com/newsapi-budget",
-          "publishedAt": "2026-03-18T10:00:00Z",
-          "content": "Labour MPs said the UK government must rethink the budget after criticism in Parliament and Westminster."
-        },
-        {
-          "source": {
-            "name": "Sky News"
-          },
-          "author": "Beth Rigby",
-          "title": "Reform UK and Conservatives clash over election strategy",
-          "description": "Nigel Farage and Conservative figures traded criticism ahead of local elections in England.",
-          "url": "https://example.com/newsapi-election",
-          "publishedAt": "2026-03-21T09:30:00Z",
-          "content": "The local election campaign intensified as Reform UK challenged the Conservatives across England."
-        }
-      ]
-    },
     "guardian": {
       "response": {
         "results": [
@@ -70,6 +44,34 @@
               "lastModified": "2026-03-20T12:00:00Z",
               "wordcount": "720"
             }
+          }
+        ]
+      }
+    },
+    "parliament": {
+      "response": {
+        "results": [
+          {
+            "title": "Health statement",
+            "url": "https://example.com/parliament-health-statement",
+            "date": "2026-03-19T10:30:00Z",
+            "house": "House of Commons",
+            "description": "A statement on NHS performance.",
+            "topics": ["NHS", "Healthcare"]
+          }
+        ]
+      }
+    },
+    "govuk": {
+      "response": {
+        "results": [
+          {
+            "title": "New immigration policy paper",
+            "link": "/government/publications/new-immigration-policy-paper",
+            "public_timestamp": "2026-03-23T12:00:00Z",
+            "description": "A new policy paper from the Home Office.",
+            "format": "policy_paper",
+            "organisations": ["Home Office"]
           }
         ]
       }
