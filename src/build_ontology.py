@@ -439,6 +439,13 @@ def build_ontology() -> Graph:
     graph.add((NEWS.reportsOn, RDFS.domain, NEWS.NewsArticle))
     graph.add((NEWS.reportsOn, RDFS.range, NEWS.PolicyEvent))
     graph.add((NEWS.reportsOn, RDFS.label, Literal("reports on")))
+    graph.add(
+        (
+            NEWS.reportsOn,
+            RDFS.comment,
+            Literal("Links a news article to the policy event it reports on."),
+        )
+    )
     return graph
 
 
