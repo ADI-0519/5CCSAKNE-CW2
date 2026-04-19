@@ -210,7 +210,7 @@ def request_structured_output(instructions, user_input, response_format):
         except Exception as exc:
             last_exc = exc
             if attempt < 2:
-                time.sleep(2 ** attempt)  # 1s, then 2s
+                time.sleep(2**attempt)  # 1s, then 2s
 
     raise last_exc
 

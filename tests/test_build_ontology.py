@@ -58,7 +58,6 @@ class TestBuildOntology:
         for label in ("Positive", "Negative", "Neutral"):
             assert (build_ontology.NEWS[label], RDF.type, build_ontology.NEWS.Sentiment) in graph
 
-
     def test_no_rdf_property_declarations(self):
         graph = build_ontology.build_ontology()
         assert len(list(graph.subjects(RDF.type, RDF.Property))) == 0

@@ -30,7 +30,9 @@ def add_object_property(graph, property_uri, label, comment, domain=None, range_
     graph.add((property_uri, RDFS.comment, Literal(comment)))
 
 
-def add_datatype_property(graph, property_uri, label, comment, domain=None, range_=None, parent=None):
+def add_datatype_property(
+    graph, property_uri, label, comment, domain=None, range_=None, parent=None
+):
     graph.add((property_uri, RDF.type, OWL.DatatypeProperty))
     if parent is not None:
         graph.add((property_uri, RDFS.subPropertyOf, parent))
@@ -352,9 +354,13 @@ def build_ontology() -> Graph:
     g.add((NEWS.authorOf, RDFS.domain, NEWS.Journalist))
     g.add((NEWS.authorOf, RDFS.range, NEWS.NewsArticle))
     g.add((NEWS.authorOf, RDFS.label, Literal("author of")))
-    g.add((NEWS.authorOf, RDFS.comment, Literal(
-        "Inverse of hasAuthor: links journalist to articles they have written."
-    )))
+    g.add(
+        (
+            NEWS.authorOf,
+            RDFS.comment,
+            Literal("Inverse of hasAuthor: links journalist to articles they have written."),
+        )
+    )
 
     return g
 
@@ -378,7 +384,9 @@ def main():
     print(f"Object properties: {len(obj_props)}")
     print(f"Datatype properties: {len(dt_props)}")
     print(f"Total triples: {len(g)}")
-    print(f"\nSchema.org: {len(schema_subclasses)} subclasses, {len(schema_subprops)} subproperties")
+    print(
+        f"\nSchema.org: {len(schema_subclasses)} subclasses, {len(schema_subprops)} subproperties"
+    )
     print(f"BBC Core: {len(bbc_subclasses)} subclasses, {len(bbc_subprops)} subproperties")
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)

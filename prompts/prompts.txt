@@ -1,7 +1,7 @@
 # Prompt Log
 
 ## P00: Initial Plan
-Task: 
+Task:
 Generate an overall plan then refine it.
 
 Prompts:
@@ -16,7 +16,7 @@ Used for: Planning
 
 
 ## P01: Competency Question Augmentation
-Task: 
+Task:
 Generate 10 additional competency questions that complement the manual set.
 
 Prompts:
@@ -37,7 +37,7 @@ Used for: `docs/competency_questions.md`
 
 
 ## P02: Ontology Review Against Reused Vocabularies
-Task: 
+Task:
 Check the local ontology against Schema.org and BBC Core Concepts.
 
 Prompts:
@@ -61,7 +61,7 @@ Used for: `docs/mapping_specification.md` and the ontology/RDF alignment refacto
 
 
 ## P03: Source-to-Ontology Mapping Draft
-Task: 
+Task:
 Turn source fields and extracted entities into an explicit mapping specification.
 
 Prompts:
@@ -82,7 +82,7 @@ Used for: `docs/mapping_specification.md`
 
 
 ## P04: Completion Analysis
-Task: 
+Task:
 Identify incompleteness in both the ontology and the instance layer.
 
 Prompts:
@@ -103,7 +103,7 @@ Used for: `docs/completion_analysis.md`
 
 
 ## P05: Evaluation Methodology Design
-Task: 
+Task:
 Define a quantitative evaluation strategy for the automated KG-construction pipeline.
 
 Prompts:
@@ -121,7 +121,7 @@ Used for: `docs/evaluation_methodology.md`
 
 
 ## P06: Report Generation
-Task: 
+Task:
 Generate Useful report draft then refine it.
 
 Prompts:
@@ -137,7 +137,7 @@ Used for: `/Report.tex`
 
 
 ## P07: LLM-Assisted Entity and Event Extraction
-Task: 
+Task:
 Extract named entities, sentiment, article type, and events from article text to supplement heuristic extraction.
 
 Prompts:
@@ -174,7 +174,7 @@ Used for: `src/data_extraction.py` and `src/openai_client.py`
 
 
 ## P08: LLM-Assisted KG Completion
-Task: 
+Task:
 Refine sentiment, section, article subtypes, and topic assignments for articles already in the knowledge graph.
 
 Prompt:
