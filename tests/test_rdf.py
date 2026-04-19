@@ -91,6 +91,7 @@ class TestConvertJsonToRdf:
 
         assert (actor, RDF.type, NEWS.PoliticalActor) in graph
         assert (party, RDF.type, NEWS.PoliticalParty) in graph
+        assert (body, RDF.type, NEWS.OfficialBody) in graph
         assert (body, RDF.type, NEWS.GovernmentBody) in graph
         assert (body, RDF.type, NEWS.GovernmentDepartment) in graph
         assert (topic, RDF.type, NEWS.PolicyTopic) in graph

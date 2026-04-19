@@ -134,6 +134,7 @@ def add_government_body(graph, record):
         return
 
     uri = organisation_uri(name)
+    graph.add((uri, RDF.type, NEWS.OfficialBody))
     graph.add((uri, RDF.type, NEWS.GovernmentBody))
     graph.add((uri, RDF.type, SCHEMA.Organization))
     add_literal(graph, uri, SCHEMA.name, name)

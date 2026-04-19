@@ -8,9 +8,12 @@ def test_ontology_defines_people_and_institution_classes():
     assert (NEWS.PoliticalActor, RDF.type, OWL.Class) in graph
     assert (NEWS.PoliticalActor, RDFS.subClassOf, SCHEMA.Person) in graph
     assert (NEWS.PoliticalParty, RDF.type, OWL.Class) in graph
+    assert (NEWS.OfficialBody, RDF.type, OWL.Class) in graph
+    assert (NEWS.OfficialBody, RDFS.subClassOf, SCHEMA.Organization) in graph
     assert (NEWS.GovernmentBody, RDF.type, OWL.Class) in graph
+    assert (NEWS.GovernmentBody, RDFS.subClassOf, NEWS.OfficialBody) in graph
     assert (NEWS.GovernmentDepartment, RDFS.subClassOf, NEWS.GovernmentBody) in graph
-    assert (NEWS.ParliamentaryBody, RDFS.subClassOf, NEWS.GovernmentBody) in graph
+    assert (NEWS.ParliamentaryBody, RDFS.subClassOf, NEWS.OfficialBody) in graph
 
 
 def test_ontology_defines_event_and_topic_classes():

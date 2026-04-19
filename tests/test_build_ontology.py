@@ -52,6 +52,11 @@ class TestBuildOntology:
     def test_extends_schema_org_with_subclasses(self):
         graph = build_ontology.build_ontology()
         assert (
+            build_ontology.NEWS.OfficialBody,
+            RDFS.subClassOf,
+            build_ontology.SCHEMA.Organization,
+        ) in graph
+        assert (
             build_ontology.NEWS.PoliticalActor,
             RDFS.subClassOf,
             build_ontology.SCHEMA.Person,
@@ -78,6 +83,24 @@ class TestBuildOntology:
             build_ontology.NEWS.Location,
             RDFS.subClassOf,
             build_ontology.CORE.Place,
+        ) in graph
+
+    def test_defines_official_body_hierarchy(self):
+        graph = build_ontology.build_ontology()
+        assert (
+            build_ontology.NEWS.GovernmentBody,
+            RDFS.subClassOf,
+            build_ontology.NEWS.OfficialBody,
+        ) in graph
+        assert (
+            build_ontology.NEWS.GovernmentDepartment,
+            RDFS.subClassOf,
+            build_ontology.NEWS.GovernmentBody,
+        ) in graph
+        assert (
+            build_ontology.NEWS.ParliamentaryBody,
+            RDFS.subClassOf,
+            build_ontology.NEWS.OfficialBody,
         ) in graph
 
     def test_extends_existing_ontologies_with_subproperties(self):

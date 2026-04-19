@@ -308,10 +308,11 @@ def add_government_bodies(graph, record):
     body_uris = []
     for name in sorted(set((record.get("entities") or {}).get("government_bodies", []))):
         uri = organisation_uri(name)
-        graph.add((uri, RDF.type, NEWS.GovernmentBody))
+        graph.add((uri, RDF.type, NEWS.OfficialBody))
         body_type = classify_government_body(name)
-        if body_type != NEWS.GovernmentBody:
-            graph.add((uri, RDF.type, body_type))
+        graph.add((uri, RDF.type, body_type))
+        if body_type == NEWS.GovernmentDepartment:
+            graph.add((uri, RDF.type, NEWS.GovernmentBody))
         add_name(graph, uri, name)
         body_uris.append(uri)
     return body_uris

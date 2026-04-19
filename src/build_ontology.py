@@ -12,6 +12,7 @@ OUTPUT_PATH = Path(__file__).parent.parent / "ontology" / "news_ontology.ttl"
 SCHEMA_EXTENSION_TERMS = {
     "PoliticalActor",
     "PoliticalParty",
+    "OfficialBody",
     "GovernmentBody",
     "PolicyTopic",
     "NewsArticle",
@@ -179,10 +180,17 @@ def build_ontology() -> Graph:
     )
     add_class(
         graph,
+        NEWS.OfficialBody,
+        "Official Body",
+        "An official public institution relevant to the domain, including executive government bodies and parliamentary institutions.",
+        SCHEMA.Organization,
+    )
+    add_class(
+        graph,
         NEWS.GovernmentBody,
         "Government Body",
-        "An official public body relevant to the domain, including executive government departments and parliamentary institutions.",
-        SCHEMA.Organization,
+        "An executive government body involved in a policy event.",
+        NEWS.OfficialBody,
     )
     add_class(
         graph,
@@ -196,7 +204,7 @@ def build_ontology() -> Graph:
         NEWS.ParliamentaryBody,
         "Parliamentary Body",
         "A parliamentary chamber, committee, or institution in which a parliamentary event occurs.",
-        NEWS.GovernmentBody,
+        NEWS.OfficialBody,
     )
 
     # Topic and place layer
