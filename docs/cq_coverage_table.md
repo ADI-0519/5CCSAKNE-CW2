@@ -1,32 +1,38 @@
 # CQ Coverage Table
 
-This table records how each competency question maps to the current pipeline and what results it produces. The support assessment reflects the final pipeline state, including Wikidata-based entity typing and OpenAI-assisted triple completion. All 20 queries return results.
+This table records how each competency question is supported by the current event-centred pipeline. Counts come from the validated `20260420T130554Z` run, where all 20 queries returned at least one row.
 
 Classification legend:
 
-- `Answered`: query returns clean, meaningful results grounded in well-populated data.
-- `Answered (noisy)`: query returns results but the underlying data has known quality issues such as over-extraction, heuristic links, or unvalidated classifications.
-- `Partial`: query returns results but only for a subset of the intended question due to data gaps.
+- `Answered`: query returns meaningful rows using well-populated ontology terms.
+- `Answered (noisy)`: query returns rows, but the underlying extraction or matching still has known quality limits.
+- `Diagnostic`: query is intended to expose incompleteness rather than produce only polished answers.
 
 | CQ | Classification | Result count | Notes |
-| --- | --- | --- | --- |
-| CQ01 | Answered (noisy) | 128 | journalist-author deduplication is weak; Guardian bylines include appended job titles |
-| CQ02 | Answered | 2 | Guardian and one NewsAPI source pass the politics-section filter |
-| CQ03 | Answered (noisy) | 1860 | person entity list is now cleaner after extraction fixes; count reduction from 2261 reflects removal of spurious nav-phrase entries |
-| CQ04 | Answered (noisy) | 534 | PoliticalParty typing from Wikidata; not all article-extracted mentions resolved |
-| CQ05 | Answered (noisy) | 200 | GovernmentBody typing from Wikidata; article-level classification still heuristic |
-| CQ06 | Answered (noisy) | 11 | sentiment from combined heuristic and OpenAI completion; not validated against ground truth |
-| CQ07 | Answered | 14 | topic coverage is flat with no hierarchy |
-| CQ08 | Answered | 246 | direct metadata mapping, no extraction needed |
-| CQ09 | Answered | 2 | one row per article group, clean comparison |
-| CQ10 | Answered (noisy) | 314 | follow-up links are heuristic; count reduction from 378 reflects removal of links grounded in spurious events |
-| CQ11 | Answered (noisy) | 15 | worksFor derived per-article, not from canonical journalist profiles |
-| CQ12 | Answered (noisy) | 25 | live-blog classification now locked by structural title/URL signals; body-keyword-only cases remain heuristic |
-| CQ13 | Answered (noisy) | 383 | location extraction is regex-based and still noisy in long-form live blog articles |
-| CQ14 | Answered | 239 | metadata-driven, reliable |
-| CQ15 | Answered | 251 | both person and organisation triples well-populated; slight reduction reflects articles that had only spurious person mentions |
-| CQ16 | Answered (noisy) | 2 | Guardian-dominant dataset limits publisher range |
-| CQ17 | Answered (noisy) | 30500 | combinatorial co-mention space; count reduction from 36755 reflects removal of spurious person nodes, not loss of real data |
-| CQ18 | Answered (noisy) | 52 | event location matching is string comparison only; slight increase reflects more policy events correctly assigned London location |
-| CQ19 | Answered (noisy) | 5 | event canonicalisation is heuristic |
-| CQ20 | Answered (noisy) | 1249 | politician and party typing from Wikidata; article-level co-mention is reliable |
+| --- | --- | ---: | --- |
+| CQ01 | Answered | 21 | Parliamentary debates are linked to policy topics and dates. |
+| CQ02 | Answered | 4 | Ministerial statements are linked to issuing government departments. |
+| CQ03 | Answered (noisy) | 11 | Political-actor extraction is useful but not fully disambiguated against Wikidata. |
+| CQ04 | Answered | 22 | Confirms events can be both reported by articles and represented in official source records. |
+| CQ05 | Answered | 6 | Shows shared policy topics across parliamentary and government policy events. |
+| CQ06 | Answered | 7 | Parliamentary-body links are populated for parliamentary event records. |
+| CQ07 | Answered | 7 | Government departments can be ranked by linked policy-event count. |
+| CQ08 | Answered (noisy) | 4 | Party membership depends on extracted and enriched actor-party links. |
+| CQ09 | Diagnostic | 50 | Intentionally identifies reported events missing a government body, parliamentary body, or topic. |
+| CQ10 | Answered | 12 | Policy-topic frequency query over reported parliamentary and government policy events. |
+| CQ11 | Diagnostic | 1 | Counts events without official source records; useful for integration-gap analysis. |
+| CQ12 | Answered | 2 | Uses `matchedToSourceRecord`; confirms completion-stage provenance matching works. |
+| CQ13 | Answered | 39 | Topic co-occurrence query exercises event-topic self-joins. |
+| CQ14 | Answered | 1 | Compares news-organisation coverage of parliamentary versus government policy events. |
+| CQ15 | Answered | 2 | Location aggregation is supported, though location extraction remains conservative. |
+| CQ16 | Answered (noisy) | 8 | Actor-party-topic aggregation depends on actor and party typing quality. |
+| CQ17 | Answered | 5 | Four-hop journalist-to-article-to-event-to-department chain works. |
+| CQ18 | Answered | 11 | Finds topics on events involving both actors and government bodies. |
+| CQ19 | Answered | 3 | Date-based co-occurrence between parliamentary events and ministerial statements. |
+| CQ20 | Answered | 3 | Ranks publishers by distinct government departments covered through reported events. |
+
+## Summary
+
+- Query coverage: `20/20`
+- Most robust areas: official source records, event-topic links, event-institution links, article-event reporting links.
+- Main residual risk: extraction quality and event canonicalisation, not ontology/query alignment.
