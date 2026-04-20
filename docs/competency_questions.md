@@ -4,11 +4,11 @@ This document contains the current competency-question design for the coursework
 
 Project scope:
 
-`A knowledge graph for UK parliamentary and government policy events reported in UK news during a fixed time window, using automated mappings from textual and structured sources, with OpenAI used critically for augmentation, extraction support, completion, and evaluation baselines.`
+`A knowledge graph for UK parliamentary and government policy events reported in UK news during a fixed time window, using automated mappings from textual and structured sources, with OpenAI used critically for augmentation, extraction support, and evaluation baselines.`
 
-The first 10 questions below are the revised manually authored set. They are intentionally event-centred and are designed to drive the ontology redesign before the SPARQL layer is rewritten. The LLM-assisted 10 should be generated later so they complement this set rather than duplicating it.
+The first 10 questions below are the revised manually authored set. The second 10 are LLM-assisted questions that were reviewed and edited manually so they complement the manual set rather than duplicating it.
 
-Implementation difficulty and runtime support should be tracked separately in [cq_coverage_table.md](docs/cq_coverage_table.md).
+Implementation difficulty and runtime support should be tracked separately in [cq_coverage_table.md](cq_coverage_table.md).
 
 ## Manual Competency Questions
 
@@ -34,7 +34,7 @@ Implementation difficulty and runtime support should be tracked separately in [c
 
 ## CQ-To-Ontology Mapping
 
-This table records the minimum ontology support each manual CQ requires. It should drive the redesign of [news_ontology.ttl](5CCSAKNE-CW2/ontology/news_ontology.ttl) and [build_ontology.py](5CCSAKNE-CW2/src/build_ontology.py).
+This table records the minimum ontology support each CQ requires. It is aligned with [news_ontology.ttl](../ontology/news_ontology.ttl), [build_ontology.py](../src/build_ontology.py), and [news_competency_queries.rq](../queries/news_competency_queries.rq).
 
 | CQ | Main classes justified | Main properties justified | Query shape / strict-marker rationale |
 | --- | --- | --- | --- |
