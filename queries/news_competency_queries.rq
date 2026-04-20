@@ -283,23 +283,23 @@ HAVING(COUNT(DISTINCT ?topic) >= 2)
 ORDER BY DESC(?topicCount) ?actorName
 
 
-# CQ17: Which journalists authored more than one article reporting on policy events that involve a government department?
-SELECT ?journalistName (COUNT(DISTINCT ?article) AS ?articleCount)
+# CQ17: Which journalists authored articles reporting on policy events that involve a government department?
+SELECT DISTINCT ?journalistName ?headline ?departmentName
 WHERE {
   ?journalist a news:Journalist ;
               schema:name ?journalistName .
   ?article a news:NewsArticle ;
-           news:hasAuthor ?journalist .
+           news:hasAuthor ?journalist ;
+           schema:headline ?headline .
   ?event a news:PolicyEvent ;
          news:reportedByArticle ?article ;
          news:involvesGovernmentBody ?department ;
          news:occursOnDate ?eventDate .
-  ?department a news:GovernmentDepartment .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
   FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
-GROUP BY ?journalistName
-HAVING(COUNT(DISTINCT ?article) > 1)
-ORDER BY DESC(?articleCount) ?journalistName
+ORDER BY ?journalistName ?departmentName ?headline
 
 
 # CQ18: Which policy topics appear in events that involve both a political actor and a government body?
