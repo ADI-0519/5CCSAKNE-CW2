@@ -6,11 +6,13 @@ from src.data_normalisation import (
     build_stable_id,
     canonicalise_date,
     is_valid_url,
+    mojibake_score,
     normalise_collected_sources,
     normalise_data,
     normalise_govuk_records,
     normalise_name,
     normalise_parliament_records,
+    repair_common_mojibake,
 )
 
 
@@ -41,6 +43,12 @@ class TestUtilityFunctions:
     def test_normalise_name_repairs_common_mojibake(self):
         broken = "Starmer\u00e2\u20ac\u2122s plans \u00e2\u20ac\u201c update"
         assert normalise_name(broken) == "Starmer’s plans – update"
+
+    def test_repair_common_mojibake_prefers_cleaner_text(self):
+        broken = "London\u00e2\u20ac\u2122s politics"
+        repaired = repair_common_mojibake(broken)
+        assert repaired == "London’s politics"
+        assert mojibake_score(repaired) < mojibake_score(broken)
 
 
 class TestSourceNormalisation:
