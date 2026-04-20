@@ -22,7 +22,7 @@ Implementation difficulty and runtime support should be tracked separately in [c
 
 `CQ05.` Which policy topics are common to both parliamentary events and government policy events during the selected time window?
 
-`CQ06.` Which parliamentary bodies are linked to events concerning a given policy topic during the selected time window?
+`CQ06.` Which parliamentary bodies do events concerning a given policy topic occur in during the selected time window?
 
 `CQ07.` Which government departments are involved in the highest number of policy events during the selected time window?
 
@@ -46,43 +46,43 @@ This table records the minimum ontology support each CQ requires. It is aligned 
 | CQ06 | `ParliamentaryBody`, `PolicyEvent`, `PolicyTopic` | `occursInParliamentaryBody`, `concernsPolicyTopic`, `occursOnDate` | Institution-event-topic linkage; supports non-trivial joins. |
 | CQ07 | `GovernmentDepartment`, `PolicyEvent` | `involvesGovernmentBody`, `occursOnDate` | Ranking / `ORDER BY` / `LIMIT`; requires true aggregation cases. |
 | CQ08 | `PoliticalParty`, `PoliticalActor`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic` | Multi-hop party-actor-event-topic query; stronger than simple party mention lookup. |
-| CQ09 | `PolicyEvent`, `GovernmentBody`, `ParliamentaryBody`, `PolicyTopic` | missing-link detection over `involvesGovernmentBody`, `occursInParliamentaryBody`, `concernsPolicyTopic` | Completion-oriented CQ; explicitly supports incompleteness analysis. |
+| CQ09 | `PolicyEvent`, `OfficialBody`, `GovernmentBody`, `ParliamentaryBody`, `PolicyTopic` | missing-link detection over `involvesGovernmentBody`, `occursInParliamentaryBody`, `concernsPolicyTopic` | Completion-oriented CQ over the relevant subclasses of `OfficialBody`; explicitly supports incompleteness analysis. |
 | CQ10 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent`, `NewsArticle` | `concernsPolicyTopic`, `reportedByArticle` | Frequency / topic ranking query; supports counterexamples and meaningful limits. |
-| CQ11 | `PolicyEvent`, `OfficialSourceRecord` | `representedInOfficialSource` | Counting with `NOT EXISTS`; interlinking completeness metric (Week 10). |
-| CQ12 | `SourceRecord`, `PolicyEvent` | `matchedToSourceRecord`, `sourceSystem` | Provenance aggregation; validates three-source integration story. |
+| CQ11 | `PolicyEvent`, `OfficialSourceRecord`, `GovernmentDepartment` | `representedInOfficialSource`, `involvesGovernmentBody`, `occursOnDate` | Cross-source institutional linkage; extends CQ04 toward department-level analysis without duplicating ministerial statements. |
+| CQ12 | `PolicyTopic`, `PolicyEvent`, `OfficialSourceRecord` | `concernsPolicyTopic`, `representedInOfficialSource`, `occursOnDate` | Topic aggregation over officially evidenced events; complements CQ10 with an official-source perspective. |
 | CQ13 | `PolicyEvent`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Topic co-occurrence via self-join with `HAVING`; non-trivial join pattern. |
-| CQ14 | `NewsOrganisation`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `publishedBy`, `reportedByArticle` | Comparative coverage counts for parliamentary versus government policy events; exercises subtype distinction without assuming a non-empty winner set. |
+| CQ14 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `concernsPolicyTopic`, `occursOnDate` | Comparative topic coverage counts across event subclasses; domain-centred counterpart to CQ05 and CQ10 without assuming one side dominates. |
 | CQ15 | `Location`, `PolicyEvent` | `occursInLocation`, `occursOnDate` | Location aggregation; exercises the geographic dimension of the event model. |
 | CQ16 | `PoliticalActor`, `PoliticalParty`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic`, `occursOnDate` | Per-actor multi-topic aggregation; distinct from CQ08 which aggregates at party level. |
-| CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Four-hop retrieval linking reporters to institutional involvement. |
+| CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Journalist-level aggregation over department-linked coverage; source-dependent because byline metadata is only available where article authors are captured reliably. |
 | CQ18 | `PolicyTopic`, `PolicyEvent`, `PoliticalActor`, `GovernmentBody` | `involvesActor`, `involvesGovernmentBody`, `concernsPolicyTopic` | Multi-constraint intersection query; tests joint actor-institution-topic linkage on the same event. |
-| CQ19 | `ParliamentaryEvent`, `MinisterialStatement` | `occursOnDate` | Temporal co-occurrence across disjoint event subclasses; tests date-based reasoning. |
-| CQ20 | `NewsOrganisation`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `publishedBy`, `reportedByArticle`, `involvesGovernmentBody` | Ranking query over 3-hop chain; measures institutional breadth of news coverage per publisher. |
+| CQ19 | `ParliamentaryEvent`, `MinisterialStatement`, `PolicyTopic` | `occursOnDate`, `concernsPolicyTopic` | Temporal-topic overlap across disjoint event subclasses; stronger than weak date-only co-occurrence and better aligned to what the KG can support reliably. |
+| CQ20 | `GovernmentDepartment`, `PolicyEvent`, `PolicyTopic` | `involvesGovernmentBody`, `concernsPolicyTopic`, `occursOnDate` | Department-topic breadth ranking; domain-facing aggregation over institutional policy scope. |
 
 ## LLM-Assisted Competency Questions
 
-`CQ11.` How many policy events in the knowledge graph have no linked official source record?
+`CQ11.` Which policy events in the selected time window are represented in official source records and also involve a government department?
 
-`CQ12.` Which source systems contributed records matched to policy events in the knowledge graph, and how many matched events does each system account for?
+`CQ12.` Which policy topics are most frequently linked to policy events represented in official source records during the selected time window?
 
 `CQ13.` Which pairs of policy topics co-occur across more than one policy event during the selected time window?
 
-`CQ14.` How many articles did each news organisation publish reporting on parliamentary events versus government policy events during the selected time window?
+`CQ14.` How many parliamentary events and government policy events are linked to each policy topic during the selected time window?
 
 `CQ15.` Which locations are linked to more than one distinct policy event during the selected time window?
 
 `CQ16.` Which political actors are individually involved in events spanning at least two distinct policy topics, and which party do they belong to?
 
-`CQ17.` Which journalists authored articles that report on events involving a government department?
+`CQ17.` Which journalists authored more than one article reporting on policy events that involve a government department?
 
 `CQ18.` Which policy topics appear in events that involve both a political actor and a government body?
 
-`CQ19.` Which parliamentary events share an occurrence date with at least one ministerial statement?
+`CQ19.` Which policy topics are shared by parliamentary events and ministerial statements occurring on the same date?
 
-`CQ20.` Which news organisations published the most articles reporting on events that involved government departments, ranked by number of distinct departments covered?
+`CQ20.` Which government departments are involved in policy events spanning the widest range of policy topics during the selected time window?
 
 ## Notes
 
 - This revised manual set is intentionally more TBox-aware and less ABox-retrieval-heavy than the earlier article-centric version.
 - The wording has been tightened to avoid vague relations such as `associated with` where more explicit ontology links are intended.
-- The set is designed to be safer against the CW1 feedback pattern: weak class-role distinctions, shallow retrieval CQs, and SPARQL that lacks meaningful aggregation or boundary cases.
+- `OfficialBody` is the superclass for official institutions in scope, with `GovernmentBody` and `ParliamentaryBody` used where the CQs need subclass-level distinctions.
