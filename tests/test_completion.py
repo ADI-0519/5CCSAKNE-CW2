@@ -91,6 +91,27 @@ def test_enrich_graph_matches_guardian_event_to_official_source_record():
     assert (event_uri, NEWS.representedInOfficialSource, source_record) in enriched
 
 
+def test_enrich_graph_mirrors_existing_official_source_links_as_matches():
+    graph = build_ontology()
+
+    event_uri = NEWS["event/already_represented"]
+    source_record = NEWS["source-record/parliament/already_represented"]
+
+    graph.add((source_record, RDF.type, NEWS.SourceRecord))
+    graph.add((source_record, RDF.type, NEWS.OfficialSourceRecord))
+    graph.add((source_record, NEWS.sourceSystem, Literal("parliament")))
+    graph.add((source_record, NEWS.sourceTitle, Literal("Already represented source")))
+
+    graph.add((event_uri, RDF.type, NEWS.PolicyEvent))
+    graph.add((event_uri, SCHEMA.name, Literal("Already represented source")))
+    graph.add((event_uri, NEWS.representedInOfficialSource, source_record))
+
+    enriched = enrich_graph(graph)
+
+    assert (event_uri, NEWS.matchedToSourceRecord, source_record) in enriched
+    assert (event_uri, NEWS.representedInOfficialSource, source_record) in enriched
+
+
 def test_enrich_graph_avoids_weak_cross_source_match():
     graph = build_ontology()
 
