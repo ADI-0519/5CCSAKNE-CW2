@@ -63,27 +63,6 @@ EXTRACTION_RESPONSE_FORMAT = {
     },
 }
 
-COMPLETION_RESPONSE_FORMAT = {
-    "type": "json_schema",
-    "name": "article_completion",
-    "strict": True,
-    "schema": {
-        "type": "object",
-        "properties": {
-            "sentiment": {"type": "string", "enum": sorted(VALID_SENTIMENTS)},
-            "section": {"type": "string"},
-            "article_types": {
-                "type": "array",
-                "items": {"type": "string", "enum": sorted(VALID_ARTICLE_TYPES)},
-            },
-            "additional_topics": {"type": "array", "items": {"type": "string"}},
-        },
-        "required": ["sentiment", "section", "article_types", "additional_topics"],
-        "additionalProperties": False,
-    },
-}
-
-
 def slug_text(text):
     return re.sub(r"[^a-zA-Z0-9_-]", "_", str(text).strip()) or "item"
 
@@ -287,32 +266,6 @@ def validate_extraction_payload(payload):
     return validated
 
 
-def validate_completion_payload(payload):
-    if not isinstance(payload, dict):
-        return None
-
-    sentiment = str(payload.get("sentiment") or "").strip()
-    section = str(payload.get("section") or "").strip()
-    if sentiment not in VALID_SENTIMENTS:
-        return None
-
-    article_types = [
-        str(item).strip()
-        for item in payload.get("article_types", [])
-        if str(item).strip() in VALID_ARTICLE_TYPES
-    ]
-    additional_topics = [
-        str(item).strip() for item in payload.get("additional_topics", []) if str(item).strip()
-    ]
-
-    return {
-        "sentiment": sentiment,
-        "section": section,
-        "article_types": article_types,
-        "additional_topics": additional_topics,
-    }
-
-
 def summarize_invalid_payload(payload):
     if payload is None:
         return "payload was None"
@@ -325,8 +278,6 @@ def summarize_invalid_payload(payload):
         summary.append(f"sentiment={payload.get('sentiment')!r}")
     if "article_type" in payload:
         summary.append(f"article_type={payload.get('article_type')!r}")
-    if "article_types" in payload:
-        summary.append(f"article_types={payload.get('article_types')!r}")
     if "events" in payload and isinstance(payload.get("events"), list):
         summary.append(f"events={len(payload.get('events', []))}")
     return ", ".join(summary)
@@ -378,51 +329,6 @@ def maybe_extract_article_with_openai(article, article_text, heuristic_result):
     if validated_result is None:
         print(
             "[OPENAI] Extraction response was invalid and has been ignored: "
-            f"{summarize_invalid_payload(result)}"
-        )
-        return None
-
-    save_cache_payload(cache_path, validated_result)
-    return validated_result
-
-
-def maybe_complete_article_with_openai(article_key, article_payload, heuristic_result):
-    cache_path = build_cache_path("completion", article_key)
-    cached = load_cache_payload(cache_path)
-    if cached is not None:
-        validated_cached = validate_completion_payload(cached)
-        if validated_cached is not None:
-            return validated_cached
-
-    instructions = (
-        "You are completing a UK politics and policy news knowledge graph. Use only the supplied "
-        "headline, description, and current KG context. Do not invent facts. Return only "
-        "JSON-compatible ontology-aligned updates."
-    )
-    user_input = json.dumps(
-        {
-            "project_scope": CONFIG["project_scope"],
-            "allowed_topics": sorted(CONFIG["TOPIC_GROUPS"].keys()),
-            "article": article_payload,
-            "heuristic_result": heuristic_result,
-        },
-        ensure_ascii=False,
-    )
-
-    try:
-        result = request_structured_output(
-            instructions=instructions,
-            user_input=user_input,
-            response_format=COMPLETION_RESPONSE_FORMAT,
-        )
-    except Exception as exc:
-        print(f"[OPENAI] Completion request failed: {exc}")
-        return None
-
-    validated_result = validate_completion_payload(result)
-    if validated_result is None:
-        print(
-            "[OPENAI] Completion response was invalid and has been ignored: "
             f"{summarize_invalid_payload(result)}"
         )
         return None
