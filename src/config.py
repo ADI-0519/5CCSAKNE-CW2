@@ -383,6 +383,115 @@ PERSON_STOPLIST = {
     "Westminster Abbey",
 }
 
+EXTRACTION_ORG_BLOCKED_PREFIXES = {
+    "Analysis",
+    "Comment",
+    "Commentary",
+    "Opinion",
+    "Politics",
+    "Reports",
+}
+
+EXTRACTION_ORG_NOISE_TERMS = {
+    "Letters",
+    "News",
+    "Opinion",
+    "Politics",
+    "Review",
+}
+
+EXTRACTION_LOCATION_BLOCKLIST = {
+    "Badenoch",
+    "British",
+    "Britons",
+    "Cameo",
+    "CenTax",
+    "Common",
+    "Conservatives",
+    "Farage",
+    "Kemi",
+    "Labour MPs",
+    "Muslims",
+    "Nige",
+    "Offord",
+    "PMQs",
+    "Rayner",
+    "Reform",
+    "Tories",
+    "UK The",
+}
+
+EXTRACTION_LOCATION_STOPWORDS = {
+    "A",
+    "My",
+    "An",
+    "The",
+}
+
+EXTRACTION_LOCATION_ROLE_TERMS = {
+    "Budget",
+    "Minister",
+    "Ministers",
+    "MP",
+    "MPs",
+    "MSP",
+    "MSPs",
+    "Party",
+    "Parties",
+    "Policy",
+    "Policies",
+    "Questions",
+}
+
+EXTRACTION_PERSON_BLOCKED_PREFIXES = {
+    "House",
+    "Last",
+    "Lords",
+    "Middle",
+    "News",
+    "Reports",
+}
+
+EXTRACTION_BROAD_EVENT_LOCATIONS = {
+    "England",
+    "Europe",
+    "Iran",
+    "Northern Ireland",
+    "Scotland",
+    "UK",
+    "United Kingdom",
+    "Wales",
+}
+
+EXTRACTION_ELECTION_SIGNAL_PHRASES = {
+    "byelection",
+    "by-election",
+    "election campaign",
+    "election candidate",
+    "elections",
+    "general election",
+    "local election",
+    "may elections",
+    "mayoral election",
+}
+
+EXTRACTION_POLICY_ANNOUNCEMENT_SIGNAL_PHRASES = {
+    "announcement",
+    "announced",
+    "consultation",
+    "guidance",
+    "ministerial statement",
+    "plan",
+    "plans",
+    "policy paper",
+    "proposal",
+    "proposed",
+    "set out",
+    "speech",
+    "statement",
+    "unveiled",
+}
+
 
 def build_query_string(terms):
     return " OR ".join(terms)
@@ -462,5 +571,14 @@ CONFIG = {
     "CONTROLLED_PREDICATES": CONTROLLED_PREDICATES,
     "ENTITY_STOPLIST": ENTITY_STOPLIST,
     "PERSON_STOPLIST": PERSON_STOPLIST,
+    "EXTRACTION_ORG_BLOCKED_PREFIXES": EXTRACTION_ORG_BLOCKED_PREFIXES,
+    "EXTRACTION_ORG_NOISE_TERMS": EXTRACTION_ORG_NOISE_TERMS,
+    "EXTRACTION_LOCATION_BLOCKLIST": EXTRACTION_LOCATION_BLOCKLIST,
+    "EXTRACTION_LOCATION_STOPWORDS": EXTRACTION_LOCATION_STOPWORDS,
+    "EXTRACTION_LOCATION_ROLE_TERMS": EXTRACTION_LOCATION_ROLE_TERMS,
+    "EXTRACTION_PERSON_BLOCKED_PREFIXES": EXTRACTION_PERSON_BLOCKED_PREFIXES,
+    "EXTRACTION_BROAD_EVENT_LOCATIONS": EXTRACTION_BROAD_EVENT_LOCATIONS,
+    "EXTRACTION_ELECTION_SIGNAL_PHRASES": EXTRACTION_ELECTION_SIGNAL_PHRASES,
+    "EXTRACTION_POLICY_ANNOUNCEMENT_SIGNAL_PHRASES": EXTRACTION_POLICY_ANNOUNCEMENT_SIGNAL_PHRASES,
     "url_guardian": build_guardian_url(),
 }

@@ -1,14 +1,12 @@
 import argparse
 import re
-from collections import defaultdict
-from datetime import datetime
+from datetime import date
 from pathlib import Path
 
-from rdflib import RDF, XSD, Graph, Literal
+from rdflib import RDF, Graph
 
 from src.build_ontology import NEWS, SCHEMA
-from src.config import CONFIG
-from src.openai_client import maybe_complete_article_with_openai
+from src.data_normalisation import normalise_name
 from src.run_queries import load_kg
 
 DEFAULT_OUTPUT_PATH = Path("kg/generated/completed_kg.ttl")
@@ -17,113 +15,42 @@ DEFAULT_INPUT_KG_CANDIDATES = (
     Path("kg/generated/new_kg.ttl"),
 )
 
-POSITIVE_KEYWORDS = {
-    "advance",
-    "advances",
-    "breakthrough",
-    "boost",
-    "growth",
-    "improve",
-    "improved",
-    "innovation",
-    "launch",
-    "launched",
-    "released",
-    "success",
-    "surge",
-    "win",
-}
-
-NEGATIVE_KEYWORDS = {
-    "attack",
-    "ban",
-    "breach",
-    "concern",
-    "concerns",
-    "crisis",
-    "decline",
-    "declines",
-    "drop",
-    "dropped",
-    "lawsuit",
-    "layoff",
-    "loss",
-    "risk",
-    "warning",
-}
-
-FOLLOW_UP_STOPWORDS = {
+OFFICIAL_PUBLISHERS = {"UK Parliament", "GOV.UK"}
+EVENT_MATCH_STOPWORDS = {
     "a",
-    "after",
-    "analysis",
+    "an",
     "and",
+    "announcement",
     "bill",
-    "budget",
-    "comment",
-    "commentary",
     "debate",
-    "different",
+    "event",
+    "for",
     "government",
-    "minister",
-    "ministers",
-    "new",
-    "officials",
+    "in",
+    "ministerial",
+    "of",
     "on",
-    "opinion",
-    "plan",
+    "parliamentary",
     "policy",
-    "proposal",
-    "response",
     "review",
-    "separate",
+    "statement",
     "the",
-    "today",
-    "transport",
-    "treasury",
+    "to",
     "update",
 }
 
-SECTION_RULES = {
-    "Politics": {
-        "politics",
-        "government",
-        "policy",
-        "regulation",
-        "election",
-        "parliament",
-        "westminster",
-    },
-    "Business": {"finance", "economy", "budget", "tax", "treasury", "spending"},
-    "Health": {"health", "healthcare", "hospital", "nhs"},
-    "Energy": {"climate", "energy", "net zero", "gas", "renewable"},
-}
 
-OPINION_KEYWORDS = {"analysis", "comment", "editorial", "opinion", "view"}
-BREAKING_KEYWORDS = {"breaking", "developing", "live", "urgent", "just in"}
-
-ADDITIONAL_TOPIC_RULES = {
-    "Economic Policy": {"budget", "fiscal", "inflation", "interest rates", "growth"},
-    "Public Spending": {"public spending", "spending review", "funding", "spending cuts"},
-    "Government Policy": {"policy", "bill", "legislation", "white paper", "proposal"},
-    "Election": {"election", "campaign", "polling", "ballot"},
-}
+def normalized_text(value):
+    return normalise_name(value)
 
 
-def normalize_whitespace(text):
-    return " ".join(text.split())
-
-
-def slug_text(text):
-    return re.sub(r"[^a-zA-Z0-9_-]", "_", text.strip())
-
-
-def text_terms(text):
-    return {term.lower() for term in re.findall(r"[A-Za-z][A-Za-z\\-]+", text)}
-
-
-def contains_any(text, patterns):
-    lowered = text.lower()
-    return any(pattern in lowered for pattern in patterns)
+def slug_terms(text):
+    cleaned = normalized_text(text).lower()
+    return {
+        term
+        for term in re.findall(r"[a-z][a-z0-9'-]+", cleaned)
+        if len(term) >= 3 and term not in EVENT_MATCH_STOPWORDS
+    }
 
 
 def first_literal(graph, subject, predicate):
@@ -134,65 +61,21 @@ def first_literal(graph, subject, predicate):
 
 def text_value(graph, subject, predicate):
     literal = first_literal(graph, subject, predicate)
-    return "" if literal is None else str(literal)
+    return "" if literal is None else normalized_text(str(literal))
 
 
-def named_entities(graph, subject, predicate):
-    names = []
-    for obj in graph.objects(subject, predicate):
-        name = first_literal(graph, obj, SCHEMA.name)
-        if name is not None:
-            names.append(str(name))
-    return names
+def parse_date_literal(value):
+    if value is None:
+        return None
 
-
-def infer_sentiment(text):
-    terms = text_terms(text)
-    positive_hits = len(terms & POSITIVE_KEYWORDS)
-    negative_hits = len(terms & NEGATIVE_KEYWORDS)
-
-    if positive_hits > negative_hits:
-        return NEWS.Positive
-    if negative_hits > positive_hits:
-        return NEWS.Negative
-    return NEWS.Neutral
-
-
-def infer_section(article_text, topic_names):
-    combined_text = normalize_whitespace(" ".join([article_text, *topic_names]))
-
-    for section, keywords in SECTION_RULES.items():
-        if contains_any(combined_text, keywords):
-            return section
-    return "General"
-
-
-def infer_article_subtypes(article_text, section):
-    terms = text_terms(article_text)
-    subtypes = set()
-
-    if OPINION_KEYWORDS & terms:
-        subtypes.add(NEWS.OpinionArticle)
-    if BREAKING_KEYWORDS & terms:
-        subtypes.add(NEWS.BreakingNewsArticle)
-    if "live" in terms and section == "Politics":
-        subtypes.add(NEWS.BreakingNewsArticle)
-
-    return subtypes
-
-
-def infer_additional_topics(article_text, topic_names, organization_names):
-    existing_topics = {topic.lower() for topic in topic_names}
-    combined_text = normalize_whitespace(" ".join([article_text, *organization_names]))
-
-    inferred = set()
-    for topic_label, triggers in ADDITIONAL_TOPIC_RULES.items():
-        if topic_label in existing_topics:
+    text = str(value).strip()
+    candidates = [text[:10], text]
+    for candidate in candidates:
+        try:
+            return date.fromisoformat(candidate)
+        except ValueError:
             continue
-        if contains_any(combined_text, triggers):
-            inferred.add(topic_label)
-
-    return sorted(inferred)
+    return None
 
 
 def choose_default_input_kg():
@@ -205,168 +88,159 @@ def choose_default_input_kg():
     )
 
 
-def parse_datetime_value(value):
-    return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-
-
-def article_metadata(graph, article_uri):
-    publisher = next(graph.objects(article_uri, NEWS.publishedBy), None)
-    published_date = first_literal(graph, article_uri, NEWS.publishedDate)
-    organizations = set(graph.objects(article_uri, NEWS.mentionsOrganisation))
-    topics = set(graph.objects(article_uri, NEWS.hasTopic))
-    events = set(graph.objects(article_uri, NEWS.coversEvent))
-    article_types = set(graph.objects(article_uri, RDF.type))
-    headline = text_value(graph, article_uri, SCHEMA.headline)
-    headline_terms = {
-        term for term in text_terms(headline) if term not in FOLLOW_UP_STOPWORDS and len(term) >= 4
+def event_metadata(graph, event_uri):
+    article_uris = set(graph.objects(event_uri, NEWS.reportedByArticle))
+    article_headlines = {
+        text_value(graph, article_uri, SCHEMA.headline) for article_uri in article_uris
     }
+    article_headlines.discard("")
+    event_name = text_value(graph, event_uri, SCHEMA.name)
+    topic_names = {
+        text_value(graph, topic_uri, SCHEMA.name)
+        for topic_uri in graph.objects(event_uri, NEWS.concernsPolicyTopic)
+    }
+    topic_names.discard("")
 
     return {
-        "article": article_uri,
-        "publisher": publisher,
-        "published_date": None if published_date is None else parse_datetime_value(published_date),
-        "organizations": organizations,
-        "topics": topics,
-        "events": events,
-        "article_types": article_types,
-        "headline_terms": headline_terms,
+        "uri": event_uri,
+        "name": event_name,
+        "event_date": parse_date_literal(first_literal(graph, event_uri, NEWS.occursOnDate)),
+        "reported_articles": article_uris,
+        "article_headlines": article_headlines,
+        "topics": topic_names,
+        "already_represented": set(graph.objects(event_uri, NEWS.representedInOfficialSource)),
     }
 
 
-def infer_follow_up_links(graph, max_gap_days=7):
-    article_nodes = sorted(
-        graph.subjects(RDF.type, NEWS.NewsArticle),
-        key=lambda uri: (article_metadata(graph, uri)["published_date"], str(uri)),
+def official_article_metadata(graph, article_uri):
+    publisher_uri = first_literal(graph, article_uri, NEWS.publishedBy)
+    publisher_name = (
+        text_value(graph, publisher_uri, SCHEMA.name) if publisher_uri is not None else ""
     )
-    metadata = {article_uri: article_metadata(graph, article_uri) for article_uri in article_nodes}
-    follow_ups = []
-
-    for earlier in article_nodes:
-        earlier_data = metadata[earlier]
-        if earlier_data["published_date"] is None:
-            continue
-
-        candidates = []
-        for later in article_nodes:
-            if later == earlier:
-                continue
-
-            later_data = metadata[later]
-            if later_data["published_date"] is None:
-                continue
-            if later_data["published_date"] <= earlier_data["published_date"]:
-                continue
-
-            day_gap = (later_data["published_date"] - earlier_data["published_date"]).days
-            if day_gap > max_gap_days:
-                continue
-
-            shared_orgs = earlier_data["organizations"] & later_data["organizations"]
-            shared_topics = earlier_data["topics"] & later_data["topics"]
-            shared_events = earlier_data["events"] & later_data["events"]
-            shared_headline_terms = earlier_data["headline_terms"] & later_data["headline_terms"]
-            same_publisher = (
-                earlier_data["publisher"] is not None
-                and later_data["publisher"] is not None
-                and earlier_data["publisher"] == later_data["publisher"]
-            )
-            earlier_is_opinion = NEWS.OpinionArticle in earlier_data["article_types"]
-            later_is_opinion = NEWS.OpinionArticle in later_data["article_types"]
-            earlier_is_breaking = NEWS.BreakingNewsArticle in earlier_data["article_types"]
-            later_is_breaking = NEWS.BreakingNewsArticle in later_data["article_types"]
-
-            # require shared event or stricter publisher+org+topic combo to avoid broad overlap
-            if shared_events:
-                score = (len(shared_events) * 5) + len(shared_orgs) + len(shared_topics)
-                candidates.append((score, later_data["published_date"], later))
-                continue
-
-            if not same_publisher:
-                continue
-            if earlier_is_opinion:
-                continue
-            if not shared_orgs or not shared_topics:
-                continue
-            if not shared_headline_terms and not shared_events:
-                continue
-            if not (earlier_is_breaking or later_is_breaking):
-                continue
-            if len(shared_topics) < 2 and not (later_is_opinion and not earlier_is_opinion):
-                continue
-
-            score = (len(shared_orgs) * 3) + (len(shared_topics) * 2) + len(shared_headline_terms)
-            if later_is_opinion and not earlier_is_opinion:
-                score += 1
-            candidates.append((score, later_data["published_date"], later))
-
-        if candidates:
-            _, _, best_later = max(candidates, key=lambda item: (item[0], item[1]))
-            follow_ups.append((earlier, best_later))
-
-    return follow_ups
+    return {
+        "uri": article_uri,
+        "headline": text_value(graph, article_uri, SCHEMA.headline),
+        "publisher": publisher_name,
+        "published_date": parse_date_literal(first_literal(graph, article_uri, NEWS.publishedDate)),
+    }
 
 
-def apply_openai_completion(article_key, article_payload, heuristic_result):
-    llm_result = maybe_complete_article_with_openai(article_key, article_payload, heuristic_result)
-    if not llm_result:
-        return heuristic_result
-
-    merged = dict(heuristic_result)
-
-    sentiment = llm_result.get("sentiment")
-    if sentiment in {"Positive", "Negative", "Neutral"}:
-        merged["sentiment"] = sentiment
-
-    section = str(llm_result.get("section") or "").strip()
-    if section:
-        merged["section"] = section
-
-    article_types = set(merged["article_types"])
-    article_types.update(
-        article_type
-        for article_type in llm_result.get("article_types", [])
-        if article_type in {"NewsArticle", "OpinionArticle", "BreakingNewsArticle"}
+def source_record_metadata(graph, record_uri):
+    title = text_value(graph, record_uri, NEWS.sourceTitle) or text_value(
+        graph, record_uri, SCHEMA.name
     )
-    merged["article_types"] = sorted(article_types)
+    system = text_value(graph, record_uri, NEWS.sourceSystem).lower()
+    return {"uri": record_uri, "title": title, "system": system}
 
-    additional_topics = set(merged["additional_topics"])
-    additional_topics.update(
-        topic
-        for topic in llm_result.get("additional_topics", [])
-        if topic in CONFIG["TOPIC_GROUPS"]
-    )
-    merged["additional_topics"] = sorted(additional_topics)
 
-    return merged
+def score_event_to_official_match(event_data, official_article, source_record):
+    event_terms = slug_terms(event_data["name"])
+    headline_terms = slug_terms(official_article["headline"])
+    shared_terms = event_terms & headline_terms
+
+    headline_score = 0
+    if event_data["name"] and official_article["headline"]:
+        if event_data["name"].lower() == official_article["headline"].lower():
+            headline_score += 5
+        elif event_data["name"].lower() in official_article["headline"].lower():
+            headline_score += 3
+
+    if event_data["article_headlines"]:
+        exact_headline_overlap = any(
+            article_headline.lower() == official_article["headline"].lower()
+            for article_headline in event_data["article_headlines"]
+        )
+        if exact_headline_overlap:
+            headline_score += 6
+
+    source_title_score = 0
+    if source_record["title"]:
+        if event_data["name"] and event_data["name"].lower() == source_record["title"].lower():
+            source_title_score += 5
+
+    date_score = 0
+    if event_data["event_date"] and official_article["published_date"]:
+        day_gap = abs((event_data["event_date"] - official_article["published_date"]).days)
+        if day_gap == 0:
+            date_score += 3
+        elif day_gap <= 2:
+            date_score += 1
+        else:
+            return -1
+
+    topic_bonus = 0
+    if event_data["topics"]:
+        headline_lower = official_article["headline"].lower()
+        topic_bonus = sum(1 for topic in event_data["topics"] if topic.lower() in headline_lower)
+
+    if not shared_terms and headline_score == 0 and source_title_score == 0:
+        return -1
+
+    return (len(shared_terms) * 2) + headline_score + source_title_score + date_score + topic_bonus
+
+
+def build_official_indexes(graph):
+    record_by_title = {}
+    for record_uri in graph.subjects(RDF.type, NEWS.SourceRecord):
+        record_data = source_record_metadata(graph, record_uri)
+        if record_data["title"]:
+            record_by_title.setdefault(record_data["title"].lower(), []).append(record_data)
+
+    official_articles = []
+    for article_uri in graph.subjects(RDF.type, NEWS.NewsArticle):
+        article_data = official_article_metadata(graph, article_uri)
+        if article_data["publisher"] in OFFICIAL_PUBLISHERS:
+            official_articles.append(article_data)
+
+    return official_articles, record_by_title
+
+
+def add_reports_on_inverse(graph):
+    added = 0
+    for event_uri, _, article_uri in graph.triples((None, NEWS.reportedByArticle, None)):
+        if (article_uri, NEWS.reportsOn, event_uri) not in graph:
+            graph.add((article_uri, NEWS.reportsOn, event_uri))
+            added += 1
+    return added
 
 
 def enrich_cross_source_links(graph):
-    # match guardian events to official records by shared title keywords
-    official_records = set(graph.subjects(RDF.type, NEWS.OfficialSourceRecord))
-    if not official_records:
-        return
+    official_articles, record_by_title = build_official_indexes(graph)
+    added_matched = 0
+    added_represented = 0
 
-    guardian_events = [
-        event
-        for event in graph.subjects(RDF.type, NEWS.PolicyEvent)
-        if (event, NEWS.reportedByArticle, None) in graph
-        and (event, NEWS.representedInOfficialSource, None) not in graph
-    ]
-
-    added = 0
-    for record in official_records:
-        record_title = first_literal(graph, record, NEWS.sourceTitle) or ""
-        record_terms = text_terms(record_title)
-        if not record_terms:
+    for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
+        event_data = event_metadata(graph, event_uri)
+        if not event_data["name"] or event_data["already_represented"]:
             continue
-        for event in guardian_events:
-            event_name = first_literal(graph, event, SCHEMA.name) or ""
-            if text_terms(event_name) & record_terms:
-                graph.add((event, NEWS.matchedToSourceRecord, record))
-                added += 1
 
-    if added:
-        print(f"[COMPLETE] Added {added} matchedToSourceRecord links.")
+        best_match = None
+        best_score = -1
+        for official_article in official_articles:
+            candidate_records = record_by_title.get(official_article["headline"].lower(), [])
+            if not candidate_records:
+                continue
+            for source_record in candidate_records:
+                score = score_event_to_official_match(event_data, official_article, source_record)
+                if score > best_score:
+                    best_score = score
+                    best_match = source_record["uri"]
+
+        if best_match is None or best_score < 4:
+            continue
+
+        if (event_uri, NEWS.matchedToSourceRecord, best_match) not in graph:
+            graph.add((event_uri, NEWS.matchedToSourceRecord, best_match))
+            added_matched += 1
+
+        if (
+            best_score >= 8
+            and (event_uri, NEWS.representedInOfficialSource, best_match) not in graph
+        ):
+            graph.add((event_uri, NEWS.representedInOfficialSource, best_match))
+            added_represented += 1
+
+    return added_matched, added_represented
 
 
 def enrich_graph(graph):
@@ -376,93 +250,15 @@ def enrich_graph(graph):
     for triple in graph:
         enriched.add(triple)
 
-    article_nodes = set(enriched.subjects(RDF.type, NEWS.NewsArticle))
-    topic_nodes = defaultdict(lambda: None)
+    inverse_count = add_reports_on_inverse(enriched)
+    matched_count, represented_count = enrich_cross_source_links(enriched)
 
-    for article_uri in article_nodes:
-        headline = text_value(enriched, article_uri, SCHEMA.headline)
-        description = text_value(enriched, article_uri, SCHEMA.description)
-        article_text = normalize_whitespace(
-            " ".join(part for part in (headline, description) if part)
-        )
-
-        topic_names = named_entities(enriched, article_uri, NEWS.hasTopic)
-        organization_names = named_entities(enriched, article_uri, NEWS.mentionsOrganisation)
-        existing_word_count = first_literal(enriched, article_uri, NEWS.wordCount)
-        existing_section = first_literal(enriched, article_uri, NEWS.hasSection)
-
-        if article_text:
-            if existing_word_count is None:
-                inferred_word_count = len(re.findall(r"\b\w+\b", article_text))
-                enriched.set(
-                    (
-                        article_uri,
-                        NEWS.wordCount,
-                        Literal(inferred_word_count, datatype=XSD.integer),
-                    )
-                )
-
-            heuristic_completion = apply_openai_completion(
-                str(article_uri),
-                {
-                    "headline": headline,
-                    "description": description,
-                    "existing_topics": topic_names,
-                    "organizations": organization_names,
-                },
-                {
-                    "sentiment": str(infer_sentiment(article_text).split("#")[-1]),
-                    "section": infer_section(article_text, topic_names),
-                    "article_types": sorted(
-                        str(article_type).split("#")[-1]
-                        for article_type in infer_article_subtypes(
-                            article_text, infer_section(article_text, topic_names)
-                        )
-                    ),
-                    "additional_topics": infer_additional_topics(
-                        article_text, topic_names, organization_names
-                    ),
-                },
-            )
-
-            sentiment_uri = NEWS[heuristic_completion["sentiment"]]
-            enriched.set((article_uri, NEWS.hasSentiment, sentiment_uri))
-
-            if existing_section is None:
-                section = heuristic_completion["section"]
-                if section:
-                    enriched.set((article_uri, NEWS.hasSection, Literal(section)))
-
-            for article_type_name in heuristic_completion["article_types"]:
-                article_type = NEWS[article_type_name]
-                enriched.add((article_uri, RDF.type, article_type))
-
-        published_date = first_literal(enriched, article_uri, NEWS.publishedDate)
-        if (
-            published_date is not None
-            and (article_uri, NEWS.hasUpdateTimestamp, None) not in enriched
-        ):
-            enriched.set((article_uri, NEWS.hasUpdateTimestamp, published_date))
-
-        inferred_topics = []
-        if article_text:
-            inferred_topics = heuristic_completion["additional_topics"]
-        for topic_label in inferred_topics:
-            topic_uri = topic_nodes[topic_label]
-            if topic_uri is None:
-                topic_uri = NEWS[f"topic/{slug_text(topic_label)}"]
-                topic_nodes[topic_label] = topic_uri
-                enriched.add((topic_uri, RDF.type, NEWS.Topic))
-                enriched.add((topic_uri, RDF.type, SCHEMA.Thing))
-                enriched.set((topic_uri, SCHEMA.name, Literal(topic_label)))
-
-            enriched.add((article_uri, NEWS.hasTopic, topic_uri))
-            enriched.add((article_uri, SCHEMA.about, topic_uri))
-
-    for earlier, later in infer_follow_up_links(enriched):
-        enriched.add((earlier, NEWS.hasFollowUp, later))
-
-    enrich_cross_source_links(enriched)
+    if inverse_count:
+        print(f"[COMPLETE] Added {inverse_count} reportsOn inverse links.")
+    if matched_count:
+        print(f"[COMPLETE] Added {matched_count} matchedToSourceRecord links.")
+    if represented_count:
+        print(f"[COMPLETE] Added {represented_count} representedInOfficialSource links.")
 
     return enriched
 
@@ -474,7 +270,9 @@ def save_graph(graph, output_path):
 
 
 def build_arg_parser():
-    parser = argparse.ArgumentParser(description="Complete or enrich a KG with inferred triples.")
+    parser = argparse.ArgumentParser(
+        description="Enrich a KG with ontology-aligned completion links."
+    )
     parser.add_argument(
         "--kg",
         type=Path,

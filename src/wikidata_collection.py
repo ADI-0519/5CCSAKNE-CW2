@@ -107,6 +107,9 @@ def run_sparql_query(query, label="query"):
         bindings = data.get("results", {}).get("bindings", [])
         print(f"[WIKIDATA] {label}: {len(bindings)} results")
         return bindings
+    except json.JSONDecodeError as exc:
+        print(f"[WIKIDATA] {label} failed: {exc}")
+        return []
     except requests.exceptions.RequestException as exc:
         print(f"[WIKIDATA] {label} failed: {exc}")
         return []
@@ -180,63 +183,6 @@ def is_valid_label(name):
     return True
 
 
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
-
-
-def collect_wikidata(save_snapshot=True):
-    """Fetch politicians, parties, and government bodies from Wikidata."""
-
-    # Fetch with a small delay between queries to be polite to the endpoint
-    politician_bindings = run_sparql_query(POLITICIANS_QUERY, "politicians")
-    time.sleep(2)
-    party_bindings = run_sparql_query(POLITICAL_PARTIES_QUERY, "political parties")
-    time.sleep(2)
-    body_bindings = run_sparql_query(GOVERNMENT_BODIES_QUERY, "government bodies")
-
-    politicians = deduplicate_by_name(
-        [
-            parse_politician(b)
-            for b in politician_bindings
-            if is_valid_label(binding_value(b, "personLabel"))
-        ]
-    )
-    parties = deduplicate_by_name(
-        [parse_party(b) for b in party_bindings if is_valid_label(binding_value(b, "partyLabel"))]
-    )
-    government_bodies = deduplicate_by_name(
-        [
-            parse_government_body(b)
-            for b in body_bindings
-            if is_valid_label(binding_value(b, "bodyLabel"))
-        ]
-    )
-
-    payload = {
-        "source": "wikidata",
-        "endpoint": WIKIDATA_SPARQL_URL,
-        "politicians": politicians,
-        "political_parties": parties,
-        "government_bodies": government_bodies,
-    }
-
-    print(
-        f"[WIKIDATA] Collected: {len(politicians)} politicians, "
-        f"{len(parties)} parties, {len(government_bodies)} government bodies"
-    )
-
-    if save_snapshot:
-        RAW_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
-        snapshot_path = RAW_SNAPSHOT_DIR / "wikidata_entities.json"
-        snapshot_path.write_text(
-            json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
-        print(f"[WIKIDATA] Saved snapshot to {snapshot_path}")
-
-    return payload
-
-
 def load_cached_wikidata(snapshot_path=None):
     """Load a previously saved Wikidata snapshot from disk."""
     if snapshot_path is not None:
@@ -255,6 +201,100 @@ def load_cached_wikidata(snapshot_path=None):
         f"{len(data.get('government_bodies', []))} government bodies"
     )
     return data
+
+
+def load_cached_wikidata_if_available(snapshot_path=None):
+    try:
+        return load_cached_wikidata(snapshot_path=snapshot_path)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def merge_with_cached_entities(live_records, cached_payload, key):
+    cached_records = (cached_payload or {}).get(key, [])
+    if live_records or not cached_records:
+        return live_records
+    print(
+        f"[WIKIDATA] Falling back to cached {key} because the live query returned no usable records."
+    )
+    return cached_records
+
+
+def has_minimum_wikidata_coverage(payload):
+    return all(
+        payload.get(key) for key in ("politicians", "political_parties", "government_bodies")
+    )
+
+
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
+
+def collect_wikidata(save_snapshot=True):
+    """Fetch politicians, parties, and government bodies from Wikidata."""
+    cached_payload = load_cached_wikidata_if_available()
+
+    # Fetch with a small delay between queries to be polite to the endpoint
+    politician_bindings = run_sparql_query(POLITICIANS_QUERY, "politicians")
+    time.sleep(2)
+    party_bindings = run_sparql_query(POLITICAL_PARTIES_QUERY, "political parties")
+    time.sleep(2)
+    body_bindings = run_sparql_query(GOVERNMENT_BODIES_QUERY, "government bodies")
+
+    politicians = deduplicate_by_name(
+        [
+            parse_politician(b)
+            for b in politician_bindings
+            if is_valid_label(binding_value(b, "personLabel"))
+        ]
+    )
+    politicians = merge_with_cached_entities(politicians, cached_payload, "politicians")
+    parties = deduplicate_by_name(
+        [parse_party(b) for b in party_bindings if is_valid_label(binding_value(b, "partyLabel"))]
+    )
+    parties = merge_with_cached_entities(parties, cached_payload, "political_parties")
+    government_bodies = deduplicate_by_name(
+        [
+            parse_government_body(b)
+            for b in body_bindings
+            if is_valid_label(binding_value(b, "bodyLabel"))
+        ]
+    )
+    government_bodies = merge_with_cached_entities(
+        government_bodies,
+        cached_payload,
+        "government_bodies",
+    )
+
+    payload = {
+        "source": "wikidata",
+        "endpoint": WIKIDATA_SPARQL_URL,
+        "politicians": politicians,
+        "political_parties": parties,
+        "government_bodies": government_bodies,
+    }
+
+    print(
+        f"[WIKIDATA] Collected: {len(politicians)} politicians, "
+        f"{len(parties)} parties, {len(government_bodies)} government bodies"
+    )
+
+    if save_snapshot:
+        RAW_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+        snapshot_path = RAW_SNAPSHOT_DIR / "wikidata_entities.json"
+        if has_minimum_wikidata_coverage(payload):
+            snapshot_path.write_text(
+                json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
+            )
+            print(f"[WIKIDATA] Saved snapshot to {snapshot_path}")
+        else:
+            print(
+                "[WIKIDATA] Snapshot not updated because the live payload was incomplete; "
+                "keeping any existing snapshot unchanged."
+            )
+
+    return payload
 
 
 if __name__ == "__main__":

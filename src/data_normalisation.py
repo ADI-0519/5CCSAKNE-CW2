@@ -8,6 +8,46 @@ from src.config import CONFIG
 
 CONTROLLED_PREDICATES = CONFIG["CONTROLLED_PREDICATES"]
 
+MOJIBAKE_MARKERS = ("\u00c3", "\u00c2", "\u00e2\u20ac")
+MOJIBAKE_REPLACEMENTS = {
+    "\u00e2\u20ac\u2122": "\u2019",
+    "\u00e2\u20ac\u2018": "\u2018",
+    "\u00e2\u20ac\u0153": "\u201c",
+    "\u00e2\u20ac\x9d": "\u201d",
+    "\u00e2\u20ac\u201c": "\u2013",
+    "\u00e2\u20ac\u201d": "\u2014",
+    "\u00e2\u20ac\u00a6": "\u2026",
+    "\u00c2\u00a0": " ",
+}
+
+
+def mojibake_score(text):
+    return sum(str(text).count(marker) for marker in MOJIBAKE_MARKERS)
+
+
+def repair_common_mojibake(text):
+    repaired = str(text)
+    best = repaired
+    best_score = mojibake_score(repaired)
+
+    for _ in range(2):
+        try:
+            candidate = repaired.encode("latin-1").decode("utf-8")
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            break
+        candidate_score = mojibake_score(candidate)
+        if candidate_score < best_score:
+            best = candidate
+            best_score = candidate_score
+            repaired = candidate
+        else:
+            break
+
+    for broken, fixed in MOJIBAKE_REPLACEMENTS.items():
+        best = best.replace(broken, fixed)
+
+    return best
+
 
 def build_stable_id(url, title, published_at):
     source = url if url else f"{title}{published_at}"
@@ -17,7 +57,8 @@ def build_stable_id(url, title, published_at):
 def normalise_name(name):
     if not name:
         return ""
-    return " ".join(str(name).strip().split())
+    repaired = repair_common_mojibake(name)
+    return " ".join(str(repaired).strip().split())
 
 
 def canonicalise_date(date_str):
