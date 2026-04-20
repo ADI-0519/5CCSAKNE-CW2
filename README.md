@@ -8,9 +8,10 @@ Current UK politics and policy news, covering articles published between March 6
 
 ## Data Sources
 
-- **Guardian API** (textual source): full article body text processed with NLP extraction (regex NER, keyword matching, LLM-assisted extraction)
-- **Wikidata** (structured source): UK politicians, political parties, and government bodies queried via the public SPARQL endpoint and mapped directly to RDF
-- **NewsAPI** (supplementary): structured metadata from additional UK news publishers
+- **Guardian API** (textual source): UK politics and policy reporting, including full article text used for extraction.
+- **UK Parliament / Hansard written statements API** (official structured source): parliamentary source records used to ground policy events.
+- **GOV.UK Search API** (official structured source): government policy, guidance, announcement, speech, consultation, and press-release records.
+- **Wikidata** (optional enrichment source): UK politicians, political parties, and government bodies queried through SPARQL and mapped directly to RDF.
 
 ## Repository Structure
 
@@ -37,9 +38,10 @@ pre-commit install
 
 ```
 GUARDIAN_API_KEY=...
-NEWS_API_KEY=...
 OPENAI_API_KEY=...
 ```
+
+Parliament, GOV.UK, and Wikidata do not require API keys for the current pipeline.
 
 ## Running the Pipeline
 
@@ -69,16 +71,16 @@ python -m src.main --from-cache --wikidata-snapshot data/raw/wikidata/wikidata_e
 
 ## Pipeline Stages
 
-1. **Collect** — Fetch data from Guardian API, NewsAPI, and Wikidata SPARQL endpoint
-2. **Normalise** — Convert Guardian and NewsAPI JSON into a shared article schema
-3. **Extract** — Run NLP extraction (entities, topics, events, sentiment) over article text, supplemented by OpenAI
-4. **Normalise extracted records** — Validate and clean extraction outputs
-5. **Build ontology** — Programmatically construct the TBox (15 classes, 15 properties)
-6. **Map news to RDF** — Convert extracted article records to RDF triples (textual source path)
-7. **Map Wikidata to RDF** — Direct field-to-property mapping of structured data (no NLP)
-8. **Merge** — Combine ontology, news instances, and Wikidata triples into a prototype KG
-9. **Enrich** — Complete the KG with inferred sentiment, sections, topics, follow-up links
-10. **Query** — Run 20 SPARQL competency queries against the completed KG
+1. **Collect** — Fetch Guardian articles, Parliament written statements, GOV.UK records, and optional Wikidata enrichment records.
+2. **Normalise** — Convert source payloads into a shared record format with source-system metadata.
+3. **Extract** — Create KG-ready policy-event records from text and official-source metadata, with OpenAI used only as constrained extraction support where configured.
+4. **Normalise extracted records** — Validate and clean extracted event, actor, institution, topic, location, article, and source-record fields.
+5. **Build ontology** — Programmatically construct the event-centred TBox in `ontology/news_ontology.ttl`.
+6. **Map source records to RDF** — Convert KG-ready records into article, policy-event, institution, topic, location, and source-record triples.
+7. **Map Wikidata to RDF** — Directly map structured Wikidata entities to RDF, without NLP.
+8. **Merge** — Combine ontology, source-derived instances, and optional Wikidata triples into `kg/generated/prototype_kg.ttl`.
+9. **Enrich** — Add graph-level links such as `news:reportsOn` inverses and `news:matchedToSourceRecord` cross-source matches.
+10. **Query** — Run 20 SPARQL competency queries against `kg/generated/completed_kg.ttl`.
 
 ## Running Tests
 
