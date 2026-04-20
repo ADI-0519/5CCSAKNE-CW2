@@ -1,12 +1,3 @@
-"""Collect structured entity data from the Wikidata SPARQL endpoint.
-
-This module queries Wikidata for UK politicians, political parties, and
-government bodies.  It serves as the structured data source for the KG
-pipeline, complementing the textual data extracted from Guardian articles.
-
-No API key is required.  All queries use the public Wikidata Query Service.
-"""
-
 import json
 import time
 from pathlib import Path
@@ -23,10 +14,6 @@ REQUEST_HEADERS = {
 REQUEST_TIMEOUT = 90
 
 RAW_SNAPSHOT_DIR = Path(CONFIG["RAW_DATA_DIR"]) / "wikidata"
-
-# ---------------------------------------------------------------------------
-# SPARQL queries
-# ---------------------------------------------------------------------------
 
 POLITICIANS_QUERY = """
 SELECT DISTINCT
@@ -87,13 +74,7 @@ LIMIT 500
 """
 
 
-# ---------------------------------------------------------------------------
-# Execution helpers
-# ---------------------------------------------------------------------------
-
-
 def run_sparql_query(query, label="query"):
-    """Execute a SPARQL query against the Wikidata endpoint."""
     print(f"[WIKIDATA] Running {label}...")
     try:
         response = requests.get(
@@ -116,7 +97,6 @@ def run_sparql_query(query, label="query"):
 
 
 def binding_value(binding, key):
-    """Extract a plain string value from a SPARQL result binding."""
     entry = binding.get(key)
     if entry is None:
         return None
@@ -124,7 +104,6 @@ def binding_value(binding, key):
 
 
 def parse_politician(binding):
-    """Convert a SPARQL binding row into a politician record."""
     return {
         "wikidata_uri": binding_value(binding, "person"),
         "name": binding_value(binding, "personLabel"),
@@ -137,7 +116,6 @@ def parse_politician(binding):
 
 
 def parse_party(binding):
-    """Convert a SPARQL binding row into a political party record."""
     return {
         "wikidata_uri": binding_value(binding, "party"),
         "name": binding_value(binding, "partyLabel"),
@@ -150,7 +128,6 @@ def parse_party(binding):
 
 
 def parse_government_body(binding):
-    """Convert a SPARQL binding row into a government body record."""
     return {
         "wikidata_uri": binding_value(binding, "body"),
         "name": binding_value(binding, "bodyLabel"),
@@ -160,7 +137,6 @@ def parse_government_body(binding):
 
 
 def deduplicate_by_name(records):
-    """Keep one record per unique name (first occurrence wins)."""
     seen = set()
     deduped = []
     for record in records:
@@ -173,7 +149,7 @@ def deduplicate_by_name(records):
 
 
 def is_valid_label(name):
-    """Reject Wikidata URIs or Q-IDs that leaked through as labels."""
+    # Wikidata sometimes returns Q-IDs instead of labels when no English label exists
     if not name:
         return False
     if name.startswith("http://") or name.startswith("https://"):
@@ -184,7 +160,6 @@ def is_valid_label(name):
 
 
 def load_cached_wikidata(snapshot_path=None):
-    """Load a previously saved Wikidata snapshot from disk."""
     if snapshot_path is not None:
         path = Path(snapshot_path)
     else:
@@ -226,13 +201,7 @@ def has_minimum_wikidata_coverage(payload):
     )
 
 
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
-
-
 def collect_wikidata(save_snapshot=True):
-    """Fetch politicians, parties, and government bodies from Wikidata."""
     cached_payload = load_cached_wikidata_if_available()
 
     # Fetch with a small delay between queries to be polite to the endpoint
