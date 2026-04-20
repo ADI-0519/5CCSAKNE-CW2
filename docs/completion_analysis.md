@@ -28,25 +28,25 @@ This is ontology-constrained graph enrichment. It is not currently a full retrie
 
 Latest validated run:
 
-- timestamp: `20260420T130554Z`
-- normalised source records: `373`
+- timestamp: `20260420T202251Z`
+- normalised source records: `732`
 - Guardian articles: `253`
 - Parliament source records: `20`
-- GOV.UK source records: `100`
-- Wikidata entities: `1719` politicians, `967` parties, `490` government bodies
-- ontology graph: `190` triples
-- source-derived instance KG: `7443` triples
-- Wikidata KG: `24950` triples
-- prototype KG: `32380` triples
-- completed KG: `32453` triples
+- GOV.UK source records: `459`
+- Wikidata entities: `1730` politicians, `968` parties, `490` government bodies
+- ontology graph: `188` triples
+- source-derived instance KG: `14429` triples
+- Wikidata KG: `25064` triples
+- prototype KG: `39545` triples
+- completed KG: `40049` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
-- `51` `news:reportsOn` inverse links
-- `22` `news:matchedToSourceRecord` links
+- `266` `news:reportsOn` inverse links
+- `238` `news:matchedToSourceRecord` links
 
-The completed KG is therefore larger than the prototype KG by `73` triples.
+The completed KG is therefore larger than the prototype KG by `504` triples.
 
 ## What Is Covered Well
 
@@ -119,8 +119,8 @@ Future RAG work can be added by retrieving relevant source-record and article co
 Completion improves the query layer without changing the core ontology:
 
 - `news:reportsOn` lets queries start from articles and navigate to events.
-- `news:matchedToSourceRecord` supports CQ12, which asks which source systems contributed records matched to policy events.
-- Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` makes official-source integration visible to provenance queries.
+- `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
+- Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 
