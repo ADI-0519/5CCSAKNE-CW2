@@ -433,8 +433,6 @@ def build_ontology() -> Graph:
     )
 
     # property characteristics
-    # graph.add((NEWS.involvesActor, RDF.type, OWL.IrreflexiveProperty))
-    # graph.add((NEWS.memberOfParty, RDF.type, OWL.IrreflexiveProperty))
     graph.add((NEWS.reportsOn, RDF.type, OWL.ObjectProperty))
     graph.add((NEWS.reportsOn, OWL.inverseOf, NEWS.reportedByArticle))
     graph.add((NEWS.reportsOn, RDFS.domain, NEWS.NewsArticle))
