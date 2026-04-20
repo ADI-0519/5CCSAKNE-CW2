@@ -12,6 +12,7 @@ from src.data_extraction import (
     normalize_event_name,
     sanitize_locations,
     sanitize_organizations,
+    should_use_openai_extraction,
 )
 
 
@@ -210,6 +211,37 @@ class TestExtractRelevantInformation:
         record = extract_relevant_information([article])[0]
         assert record["event_candidates"] == []
 
+    def test_obituary_does_not_get_generic_policy_fallback(self):
+        article = make_article(
+            title="David Winnick obituary",
+            summary="A retrospective on a long parliamentary career.",
+            content=(
+                "The obituary reflects on decades in politics, Westminster, and Labour history "
+                "without describing a new announcement or current policy event."
+            ),
+            tags=["Politics", "Parliament"],
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"] == []
+
+    def test_liveblog_without_clear_event_signal_does_not_get_generic_policy_fallback(self):
+        article = make_article(
+            title="Social media has led to a complete rewiring of childhood, says minister – UK politics live",
+            url="https://example.com/politics/live/2026/mar/27/uk-politics-live",
+            summary="Rolling coverage of UK politics through the day.",
+            content=(
+                "Rolling updates covered several reactions from ministers and opposition figures "
+                "throughout the day without a single clearly bounded policy event."
+            ),
+            tags=["Politics", "Government Policy"],
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"] == []
+
     def test_respects_raw_article_type_hint(self):
         article = make_article(raw_article_type_hint="OpinionArticle", section="UK news")
         record = extract_relevant_information([article])[0]
@@ -230,7 +262,7 @@ class TestExtractRelevantInformation:
                 "article_type": "OpinionArticle",
                 "events": [
                     {
-                        "name": "NHS Reform Announcement",
+                        "name": "NHS Reform Options",
                         "type": "GovernmentPolicyEvent",
                         "date": "2026-03-20",
                         "location": "Manchester",
@@ -239,14 +271,21 @@ class TestExtractRelevantInformation:
             },
         )
 
-        record = extract_relevant_information([make_article()])[0]
+        article = make_article(
+            title="Officials outline NHS reform options",
+            summary="A briefing note outlined possible health reforms.",
+            content="Officials outlined possible reforms and options in Manchester.",
+            tags=[],
+            section="UK news",
+        )
+        record = extract_relevant_information([article])[0]
 
         assert record["sentiment"] == "Positive"
         assert record["article_type"] == "OpinionArticle"
         assert "Wes Streeting" in record["entities"]["people"]
         assert "NHS England" in record["entities"]["government_bodies"]
         assert "Healthcare" in record["entities"]["topics"]
-        assert "NHS Reform Announcement" in record["entities"]["events"]
+        assert "NHS Reform Options" in record["entities"]["events"]
 
     def test_pmqs_is_treated_as_parliamentary_debate(self):
         assert infer_event_type("Prime Minister's Questions") == "ParliamentaryDebate"
@@ -402,3 +441,115 @@ class TestExtractRelevantInformation:
         assert record["event_candidates"]
         assert record["event_candidates"][0]["name"] == "Ministerial Statement"
         assert record["event_candidates"][0]["type"] == "MinisterialStatement"
+
+    def test_govuk_policy_paper_gets_source_aware_fallback_event(self):
+        article = make_article(
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="National Cancer Plan for England",
+            section="policy_paper",
+            summary="Government sets out a long-term plan for cancer services.",
+            content="Government sets out a long-term plan for cancer services in England.",
+            tags=["policy_paper"],
+            author=None,
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"]
+        assert record["event_candidates"][0]["name"] == "National Cancer Plan for England"
+        assert record["event_candidates"][0]["type"] == "GovernmentPolicyEvent"
+
+    def test_govuk_policy_paper_without_explicit_event_signal_does_not_get_fallback_event(self):
+        article = make_article(
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="HM Treasury Market Engagement Group",
+            section="policy_paper",
+            summary="Reference material for market participants.",
+            content="Reference material for market participants.",
+            tags=["policy_paper"],
+            author=None,
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"] == []
+
+    def test_govuk_person_record_does_not_get_fallback_event(self):
+        article = make_article(
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="Dr Vanessa Ogden CBE",
+            section="person",
+            summary="Dr Vanessa Ogden CBE is the Regional Director for London.",
+            content="Dr Vanessa Ogden CBE is the Regional Director for London.",
+            tags=["person"],
+            author=None,
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"] == []
+
+    def test_openai_extraction_is_skipped_for_structured_sources(self):
+        heuristic_result = {
+            "people": [],
+            "organizations": [],
+            "locations": [],
+            "topics": ["Government Policy"],
+            "politicians": [],
+            "political_parties": [],
+            "government_bodies": [],
+            "sentiment": "Neutral",
+            "article_type": "NewsArticle",
+            "events": [],
+        }
+        article = make_article(source_system="govuk", source_name="GOV.UK")
+
+        assert should_use_openai_extraction(article, heuristic_result) is False
+
+    def test_openai_extraction_is_skipped_for_liveblogs(self):
+        heuristic_result = {
+            "people": [],
+            "organizations": [],
+            "locations": [],
+            "topics": ["Politics"],
+            "politicians": [],
+            "political_parties": [],
+            "government_bodies": [],
+            "sentiment": "Neutral",
+            "article_type": "BreakingNewsArticle",
+            "events": [],
+        }
+        article = make_article(
+            title="UK politics: ministers under pressure – as it happened",
+            url="https://example.com/live/article",
+        )
+
+        assert should_use_openai_extraction(article, heuristic_result) is False
+
+    def test_openai_extraction_is_skipped_when_heuristics_are_already_strong(self):
+        heuristic_result = {
+            "people": [],
+            "organizations": [],
+            "locations": ["London"],
+            "topics": ["Government Policy"],
+            "politicians": ["Keir Starmer"],
+            "political_parties": [],
+            "government_bodies": ["Treasury"],
+            "sentiment": "Neutral",
+            "article_type": "NewsArticle",
+            "events": [
+                {
+                    "name": "Spring Statement",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-20",
+                    "location": "London",
+                    "source": "heuristic",
+                }
+            ],
+        }
+        article = make_article(title="Treasury confirms spring statement timetable")
+
+        assert should_use_openai_extraction(article, heuristic_result) is False

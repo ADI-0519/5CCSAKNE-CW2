@@ -6,6 +6,7 @@ from src.data_normalisation import (
     build_stable_id,
     canonicalise_date,
     is_valid_url,
+    is_within_configured_window,
     mojibake_score,
     normalise_collected_sources,
     normalise_data,
@@ -35,6 +36,10 @@ class TestUtilityFunctions:
         assert is_valid_url("https://example.com") is True
         assert is_valid_url("http://example.com") is True
         assert is_valid_url("ftp://example.com") is False
+
+    def test_is_within_configured_window_uses_coursework_dates(self):
+        assert is_within_configured_window("2026-03-06T10:00:00Z") is True
+        assert is_within_configured_window("2026-04-20T10:00:00Z") is False
 
     def test_normalise_name_trims_and_collapses_whitespace(self):
         assert normalise_name("  hello   world  ") == "hello world"
@@ -193,6 +198,60 @@ class TestSourceNormalisation:
         assert record["section"] == "policy_paper"
         assert record["url"] == "https://www.gov.uk/government/publications/treasury-growth-plan"
         assert "HM Treasury" in record["tags"]
+
+    def test_normalise_govuk_records_filters_out_of_window_results(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Out-of-window policy paper",
+                        "link": "/government/publications/out-of-window-policy-paper",
+                        "public_timestamp": "2026-04-20T09:15:00Z",
+                        "description": "A policy paper outside the fixed coursework window.",
+                        "format": "policy_paper",
+                        "organisations": ["Cabinet Office"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+    def test_normalise_govuk_records_filters_reference_like_guidance_material(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Rates and allowances: Inheritance Tax thresholds and interest rates",
+                        "link": "/government/publications/inheritance-tax-thresholds",
+                        "public_timestamp": "2026-03-20T09:15:00Z",
+                        "description": "Reference rates and allowances material.",
+                        "format": "guidance",
+                        "organisations": ["HM Revenue and Customs"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+    def test_normalise_govuk_records_filters_admin_news_items_without_scope_signal(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Appointment of new private sector partner",
+                        "link": "/government/news/appointment-of-new-private-sector-partner",
+                        "public_timestamp": "2026-03-20T09:15:00Z",
+                        "description": "Administrative update from government.",
+                        "format": "news_story",
+                        "organisations": ["Cabinet Office"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
 
 
 class TestExtractedRecordNormalisation:
