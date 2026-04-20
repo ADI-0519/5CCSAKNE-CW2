@@ -49,7 +49,7 @@ ORDER BY DESC(?eventCount) ?actorName
 SELECT DISTINCT ?eventName ?headline ?sourceTitle ?eventDate
 WHERE {
   ?sourceRecord a news:OfficialSourceRecord ;
-                schema:name ?sourceTitle .
+                news:sourceTitle ?sourceTitle .
   ?event a news:PolicyEvent ;
          schema:name ?eventName ;
          news:representedInOfficialSource ?sourceRecord ;
@@ -144,7 +144,10 @@ WHERE {
   FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
   FILTER(
     NOT EXISTS { ?event news:involvesGovernmentBody ?governmentBody . }
-    || NOT EXISTS { ?event news:occursInParliamentaryBody ?parliamentaryBody . }
+    || (
+      EXISTS { ?event a news:ParliamentaryEvent . }
+      && NOT EXISTS { ?event news:occursInParliamentaryBody ?parliamentaryBody . }
+    )
     || NOT EXISTS { ?event news:concernsPolicyTopic ?topic . }
   )
 }
@@ -154,27 +157,17 @@ ORDER BY ?eventDate ?eventName ?headline
 # CQ10: Which policy topics are most frequently linked to parliamentary and government policy events reported during the selected time window?
 SELECT ?topicName (COUNT(DISTINCT ?event) AS ?eventCount)
 WHERE {
-  {
-    ?event a news:PolicyEvent ;
-           news:concernsPolicyTopic ?topic ;
-           news:reportedByArticle ?article ;
-           news:occursOnDate ?eventDate .
-    ?topic a news:PolicyTopic ;
-           schema:name ?topicName .
-    FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
-    FILTER EXISTS { ?event a news:ParliamentaryEvent . }
-  }
-  UNION
-  {
-    ?event a news:PolicyEvent ;
-           news:concernsPolicyTopic ?topic ;
-           news:reportedByArticle ?article ;
-           news:occursOnDate ?eventDate .
-    ?topic a news:PolicyTopic ;
-           schema:name ?topicName .
-    FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
-    FILTER EXISTS { ?event a news:GovernmentPolicyEvent . }
-  }
+  ?event a news:PolicyEvent ;
+         news:concernsPolicyTopic ?topic ;
+         news:reportedByArticle ?article ;
+         news:occursOnDate ?eventDate .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+  FILTER(
+    EXISTS { ?event a news:ParliamentaryEvent . } ||
+    EXISTS { ?event a news:GovernmentPolicyEvent . }
+  )
 }
 GROUP BY ?topicName
 ORDER BY DESC(?eventCount) ?topicName
@@ -189,7 +182,7 @@ WHERE {
          news:involvesGovernmentBody ?department ;
          news:occursOnDate ?eventDate .
   ?sourceRecord a news:OfficialSourceRecord ;
-                schema:name ?sourceTitle .
+                news:sourceTitle ?sourceTitle .
   ?department a news:GovernmentDepartment ;
               schema:name ?departmentName .
   FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
@@ -299,8 +292,10 @@ WHERE {
            news:hasAuthor ?journalist .
   ?event a news:PolicyEvent ;
          news:reportedByArticle ?article ;
-         news:involvesGovernmentBody ?department .
+         news:involvesGovernmentBody ?department ;
+         news:occursOnDate ?eventDate .
   ?department a news:GovernmentDepartment .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
 GROUP BY ?journalistName
 HAVING(COUNT(DISTINCT ?article) > 1)
@@ -313,11 +308,13 @@ WHERE {
   ?event a news:PolicyEvent ;
          news:involvesActor ?actor ;
          news:involvesGovernmentBody ?body ;
-         news:concernsPolicyTopic ?topic .
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
   ?actor a news:PoliticalActor .
   ?body a news:GovernmentBody .
   ?topic a news:PolicyTopic ;
          schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
 ORDER BY ?topicName
 
@@ -333,7 +330,7 @@ WHERE {
              news:occursOnDate ?sharedDate .
   ?topic a news:PolicyTopic ;
          schema:name ?topicName .
-  FILTER NOT EXISTS { ?parliamentaryEvent a news:MinisterialStatement . }
+  FILTER(?sharedDate >= "{DATE_START}"^^xsd:date && ?sharedDate <= "{DATE_END}"^^xsd:date)
 }
 ORDER BY ?sharedDate ?topicName
 
