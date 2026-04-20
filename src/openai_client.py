@@ -211,6 +211,7 @@ def request_structured_output(instructions, user_input, response_format):
                 instructions=instructions,
                 input=user_input,
                 text={"format": response_format},
+                timeout=CONFIG["OPENAI_REQUEST_TIMEOUT_SECONDS"],
             )
             return response_to_json(response)
         except Exception as exc:

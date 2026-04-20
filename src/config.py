@@ -23,6 +23,7 @@ PROJECT_SCOPE = (
 GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+OPENAI_REQUEST_TIMEOUT_SECONDS = int(os.getenv("OPENAI_REQUEST_TIMEOUT_SECONDS", "30"))
 PARLIAMENT_API_KEY = os.getenv("PARLIAMENT_API_KEY")
 GOVUK_API_KEY = os.getenv("GOVUK_API_KEY")
 
@@ -69,6 +70,7 @@ RAW_DATA_DIR = "data/raw"
 PROCESSED_DATA_DIR = "data/processed"
 GENERATED_KG_DIR = "kg/generated"
 OPENAI_CACHE_DIR = "data/cache/openai"
+EXTRACTION_PROGRESS_EVERY = 25
 
 # Guardian configuration
 
@@ -150,14 +152,48 @@ GOVUK_QUERY_TERMS = [
     "healthcare",
 ]
 GOVUK_DOCUMENT_FORMATS = [
-    "guidance",
-    "news_story",
     "press_release",
     "speech",
     "policy_paper",
     "consultation",
-    "statutory_guidance",
 ]
+GOVUK_ALWAYS_INCLUDE_FORMATS = {
+    "policy_paper",
+    "consultation",
+}
+GOVUK_SCOPE_SIGNAL_TERMS = {
+    "budget",
+    "defence",
+    "education",
+    "energy",
+    "health",
+    "healthcare",
+    "home office",
+    "housing",
+    "immigration",
+    "ministerial",
+    "nhs",
+    "parliament",
+    "public spending",
+    "reform",
+    "statement",
+    "tax",
+    "treasury",
+    "transport",
+    "welfare",
+}
+GOVUK_EXCLUDED_TEXT_TERMS = {
+    "appointments to",
+    "extension notice",
+    "form ",
+    "helpsheet",
+    "manual",
+    "minutes",
+    "rates and allowances",
+    "report:",
+    "self assessment",
+    "terms of reference",
+}
 
 # extraction dictionaries
 
@@ -300,6 +336,46 @@ BREAKING_NEWS_HINTS = {
     "as it happened",
     "rolling coverage",
     "updates",
+}
+
+GOVUK_EVENT_FALLBACK_SECTIONS = {
+    "press_release",
+    "speech",
+}
+
+GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS = {
+    "agreement",
+    "announcement",
+    "charter",
+    "consultation",
+    "crackdown",
+    "declaration",
+    "funding",
+    "investment",
+    "launch",
+    "measures",
+    "plan",
+    "policy",
+    "reform",
+    "response",
+    "rules",
+    "speech",
+    "statement",
+    "strategy",
+    "summit",
+    "vision",
+}
+
+GOVUK_NON_EVENT_SECTIONS = {
+    "person",
+    "form",
+    "employment_tribunal_decision",
+    "travel_advice",
+    "complaints_procedure",
+    "mainstream_browse_page",
+    "hmrc_manual_section",
+    "armed_forces_covenant_business",
+    "policy_group",
 }
 
 POSITIVE_SENTIMENT_TERMS = {
@@ -531,6 +607,7 @@ CONFIG = {
     "GUARDIAN_API_KEY": GUARDIAN_API_KEY,
     "OPENAI_API_KEY": OPENAI_API_KEY,
     "OPENAI_MODEL": OPENAI_MODEL,
+    "OPENAI_REQUEST_TIMEOUT_SECONDS": OPENAI_REQUEST_TIMEOUT_SECONDS,
     "PARLIAMENT_API_KEY": PARLIAMENT_API_KEY,
     "GOVUK_API_KEY": GOVUK_API_KEY,
     "SOURCE_CONFIG": SOURCE_CONFIG,
@@ -545,6 +622,7 @@ CONFIG = {
     "PROCESSED_DATA_DIR": PROCESSED_DATA_DIR,
     "GENERATED_KG_DIR": GENERATED_KG_DIR,
     "OPENAI_CACHE_DIR": OPENAI_CACHE_DIR,
+    "EXTRACTION_PROGRESS_EVERY": EXTRACTION_PROGRESS_EVERY,
     "GUARDIAN_PAGE_SIZE": GUARDIAN_PAGE_SIZE,
     "GUARDIAN_SHOW_TAGS": GUARDIAN_SHOW_TAGS,
     "GUARDIAN_FIELDS": GUARDIAN_FIELDS,
@@ -556,6 +634,9 @@ CONFIG = {
     "PARLIAMENTARY_BODY_NAMES": PARLIAMENTARY_BODY_NAMES,
     "GOVUK_QUERY_TERMS": GOVUK_QUERY_TERMS,
     "GOVUK_DOCUMENT_FORMATS": GOVUK_DOCUMENT_FORMATS,
+    "GOVUK_ALWAYS_INCLUDE_FORMATS": GOVUK_ALWAYS_INCLUDE_FORMATS,
+    "GOVUK_SCOPE_SIGNAL_TERMS": GOVUK_SCOPE_SIGNAL_TERMS,
+    "GOVUK_EXCLUDED_TEXT_TERMS": GOVUK_EXCLUDED_TEXT_TERMS,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
     "POLITICIAN_NAMES": POLITICIAN_NAMES,
     "POLITICAL_PARTY_NAMES": POLITICAL_PARTY_NAMES,
@@ -566,6 +647,9 @@ CONFIG = {
     "ECONOMIC_EVENT_HINTS": ECONOMIC_EVENT_HINTS,
     "OPINION_SECTION_NAMES": OPINION_SECTION_NAMES,
     "BREAKING_NEWS_HINTS": BREAKING_NEWS_HINTS,
+    "GOVUK_EVENT_FALLBACK_SECTIONS": GOVUK_EVENT_FALLBACK_SECTIONS,
+    "GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS": GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS,
+    "GOVUK_NON_EVENT_SECTIONS": GOVUK_NON_EVENT_SECTIONS,
     "POSITIVE_SENTIMENT_TERMS": POSITIVE_SENTIMENT_TERMS,
     "NEGATIVE_SENTIMENT_TERMS": NEGATIVE_SENTIMENT_TERMS,
     "CONTROLLED_PREDICATES": CONTROLLED_PREDICATES,
