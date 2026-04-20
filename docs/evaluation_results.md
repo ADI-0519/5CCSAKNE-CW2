@@ -4,18 +4,18 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260420T130554Z`
+- `20260420T202251Z`
 
 Primary artefacts:
 
-- `data/processed/20260420T130554Z_normalised_articles.json`
-- `data/processed/20260420T130554Z_extracted_articles.json`
-- `data/processed/20260420T130554Z_kg_records.json`
-- `output/20260420T130554Z_instance_kg.ttl`
-- `output/20260420T130554Z_wikidata_kg.ttl`
-- `output/20260420T130554Z_prototype_kg.ttl`
-- `output/20260420T130554Z_completed_kg.ttl`
-- `output/20260420T130554Z_query_results.json`
+- `data/processed/20260420T202251Z_normalised_articles.json`
+- `data/processed/20260420T202251Z_extracted_articles.json`
+- `data/processed/20260420T202251Z_kg_records.json`
+- `output/20260420T202251Z_instance_kg.ttl`
+- `output/20260420T202251Z_wikidata_kg.ttl`
+- `output/20260420T202251Z_prototype_kg.ttl`
+- `output/20260420T202251Z_completed_kg.ttl`
+- `output/20260420T202251Z_query_results.json`
 
 ## 1. Structural Results
 
@@ -25,28 +25,28 @@ Source records:
 
 - Guardian records: `253`
 - Parliament records: `20`
-- GOV.UK records: `100`
-- Combined normalised records: `373`
+- GOV.UK records: `459`
+- Combined normalised records: `732`
 
 Wikidata enrichment:
 
-- Politicians: `1719`
-- Political parties: `967`
+- Politicians: `1730`
+- Political parties: `968`
 - Government bodies: `490`
 
 Generated graph counts:
 
-- Ontology graph: `190` triples
-- Source-derived instance KG: `7443` triples
-- Wikidata KG: `24950` triples
-- Prototype KG: `32380` triples
-- Completed KG: `32453` triples
+- Ontology graph: `188` triples
+- Source-derived instance KG: `14429` triples
+- Wikidata KG: `25064` triples
+- Prototype KG: `39545` triples
+- Completed KG: `40049` triples
 
 Completion additions:
 
-- `51` `news:reportsOn` inverse links
-- `22` `news:matchedToSourceRecord` links
-- total delta from prototype to completed KG: `73` triples
+- `266` `news:reportsOn` inverse links
+- `238` `news:matchedToSourceRecord` links
+- total delta from prototype to completed KG: `504` triples
 
 Structural judgment:
 
@@ -57,37 +57,37 @@ Structural judgment:
 
 ## 2. Competency Question Results
 
-All `20/20` competency queries returned at least one row in the latest run.
+All `20/20` competency queries returned at least one row when the current query set was run against the completed KG from this snapshot.
 
 | CQ | Row count |
 | --- | ---: |
-| CQ01 | 21 |
-| CQ02 | 4 |
+| CQ01 | 15 |
+| CQ02 | 25 |
 | CQ03 | 11 |
-| CQ04 | 22 |
-| CQ05 | 6 |
-| CQ06 | 7 |
-| CQ07 | 7 |
+| CQ04 | 233 |
+| CQ05 | 3 |
+| CQ06 | 4 |
+| CQ07 | 8 |
 | CQ08 | 4 |
-| CQ09 | 50 |
+| CQ09 | 193 |
 | CQ10 | 12 |
-| CQ11 | 1 |
-| CQ12 | 2 |
-| CQ13 | 39 |
-| CQ14 | 1 |
-| CQ15 | 2 |
+| CQ11 | 81 |
+| CQ12 | 11 |
+| CQ13 | 48 |
+| CQ14 | 12 |
+| CQ15 | 7 |
 | CQ16 | 8 |
-| CQ17 | 5 |
+| CQ17 | 11 |
 | CQ18 | 11 |
-| CQ19 | 3 |
-| CQ20 | 3 |
+| CQ19 | 1 |
+| CQ20 | 8 |
 
 Important judgments:
 
 - `CQ04` confirms that reported policy events can also be represented in official Parliament or GOV.UK source records.
-- `CQ12` confirms that matched source-record provenance is populated after completion.
+- `CQ11` and `CQ12` confirm that official source records support institution and topic queries.
 - `CQ14` now answers a comparative coverage question over parliamentary versus government policy events rather than relying on the old article-analytics vocabulary.
-- `CQ17` and `CQ20` exercise multi-hop chains from publishers or journalists through articles to policy events and government departments.
+- `CQ17` and `CQ20` exercise multi-hop chains from journalists or departments through articles, policy events, and policy topics.
 - `CQ09` intentionally exposes missing links, so a non-zero result is useful for incompleteness analysis rather than a failure.
 
 ## 3. Evaluation Position
@@ -121,3 +121,9 @@ The graph is weaker for:
 The final report should frame the system as a working automated KG pipeline with an event-centred ontology. It should avoid old claims about supplementary news-source coverage, sentiment analysis, article subtype classification, or follow-up links as core graph outputs.
 
 If RAG is added later, it should be evaluated separately and described as an extension to the current completion stage, not retroactively treated as part of this evaluated run.
+
+Cache-mode verification:
+
+- `python -m src.main --from-cache` was run against the saved raw snapshots.
+- Cached run timestamp: `20260420T202251Z`
+- The cached run used the saved Guardian, Parliament, GOV.UK, Wikidata, and OpenAI extraction cache artefacts and reproduced `20/20` query coverage with the same graph counts.
