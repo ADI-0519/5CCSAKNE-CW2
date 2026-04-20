@@ -211,7 +211,12 @@ def enrich_cross_source_links(graph):
 
     for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
         event_data = event_metadata(graph, event_uri)
-        if not event_data["name"] or event_data["already_represented"]:
+        for source_record in event_data["already_represented"]:
+            if (event_uri, NEWS.matchedToSourceRecord, source_record) not in graph:
+                graph.add((event_uri, NEWS.matchedToSourceRecord, source_record))
+                added_matched += 1
+
+        if not event_data["name"]:
             continue
 
         best_match = None
