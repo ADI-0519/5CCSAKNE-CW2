@@ -68,7 +68,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` queries returned at least one row in run `20260420T130554Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260420T202251Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -100,7 +100,7 @@ Recommended metrics:
 - topic precision
 - institution-link precision
 - official-source match precision
-- number of missing source links found by CQ09 and CQ11
+- number of missing source or modelling links found by CQ09 and source-integration audits
 
 ## 4. Completion Quality
 
@@ -121,17 +121,17 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `32380` triples
-- completed KG: `32453` triples
-- completion delta: `73` triples
-- `reportsOn` links added: `51`
-- `matchedToSourceRecord` links added: `22`
+- prototype KG: `39545` triples
+- completed KG: `40049` triples
+- completion delta: `504` triples
+- `reportsOn` links added: `266`
+- `matchedToSourceRecord` links added: `238`
 
 Important quality questions:
 
 - are matched source records from the correct source system?
 - do source-record titles support the event they are matched to?
-- does completion improve CQ12 without inflating false matches?
+- do completion-added source matches improve provenance without inflating false matches?
 - should future RAG work add confidence and evidence metadata?
 
 ## 5. Cross-Source Evaluation
@@ -157,8 +157,8 @@ Latest validated source counts:
 
 - Guardian: `253`
 - Parliament: `20`
-- GOV.UK: `100`
-- Wikidata: `1719` politicians, `967` parties, `490` government bodies
+- GOV.UK: `459`
+- Wikidata: `1730` politicians, `968` parties, `490` government bodies
 
 ## 6. Performance And Reproducibility
 
