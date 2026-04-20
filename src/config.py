@@ -15,7 +15,7 @@ PROJECT_SCOPE = (
     "UK parliamentary and government policy events reported in UK news, using "
     "Guardian as the core textual reporting source and Parliament/Hansard plus "
     "GOV.UK as structured or official sources, with OpenAI used critically for "
-    "augmentation, extraction support, completion, and evaluation baselines."
+    "augmentation, extraction support, and evaluation baselines."
 )
 
 # API keys and model config
