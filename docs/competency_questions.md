@@ -41,7 +41,7 @@ This table records the minimum ontology support each CQ requires. It is aligned 
 | CQ01 | `ParliamentaryDebate`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Event-topic retrieval; not article lookup; supports temporal filtering. |
 | CQ02 | `MinisterialStatement`, `GovernmentDepartment` | `issuedByDepartment`, `occursOnDate` | Official-source event-to-institution linkage; justifies department modelling. |
 | CQ03 | `PoliticalActor`, `PolicyEvent` | `involvesActor`, `occursOnDate` | Aggregation with `COUNT` / `HAVING`; easy to construct boundary cases. |
-| CQ04 | `PolicyEvent`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `reportedByArticle`, `representedInOfficialSource`, `matchedToSourceRecord` | Cross-source integration question; validates multi-source KG design without overclaiming identity. |
+| CQ04 | `PolicyEvent`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `reportedByArticle`, `representedInOfficialSource` | Cross-source integration question; validates multi-source KG design without overclaiming identity. |
 | CQ05 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `concernsPolicyTopic` | Tests whether event subclasses are meaningfully distinguished but still connected by shared topics. |
 | CQ06 | `ParliamentaryBody`, `PolicyEvent`, `PolicyTopic` | `occursInParliamentaryBody`, `concernsPolicyTopic`, `occursOnDate` | Institution-event-topic linkage; supports non-trivial joins. |
 | CQ07 | `GovernmentDepartment`, `PolicyEvent` | `involvesGovernmentBody`, `occursOnDate` | Ranking / `ORDER BY` / `LIMIT`; requires true aggregation cases. |
@@ -54,7 +54,7 @@ This table records the minimum ontology support each CQ requires. It is aligned 
 | CQ14 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `concernsPolicyTopic`, `occursOnDate` | Comparative topic coverage counts across event subclasses; domain-centred counterpart to CQ05 and CQ10 without assuming one side dominates. |
 | CQ15 | `Location`, `PolicyEvent` | `occursInLocation`, `occursOnDate` | Location aggregation; exercises the geographic dimension of the event model. |
 | CQ16 | `PoliticalActor`, `PoliticalParty`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic`, `occursOnDate` | Per-actor multi-topic aggregation; distinct from CQ08 which aggregates at party level. |
-| CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Journalist-level aggregation over department-linked coverage; source-dependent because byline metadata is only available where article authors are captured reliably. |
+| CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Four-hop retrieval linking journalists to articles, policy events, and government departments; source-dependent because byline metadata is only available where article authors are captured reliably. |
 | CQ18 | `PolicyTopic`, `PolicyEvent`, `PoliticalActor`, `GovernmentBody` | `involvesActor`, `involvesGovernmentBody`, `concernsPolicyTopic` | Multi-constraint intersection query; tests joint actor-institution-topic linkage on the same event. |
 | CQ19 | `ParliamentaryEvent`, `MinisterialStatement`, `PolicyTopic` | `occursOnDate`, `concernsPolicyTopic` | Temporal-topic overlap across disjoint event subclasses; stronger than weak date-only co-occurrence and better aligned to what the KG can support reliably. |
 | CQ20 | `GovernmentDepartment`, `PolicyEvent`, `PolicyTopic` | `involvesGovernmentBody`, `concernsPolicyTopic`, `occursOnDate` | Department-topic breadth ranking; domain-facing aggregation over institutional policy scope. |
@@ -73,7 +73,7 @@ This table records the minimum ontology support each CQ requires. It is aligned 
 
 `CQ16.` Which political actors are individually involved in events spanning at least two distinct policy topics, and which party do they belong to?
 
-`CQ17.` Which journalists authored more than one article reporting on policy events that involve a government department?
+`CQ17.` Which journalists authored articles reporting on policy events that involve a government department?
 
 `CQ18.` Which policy topics appear in events that involve both a political actor and a government body?
 
