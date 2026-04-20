@@ -218,7 +218,7 @@ HAVING(COUNT(DISTINCT ?event) > 1)
 ORDER BY DESC(?coOccurrenceCount) ?topicNameA ?topicNameB
 
 
-# CQ14: Which news organisations published more articles reporting on parliamentary events than on government policy events during the selected time window?
+# CQ14: How many articles did each news organisation publish reporting on parliamentary events versus government policy events during the selected time window?
 SELECT ?orgName ?parliamentaryCount ?governmentCount
 WHERE {
   {
@@ -226,29 +226,42 @@ WHERE {
     WHERE {
       ?article a news:NewsArticle ;
                news:publishedBy ?org .
-      ?event a news:ParliamentaryEvent ;
-             news:reportedByArticle ?article ;
+      ?event news:reportedByArticle ?article ;
              news:occursOnDate ?eventDate .
+      {
+        ?event a news:ParliamentaryEvent .
+      }
+      UNION
+      {
+        ?event a news:ParliamentaryDebate .
+      }
       FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
     }
     GROUP BY ?org
   }
-  {
+  OPTIONAL {
     SELECT ?org (COUNT(DISTINCT ?article) AS ?governmentCount)
     WHERE {
       ?article a news:NewsArticle ;
                news:publishedBy ?org .
-      ?event a news:GovernmentPolicyEvent ;
-             news:reportedByArticle ?article ;
+      ?event news:reportedByArticle ?article ;
              news:occursOnDate ?eventDate .
+      {
+        ?event a news:GovernmentPolicyEvent .
+      }
+      UNION
+      {
+        ?event a news:MinisterialStatement .
+      }
       FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
     }
     GROUP BY ?org
   }
   ?org schema:name ?orgName .
-  FILTER(?parliamentaryCount > ?governmentCount)
+  BIND(COALESCE(?governmentCount, 0) AS ?governmentTotal)
+  BIND(?parliamentaryCount - ?governmentTotal AS ?coverageDelta)
 }
-ORDER BY DESC(?parliamentaryCount) ?orgName
+ORDER BY DESC(?coverageDelta) DESC(?parliamentaryCount) ?orgName
 
 
 # CQ15: Which locations are linked to more than one distinct policy event during the selected time window?

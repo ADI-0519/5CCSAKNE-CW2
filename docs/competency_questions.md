@@ -51,7 +51,7 @@ This table records the minimum ontology support each manual CQ requires. It shou
 | CQ11 | `PolicyEvent`, `OfficialSourceRecord` | `representedInOfficialSource` | Counting with `NOT EXISTS`; interlinking completeness metric (Week 10). |
 | CQ12 | `SourceRecord`, `PolicyEvent` | `matchedToSourceRecord`, `sourceSystem` | Provenance aggregation; validates three-source integration story. |
 | CQ13 | `PolicyEvent`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Topic co-occurrence via self-join with `HAVING`; non-trivial join pattern. |
-| CQ14 | `NewsOrganisation`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `publishedBy`, `reportedByArticle` | Comparison via correlated subqueries; exercises event subtype distinction. |
+| CQ14 | `NewsOrganisation`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `publishedBy`, `reportedByArticle` | Comparative coverage counts for parliamentary versus government policy events; exercises subtype distinction without assuming a non-empty winner set. |
 | CQ15 | `Location`, `PolicyEvent` | `occursInLocation`, `occursOnDate` | Location aggregation; exercises the geographic dimension of the event model. |
 | CQ16 | `PoliticalActor`, `PoliticalParty`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic`, `occursOnDate` | Per-actor multi-topic aggregation; distinct from CQ08 which aggregates at party level. |
 | CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Four-hop retrieval linking reporters to institutional involvement. |
@@ -67,7 +67,7 @@ This table records the minimum ontology support each manual CQ requires. It shou
 
 `CQ13.` Which pairs of policy topics co-occur across more than one policy event during the selected time window?
 
-`CQ14.` Which news organisations published more articles reporting on parliamentary events than on government policy events during the selected time window?
+`CQ14.` How many articles did each news organisation publish reporting on parliamentary events versus government policy events during the selected time window?
 
 `CQ15.` Which locations are linked to more than one distinct policy event during the selected time window?
 
