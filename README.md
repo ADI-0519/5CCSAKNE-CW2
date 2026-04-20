@@ -4,7 +4,7 @@ Knowledge Engineering coursework repository for building a knowledge graph from 
 
 ## Domain
 
-Current UK politics and policy news, covering articles published between March 6, 2026 and April 6, 2026.
+UK parliamentary and government policy events reported in UK news between March 6, 2026 and April 6, 2026.
 
 ## Data Sources
 
@@ -20,7 +20,7 @@ Current UK politics and policy news, covering articles published between March 6
 - `ontology/`: ontology TBox file
 - `queries/`: SPARQL queries answering the 20 competency questions
 - `docs/`: competency questions, mapping specification, completion analysis, evaluation methodology
-- `prompts/`: prompts used for competency questions, extraction, mapping, and completion tasks
+- `prompts/`: prompts used for competency questions, extraction, mapping, and completion/enrichment analysis
 - `tests/`: automated tests for the pipeline and validation logic
 - `data/`: cached raw API snapshots and processed records (not committed; submitted separately)
 
