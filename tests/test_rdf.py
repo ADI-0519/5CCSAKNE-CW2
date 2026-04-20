@@ -145,6 +145,40 @@ class TestConvertJsonToRdf:
 
         assert (event, RDF.type, NEWS.ParliamentaryDebate) in graph
         assert (event, NEWS.occursInParliamentaryBody, body) in graph
+        assert (event, NEWS.involvesGovernmentBody, body) not in graph
+
+    def test_government_policy_event_does_not_become_debate_from_article_prose(self):
+        record = sample_record(
+            title="Banknote redesign sparks debate among commentators",
+            summary="Opinion column arguing the Bank of England should not duck this debate.",
+            event_candidates=[
+                {
+                    "name": "Banknote Design Policy Announcement",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-16",
+                    "location": "Bristol",
+                    "source": "openai",
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["Bank of England", "Treasury"],
+                "locations": ["Bristol"],
+                "technologies": [],
+                "topics": ["Opinion", "Parliament"],
+                "events": ["Banknote Design Policy Announcement"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Banknote_Design_Policy_Announcement_2026-03-16_Bristol"]
+
+        assert (event, RDF.type, NEWS.GovernmentPolicyEvent) in graph
+        assert (event, RDF.type, NEWS.ParliamentaryDebate) not in graph
+        assert (event, RDF.type, NEWS.ParliamentaryEvent) not in graph
 
     def test_ministerial_statement_links_to_department(self):
         record = sample_record(
@@ -179,6 +213,42 @@ class TestConvertJsonToRdf:
         assert (event, RDF.type, NEWS.MinisterialStatement) in graph
         assert (department, RDF.type, NEWS.GovernmentDepartment) in graph
         assert (event, NEWS.issuedByDepartment, department) in graph
+
+    def test_events_only_link_to_bodies_supported_by_context(self):
+        record = sample_record(
+            title="Prime minister questioned over energy bills at PMQs",
+            summary="The Commons exchange focused on energy and public spending.",
+            event_candidates=[
+                {
+                    "name": "Prime Minister's Questions",
+                    "type": "ParliamentaryDebate",
+                    "date": "2026-03-19",
+                    "location": "Westminster",
+                    "source": "heuristic",
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["House of Commons", "House of Lords", "Treasury"],
+                "locations": ["Westminster"],
+                "technologies": [],
+                "topics": ["Parliament", "Economic Policy"],
+                "events": ["Prime Minister's Questions"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Prime_Minister_s_Questions_2026-03-19_Westminster"]
+        commons = NEWS["organisation/House_of_Commons"]
+        lords = NEWS["organisation/House_of_Lords"]
+        treasury = NEWS["organisation/Treasury"]
+
+        assert (event, NEWS.occursInParliamentaryBody, commons) in graph
+        assert (event, NEWS.occursInParliamentaryBody, lords) not in graph
+        assert (event, NEWS.involvesGovernmentBody, treasury) not in graph
 
     def test_official_sources_create_source_records_and_link_events(self):
         record = sample_record(
@@ -215,6 +285,41 @@ class TestConvertJsonToRdf:
         assert (source_record, RDF.type, NEWS.SourceRecord) in graph
         assert (source_record, RDF.type, NEWS.GovernmentSourceRecord) in graph
         assert (event, NEWS.representedInOfficialSource, source_record) in graph
+
+    def test_parliament_written_statement_is_not_promoted_to_parliamentary_event(self):
+        record = sample_record(
+            source_system="parliament",
+            source_name="UK Parliament",
+            title="National Scheme of Delegation",
+            summary="Written statement laid before the House.",
+            section="Lords",
+            event_candidates=[
+                {
+                    "name": "Policy Announcement",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-26",
+                    "location": None,
+                    "source": "openai",
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": [],
+                "locations": [],
+                "technologies": [],
+                "topics": ["Parliament"],
+                "events": ["Policy Announcement"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Policy_Announcement_2026-03-26_abc123de"]
+
+        assert (event, RDF.type, NEWS.GovernmentPolicyEvent) in graph
+        assert (event, RDF.type, NEWS.ParliamentaryEvent) not in graph
 
     def test_specific_event_names_gain_canonical_labels(self):
         record = sample_record(

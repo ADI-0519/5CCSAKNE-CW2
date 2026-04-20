@@ -38,6 +38,10 @@ class TestUtilityFunctions:
         assert normalise_name("  hello   world  ") == "hello world"
         assert normalise_name(None) == ""
 
+    def test_normalise_name_repairs_common_mojibake(self):
+        broken = "Starmer\u00e2\u20ac\u2122s plans \u00e2\u20ac\u201c update"
+        assert normalise_name(broken) == "Starmer’s plans – update"
+
 
 class TestSourceNormalisation:
     def test_normalise_collected_sources_preserves_core_sources(self):
