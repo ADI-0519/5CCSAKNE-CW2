@@ -92,7 +92,7 @@ source-record providers, and Wikidata as optional structured enrichment.
 \end{itemize}
 
 The latest validated live run collected 253 Guardian records, 20 Parliament
-records, 100 GOV.UK records, and Wikidata enrichment for 1719 politicians, 967
+records, 459 GOV.UK records, and Wikidata enrichment for 1730 politicians, 968
 parties, and 490 government bodies. Raw snapshots are saved under
 \filepath{data/raw/}, allowing cached reruns.
 
@@ -217,7 +217,7 @@ The questions deliberately exercise non-trivial ontology paths, including:
 \section{Evaluation}\label{sec:evaluation}
 %------------------------------------------------------------------
 
-The latest validated run is \code{20260420T130554Z}. It completed all pipeline
+The latest validated run is \code{20260420T202251Z}. It completed all pipeline
 stages and returned rows for all 20 competency queries.
 
 \begin{table}[t]
@@ -230,16 +230,16 @@ stages and returned rows for all 20 competency queries.
 \midrule
 Guardian records & 253 \\
 Parliament records & 20 \\
-GOV.UK records & 100 \\
-Combined normalised records & 373 \\
-Wikidata politicians & 1719 \\
-Wikidata political parties & 967 \\
+GOV.UK records & 459 \\
+Combined normalised records & 732 \\
+Wikidata politicians & 1730 \\
+Wikidata political parties & 968 \\
 Wikidata government bodies & 490 \\
-Ontology graph & 190 triples \\
-Source-derived instance KG & 7443 triples \\
-Wikidata KG & 24950 triples \\
-Prototype KG & 32380 triples \\
-Completed KG & 32453 triples \\
+Ontology graph & 188 triples \\
+Source-derived instance KG & 14429 triples \\
+Wikidata KG & 25064 triples \\
+Prototype KG & 39545 triples \\
+Completed KG & 40049 triples \\
 Queries returning at least one row & 20 / 20 \\
 \bottomrule
 \end{tabular}
@@ -253,7 +253,7 @@ Queries returning at least one row & 20 / 20 \\
 \toprule
 CQ & 01 & 02 & 03 & 04 & 05 & 06 & 07 & 08 & 09 & 10 \\
 \midrule
-Rows & 21 & 4 & 11 & 22 & 6 & 7 & 7 & 4 & 50 & 12 \\
+Rows & 15 & 25 & 11 & 233 & 3 & 4 & 8 & 4 & 193 & 12 \\
 \bottomrule
 \end{tabular}
 
@@ -263,14 +263,15 @@ Rows & 21 & 4 & 11 & 22 & 6 & 7 & 7 & 4 & 50 & 12 \\
 \toprule
 CQ & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\
 \midrule
-Rows & 1 & 2 & 39 & 1 & 2 & 8 & 5 & 11 & 3 & 3 \\
+Rows & 81 & 11 & 48 & 12 & 7 & 8 & 11 & 11 & 1 & 8 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The completion stage added 73 triples to the prototype graph: 51 inverse
-\ns{reportsOn} links and 22 \ns{matchedToSourceRecord} links. This is most visible
-in CQ12, which depends on source-system provenance through matched source records.
+The completion stage added 504 triples to the prototype graph: 266 inverse
+\ns{reportsOn} links and 238 \ns{matchedToSourceRecord} links. This is most visible
+in source-integration audits, while CQ11 and CQ12 use official source
+representation to test institution and topic coverage.
 
 The main strengths are source traceability, event-to-topic links, institution-event
 links, and the ability to query across article, event, and official-source layers.
