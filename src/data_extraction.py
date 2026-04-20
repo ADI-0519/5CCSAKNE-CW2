@@ -373,6 +373,68 @@ def normalize_event_name(event_name):
     return normalized
 
 
+def govuk_supports_event_fallback(article):
+    if article.get("source_system") != "govuk":
+        return False
+
+    section = normalise_label(article.get("section")).lower()
+    if not section:
+        return False
+    if section in CONFIG["GOVUK_NON_EVENT_SECTIONS"]:
+        return False
+    return section in CONFIG["GOVUK_EVENT_FALLBACK_SECTIONS"]
+
+
+def govuk_has_explicit_event_signal(article, text):
+    if article.get("source_system") != "govuk":
+        return False
+
+    signal_text = " ".join(
+        normalise_label(part).lower()
+        for part in [article.get("title"), article.get("summary"), article.get("content")]
+        if part
+    )
+    return any(
+        phrase_in_text(signal_text, phrase)
+        for phrase in CONFIG["GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS"]
+    )
+
+
+def build_govuk_fallback_event(article, text, topics, locations):
+    if article.get("source_system") != "govuk":
+        return []
+    section = normalise_label(article.get("section")).lower()
+    if not section or section in CONFIG["GOVUK_NON_EVENT_SECTIONS"]:
+        return []
+    if section not in (
+        set(CONFIG["GOVUK_EVENT_FALLBACK_SECTIONS"]) | {"policy_paper", "consultation"}
+    ):
+        return []
+    if not govuk_has_explicit_event_signal(article, text):
+        return []
+
+    event_date = (article.get("published_at") or "")[:10] or None
+    title = normalize_event_name(article.get("title"))
+    if not title:
+        return []
+
+    text_lower = text.lower()
+    event_type = "GovernmentPolicyEvent"
+
+    if section == "speech" or "statement" in title.lower():
+        event_type = "MinisterialStatement"
+
+    return [
+        {
+            "name": title,
+            "type": event_type,
+            "date": event_date,
+            "location": choose_event_location(title, event_type, locations, text_lower, topics),
+            "source": "heuristic",
+        }
+    ]
+
+
 def event_date_is_plausible(article, event_date):
     parsed_event_date = parse_iso_date(event_date)
     if parsed_event_date is None:
@@ -535,6 +597,28 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
     return candidates[0]
 
 
+def generic_event_fallback_blocked(article, article_type=None):
+    title_lower = normalise_label(article.get("title")).lower()
+    url_lower = str(article.get("url") or "").lower()
+    section_lower = normalise_label(article.get("section")).lower()
+    inferred_type = article_type or article.get("raw_article_type_hint")
+
+    if inferred_type == "OpinionArticle" or section_lower in CONFIG["OPINION_SECTION_NAMES"]:
+        return True
+
+    if (
+        "obituary" in title_lower
+        or "q&a" in title_lower
+        or "| letters" in title_lower
+        or title_lower.startswith("live")
+        or title_lower.endswith("as it happened")
+        or "live/" in url_lower
+    ):
+        return True
+
+    return False
+
+
 def build_salient_event_text(article):
     parts = [
         article.get("title"),
@@ -695,9 +779,24 @@ def sanitize_event_candidates(article, text, topics, locations, events):
             }
         )
 
+    govuk_explicit_signal = govuk_has_explicit_event_signal(article, text)
     has_specific_event = any(event["name"] not in _GENERIC_EVENT_NAMES for event in sanitized)
+    if article.get("source_system") == "govuk":
+        if not govuk_explicit_signal and not has_specific_event:
+            return []
+        if govuk_explicit_signal and not has_specific_event:
+            govuk_fallback = build_govuk_fallback_event(
+                article, text, topics, sorted(valid_locations)
+            )
+            if govuk_fallback:
+                return govuk_fallback
+
     if has_specific_event:
         sanitized = [event for event in sanitized if event["name"] not in _GENERIC_EVENT_NAMES]
+    elif sanitized and govuk_supports_event_fallback(article):
+        govuk_fallback = build_govuk_fallback_event(article, text, topics, sorted(valid_locations))
+        if govuk_fallback:
+            sanitized = govuk_fallback
 
     return sanitized
 
@@ -749,6 +848,8 @@ def extract_events(article, text, topics, locations):
     election_signal = signals["election_signal"]
     parliamentary_signal = signals["parliamentary_signal"]
     parliament_written_statement = signals["parliament_written_statement"]
+    govuk_explicit_signal = govuk_has_explicit_event_signal(article, text)
+    fallback_blocked = generic_event_fallback_blocked(article)
 
     events = []
     for event_name in sorted(event_names):
@@ -769,6 +870,8 @@ def extract_events(article, text, topics, locations):
         not events
         and any(topic in topics for topic in ["Parliament", "Government Policy"])
         and policy_signal
+        and (article.get("source_system") != "govuk" or govuk_explicit_signal)
+        and not fallback_blocked
     ):
         if parliament_written_statement:
             fallback_type = "GovernmentPolicyEvent"
@@ -803,12 +906,23 @@ def extract_events(article, text, topics, locations):
                     "source": "heuristic",
                 }
             )
-        elif "Government Policy" in topics and (
-            policy_signal
-            or any(
-                phrase_in_text(text_lower, phrase)
-                for phrase in ["government", "minister", "ministers", "prime minister", "treasury"]
+        elif (
+            "Government Policy" in topics
+            and (
+                policy_signal
+                or any(
+                    phrase_in_text(text_lower, phrase)
+                    for phrase in [
+                        "government",
+                        "minister",
+                        "ministers",
+                        "prime minister",
+                        "treasury",
+                    ]
+                )
             )
+            and (article.get("source_system") != "govuk" or govuk_explicit_signal)
+            and not fallback_blocked
         ):
             events.append(
                 {
@@ -853,6 +967,17 @@ def extract_events(article, text, topics, locations):
 
 def add_topic_based_fallback_events(article, text, topics, locations, events):
     if events:
+        return events
+
+    govuk_events = build_govuk_fallback_event(article, text, topics, locations)
+    if govuk_events:
+        return govuk_events
+    if article.get("source_system") == "govuk" and not govuk_has_explicit_event_signal(
+        article, text
+    ):
+        return events
+
+    if generic_event_fallback_blocked(article):
         return events
 
     event_date = (article.get("published_at") or "")[:10] or None
@@ -987,7 +1112,45 @@ def merge_event_candidates(
     return [merged[name] for name in sorted(merged)]
 
 
+def should_use_openai_extraction(article, heuristic_result):
+    source_system = article.get("source_system")
+    if source_system not in CONFIG["TEXTUAL_SOURCE_SYSTEMS"]:
+        return False
+
+    article_type = heuristic_result.get("article_type")
+    title_lower = normalise_label(article.get("title")).lower()
+    url_lower = str(article.get("url") or "").lower()
+
+    structural_live_signal = (
+        title_lower.startswith("live")
+        or title_lower.endswith("as it happened")
+        or "live/" in url_lower
+    )
+    commentary_signal = (
+        article_type == "OpinionArticle"
+        or "| letters" in title_lower
+        or "q&a" in title_lower
+        or "obituary" in title_lower
+    )
+    if structural_live_signal or commentary_signal:
+        return False
+
+    has_core_structure = bool(heuristic_result.get("events")) and bool(
+        heuristic_result.get("topics")
+    )
+    has_institution_or_actor = bool(heuristic_result.get("government_bodies")) or bool(
+        heuristic_result.get("politicians")
+    )
+    if has_core_structure and has_institution_or_actor:
+        return False
+
+    return True
+
+
 def apply_openai_extraction(article, text, heuristic_result):
+    if not should_use_openai_extraction(article, heuristic_result):
+        return heuristic_result
+
     llm_result = maybe_extract_article_with_openai(article, text, heuristic_result)
     if not llm_result:
         return heuristic_result
@@ -1189,7 +1352,10 @@ def extract_relevant_information(raw_data):
         raise ValueError("[EXTRACT] No articles found in input data.")
 
     extracted = []
+    progress_every = max(1, int(CONFIG.get("EXTRACTION_PROGRESS_EVERY", 25)))
     for index, article in enumerate(articles):
+        if index and index % progress_every == 0:
+            print(f"[EXTRACT] Progress: {index}/{len(articles)} records processed...")
         try:
             extracted.append(extract_article_record(article))
         except Exception as exc:

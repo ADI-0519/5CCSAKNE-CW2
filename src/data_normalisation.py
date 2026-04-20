@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from src.config import CONFIG
+from src.govuk_scope import govuk_result_is_in_scope
 
 CONTROLLED_PREDICATES = CONFIG["CONTROLLED_PREDICATES"]
 
@@ -74,6 +75,12 @@ def canonicalise_date(date_str):
         except ValueError:
             continue
     raise ValueError(f"Cannot parse date: {date_str!r}")
+
+
+def is_within_configured_window(date_str):
+    canonical = canonicalise_date(str(date_str))
+    date_only = canonical[:10]
+    return CONFIG["date_start"] <= date_only <= CONFIG["date_end"]
 
 
 def is_valid_url(url):
@@ -244,6 +251,8 @@ def normalise_parliament_records(raw_data):
             continue
         if not is_valid_url(url):
             continue
+        if not is_within_configured_window(published_at):
+            continue
 
         tags = deduplicate_list(
             _extract_text_fragments(item.get("tags"))
@@ -308,6 +317,10 @@ def normalise_govuk_records(raw_data):
             continue
         if not is_valid_url(url):
             continue
+        if not is_within_configured_window(published_at):
+            continue
+        if not govuk_result_is_in_scope(item):
+            continue
 
         format_label = normalise_name(_first_present(item, ["format"]))
         document_type = normalise_name(_first_present(item, ["document_type"]))
@@ -359,6 +372,8 @@ def normalise_guardian_articles(raw_data):
         if not title or not url or not published_at:
             continue
         if not is_valid_url(url):
+            continue
+        if not is_within_configured_window(published_at):
             continue
 
         fields = article.get("fields") or {}

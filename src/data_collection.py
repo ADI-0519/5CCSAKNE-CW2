@@ -1,14 +1,16 @@
 import json
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.parse import parse_qsl, quote_plus, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 
 from src.config import CONFIG, build_guardian_page_url
+from src.govuk_scope import govuk_result_is_in_scope
 
 DEFAULT_TIMEOUT_SECONDS = 30
 DEFAULT_PAGE_SIZE = 100
+DEFAULT_GOVUK_MAX_PAGES = 20
 CORE_COLLECTION_SOURCES = tuple(CONFIG["CORE_SOURCE_ORDER"])
 
 
@@ -120,15 +122,36 @@ def derive_govuk_search_base():
 
 
 def build_govuk_search_url(page=1):
-    query = quote_plus(" OR ".join(CONFIG["GOVUK_QUERY_TERMS"]))
     start = max(0, page - 1) * DEFAULT_PAGE_SIZE
-    return (
-        f"{derive_govuk_search_base()}?"
-        f"q={query}&"
-        f"count={DEFAULT_PAGE_SIZE}&"
-        f"start={start}&"
-        f"order=-public_timestamp"
-    )
+    params = [
+        ("q", " OR ".join(CONFIG["GOVUK_QUERY_TERMS"])),
+        ("count", str(DEFAULT_PAGE_SIZE)),
+        ("start", str(start)),
+        ("order", "-public_timestamp"),
+        (
+            "filter_public_timestamp",
+            f"from:{CONFIG['date_start']},to:{CONFIG['date_end']}",
+        ),
+    ]
+    for document_format in CONFIG["GOVUK_DOCUMENT_FORMATS"]:
+        params.append(("filter_format", document_format))
+    return f"{derive_govuk_search_base()}?{urlencode(params)}"
+
+
+def govuk_result_date(item):
+    return str(
+        item.get("public_timestamp") or item.get("timestamp") or item.get("updated_at") or ""
+    )[:10]
+
+
+def govuk_result_in_window(item):
+    result_date = govuk_result_date(item)
+    return bool(result_date) and CONFIG["date_start"] <= result_date <= CONFIG["date_end"]
+
+
+def govuk_result_is_older_than_window(item):
+    result_date = govuk_result_date(item)
+    return bool(result_date) and result_date < CONFIG["date_start"]
 
 
 def fetch_guardian_data(save_snapshot=True):
@@ -194,16 +217,49 @@ def fetch_parliament_data(save_snapshot=True):
 
 
 def fetch_govuk_data(save_snapshot=True):
-    url = build_govuk_search_url(page=1)
-    first_page = fetch_json(url)
+    collected_results = []
+    pages_fetched = 0
+    total = None
+    last_url = None
+
+    for page in range(1, DEFAULT_GOVUK_MAX_PAGES + 1):
+        url = build_govuk_search_url(page=page)
+        page_data = fetch_json(url)
+        pages_fetched += 1
+        last_url = url
+
+        total = page_data.get("total", total)
+        page_results = page_data.get("results", []) if isinstance(page_data, dict) else []
+        if not page_results:
+            break
+
+        collected_results.extend(
+            item
+            for item in page_results
+            if isinstance(item, dict)
+            and govuk_result_in_window(item)
+            and govuk_result_is_in_scope(item)
+        )
+
+        if any(govuk_result_is_older_than_window(item) for item in page_results):
+            break
+
+        start = page_data.get("start")
+        if total is not None and isinstance(start, int) and start + DEFAULT_PAGE_SIZE >= total:
+            break
+
     data = {
         "query_terms": CONFIG["GOVUK_QUERY_TERMS"],
         "document_formats": CONFIG["GOVUK_DOCUMENT_FORMATS"],
         "date_start": CONFIG["date_start"],
         "date_end": CONFIG["date_end"],
-        "request_url": safe_url_for_logging(url),
-        "pagesFetched": 1,
-        "response": first_page,
+        "request_url": safe_url_for_logging(last_url or build_govuk_search_url(page=1)),
+        "pagesFetched": pages_fetched,
+        "response": {
+            "results": collected_results,
+            "total": total if total is not None else len(collected_results),
+            "start": 0,
+        },
     }
     if save_snapshot:
         save_raw_json(data, "govuk")

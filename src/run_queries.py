@@ -35,7 +35,7 @@ def load_query_definitions(query_file=DEFAULT_QUERY_PATH):
     if not query_path.exists():
         raise FileNotFoundError(f"Query file not found: {query_path}")
 
-    raw = query_path.read_text()
+    raw = query_path.read_text(encoding="utf-8")
     raw = raw.replace("{DATE_START}", CONFIG["date_start"])
     raw = raw.replace("{DATE_END}", CONFIG["date_end"])
     lines = raw.splitlines()
@@ -89,7 +89,7 @@ def load_kg(kg_path):
         raise FileNotFoundError(f"KG file not found: {kg_file}")
 
     graph = Graph(store="Oxigraph")
-    graph.parse(data=kg_file.read_text(), format="turtle")
+    graph.parse(data=kg_file.read_text(encoding="utf-8"), format="turtle")
     return graph
 
 
@@ -133,7 +133,7 @@ def execute_queries(graph, query_definitions):
 def save_results(results, output_path):
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    output_file.write_text(json.dumps(results, indent=2))
+    output_file.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def build_arg_parser():
