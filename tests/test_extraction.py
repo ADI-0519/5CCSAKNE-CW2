@@ -4,6 +4,7 @@ import pytest
 
 from src.data_extraction import (
     build_article_id,
+    build_extraction_audit_metrics,
     choose_event_location,
     classify_article_type,
     classify_sentiment,
@@ -822,3 +823,43 @@ class TestExtractRelevantInformation:
         article = make_article(title="Treasury confirms spring statement timetable")
 
         assert should_use_openai_extraction(article, heuristic_result) is False
+
+
+def test_build_extraction_audit_metrics_counts_generic_fallbacks():
+    records = [
+        {
+            "event_candidates": [
+                {
+                    "name": "Policy Announcement",
+                    "confidence": "low",
+                    "extraction_method": "heuristic",
+                    "is_generic_fallback": True,
+                },
+                {
+                    "name": "Spring Statement",
+                    "confidence": "high",
+                    "extraction_method": "hybrid",
+                    "is_generic_fallback": False,
+                },
+            ]
+        },
+        {
+            "event_candidates": [
+                {
+                    "name": "Budget",
+                    "confidence": "medium",
+                    "extraction_method": "openai",
+                    "is_generic_fallback": True,
+                }
+            ]
+        },
+    ]
+
+    metrics = build_extraction_audit_metrics(records)
+
+    assert metrics["record_count"] == 2
+    assert metrics["event_count"] == 3
+    assert metrics["generic_fallback_event_count"] == 2
+    assert metrics["records_with_generic_fallback"] == 2
+    assert metrics["generic_fallback_name_counts"] == {"Budget": 1, "Policy Announcement": 1}
+    assert metrics["confidence_counts"] == {"high": 1, "low": 1, "medium": 1}

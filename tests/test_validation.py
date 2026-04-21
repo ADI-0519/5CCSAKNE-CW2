@@ -27,6 +27,8 @@ def build_valid_graph():
     graph.add((event, NEWS.matchedToSourceRecord, record))
 
     graph.add((article, RDF.type, NEWS.NewsArticle))
+    graph.add((article, NEWS.publishedBy, NEWS["organisation/publisher"]))
+    graph.add((article, NEWS.articleURL, Literal("https://example.org/article/a1")))
     graph.add((record, RDF.type, NEWS.SourceRecord))
     graph.add((record, RDF.type, NEWS.OfficialSourceRecord))
     graph.add((record, NEWS.sourceSystem, Literal("govuk")))
@@ -39,8 +41,18 @@ def build_valid_graph():
     debate = NEWS["event/debate"]
     graph.add((debate, RDF.type, NEWS.PolicyEvent))
     graph.add((debate, RDF.type, NEWS.ParliamentaryDebate))
+    graph.add((debate, RDF.type, NEWS.ParliamentaryEvent))
     graph.add((debate, NEWS.occursOnDate, Literal("2026-03-13")))
     graph.add((debate, NEWS.concernsPolicyTopic, topic))
+    graph.add((debate, NEWS.occursInParliamentaryBody, NEWS["organisation/commons"]))
+    graph.add((debate, NEWS.reportedByArticle, article))
+
+    government_event = NEWS["event/gov"]
+    graph.add((government_event, RDF.type, NEWS.PolicyEvent))
+    graph.add((government_event, RDF.type, NEWS.GovernmentPolicyEvent))
+    graph.add((government_event, NEWS.occursOnDate, Literal("2026-03-14")))
+    graph.add((government_event, NEWS.involvesGovernmentBody, department))
+    graph.add((government_event, NEWS.representedInOfficialSource, record))
 
     return graph
 
@@ -57,6 +69,7 @@ def test_validation_rules_flag_expected_violations():
     graph = Graph()
     event = NEWS["event/bad"]
     article = NEWS["article/not-typed"]
+    article_missing_meta = NEWS["article/missing-meta"]
     actor = NEWS["person/not-typed"]
     party = NEWS["organisation/not-party"]
     record = NEWS["source-record/missing-meta"]
@@ -64,10 +77,13 @@ def test_validation_rules_flag_expected_violations():
     bad_match_target = NEWS["target/not-source-record"]
     bad_subject = NEWS["not-an-event"]
     department = NEWS["organisation/dept-without-body-link"]
+    bad_government_event = NEWS["event/gov-without-body"]
+    orphan_event = NEWS["event/orphan"]
 
     graph.add((event, RDF.type, NEWS.PolicyEvent))
     graph.add((event, RDF.type, NEWS.MinisterialStatement))
     graph.add((event, RDF.type, NEWS.ParliamentaryDebate))
+    graph.add((event, RDF.type, NEWS.ParliamentaryEvent))
     graph.add((event, NEWS.reportedByArticle, article))
     graph.add((bad_subject, NEWS.reportedByArticle, article))
     graph.add((event, NEWS.representedInOfficialSource, bad_target))
@@ -76,6 +92,12 @@ def test_validation_rules_flag_expected_violations():
     graph.add((actor, NEWS.memberOfParty, party))
     graph.add((record, RDF.type, NEWS.OfficialSourceRecord))
     graph.add((bad_target, RDF.type, NEWS.SourceRecord))
+    graph.add((article_missing_meta, RDF.type, NEWS.NewsArticle))
+    graph.add((bad_government_event, RDF.type, NEWS.PolicyEvent))
+    graph.add((bad_government_event, RDF.type, NEWS.GovernmentPolicyEvent))
+    graph.add((bad_government_event, NEWS.occursOnDate, Literal("2026-03-15")))
+    graph.add((bad_government_event, NEWS.reportedByArticle, article))
+    graph.add((orphan_event, RDF.type, NEWS.PolicyEvent))
 
     report = execute_validation(graph, load_validation_rules())
     violations = {result["rule_id"]: result["violation_count"] for result in report["results"]}
@@ -84,11 +106,16 @@ def test_validation_rules_flag_expected_violations():
     assert violations["V02"] == 1
     assert violations["V03"] == 1
     assert violations["V04"] == 1
-    assert violations["V05"] == 2
+    assert violations["V05"] == 3
     assert violations["V06"] == 1
     assert violations["V07"] == 1
     assert violations["V08"] == 1
-    assert violations["V09"] == 1
+    assert violations["V09"] == 2
     assert violations["V10"] == 1
     assert violations["V11"] == 1
     assert violations["V12"] == 1
+    assert violations["V13"] == 1
+    assert violations["V14"] == 1
+    assert violations["V15"] == 1
+    assert violations["V16"] == 1
+    assert violations["V17"] == 1

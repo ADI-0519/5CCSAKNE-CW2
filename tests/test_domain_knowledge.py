@@ -8,6 +8,7 @@ from src.domain_knowledge import (
     classify_official_body_kind,
     has_ministerial_statement_signal,
     infer_government_bodies_from_text,
+    looks_like_official_body_name,
 )
 
 
@@ -39,6 +40,12 @@ def test_government_body_aliases_are_canonicalised():
         canonicalise_government_body_name("FCDO") == "Foreign, Commonwealth and Development Office"
     )
     assert canonicalise_government_body_name("DCMS") == "Department for Culture, Media and Sport"
+    assert (
+        canonicalise_government_body_name("DSIT")
+        == "Department for Science, Innovation and Technology"
+    )
+    assert canonicalise_government_body_name("DfT") == "Department for Transport"
+    assert canonicalise_government_body_name("HMRC") == "HM Revenue and Customs"
     assert classify_known_government_bodies(["FCDO", "BBC News"]) == [
         "Foreign, Commonwealth and Development Office"
     ]
@@ -49,6 +56,12 @@ def test_political_party_aliases_are_canonicalised():
     assert classify_known_political_parties(["Labour", "Labour Party", "BBC News"]) == [
         "Labour Party"
     ]
+
+
+def test_official_body_name_detection_catches_institutional_labels():
+    assert looks_like_official_body_name("Welsh Government") is True
+    assert looks_like_official_body_name("Home Office") is True
+    assert looks_like_official_body_name("Keir Starmer") is False
 
 
 def test_ministerial_signal_and_department_inference_are_conservative():
@@ -63,6 +76,12 @@ def test_ministerial_signal_and_department_inference_are_conservative():
     assert infer_government_bodies_from_text("Trade Minister speech at Chatham House") == [
         "Department for Business and Trade"
     ]
+    assert infer_government_bodies_from_text(
+        "The Department for Science, Innovation and Technology (DSIT) is backing small businesses."
+    ) == ["Department for Science, Innovation and Technology"]
+    assert infer_government_bodies_from_text(
+        "HMRC small and medium-sized enterprise action plan"
+    ) == ["HM Revenue and Customs"]
     assert infer_government_bodies_from_text(
         "My Honourable Friend the Minister of State for Housing and Planning has made the following statement."
     ) == ["Ministry of Housing, Communities and Local Government"]

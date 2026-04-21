@@ -55,6 +55,10 @@ class TestUtilityFunctions:
         assert repaired == "London\u2019s politics"
         assert mojibake_score(repaired) < mojibake_score(broken)
 
+    def test_normalise_name_strips_inline_markup_and_entities(self):
+        broken = "Department for<br/>Science, Innovation<br/>&amp; Technology"
+        assert normalise_name(broken) == "Department for Science, Innovation & Technology"
+
 
 class TestSourceNormalisation:
     def test_normalise_collected_sources_preserves_core_sources(self):
@@ -315,6 +319,7 @@ class TestExtractedRecordNormalisation:
         assert record["event_candidates"][0]["name"] == "Budget"
         assert record["event_candidates"][0]["confidence"] == "high"
         assert record["event_candidates"][0]["extraction_method"] == "hybrid"
+        assert record["event_candidates"][0]["is_generic_fallback"] is False
 
     def test_normalise_data_rejects_unknown_predicate(self):
         record = self.valid_record(

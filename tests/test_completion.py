@@ -1,5 +1,7 @@
 """Tests for ontology-aligned KG completion/enrichment."""
 
+import json
+
 from rdflib import RDF, Literal
 from rdflib.namespace import XSD
 
@@ -346,6 +348,51 @@ def test_enrich_graph_rag_skips_party_names_returned_as_actors(monkeypatch):
     assert (person_uri("Labour Party"), RDF.type, NEWS.PoliticalActor) not in enriched
 
 
+def test_enrich_graph_rag_skips_official_bodies_returned_as_actors(monkeypatch):
+    graph = build_ontology()
+    article_uri = NEWS["article/rag_body_actor"]
+    event_uri = NEWS["event/rag_body_actor"]
+    publisher_uri = NEWS["org/guardian_body_actor"]
+
+    add_named_entity(
+        graph,
+        publisher_uri,
+        "The Guardian",
+        (NEWS.NewsOrganisation, SCHEMA.Organization),
+    )
+
+    graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+    graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+    graph.add(
+        (
+            article_uri,
+            SCHEMA.headline,
+            Literal("Welsh Government and Ministry of Justice strike deal"),
+        )
+    )
+    graph.add((article_uri, NEWS.publishedBy, publisher_uri))
+
+    graph.add((event_uri, RDF.type, NEWS.PolicyEvent))
+    graph.add((event_uri, SCHEMA.name, Literal("Youth justice agreement")))
+    graph.add((event_uri, NEWS.reportedByArticle, article_uri))
+
+    monkeypatch.setattr("src.complete_kg.load_cache_payload", lambda path: None)
+    monkeypatch.setattr("src.complete_kg.save_cache_payload", lambda path, payload: None)
+    monkeypatch.setattr(
+        "src.complete_kg.request_structured_output",
+        lambda instructions, user_input, response_format: {
+            "proposed_actors": ["Welsh Government"],
+            "proposed_departments": ["Ministry of Justice"],
+            "proposed_topics": [],
+        },
+    )
+
+    enriched = enrich_graph(graph)
+
+    assert list(enriched.objects(event_uri, NEWS.involvesActor)) == []
+    assert (person_uri("Welsh Government"), None, None) not in enriched
+
+
 def test_enrich_graph_rag_does_not_attach_parliamentary_body_as_government_body(monkeypatch):
     graph = build_ontology()
     article_uri = NEWS["article/rag_parliamentary_body"]
@@ -384,3 +431,113 @@ def test_enrich_graph_rag_does_not_attach_parliamentary_body_as_government_body(
 
     assert (event_uri, NEWS.involvesGovernmentBody, commons_uri) not in enriched
     assert (commons_uri, None, None) not in enriched
+
+
+def test_enrich_graph_writes_completion_audit_log(monkeypatch, tmp_path):
+    graph = build_ontology()
+    article_uri = NEWS["article/rag_audit"]
+    event_uri = NEWS["event/rag_audit"]
+    publisher_uri = NEWS["org/guardian_audit"]
+    topic_uri = NEWS["topic/housing_audit"]
+    audit_path = tmp_path / "completion_audit.json"
+
+    add_named_entity(
+        graph,
+        publisher_uri,
+        "The Guardian",
+        (NEWS.NewsOrganisation, SCHEMA.Organization),
+    )
+
+    graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+    graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+    graph.add(
+        (article_uri, SCHEMA.headline, Literal("Keir Starmer backs Home Office housing update"))
+    )
+    graph.add((article_uri, NEWS.publishedBy, publisher_uri))
+
+    graph.add((topic_uri, RDF.type, NEWS.PolicyTopic))
+    graph.add((topic_uri, SCHEMA.name, Literal("Housing")))
+
+    graph.add((event_uri, RDF.type, NEWS.PolicyEvent))
+    graph.add((event_uri, SCHEMA.name, Literal("Housing Update")))
+    graph.add((event_uri, NEWS.reportedByArticle, article_uri))
+
+    monkeypatch.setattr("src.complete_kg.load_cache_payload", lambda path: None)
+    monkeypatch.setattr("src.complete_kg.save_cache_payload", lambda path, payload: None)
+    monkeypatch.setattr(
+        "src.complete_kg.request_structured_output",
+        lambda instructions, user_input, response_format: {
+            "proposed_actors": ["Keir Starmer"],
+            "proposed_departments": ["Home Office"],
+            "proposed_topics": ["Housing"],
+        },
+    )
+
+    enrich_graph(graph, audit_log_path=audit_path)
+
+    payload = json.loads(audit_path.read_text(encoding="utf-8"))
+    entry = next(item for item in payload["entries"] if item["event_uri"] == str(event_uri))
+    assert entry["rag_added_actors"] == [str(person_uri("Keir Starmer"))]
+    assert entry["rag_added_departments"] == [str(organisation_uri("Home Office"))]
+    assert entry["rag_added_topics"] == [str(topic_uri)]
+
+
+def test_rag_does_not_add_extra_department_when_event_already_has_one(monkeypatch):
+    graph = build_ontology()
+    article_uri = NEWS["article/existing_department"]
+    event_uri = NEWS["event/existing_department"]
+    publisher_uri = NEWS["org/guardian_existing_department"]
+    existing_department = organisation_uri("Home Office")
+
+    add_named_entity(
+        graph,
+        publisher_uri,
+        "The Guardian",
+        (NEWS.NewsOrganisation, SCHEMA.Organization),
+    )
+    add_named_entity(
+        graph,
+        existing_department,
+        "Home Office",
+        (NEWS.OfficialBody, NEWS.GovernmentBody, NEWS.GovernmentDepartment),
+    )
+
+    graph.add((article_uri, RDF.type, NEWS.NewsArticle))
+    graph.add((article_uri, RDF.type, SCHEMA.NewsArticle))
+    graph.add(
+        (
+            article_uri,
+            SCHEMA.headline,
+            Literal("Hyper-targeted scheme to help at-risk schools in England tackle knife crime"),
+        )
+    )
+    graph.add((article_uri, NEWS.publishedBy, publisher_uri))
+
+    graph.add((event_uri, RDF.type, NEWS.PolicyEvent))
+    graph.add((event_uri, RDF.type, NEWS.GovernmentPolicyEvent))
+    graph.add(
+        (
+            event_uri,
+            SCHEMA.name,
+            Literal("Launch of hyper-targeted programme to tackle knife crime in schools"),
+        )
+    )
+    graph.add((event_uri, NEWS.reportedByArticle, article_uri))
+    graph.add((event_uri, NEWS.involvesGovernmentBody, existing_department))
+
+    monkeypatch.setattr("src.complete_kg.load_cache_payload", lambda path: None)
+    monkeypatch.setattr("src.complete_kg.save_cache_payload", lambda path, payload: None)
+    monkeypatch.setattr(
+        "src.complete_kg.request_structured_output",
+        lambda instructions, user_input, response_format: {
+            "proposed_actors": [],
+            "proposed_departments": ["Department for Education"],
+            "proposed_topics": [],
+        },
+    )
+
+    enriched = enrich_graph(graph)
+
+    dfe = organisation_uri("Department for Education")
+    assert (event_uri, NEWS.involvesGovernmentBody, existing_department) in enriched
+    assert (event_uri, NEWS.involvesGovernmentBody, dfe) not in enriched

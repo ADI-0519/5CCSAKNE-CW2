@@ -322,6 +322,40 @@ class TestConvertJsonToRdf:
         assert (event, NEWS.occursInParliamentaryBody, lords) not in graph
         assert (event, NEWS.involvesGovernmentBody, treasury) not in graph
 
+    def test_pmqs_defaults_to_house_of_commons_when_westminster_context_is_present(self):
+        record = sample_record(
+            title="Prime Minister's Questions: MPs press Starmer in Westminster",
+            summary="PMQs returned to Westminster this week.",
+            event_candidates=[
+                {
+                    "name": "Prime Minister's Questions",
+                    "type": "ParliamentaryDebate",
+                    "date": "2026-03-19",
+                    "location": "Westminster",
+                    "source": "heuristic",
+                    "government_bodies": [],
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["Office for National Statistics"],
+                "locations": ["Westminster"],
+                "technologies": [],
+                "topics": ["Parliament"],
+                "events": ["Prime Minister's Questions"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Prime_Minister_s_Questions_2026-03-19_Westminster"]
+        commons = NEWS["organisation/House_of_Commons"]
+
+        assert (event, RDF.type, NEWS.ParliamentaryDebate) in graph
+        assert (event, NEWS.occursInParliamentaryBody, commons) in graph
+
     def test_official_sources_create_source_records_and_link_events(self):
         record = sample_record(
             id="govuk-1",
@@ -357,6 +391,52 @@ class TestConvertJsonToRdf:
         assert (source_record, RDF.type, NEWS.SourceRecord) in graph
         assert (source_record, RDF.type, NEWS.GovernmentSourceRecord) in graph
         assert (event, NEWS.representedInOfficialSource, source_record) in graph
+
+    def test_single_recoverable_department_is_attached_to_official_government_event(self):
+        record = sample_record(
+            id="govuk-2",
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="DSIT small and medium-sized enterprise (SME) action plan: 2025 to 2028",
+            summary=(
+                "The Department for Science, Innovation and Technology is backing small businesses."
+            ),
+            content=(
+                "The Department for Science, Innovation and Technology is backing small businesses."
+            ),
+            event_candidates=[
+                {
+                    "name": "DSIT small and medium-sized enterprise (SME) action plan: 2025 to 2028",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-24",
+                    "location": None,
+                    "source": "heuristic",
+                    "government_bodies": [],
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["Department for Science, Innovation and Technology"],
+                "locations": [],
+                "technologies": [],
+                "topics": ["Economic Policy"],
+                "events": [
+                    "DSIT small and medium-sized enterprise (SME) action plan: 2025 to 2028"
+                ],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS[
+            "event/DSIT_small_and_medium-sized_enterprise__SME__action_plan__2025_to_2028_2026-03-24"
+        ]
+        department = NEWS["organisation/Department_for_Science__Innovation_and_Technology"]
+
+        assert (department, RDF.type, NEWS.GovernmentDepartment) in graph
+        assert (event, NEWS.involvesGovernmentBody, department) in graph
 
     def test_parliament_written_statement_is_not_promoted_to_parliamentary_event(self):
         record = sample_record(
@@ -425,6 +505,132 @@ class TestConvertJsonToRdf:
 
         assert (event, RDF.type, NEWS.PolicyEvent) in graph
         assert (event, RDF.type, NEWS.ParliamentaryDebate) not in graph
+
+    def test_low_confidence_generic_government_event_is_not_promoted_from_record_level_noise(self):
+        record = sample_record(
+            source_system="guardian",
+            source_name="The Guardian",
+            title="Missing money, shipped chips and a 350,000% profit",
+            summary="A politics feature on AI phantom investments.",
+            event_candidates=[
+                {
+                    "name": "Policy Announcement",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-09",
+                    "location": "Essex",
+                    "source": "heuristic",
+                    "confidence": "low",
+                    "government_bodies": [],
+                    "policy_topics": ["Government Policy", "Politics"],
+                }
+            ],
+            entities={
+                "organizations": ["IPO", "ONS"],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": [
+                    "Intellectual Property Office",
+                    "Office for National Statistics",
+                ],
+                "locations": ["Essex"],
+                "technologies": [],
+                "topics": ["Government Policy", "Politics"],
+                "events": ["Policy Announcement"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Policy_Announcement_2026-03-09_Essex_abc123de"]
+
+        assert (event, RDF.type, NEWS.PolicyEvent) in graph
+        assert (event, RDF.type, NEWS.GovernmentPolicyEvent) not in graph
+
+    def test_news_event_with_multiple_explicit_departments_keeps_only_context_supported_body(self):
+        record = sample_record(
+            source_system="guardian",
+            source_name="The Guardian",
+            title="Hyper-targeted scheme to help at-risk schools in England tackle knife crime",
+            summary="Schools across England are to receive support under a Home Office programme.",
+            event_candidates=[
+                {
+                    "name": "Launch of hyper-targeted programme to tackle knife crime in schools",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-04-06",
+                    "location": "England",
+                    "source": "openai",
+                    "policy_topics": ["Education"],
+                    "government_bodies": ["Department for Education", "Home Office"],
+                    "evidence_spans": [
+                        "Home Office will use mapping technology and crime data to identify up to 250 schools in areas of greatest risk."
+                    ],
+                }
+            ],
+            entities={
+                "organizations": ["Home Office", "ONS"],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["Home Office", "Office for National Statistics"],
+                "locations": ["England"],
+                "technologies": [],
+                "topics": ["Education", "Government Policy"],
+                "events": ["Launch of hyper-targeted programme to tackle knife crime in schools"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS[
+            "event/Launch_of_hyper-targeted_programme_to_tackle_knife_crime_in_schools_2026-04-06_England"
+        ]
+        home_office = NEWS["organisation/Home_Office"]
+        dfe = NEWS["organisation/Department_for_Education"]
+
+        assert (event, NEWS.involvesGovernmentBody, home_office) in graph
+        assert (event, NEWS.involvesGovernmentBody, dfe) not in graph
+
+    def test_news_event_does_not_attach_multiple_departments_from_broad_article_span(self):
+        record = sample_record(
+            source_system="guardian",
+            source_name="The Guardian",
+            title="Foreign secretary profile amid Iran crisis",
+            summary="A profile of the foreign secretary during an international crisis.",
+            event_candidates=[
+                {
+                    "name": "US-Israeli Bombardment of Iran",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-14",
+                    "location": "Westminster",
+                    "source": "openai",
+                    "policy_topics": ["Defence", "Government Policy"],
+                    "government_bodies": ["HM Treasury", "Home Office", "Downing Street"],
+                    "evidence_spans": [
+                        "Before Yvette Cooper joins me in a plush side room at the Foreign Office, an aide comes in and draws the heavy curtains. Outside is Horse Guards Parade. I can see a strip of Downing Street, a patch of the No 10 garden. The joint US-Israeli bombardment of Iran is ongoing and the mood here is solemn. Donald Trump continues to snipe at Keir Starmer. Later the article discusses her time at the Home Office and HM Treasury."
+                    ],
+                }
+            ],
+            entities={
+                "organizations": ["Downing Street", "HM Treasury", "Home Office"],
+                "people": ["Yvette Cooper"],
+                "politicians": ["Yvette Cooper"],
+                "political_parties": ["Labour Party"],
+                "government_bodies": ["Downing Street", "HM Treasury", "Home Office"],
+                "locations": ["Westminster"],
+                "technologies": [],
+                "topics": ["Defence", "Government Policy"],
+                "events": ["US-Israeli Bombardment of Iran"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/US-Israeli_Bombardment_of_Iran_2026-03-14_Westminster"]
+        treasury = NEWS["organisation/HM_Treasury"]
+        home_office = NEWS["organisation/Home_Office"]
+        downing_street = NEWS["organisation/Downing_Street"]
+
+        assert (event, NEWS.involvesGovernmentBody, treasury) not in graph
+        assert (event, NEWS.involvesGovernmentBody, home_office) not in graph
+        assert (event, NEWS.involvesGovernmentBody, downing_street) not in graph
 
     def test_specific_event_names_gain_canonical_labels(self):
         record = sample_record(
