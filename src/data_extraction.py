@@ -131,6 +131,18 @@ def unique_sorted(values):
     return sorted(cleaned)
 
 
+def is_generic_fallback_event_name(name):
+    return normalize_event_name(name) in GENERIC_EVENT_NAMES
+
+
+def mark_event_candidate_flags(event):
+    enriched = dict(event)
+    enriched["is_generic_fallback"] = bool(event.get("is_generic_fallback")) or (
+        is_generic_fallback_event_name(event.get("name"))
+    )
+    return enriched
+
+
 def find_named_matches(text, candidates):
     text_lower = text.lower()
     matches = [candidate for candidate in candidates if candidate.lower() in text_lower]
@@ -1010,38 +1022,40 @@ def sanitize_event_candidates(article, text, entities, topics, locations, events
         ):
             event_type = "ParliamentaryEvent"
         sanitized.append(
-            {
-                "name": name,
-                "type": event_type,
-                "date": event_date,
-                "location": location or None,
-                "source": event.get("source") or "heuristic",
-                "policy_topics": event_topics,
-                "political_actors": event_actors,
-                "government_bodies": event_bodies,
-                "parliamentary_body": event_parliamentary_body,
-                "political_parties": event_parties,
-                "evidence_spans": evidence_spans,
-                "confidence": infer_event_confidence(
-                    article,
-                    name,
-                    event_type,
-                    event,
-                    signals,
-                    evidence_spans=evidence_spans,
-                    event_topics=event_topics,
-                    event_actors=event_actors,
-                    event_bodies=event_bodies,
-                    event_parties=event_parties,
-                    parliamentary_body=event_parliamentary_body,
-                    heuristic_topics=heuristic_topics,
-                    heuristic_actors=heuristic_actors,
-                    heuristic_bodies=heuristic_bodies,
-                    heuristic_parties=heuristic_parties,
-                    heuristic_parliamentary_body=heuristic_parliamentary_body,
-                ),
-                "extraction_method": extraction_method,
-            }
+            mark_event_candidate_flags(
+                {
+                    "name": name,
+                    "type": event_type,
+                    "date": event_date,
+                    "location": location or None,
+                    "source": event.get("source") or "heuristic",
+                    "policy_topics": event_topics,
+                    "political_actors": event_actors,
+                    "government_bodies": event_bodies,
+                    "parliamentary_body": event_parliamentary_body,
+                    "political_parties": event_parties,
+                    "evidence_spans": evidence_spans,
+                    "confidence": infer_event_confidence(
+                        article,
+                        name,
+                        event_type,
+                        event,
+                        signals,
+                        evidence_spans=evidence_spans,
+                        event_topics=event_topics,
+                        event_actors=event_actors,
+                        event_bodies=event_bodies,
+                        event_parties=event_parties,
+                        parliamentary_body=event_parliamentary_body,
+                        heuristic_topics=heuristic_topics,
+                        heuristic_actors=heuristic_actors,
+                        heuristic_bodies=heuristic_bodies,
+                        heuristic_parties=heuristic_parties,
+                        heuristic_parliamentary_body=heuristic_parliamentary_body,
+                    ),
+                    "extraction_method": extraction_method,
+                }
+            )
         )
 
     govuk_explicit_signal = govuk_has_explicit_event_signal(article, text)
@@ -1083,15 +1097,17 @@ def extract_events(article, text, topics, locations):
     for event_name in event_names:
         event_type = infer_event_type(event_name)
         events.append(
-            {
-                "name": event_name,
-                "type": event_type,
-                "date": event_date,
-                "location": choose_event_location(
-                    event_name, event_type, locations, text_lower, topics
-                ),
-                "source": "heuristic",
-            }
+            mark_event_candidate_flags(
+                {
+                    "name": event_name,
+                    "type": event_type,
+                    "date": event_date,
+                    "location": choose_event_location(
+                        event_name, event_type, locations, text_lower, topics
+                    ),
+                    "source": "heuristic",
+                }
+            )
         )
 
     if (
@@ -1110,29 +1126,33 @@ def extract_events(article, text, topics, locations):
                 else "GovernmentPolicyEvent"
             )
         events.append(
-            {
-                "name": "Policy Announcement",
-                "type": fallback_type,
-                "date": event_date,
-                "location": choose_event_location(
-                    "Policy Announcement", fallback_type, locations, text_lower, topics
-                ),
-                "source": "heuristic",
-            }
+            mark_event_candidate_flags(
+                {
+                    "name": "Policy Announcement",
+                    "type": fallback_type,
+                    "date": event_date,
+                    "location": choose_event_location(
+                        "Policy Announcement", fallback_type, locations, text_lower, topics
+                    ),
+                    "source": "heuristic",
+                }
+            )
         )
 
     if not events:
         if "Election" in topics and election_signal:
             events.append(
-                {
-                    "name": "Election",
-                    "type": "PolicyEvent",
-                    "date": event_date,
-                    "location": choose_event_location(
-                        "Election", "PolicyEvent", locations, text_lower, topics
-                    ),
-                    "source": "heuristic",
-                }
+                mark_event_candidate_flags(
+                    {
+                        "name": "Election",
+                        "type": "PolicyEvent",
+                        "date": event_date,
+                        "location": choose_event_location(
+                            "Election", "PolicyEvent", locations, text_lower, topics
+                        ),
+                        "source": "heuristic",
+                    }
+                )
             )
         elif (
             "Government Policy" in topics
@@ -1141,19 +1161,21 @@ def extract_events(article, text, topics, locations):
             and not fallback_blocked
         ):
             events.append(
-                {
-                    "name": "Policy Announcement",
-                    "type": "GovernmentPolicyEvent",
-                    "date": event_date,
-                    "location": choose_event_location(
-                        "Policy Announcement",
-                        "GovernmentPolicyEvent",
-                        locations,
-                        text_lower,
-                        topics,
-                    ),
-                    "source": "heuristic",
-                }
+                mark_event_candidate_flags(
+                    {
+                        "name": "Policy Announcement",
+                        "type": "GovernmentPolicyEvent",
+                        "date": event_date,
+                        "location": choose_event_location(
+                            "Policy Announcement",
+                            "GovernmentPolicyEvent",
+                            locations,
+                            text_lower,
+                            topics,
+                        ),
+                        "source": "heuristic",
+                    }
+                )
             )
         elif {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
             fiscal_signal = any(
@@ -1167,15 +1189,17 @@ def extract_events(article, text, topics, locations):
             )
             if fiscal_signal:
                 events.append(
-                    {
-                        "name": "Budget",
-                        "type": "GovernmentPolicyEvent",
-                        "date": event_date,
-                        "location": choose_event_location(
-                            "Budget", "GovernmentPolicyEvent", locations, text_lower, topics
-                        ),
-                        "source": "heuristic",
-                    }
+                    mark_event_candidate_flags(
+                        {
+                            "name": "Budget",
+                            "type": "GovernmentPolicyEvent",
+                            "date": event_date,
+                            "location": choose_event_location(
+                                "Budget", "GovernmentPolicyEvent", locations, text_lower, topics
+                            ),
+                            "source": "heuristic",
+                        }
+                    )
                 )
 
     return events
@@ -1204,28 +1228,36 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
 
     if "Election" in topics and election_signal:
         return [
-            {
-                "name": "Election",
-                "type": "PolicyEvent",
-                "date": event_date,
-                "location": choose_event_location(
-                    "Election", "PolicyEvent", locations, text_lower, topics
-                ),
-                "source": "heuristic",
-            }
+            mark_event_candidate_flags(
+                {
+                    "name": "Election",
+                    "type": "PolicyEvent",
+                    "date": event_date,
+                    "location": choose_event_location(
+                        "Election", "PolicyEvent", locations, text_lower, topics
+                    ),
+                    "source": "heuristic",
+                }
+            )
         ]
 
     if "Government Policy" in topics and policy_signal:
         return [
-            {
-                "name": "Policy Announcement",
-                "type": "GovernmentPolicyEvent",
-                "date": event_date,
-                "location": choose_event_location(
-                    "Policy Announcement", "GovernmentPolicyEvent", locations, text_lower, topics
-                ),
-                "source": "heuristic",
-            }
+            mark_event_candidate_flags(
+                {
+                    "name": "Policy Announcement",
+                    "type": "GovernmentPolicyEvent",
+                    "date": event_date,
+                    "location": choose_event_location(
+                        "Policy Announcement",
+                        "GovernmentPolicyEvent",
+                        locations,
+                        text_lower,
+                        topics,
+                    ),
+                    "source": "heuristic",
+                }
+            )
         ]
 
     if {"Economic Policy", "Public Spending", "Taxation"} & set(topics):
@@ -1236,15 +1268,17 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
         )
         if fiscal_signal:
             return [
-                {
-                    "name": "Budget",
-                    "type": "GovernmentPolicyEvent",
-                    "date": event_date,
-                    "location": choose_event_location(
-                        "Budget", "GovernmentPolicyEvent", locations, text_lower, topics
-                    ),
-                    "source": "heuristic",
-                }
+                mark_event_candidate_flags(
+                    {
+                        "name": "Budget",
+                        "type": "GovernmentPolicyEvent",
+                        "date": event_date,
+                        "location": choose_event_location(
+                            "Budget", "GovernmentPolicyEvent", locations, text_lower, topics
+                        ),
+                        "source": "heuristic",
+                    }
+                )
             ]
 
     return events
@@ -1418,7 +1452,11 @@ def build_relations(article_id, article, entities, events):
 def merge_event_candidates(
     existing_events, suggested_events, default_date=None, default_location=None
 ):
-    merged = {event["name"]: dict(event) for event in existing_events if event.get("name")}
+    merged = {
+        event["name"]: mark_event_candidate_flags(event)
+        for event in existing_events
+        if event.get("name")
+    }
 
     for event in suggested_events or []:
         event_name = normalise_label(event.get("name"))
@@ -1447,6 +1485,8 @@ def merge_event_candidates(
             "evidence_spans": unique_sorted(event.get("evidence_spans", [])),
             "confidence": normalise_label(event.get("confidence")) or "medium",
             "extraction_method": str(event.get("extraction_method") or "").strip().lower(),
+            "is_generic_fallback": bool(event.get("is_generic_fallback"))
+            or is_generic_fallback_event_name(event_name),
         }
 
     return [merged[name] for name in sorted(merged)]
@@ -1720,3 +1760,42 @@ def extract_relevant_information(raw_data):
 
     print(f"[EXTRACT] Extracted {len(extracted)} records.")
     return extracted
+
+
+def build_extraction_audit_metrics(records):
+    metrics = {
+        "record_count": len(records),
+        "event_count": 0,
+        "generic_fallback_event_count": 0,
+        "records_with_generic_fallback": 0,
+        "generic_fallback_name_counts": {},
+        "confidence_counts": {},
+        "extraction_method_counts": {},
+    }
+
+    fallback_name_counts = defaultdict(int)
+    confidence_counts = defaultdict(int)
+    extraction_method_counts = defaultdict(int)
+
+    for record in records:
+        events = record.get("event_candidates", [])
+        metrics["event_count"] += len(events)
+        has_generic_fallback = False
+        for event in events:
+            if event.get("is_generic_fallback"):
+                has_generic_fallback = True
+                metrics["generic_fallback_event_count"] += 1
+                fallback_name_counts[event.get("name") or "Unknown"] += 1
+            confidence_key = str(event.get("confidence") or "unknown").strip().lower() or "unknown"
+            confidence_counts[confidence_key] += 1
+            extraction_key = (
+                str(event.get("extraction_method") or "unknown").strip().lower() or "unknown"
+            )
+            extraction_method_counts[extraction_key] += 1
+        if has_generic_fallback:
+            metrics["records_with_generic_fallback"] += 1
+
+    metrics["generic_fallback_name_counts"] = dict(sorted(fallback_name_counts.items()))
+    metrics["confidence_counts"] = dict(sorted(confidence_counts.items()))
+    metrics["extraction_method_counts"] = dict(sorted(extraction_method_counts.items()))
+    return metrics
