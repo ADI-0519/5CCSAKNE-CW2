@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import re
@@ -69,7 +70,10 @@ def slug_text(text):
 
 def build_cache_path(stage, cache_key):
     cache_dir = Path(CONFIG["OPENAI_CACHE_DIR"]) / stage
-    return cache_dir / f"{slug_text(cache_key)}.json"
+    slug = slug_text(cache_key)
+    if len(slug) > 200:
+        slug = hashlib.sha256(cache_key.encode()).hexdigest()
+    return cache_dir / f"{slug}.json"
 
 
 def load_cache_payload(path):
@@ -278,6 +282,8 @@ def summarize_invalid_payload(payload):
         summary.append(f"sentiment={payload.get('sentiment')!r}")
     if "article_type" in payload:
         summary.append(f"article_type={payload.get('article_type')!r}")
+    if "article_types" in payload:
+        summary.append(f"article_types={payload.get('article_types')!r}")
     if "events" in payload and isinstance(payload.get("events"), list):
         summary.append(f"events={len(payload.get('events', []))}")
     return ", ".join(summary)
