@@ -3,10 +3,12 @@
 import json
 from pathlib import Path
 
+from rdflib import Literal
+
 from src.build_ontology import build_ontology
 from src.data_extraction import extract_relevant_information
 from src.data_normalisation import normalise_data
-from src.json_to_rdf import convert_json_to_rdf
+from src.json_to_rdf import NEWS, SCHEMA, convert_json_to_rdf
 from src.run_queries import execute_queries, load_query_definitions, save_results
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "sample_response.json"
@@ -70,3 +72,55 @@ def test_save_results_writes_json(tmp_path):
     assert output_file.exists()
     loaded = json.loads(output_file.read_text())
     assert len(loaded) == 20
+
+
+def test_execute_queries_normalises_and_deduplicates_identical_rows():
+    graph = build_ontology()
+    event = NEWS["event/test-statement"]
+    department = NEWS["organisation/HM_Treasury"]
+    duplicate_department = NEWS["organisation/HM_Treasury_Duplicate"]
+    graph.add((event, NEWS.issuedByDepartment, department))
+    graph.add((event, NEWS.issuedByDepartment, duplicate_department))
+    graph.add(
+        (
+            event,
+            SCHEMA.name,
+            Literal("Joint Statement: EU-UK Financial Regulatory Forum, March 2026"),
+        )
+    )
+    graph.add((event, NEWS.occursOnDate, Literal("2026-03-12")))
+    graph.add((department, SCHEMA.name, Literal("  HM Treasury  ")))
+    graph.add((duplicate_department, SCHEMA.name, Literal("HM Treasury")))
+
+    definitions = [
+        type(
+            "QD",
+            (),
+            {
+                "query_id": "CQ02",
+                "title": "test",
+                "query_text": """
+PREFIX news: <http://example.org/news#>
+PREFIX schema: <https://schema.org/>
+SELECT ?statementName ?departmentName ?eventDate
+WHERE {
+  ?event news:issuedByDepartment ?department ;
+         schema:name ?statementName ;
+         news:occursOnDate ?eventDate .
+  ?department schema:name ?departmentName .
+}
+""".strip(),
+            },
+        )()
+    ]
+
+    results = execute_queries(graph, definitions)
+
+    assert results[0]["row_count"] == 1
+    assert results[0]["rows"] == [
+        {
+            "statementName": "Joint Statement: EU-UK Financial Regulatory Forum, March 2026",
+            "departmentName": "HM Treasury",
+            "eventDate": "2026-03-12",
+        }
+    ]

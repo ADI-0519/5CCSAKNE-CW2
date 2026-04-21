@@ -7,6 +7,7 @@ from src.data_extraction import (
     choose_event_location,
     classify_article_type,
     classify_sentiment,
+    coerce_event_type_for_source,
     extract_relevant_information,
     infer_event_type,
     normalize_event_name,
@@ -120,8 +121,8 @@ class TestExtractRelevantInformation:
         record = extract_relevant_information([article])[0]
         entities = record["entities"]
 
-        assert "Labour" in entities["political_parties"]
-        assert "Treasury" in entities["government_bodies"]
+        assert "Labour Party" in entities["political_parties"]
+        assert "HM Treasury" in entities["government_bodies"]
         assert "Politics" in entities["topics"] or "Economic Policy" in entities["topics"]
 
     def test_filters_people_from_locations(self):
@@ -141,11 +142,40 @@ class TestExtractRelevantInformation:
         assert "Farage" not in locations
         assert "England" in locations
 
+    def test_optional_spacy_candidates_are_used_as_first_pass_entities(self, monkeypatch):
+        monkeypatch.setattr(
+            "src.data_extraction.extract_spacy_entities",
+            lambda text: {
+                "people": ["Wes Streeting"],
+                "organizations": ["Institute for Fiscal Studies"],
+                "locations": ["Birmingham"],
+            },
+        )
+
+        article = make_article(
+            title="Thinktank warns over fiscal pressure",
+            content=(
+                "Wes Streeting met the Institute for Fiscal Studies. "
+                "Birmingham leaders later reacted."
+            ),
+            tags=["Politics"],
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert "Wes Streeting" in record["entities"]["people"]
+        assert "Institute for Fiscal Studies" in record["entities"]["organizations"]
+        assert "Birmingham" in record["entities"]["locations"]
+
     def test_sanitize_locations_filters_role_and_noise_terms(self):
         locations = sanitize_locations(
             ["London", "British", "Labour MPs", "PMQs", "UK The", "Manchester"]
         )
         assert locations == ["London", "Manchester"]
+
+    def test_sanitize_locations_filters_department_codes_and_slug_noise(self):
+        locations = sanitize_locations(["DfE", "PB202", "north-york", "England", "London"])
+        assert locations == ["England", "London"]
 
     def test_sanitize_locations_removes_entity_prefix_overlap(self):
         locations = sanitize_locations(
@@ -211,6 +241,22 @@ class TestExtractRelevantInformation:
         record = extract_relevant_information([article])[0]
         assert record["event_candidates"] == []
 
+    def test_does_not_fallback_to_policy_announcement_from_weak_government_mentions_alone(self):
+        article = make_article(
+            title="Ministers argue over tactics ahead of local media round",
+            summary="Senior figures traded criticism over presentation and discipline.",
+            content=(
+                "Government ministers and Treasury allies disagreed over tactics and media handling. "
+                "The piece discusses political pressure, but it does not describe an announcement, "
+                "proposal, plan, consultation, guidance, or statement."
+            ),
+            tags=["Politics", "Government Policy"],
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"] == []
+
     def test_obituary_does_not_get_generic_policy_fallback(self):
         article = make_article(
             title="David Winnick obituary",
@@ -225,6 +271,41 @@ class TestExtractRelevantInformation:
         record = extract_relevant_information([article])[0]
 
         assert record["event_candidates"] == []
+
+    def test_specific_event_candidates_carry_confidence(self):
+        article = make_article(
+            title="Treasury announces spring budget as Labour responds",
+            content=(
+                "The Treasury announced the spring budget in London as Labour criticised the "
+                "proposal in Parliament."
+            ),
+            tags=["Politics", "Labour", "Budget"],
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"]
+        assert record["event_candidates"][0]["confidence"] in {"medium", "high", "low"}
+
+    def test_specific_event_candidates_include_event_scoped_fields(self):
+        article = make_article(
+            title="Treasury announces spring budget as Labour responds",
+            content=(
+                "Keir Starmer said Labour would respond after the Treasury announced the spring "
+                "budget in London."
+            ),
+            tags=["Politics", "Labour", "Budget"],
+        )
+
+        record = extract_relevant_information([article])[0]
+        event = record["event_candidates"][0]
+
+        assert "policy_topics" in event
+        assert "political_actors" in event
+        assert "government_bodies" in event
+        assert "political_parties" in event
+        assert "evidence_spans" in event
+        assert "extraction_method" in event
 
     def test_liveblog_without_clear_event_signal_does_not_get_generic_policy_fallback(self):
         article = make_article(
@@ -287,8 +368,106 @@ class TestExtractRelevantInformation:
         assert "Healthcare" in record["entities"]["topics"]
         assert "NHS Reform Options" in record["entities"]["events"]
 
+    def test_event_scoped_openai_entities_are_promoted_to_record_entities(self, monkeypatch):
+        monkeypatch.setattr(
+            "src.data_extraction.maybe_extract_article_with_openai",
+            lambda article, text, heuristic_result: {
+                "people": [],
+                "organizations": [],
+                "locations": ["Manchester"],
+                "topics": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": [],
+                "sentiment": "Neutral",
+                "article_type": "NewsArticle",
+                "events": [
+                    {
+                        "name": "NHS Reform Options",
+                        "type": "GovernmentPolicyEvent",
+                        "date": "2026-03-20",
+                        "location": "Manchester",
+                        "policy_topics": ["Healthcare"],
+                        "political_actors": ["Wes Streeting"],
+                        "government_bodies": ["NHS England"],
+                        "parliamentary_body": None,
+                        "political_parties": ["Labour"],
+                        "evidence_spans": ["Wes Streeting outlined NHS reform options."],
+                        "confidence": "high",
+                    }
+                ],
+            },
+        )
+
+        article = make_article(
+            title="Officials outline NHS reform options",
+            summary="A briefing note outlined possible health reforms.",
+            content="Wes Streeting outlined NHS reform options in Manchester.",
+            tags=[],
+            section="UK news",
+        )
+        record = extract_relevant_information([article])[0]
+        event = record["event_candidates"][0]
+
+        assert "Wes Streeting" in record["entities"]["politicians"]
+        assert "Labour Party" in record["entities"]["political_parties"]
+        assert "NHS England" in record["entities"]["government_bodies"]
+        assert "Healthcare" in record["entities"]["topics"]
+        assert event["confidence"] == "high"
+        assert event["extraction_method"] == "openai"
+
+    def test_openai_event_with_heuristic_support_becomes_hybrid(self, monkeypatch):
+        monkeypatch.setattr(
+            "src.data_extraction.maybe_extract_article_with_openai",
+            lambda article, text, heuristic_result: {
+                "people": [],
+                "organizations": ["Treasury", "Labour"],
+                "locations": ["London"],
+                "topics": ["Economic Policy"],
+                "politicians": ["Keir Starmer"],
+                "political_parties": ["Labour"],
+                "government_bodies": ["Treasury"],
+                "sentiment": "Neutral",
+                "article_type": "NewsArticle",
+                "events": [
+                    {
+                        "name": "Budget",
+                        "type": "GovernmentPolicyEvent",
+                        "date": "2026-03-20",
+                        "location": "London",
+                        "policy_topics": [],
+                        "political_actors": [],
+                        "government_bodies": [],
+                        "parliamentary_body": None,
+                        "political_parties": [],
+                        "evidence_spans": [],
+                        "confidence": "",
+                    }
+                ],
+            },
+        )
+
+        article = make_article(
+            title="Treasury announces budget as Labour responds",
+            summary="Keir Starmer criticised the Treasury in London.",
+            content="Keir Starmer said Labour would respond after the Treasury announced the budget in London.",
+            tags=["Politics", "Budget", "Labour"],
+            section="Politics",
+        )
+
+        record = extract_relevant_information([article])[0]
+        event = record["event_candidates"][0]
+
+        assert event["extraction_method"] == "hybrid"
+        assert event["confidence"] in {"medium", "high"}
+
     def test_pmqs_is_treated_as_parliamentary_debate(self):
         assert infer_event_type("Prime Minister's Questions") == "ParliamentaryDebate"
+
+    def test_generic_statement_is_not_promoted_to_ministerial_statement(self):
+        assert (
+            infer_event_type("UK statement at the UN Security Council") == "GovernmentPolicyEvent"
+        )
 
     def test_normalize_event_name_collapses_pmqs_variant(self):
         assert (
@@ -442,6 +621,37 @@ class TestExtractRelevantInformation:
         assert record["event_candidates"][0]["name"] == "Ministerial Statement"
         assert record["event_candidates"][0]["type"] == "MinisterialStatement"
 
+    def test_ambiguous_parliament_event_stays_parliamentary_instead_of_becoming_government(self):
+        article = make_article(
+            source_system="parliament",
+            source_name="UK Parliament",
+            title="Delegation Scheme Update",
+            section="Commons",
+            summary="Parliament considered an updated delegation scheme.",
+            content=(
+                "Parliament considered an updated delegation scheme in Westminster. "
+                "The record describes committee discussion rather than a ministerial briefing."
+            ),
+            tags=["Commons"],
+        )
+        signals = {
+            "salient_text_lower": "delegation scheme update parliament commons",
+            "text_lower": (
+                "parliament considered an updated delegation scheme in westminster. "
+                "the record describes committee discussion rather than a ministerial briefing."
+            ),
+            "parliament_written_statement": False,
+        }
+
+        result = coerce_event_type_for_source(
+            article,
+            "Delegation Scheme Update",
+            "GovernmentPolicyEvent",
+            signals,
+        )
+
+        assert result == "ParliamentaryEvent"
+
     def test_govuk_policy_paper_gets_source_aware_fallback_event(self):
         article = make_article(
             source_system="govuk",
@@ -459,6 +669,65 @@ class TestExtractRelevantInformation:
         assert record["event_candidates"]
         assert record["event_candidates"][0]["name"] == "National Cancer Plan for England"
         assert record["event_candidates"][0]["type"] == "GovernmentPolicyEvent"
+
+    def test_govuk_speech_fallback_stays_government_policy_event(self):
+        article = make_article(
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="Trade Minister Speech at Chatham House",
+            section="speech",
+            summary="Speech on trade and growth.",
+            content="The Trade Minister set out the government's trade priorities at Chatham House.",
+            tags=["speech"],
+            author=None,
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"]
+        assert record["event_candidates"][0]["type"] == "GovernmentPolicyEvent"
+
+    def test_fcdo_statement_infers_foreign_office_department_body(self):
+        article = make_article(
+            source_system="govuk",
+            source_name="GOV.UK",
+            title="Summoning of the Iranian Ambassador to the United Kingdom: FCDO statement",
+            section="press_release",
+            summary="Foreign affairs statement issued by the government.",
+            content="The FCDO issued a statement after summoning the Iranian Ambassador.",
+            tags=["statement"],
+            author=None,
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert (
+            "Foreign, Commonwealth and Development Office"
+            in record["entities"]["government_bodies"]
+        )
+
+    def test_generic_parliament_policy_announcement_without_department_demotes_from_ministerial(
+        self,
+    ):
+        article = make_article(
+            source_system="parliament",
+            source_name="UK Parliament",
+            title="National Scheme of Delegation",
+            section="Lords",
+            summary=None,
+            content=(
+                "My Honourable Friend has today made the following statement. "
+                "Planning is principally a local activity."
+            ),
+            tags=[],
+            author=None,
+        )
+
+        record = extract_relevant_information([article])[0]
+
+        assert record["event_candidates"]
+        assert record["event_candidates"][0]["name"] == "Policy Announcement"
+        assert record["event_candidates"][0]["type"] == "ParliamentaryEvent"
 
     def test_govuk_policy_paper_without_explicit_event_signal_does_not_get_fallback_event(self):
         article = make_article(

@@ -279,6 +279,8 @@ class TestExtractedRecordNormalisation:
                     "date": "2026-03-06",
                     "location": "London",
                     "source": "heuristic",
+                    "confidence": "high",
+                    "extraction_method": "hybrid",
                 }
             ],
             "follow_up_candidates": [],
@@ -308,8 +310,11 @@ class TestExtractedRecordNormalisation:
         assert record["section"] == "Politics"
         assert record["article_type"] == "NewsArticle"
         assert record["sentiment"] == "Negative"
-        assert record["entities"]["government_bodies"] == ["Treasury"]
+        assert record["entities"]["government_bodies"] == ["HM Treasury"]
+        assert record["entities"]["political_parties"] == ["Labour Party"]
         assert record["event_candidates"][0]["name"] == "Budget"
+        assert record["event_candidates"][0]["confidence"] == "high"
+        assert record["event_candidates"][0]["extraction_method"] == "hybrid"
 
     def test_normalise_data_rejects_unknown_predicate(self):
         record = self.valid_record(
