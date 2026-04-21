@@ -36,26 +36,21 @@
 \section{Introduction}\label{sec:introduction}
 %------------------------------------------------------------------
 
-This project builds an automated knowledge graph (KG) for UK parliamentary and
-government policy events reported in UK news between 6 March 2026 and 6 April
-2026. The pipeline collects Guardian articles, UK Parliament written statements,
-GOV.UK policy records, and optional Wikidata enrichment data; maps them into RDF;
-builds an event-centred ontology; enriches the merged graph with source-linking
-completion; and executes 20 SPARQL competency queries over the completed KG.
+This project builds an automated knowledge graph (KG) pipeline for UK politics and
+policy news (6 March--6 April 2026). The pipeline collects articles from the Guardian
+API and NewsAPI, queries the Wikidata SPARQL endpoint for structured UK political
+entity data, extracts entities and events from article text, maps both source types to
+RDF, enriches the graph through a completion stage, and runs 20 SPARQL competency
+queries.
 
-\subsection{Team Roles}
+\textbf{Roles:} Abdrakhman Salmenov (domain expert); Aditya Ranjan and Kasim Morsel
+(modelling experts); Yingtao Zheng and Immanuel Fradinho Oliveira (data ingestion and
+LLM pipeline).
 
-The repository follows the coursework team-role model.
-
-\begin{itemize}[leftmargin=*,nosep]
-    \item \textbf{Domain expert/client:} Abdrakhman Salmenov set the project scope,
-    made domain decisions, and kept documentation coherent.
-    \item \textbf{Modelling experts:} Aditya Ranjan and Kasim Morsel designed the
-    ontology, mappings, queries, prompts, and evaluation methodology.
-    \item \textbf{Requirements, data ingestion, and LLM pipeline:} Yingtao Zheng
-    and Immanuel Fradinho Oliveira worked on data sources, access code, data
-    preparation, LLM extraction support, and pipeline automation.
-\end{itemize}
+\textbf{Deviations:} NewsAPI developer-tier access returned only 100 results (3 retained
+articles), so Wikidata was added as the primary structured source. Legacy
+technology-oriented keywords in \filepath{src/config.py} were retained for pipeline
+compatibility while the final domain was fixed as UK politics and policy.
 
 \subsection{Technology Stack}
 
@@ -74,41 +69,37 @@ The repository follows the coursework team-role model.
 \section{Data Sources}\label{sec:data_sources}
 %------------------------------------------------------------------
 
-The coursework requires both textual and structured data. The final pipeline uses
-Guardian as the main textual reporting source, Parliament and GOV.UK as official
-source-record providers, and Wikidata as optional structured enrichment.
+The coursework requires at least one textual and one structured source.
 
 \begin{itemize}[leftmargin=*,nosep]
-    \item \textbf{Guardian API:} provides article headlines, URLs, dates, bylines,
-    summaries, tags, and full body text. The body text supports extraction of
-    policy events, actors, institutions, topics, and locations.
-    \item \textbf{UK Parliament written-statements API:} provides official
-    parliamentary source records used to ground parliamentary and ministerial
-    events.
-    \item \textbf{GOV.UK Search API:} provides official government policy,
-    announcement, guidance, consultation, speech, and press-release records.
-    \item \textbf{Wikidata SPARQL endpoint:} provides structured background data
-    for politicians, political parties, and government bodies.
+    \item \textbf{Guardian API (textual):} full \code{bodyText} content for NLP
+    extraction. 253 articles retained. Implemented in \filepath{src/data\_collection.py}.
+    \item \textbf{Wikidata SPARQL endpoint (structured):} typed entity records for UK
+    politicians (1730), political parties (968), and government bodies (490),
+    mapped directly to RDF without NLP. Implemented in
+    \filepath{src/wikidata\_collection.py}.
+    \item \textbf{UK Parliament + GOV.UK APIs:} 20 parliamentary and 459 government
+    records used as official source records.
+    \item \textbf{NewsAPI (supplementary):} 3 articles retained after scope filtering.
 \end{itemize}
 
-The latest validated live run collected 253 Guardian records, 20 Parliament
-records, 459 GOV.UK records, and Wikidata enrichment for 1730 politicians, 968
-parties, and 490 government bodies. Raw snapshots are saved under
-\filepath{data/raw/}, allowing cached reruns.
+The Guardian was chosen for its full body text enabling genuine extraction. Wikidata
+was chosen for its public SPARQL endpoint and typed political actor data requiring no
+API key. Raw snapshots are saved under \filepath{data/raw/}, allowing cached reruns.
+Source selection prompts are logged in \filepath{prompts/prompts.txt}.
 
 %------------------------------------------------------------------
 \section{Ontology Design}\label{sec:ontology_design}
 %------------------------------------------------------------------
 
-The ontology is generated programmatically by \filepath{src/build_ontology.py}
-and written to \filepath{ontology/news_ontology.ttl}. It reuses Schema.org and
-BBC Core Concepts while adding a local \code{news:} namespace for the coursework
-domain.
+The ontology is built programmatically in \filepath{src/build\_ontology.py} and
+serialised to \filepath{ontology/news\_ontology.ttl}. It extends \textbf{Schema.org}
+(articles, people, organisations, metadata) and the \textbf{BBC Core Concepts Ontology}
+(events, places) under the \code{news:} namespace.
 
 \begin{table}[t]
 \centering
-\caption{Core ontology terms in the implemented event-centred model.}
-\label{tab:ontology}
+\caption{Core ontology extensions.}\label{tab:ontology}
 \setlength{\tabcolsep}{5pt}
 \begin{tabular}{@{}p{2.7cm}p{9.3cm}@{}}
 \toprule
@@ -122,34 +113,31 @@ Reporting and provenance & \ns{NewsArticle}, \ns{NewsOrganisation}, \ns{Journali
 \end{tabular}
 \end{table}
 
-The ontology satisfies the extension requirement through multiple subclasses and
-subproperties. For example, \ns{PolicyEvent} extends BBC Core Concepts
-\code{core:Event}, \ns{Location} extends \code{core:Place}, \ns{NewsArticle}
-extends \code{schema:NewsArticle}, and \ns{OfficialBody} extends
+\ns{PolicyEvent} extends \code{core:Event}; \ns{Location} extends \code{core:Place};
+\ns{NewsArticle} extends \code{schema:NewsArticle}; \ns{OfficialBody} extends
 \code{schema:Organization}. Properties such as \ns{concernsPolicyTopic},
-\ns{occursInLocation}, \ns{publishedBy}, \ns{hasAuthor}, \ns{publishedDate}, and
-\ns{articleURL} are aligned with Schema.org or BBC Core Concepts properties.
-
-The defended core ontology is deliberately event-centred. Older article-analytics
-terms such as sentiment, article subtype, and follow-up links are not part of the
-current core TBox.
+\ns{occursInLocation}, \ns{publishedBy}, and \ns{hasAuthor} are aligned with
+Schema.org or BBC Core Concepts, satisfying the subclass and subproperty requirements.
 
 %------------------------------------------------------------------
-\section{Pipeline and Mappings}\label{sec:pipeline}
+\section{Mappings}\label{sec:mappings}
 %------------------------------------------------------------------
 
-The pipeline is orchestrated by \filepath{src/main.py}. It can run against live
-APIs or cached snapshots. The main command is:
+The pipeline implements two separate mapping paths.
 
-\begin{verbatim}
-python -m src.main
-\end{verbatim}
+\textbf{Textual path (Guardian + NewsAPI):} \filepath{src/data\_extraction.py}
+combines heuristic and optional OpenAI-assisted extraction. The heuristic layer
+identifies people, organisations, and locations via controlled lists and regex;
+topics via weighted keyword groups; article subtype; and event candidates. The OpenAI
+layer uses strict JSON-schema outputs, validated before use and cached under
+\filepath{data/cache/openai/}. Extracted records are converted to RDF by \filepath{src/json\_to\_rdf.py}.
 
-The cached mode is:
+\textbf{Structured path (Wikidata):} \filepath{src/wikidata\_to\_rdf.py} converts
+SPARQL results to RDF by direct field-to-property mapping with no NLP.
 
-\begin{verbatim}
-python -m src.main --from-cache
-\end{verbatim}
+Official Parliament and GOV.UK records are typed as source records and linked to events
+through \ns{representedInOfficialSource}. Figure~\ref{fig:pipeline} shows the
+end-to-end pipeline.
 
 \begin{figure}[t]
 \centering
@@ -186,12 +174,6 @@ python -m src.main --from-cache
 \label{fig:pipeline}
 \end{figure}
 
-The mapping layer converts normalised records into articles, source records,
-policy events, topics, actors, institutions, and locations. Official Parliament
-and GOV.UK records are typed as source records and can be linked to events through
-\ns{representedInOfficialSource}. The completion stage then adds inverse
-\ns{reportsOn} links and \ns{matchedToSourceRecord} links for source integration.
-
 %------------------------------------------------------------------
 \section{Competency Questions}\label{sec:cq}
 %------------------------------------------------------------------
@@ -214,11 +196,37 @@ The questions deliberately exercise non-trivial ontology paths, including:
 \end{itemize}
 
 %------------------------------------------------------------------
+\section{KG Completion}\label{sec:completion}
+%------------------------------------------------------------------
+
+The completion stage (\filepath{src/complete\_kg.py}) identified missing source-integration
+links in the prototype graph and enriched it with ontology-aligned triples. Five gap
+types were targeted: missing \ns{reportsOn} links from articles to events, missing
+\ns{matchedToSourceRecord} links between events and official records, missing actor
+links, missing department links, and incomplete topic assignments. The stage added 504
+triples: 266 inverse \ns{reportsOn} links and 238 \ns{matchedToSourceRecord} links.
+A RAG step retrieves article headlines and source titles via SPARQL, verbalises the
+context, and prompts OpenAI with a closed vocabulary to propose actor, department, and
+topic values, which are validated before merging.
+
+%------------------------------------------------------------------
+\section{Prompts}\label{sec:prompts}
+%------------------------------------------------------------------
+
+Eight prompts were versioned and logged in \filepath{prompts/prompts.txt}:
+(1)~pipeline planning; (2)~CQ augmentation; (3)~ontology review;
+(4)~source-to-ontology mapping; (5)~completion gap analysis;
+(6)~evaluation methodology; (7)~runtime entity and event extraction;
+(8)~runtime KG completion.
+Prompts 1--6 were used during design and revised manually. Prompts 7--8 execute at
+runtime with strict JSON-schema validation before outputs enter the graph.
+
+%------------------------------------------------------------------
 \section{Evaluation}\label{sec:evaluation}
 %------------------------------------------------------------------
 
-The latest validated run is \code{20260420T202251Z}. It completed all pipeline
-stages and returned rows for all 20 competency queries.
+The latest validated run is \code{20260420T202251Z}. All 20 competency queries returned
+at least one row.
 
 \begin{table}[t]
 \centering
@@ -229,15 +237,9 @@ stages and returned rows for all 20 competency queries.
 \textbf{Measure} & \textbf{Value} \\
 \midrule
 Guardian records & 253 \\
-Parliament records & 20 \\
-GOV.UK records & 459 \\
-Combined normalised records & 732 \\
-Wikidata politicians & 1730 \\
-Wikidata political parties & 968 \\
-Wikidata government bodies & 490 \\
+Parliament / GOV.UK records & 20 / 459 \\
+Wikidata politicians / parties / gov.\ bodies & 1730 / 968 / 490 \\
 Ontology graph & 188 triples \\
-Source-derived instance KG & 14429 triples \\
-Wikidata KG & 25064 triples \\
 Prototype KG & 39545 triples \\
 Completed KG & 40049 triples \\
 Queries returning at least one row & 20 / 20 \\
@@ -268,60 +270,32 @@ Rows & 81 & 11 & 48 & 12 & 7 & 8 & 11 & 11 & 1 & 8 \\
 \end{tabular}
 \end{table}
 
-The completion stage added 504 triples to the prototype graph: 266 inverse
-\ns{reportsOn} links and 238 \ns{matchedToSourceRecord} links. This is most visible
-in source-integration audits, while CQ11 and CQ12 use official source
-representation to test institution and topic coverage.
+\textbf{Quality:} The KG is most reliable for article metadata, publisher and author
+information, topic assignment, and source traceability. Weaker areas: person and
+organisation extraction over-generates via regex; event labels remain generic; the
+corpus is Guardian-dominated.
 
-The main strengths are source traceability, event-to-topic links, institution-event
-links, and the ability to query across article, event, and official-source layers.
-The main weaknesses are event canonicalisation, incomplete actor disambiguation,
-and limited evidence metadata for completion-generated links.
+\textbf{KG vs.\ direct LLM:} KG-based answers are reproducible, auditable, and grounded
+in structured triples. Direct LLM prompting is more fluent but non-deterministic and
+non-traceable.
 
 %------------------------------------------------------------------
 \section{Testing and Reproducibility}\label{sec:testing}
 %------------------------------------------------------------------
 
-Automated tests are stored under \filepath{tests/}. They cover ontology
-construction, RDF generation, completion, and query execution. The expected test
-command is:
-
-\begin{verbatim}
-python -m pytest
-\end{verbatim}
-
-Reproducibility is supported through saved raw snapshots, timestamped processed
-JSON outputs, generated Turtle graphs, and timestamped query results. The pipeline
-also supports cached source runs with \code{--from-cache}.
-
-%------------------------------------------------------------------
-\section{AI Usage and Future Work}\label{sec:ai_usage}
-%------------------------------------------------------------------
-
-OpenAI is used in a constrained supportive role for extraction augmentation and
-evaluation baselines. Runtime outputs are validated against structured formats and
-can be cached locally. AI-generated coursework artefacts, such as competency
-questions and prompts, were manually reviewed before being encoded into the final
-ontology, queries, and documentation.
-
-The current completion stage is deterministic graph enrichment, not a full
-retrieval-augmented generation system. Future work may add a RAG layer that
-retrieves article and official-source evidence before proposing ontology-compatible
-triples. Such a layer should keep the same validation discipline: retrieve
-evidence, generate candidate triples, validate against the ontology, then merge
-only accepted assertions with provenance.
+Automated \code{pytest} tests under \filepath{tests/} cover ontology construction,
+RDF generation, completion, and query execution. Reproducibility is supported through
+saved raw snapshots, timestamped processed JSON outputs, and cached source runs
+(\code{--from-cache}).
 
 %------------------------------------------------------------------
 \section{Conclusion}\label{sec:conclusion}
 %------------------------------------------------------------------
 
 The repository delivers a working automated KG pipeline for UK parliamentary and
-government policy events. The current implementation collects live data, builds a
-programmatic ontology, maps textual and official source records to RDF, enriches
-the graph with source-integration links, and answers all 20 competency questions.
-The strongest final claim is that the system is reproducible, ontology-aligned,
-and queryable, with clear remaining work around entity resolution, event
-canonicalisation, and richer provenance for completion links.
+government policy events. The system is reproducible, ontology-aligned, and queryable,
+with all 20 competency questions answered. Remaining work includes entity resolution,
+event canonicalisation, and richer provenance for completion links.
 
 \newpage
 \begin{thebibliography}{9}

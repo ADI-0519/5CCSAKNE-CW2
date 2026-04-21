@@ -26,7 +26,8 @@ Used for: Planning
 
 
 ## P01: Competency Question Augmentation
-Task: Generate 10 additional competency questions that complement the manual set.
+Task:
+Generate 10 additional competency questions that complement the manual set.
 
 Prompts:
 You are helping with a knowledge-engineering coursework on a knowledge graph for UK parliamentary and government policy events reported in UK news during a fixed time window.
@@ -47,40 +48,38 @@ The manually authored questions were written with the team's domain knowledge, b
 Used for: `docs/competency_questions.md`
 
 
-
 ## P02: Ontology Review Against Reused Vocabularies
-Task: Check the local ontology against Schema.org and BBC Core Concepts.
+Task:
+Check the local ontology against Schema.org and BBC Core Concepts.
 
 Prompts:
 Review this ontology draft for a current-news knowledge graph.
 The ontology reuses Schema.org and BBC Core Concepts.
-
 Identify:
 1. classes that should be aligned more explicitly
 2. properties that should become typed subproperties rather than generic relations
 3. missing modelling distinctions between publishers and mentioned organisations
 4. any class or property defined in the ontology but not represented in the generated RDF
-
 Return:
 1. concrete modelling issues
 2. a revised alignment proposal
 3. the minimum code changes needed in the RDF generation step
 
 Justification:
-The ontology was initially drafted locally without a systematic check against established vocabularies. Running an LLM review against Schema.org and BBC Core Concepts helped identify where local classes should become explicit subclasses, where generic object properties should be typed subproperties, and where the distinction between publisher entities and mentioned organisations was underspecified. The output fed directly into the alignment table in the mapping specification and informed the RDF generation refactor that introduced typed subproperties such as `news:hasAuthor`, `news:publishedBy`, and `news:hasTopic`.
+LLM review identified where local classes should become explicit subclasses and generic properties should be typed subproperties. Output informed the alignment table in the mapping specification and the RDF refactor introducing `news:hasAuthor`, `news:publishedBy`, and `news:hasTopic`.
 
 Used for: `docs/mapping_specification.md` and the ontology/RDF alignment refactor.
 
 
 
 ## P03: Source-to-Ontology Mapping Draft
-Task: Turn source fields and extracted entities into an explicit mapping specification.
+Task:
+Turn source fields and extracted entities into an explicit mapping specification.
 
 Prompts:
 Given a news API response with fields such as source.name, author, title, url, publishedAt,
 description, content, plus extracted entities (organisation, person, location, technology, topic),
 produce a mapping table from source data to ontology classes and properties.
-
 Include:
 1. source field or extraction output
 2. ontology class or property
@@ -95,7 +94,8 @@ Used for: `docs/mapping_specification.md`
 
 
 ## P04: Completion Analysis
-Task: Identify incompleteness in both the ontology and the instance layer.
+Task:
+Identify incompleteness in both the ontology and the instance layer.
 
 Prompts:
 Analyse the current-news KG prototype and identify:
@@ -117,7 +117,8 @@ Used for: `docs/completion_analysis.md` and `src/complete_kg.py`
 
 
 ## P05: Evaluation Methodology Design
-Task: Define a quantitative evaluation strategy for the automated KG-construction pipeline.
+Task:
+Define a quantitative evaluation strategy for the automated KG-construction pipeline.
 
 Prompts:
 Design an evaluation methodology for an automated current-news KG pipeline.
@@ -163,16 +164,15 @@ Used for: `Report.tex`
 
 
 ## P07: LLM-Assisted Entity and Event Extraction
-Task: Extract named entities, sentiment, article type, and events from article text to supplement heuristic extraction.
+Task:
+Extract named entities, sentiment, article type, and events from article text to supplement heuristic extraction.
 
-Prompt:
+Prompts:
 You are an information extraction assistant for a knowledge graph about current UK
 parliamentary and government policy events reported in UK news. Use only evidence from the supplied article. Do not invent
 entities or events. Return only ontology-aligned JSON.
-
 User input:
 The runtime payload includes the project scope, allowed topics, article title, summary, content, section, tags, publication date, heuristic extraction output, and concatenated article text.
-
 Required response schema:
 {
   "people": ["string"],
