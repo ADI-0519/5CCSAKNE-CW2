@@ -5,6 +5,10 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from src.config import CONFIG
+from src.domain_knowledge import (
+    canonicalise_government_body_name,
+    canonicalise_political_party_name,
+)
 from src.govuk_scope import govuk_result_is_in_scope
 
 CONTROLLED_PREDICATES = CONFIG["CONTROLLED_PREDICATES"]
@@ -481,10 +485,18 @@ def normalise_data(extracted_data):
                 [normalise_name(p) for p in entities.get("politicians", [])]
             ),
             "political_parties": deduplicate_list(
-                [normalise_name(party) for party in entities.get("political_parties", [])]
+                [
+                    canonicalise_political_party_name(normalise_name(party))
+                    for party in entities.get("political_parties", [])
+                    if canonicalise_political_party_name(normalise_name(party))
+                ]
             ),
             "government_bodies": deduplicate_list(
-                [normalise_name(body) for body in entities.get("government_bodies", [])]
+                [
+                    canonicalise_government_body_name(normalise_name(body))
+                    for body in entities.get("government_bodies", [])
+                    if canonicalise_government_body_name(normalise_name(body))
+                ]
             ),
             "locations": deduplicate_list(
                 [normalise_name(location) for location in entities.get("locations", [])]
@@ -510,6 +522,35 @@ def normalise_data(extracted_data):
                     if event.get("location")
                     else None,
                     "source": normalise_name(event.get("source")),
+                    "policy_topics": deduplicate_list(
+                        [normalise_name(item) for item in event.get("policy_topics", []) if item]
+                    ),
+                    "political_actors": deduplicate_list(
+                        [normalise_name(item) for item in event.get("political_actors", []) if item]
+                    ),
+                    "government_bodies": deduplicate_list(
+                        [
+                            canonicalise_government_body_name(normalise_name(item))
+                            for item in event.get("government_bodies", [])
+                            if canonicalise_government_body_name(normalise_name(item))
+                        ]
+                    ),
+                    "parliamentary_body": normalise_name(event.get("parliamentary_body"))
+                    if event.get("parliamentary_body")
+                    else None,
+                    "political_parties": deduplicate_list(
+                        [
+                            canonicalise_political_party_name(normalise_name(item))
+                            for item in event.get("political_parties", [])
+                            if canonicalise_political_party_name(normalise_name(item))
+                        ]
+                    ),
+                    "evidence_spans": deduplicate_list(
+                        [normalise_name(item) for item in event.get("evidence_spans", []) if item]
+                    ),
+                    "confidence": str(event.get("confidence") or "").strip().lower() or "medium",
+                    "extraction_method": str(event.get("extraction_method") or "").strip().lower()
+                    or "heuristic",
                 }
             )
 
