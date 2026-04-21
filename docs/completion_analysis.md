@@ -17,12 +17,13 @@ The current codebase has four source paths feeding the final graph:
 
 The end-to-end pipeline builds a prototype KG from the ontology, source-derived RDF instances, and optional Wikidata triples. It then runs a deterministic completion stage over the merged graph.
 
-The current completion stage is implemented in `src/complete_kg.py`. It does two things:
+The current completion stage is implemented in `src/complete_kg.py` and runs three steps in sequence.
 
-- adds inverse `news:reportsOn` links for existing `news:reportedByArticle` links
-- adds `news:matchedToSourceRecord` links between policy events and aligned source records, including mirrored matches for events already represented in official Parliament or GOV.UK records
+The first step adds inverse `news:reportsOn` links for all existing `news:reportedByArticle` triples. This is fully deterministic.
 
-This is ontology-constrained graph enrichment. It is not currently a full retrieval-augmented generation pipeline with embeddings or vector search.
+The second step adds `news:matchedToSourceRecord` and `news:representedInOfficialSource` links between policy events and official Parliament or GOV.UK source records. Matching uses a scoring heuristic based on title similarity, event type, and date agreement.
+
+The third step is an LLM-assisted enrichment step. For each policy event missing `involvesActor`, `involvesGovernmentBody`, or `concernsPolicyTopic`, the pipeline retrieves the event's immediate KG neighbourhood via SPARQL (article headlines, publisher names, topic names, and matched source titles), verbalises the retrieved context as a natural language sentence, and sends it to OpenAI with instructions to propose missing property values constrained to the ontology vocabulary. Proposed actors are filtered against a blocklist of institutional terms and validated by slug-term overlap with the retrieved context before any triple is written. The step implements the retrieve-verbalise-prompt-validate pattern described in the Week 11 slides.
 
 ## Latest Validated Run
 
@@ -33,20 +34,23 @@ Latest validated run:
 - Guardian articles: `253`
 - Parliament source records: `20`
 - GOV.UK source records: `459`
-- Wikidata entities: `1730` politicians, `968` parties, `490` government bodies
+- Wikidata entities: `1730` politicians, `967` parties, `490` government bodies
 - ontology graph: `188` triples
 - source-derived instance KG: `14429` triples
 - Wikidata KG: `25064` triples
-- prototype KG: `39545` triples
-- completed KG: `40049` triples
+- prototype KG: `39510` triples
+- completed KG: `40279` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
-- `266` `news:reportsOn` inverse links
-- `238` `news:matchedToSourceRecord` links
+- `255` `news:reportsOn` inverse links
+- `236` `news:matchedToSourceRecord` cross-source links
+- `35` `news:involvesActor` links (RAG)
+- `91` `news:involvesGovernmentBody` links (RAG)
+- `144` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `504` triples.
+The completed KG is therefore larger than the prototype KG by `769` triples.
 
 ## What Is Covered Well
 
@@ -110,10 +114,6 @@ Wikidata provides strong background entities, but article-extracted political ac
 
 The graph records the linked source record but does not yet attach confidence scores, evidence spans, or a detailed explanation of why each match was accepted.
 
-`G5.` The current completion stage is not full RAG.
-
-Future RAG work can be added by retrieving relevant source-record and article context before proposing ontology-compatible event matches or missing links. The current implementation should be described more cautiously as graph enrichment or completion.
-
 ## Why Completion Matters
 
 Completion improves the query layer without changing the core ontology:
@@ -121,6 +121,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 35 actor links, 91 department links, and 144 topic links were not present in the prototype KG.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 
@@ -129,9 +130,9 @@ The latest run confirms this is enough for all `20/20` competency queries to ret
 1. Add stronger event canonicalisation so repeated events are reused across articles and official records.
 2. Add provenance metadata for completion-generated links, such as match score or match reason.
 3. Link article-extracted political actors to Wikidata entities where labels and contextual evidence agree.
-4. If RAG is implemented, keep it ontology-constrained: retrieve source evidence, generate candidate triples, validate them against the ontology, then merge only accepted triples.
+4. Extend the RAG enrichment step to cover `occursInParliamentaryBody` for parliamentary events missing a chamber assignment, using the same retrieve-verbalise-validate pattern already implemented for actor and department links.
 5. Keep reporting completion results as concrete graph deltas, not as generic claims about AI improvement.
 
 ## Final Assessment
 
-The completion stage is implemented and useful, but it is deliberately narrow. The defensible claim is that the pipeline performs deterministic ontology-aligned enrichment over the prototype KG, adding inverse article-event links and cross-source source-record matches that improve CQ coverage and provenance.
+The completion stage now combines deterministic graph enrichment with an LLM-assisted RAG step. The defensible claim is that the pipeline adds inverse article-event links, cross-source source-record matches, and context-grounded actor, department, and topic links that collectively improve CQ coverage and provenance without inventing triples that lack evidential support in the retrieved KG context.
