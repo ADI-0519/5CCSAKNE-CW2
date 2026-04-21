@@ -19,6 +19,7 @@ from src.data_normalisation import (
 )
 from src.json_to_rdf import convert_json_to_rdf
 from src.run_queries import execute_queries, load_kg, load_query_definitions, save_results
+from src.validate_graph import execute_validation, save_validation_report
 from src.wikidata_collection import collect_wikidata, load_cached_wikidata
 from src.wikidata_to_rdf import convert_wikidata_to_rdf
 
@@ -26,6 +27,7 @@ INSTANCE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "new_kg.ttl"
 WIKIDATA_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "wikidata_kg.ttl"
 PROTOTYPE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "prototype_kg.ttl"
 LATEST_QUERY_RESULTS_PATH = Path("output/query_results.json")
+LATEST_VALIDATION_RESULTS_PATH = Path("output/validation_results.json")
 
 
 def build_timestamp():
@@ -223,6 +225,20 @@ def main():
     print(
         f"[PIPELINE] Query coverage: {answered_queries}/{len(query_results)} "
         "queries returned at least one row."
+    )
+
+    # ------------------------------------------------------------------
+    # Stage 11: Run SPARQL-based graph validation checks
+    # ------------------------------------------------------------------
+    print("[PIPELINE] Stage 11: Run graph validation checks")
+    validation_report = execute_validation(query_graph)
+    timestamped_validation = Path("output") / f"{timestamp}_validation_results.json"
+    save_validation_report(validation_report, LATEST_VALIDATION_RESULTS_PATH)
+    save_validation_report(validation_report, timestamped_validation)
+    print(
+        f"[PIPELINE] Validation: {validation_report['rule_count']} rules checked, "
+        f"{validation_report['failed_rule_count']} failed, "
+        f"{validation_report['total_violations']} violations found."
     )
 
     print("[PIPELINE] Done.")
