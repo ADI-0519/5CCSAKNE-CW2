@@ -189,13 +189,21 @@ Required response schema:
       "name": "string",
       "type": "PolicyEvent | ParliamentaryEvent | GovernmentPolicyEvent | ParliamentaryDebate | MinisterialStatement",
       "date": "string | null",
-      "location": "string | null"
+      "location": "string | null",
+      "policy_topics": ["string"],
+      "political_actors": ["string"],
+      "government_bodies": ["string"],
+      "parliamentary_body": "string | null",
+      "political_parties": ["string"],
+      "evidence_spans": ["string"],
+      "confidence": "high | low | medium",
+      "extraction_method": "heuristic | hybrid | openai"
     }
   ]
 }
 
 Justification:
-This prompt is used by the automated extraction layer to supplement deterministic heuristics with ontology-aligned entity, classification, and event outputs. The OpenAI response is constrained by a strict JSON schema, validated in code, and merged conservatively with heuristic output before RDF generation.
+This prompt is used by the automated extraction layer to supplement deterministic heuristics with ontology-aligned entity, classification, and event outputs. The event schema includes per-event entity fields so that downstream RDF generation can scope actor and topic links to individual events rather than applying them at record level. The OpenAI response is constrained by a strict JSON schema, validated in code, and merged conservatively with heuristic output before RDF generation.
 
 Used for: `src/data_extraction.py` and `src/openai_client.py`
 
@@ -208,15 +216,15 @@ Prompt:
 You are completing a UK politics knowledge graph. Given a policy event and
 retrieved source context, propose missing property values using only the
 declared vocabulary. Do not invent names not supported by the context.
-proposed_actors must be named individual politicians or political parties only,
-not departments, roles, or generic labels such as 'UK Government'.
+proposed_actors must be named individual politicians only,
+not political parties, departments, roles, or generic labels such as 'UK Government'.
 proposed_departments must be named UK government departments or official bodies only.
 proposed_topics must be chosen only from this list: [Defence, Economic Policy,
 Education, Energy, Government Policy, Healthcare, Housing, Immigration, Parliament,
 Public Spending, Taxation].
 Prefer specific topics over Government Policy, which should only be used when no
 other topic applies.
-Example of correct output: {"proposed_actors": ["Keir Starmer", "Labour Party"],
+Example of correct output: {"proposed_actors": ["Keir Starmer"],
 "proposed_departments": ["Home Office"], "proposed_topics": ["Housing"]}.
 Return only JSON.
 
@@ -231,7 +239,7 @@ Required response schema:
 }
 
 Justification:
-Grounding the LLM in retrieved source titles and article headlines rather than training knowledge alone keeps proposals tied to evidence already in the dataset. The instructions explicitly distinguish actors (named politicians or parties) from departments (named government bodies) to prevent cross-type contamination, which was the main failure mode observed in early prompt iterations. A code-level blocklist of institutional terms provides a second validation layer independent of the LLM. Constraining proposed_topics to a closed enum prevents hallucinated topic names from entering the graph. The validation step requires slug-term overlap between each proposed value and the retrieved context string before any triple is merged. Results are cached per event URI so reruns do not consume API quota.
+Grounding the LLM in retrieved source titles and article headlines rather than training knowledge alone keeps proposals tied to evidence already in the dataset. The instructions explicitly restrict proposed_actors to named individual politicians and exclude political parties, which was the main cross-type contamination observed in early iterations where party names were entering the involvesActor relation. A code-level blocklist of institutional terms provides a second validation layer independent of the LLM. Constraining proposed_topics to a closed enum prevents hallucinated topic names from entering the graph. The validation step requires slug-term overlap between each proposed value and the retrieved context string before any triple is merged. Results are cached per event URI so reruns do not consume API quota.
 
 Used for: `src/complete_kg.py`
 
