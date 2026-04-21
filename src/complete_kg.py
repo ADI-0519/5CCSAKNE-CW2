@@ -1,4 +1,5 @@
 import argparse
+import json
 import re
 from datetime import date
 from pathlib import Path
@@ -9,9 +10,10 @@ from src.build_ontology import NEWS, SCHEMA
 from src.config import CONFIG
 from src.data_normalisation import normalise_name
 from src.domain_knowledge import (
-    POLITICAL_PARTY_NAME_SET,
     canonicalise_government_body_name,
     classify_official_body_kind,
+    is_known_political_party_name,
+    looks_like_official_body_name,
 )
 from src.json_to_rdf import organisation_uri, person_uri
 from src.openai_client import (
@@ -23,6 +25,7 @@ from src.openai_client import (
 from src.run_queries import load_kg
 
 DEFAULT_OUTPUT_PATH = Path("kg/generated/completed_kg.ttl")
+DEFAULT_AUDIT_LOG_PATH = Path("output/completion_audit.json")
 DEFAULT_INPUT_KG_CANDIDATES = (
     Path("kg/generated/prototype_kg.ttl"),
     Path("kg/generated/new_kg.ttl"),
@@ -112,8 +115,6 @@ ACTOR_BLOCKLIST = {
     "secretary",
 }
 
-NORMALISED_PARTY_NAMES = {normalise_name(name).lower() for name in POLITICAL_PARTY_NAME_SET}
-
 # retrieves articles, topics and sources linked to event through KG neighbourhood
 RAG_CONTEXT_QUERY = """
 SELECT DISTINCT ?headline ?publisherName ?topicName ?sourceTitle WHERE {
@@ -187,14 +188,6 @@ def ensure_government_body_node(graph, body_name):
     return body_uri, body_kind
 
 
-def is_political_party_name(name):
-    return normalise_name(name).lower() in NORMALISED_PARTY_NAMES
-
-
-def classify_rag_department_candidate(name):
-    return classify_official_body_kind(name)
-
-
 def parse_date_literal(value):
     if value is None:
         return None
@@ -254,6 +247,36 @@ def official_article_metadata(graph, article_uri):
         "publisher": publisher_name,
         "published_date": parse_date_literal(first_literal(graph, article_uri, NEWS.publishedDate)),
     }
+
+
+def build_completion_audit_index():
+    return {}
+
+
+def audit_entry(audit_index, event_uri):
+    key = str(event_uri)
+    if key not in audit_index:
+        audit_index[key] = {
+            "event_uri": key,
+            "matched_source_record_uri": None,
+            "match_score": None,
+            "matched_to_source_record_added": False,
+            "represented_in_official_source_added": False,
+            "rag_added_actors": [],
+            "rag_added_departments": [],
+            "rag_added_topics": [],
+        }
+    return audit_index[key]
+
+
+def save_completion_audit_log(audit_index, output_path=DEFAULT_AUDIT_LOG_PATH):
+    output_file = Path(output_path)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "entry_count": len(audit_index),
+        "entries": [audit_index[key] for key in sorted(audit_index)],
+    }
+    output_file.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def source_record_metadata(graph, record_uri):
@@ -353,17 +376,21 @@ def add_reports_on_inverse(graph):
     return added
 
 
-def enrich_cross_source_links(graph):
+def enrich_cross_source_links(graph, audit_index=None):
     official_articles, record_by_title = build_official_indexes(graph)
     added_matched = 0
     added_represented = 0
 
     for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
         event_data = event_metadata(graph, event_uri)
+        completion_entry = audit_entry(audit_index, event_uri) if audit_index is not None else None
         for source_record in event_data["already_represented"]:
             if (event_uri, NEWS.matchedToSourceRecord, source_record) not in graph:
                 graph.add((event_uri, NEWS.matchedToSourceRecord, source_record))
                 added_matched += 1
+                if completion_entry is not None:
+                    completion_entry["matched_source_record_uri"] = str(source_record)
+                    completion_entry["matched_to_source_record_added"] = True
 
         if not event_data["name"]:
             continue
@@ -383,9 +410,15 @@ def enrich_cross_source_links(graph):
         if best_match is None or best_score < 4:
             continue
 
+        if completion_entry is not None:
+            completion_entry["matched_source_record_uri"] = str(best_match)
+            completion_entry["match_score"] = best_score
+
         if (event_uri, NEWS.matchedToSourceRecord, best_match) not in graph:
             graph.add((event_uri, NEWS.matchedToSourceRecord, best_match))
             added_matched += 1
+            if completion_entry is not None:
+                completion_entry["matched_to_source_record_added"] = True
 
         if (
             best_score >= 8
@@ -393,11 +426,13 @@ def enrich_cross_source_links(graph):
         ):
             graph.add((event_uri, NEWS.representedInOfficialSource, best_match))
             added_represented += 1
+            if completion_entry is not None:
+                completion_entry["represented_in_official_source_added"] = True
 
     return added_matched, added_represented
 
 
-def enrich_with_rag(graph):
+def enrich_with_rag(graph, audit_index=None):
     added_actors = 0
     added_depts = 0
     added_topics = 0
@@ -406,8 +441,13 @@ def enrich_with_rag(graph):
     }
 
     for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
+        completion_entry = audit_entry(audit_index, event_uri) if audit_index is not None else None
         has_actor = next(graph.objects(event_uri, NEWS.involvesActor), None) is not None
         has_body = next(graph.objects(event_uri, NEWS.involvesGovernmentBody), None) is not None
+        has_department = any(
+            (body_uri, RDF.type, NEWS.GovernmentDepartment) in graph
+            for body_uri in graph.objects(event_uri, NEWS.involvesGovernmentBody)
+        )
         has_topic = next(graph.objects(event_uri, NEWS.concernsPolicyTopic), None) is not None
         if has_actor and has_body and has_topic:
             continue
@@ -483,7 +523,9 @@ def enrich_with_rag(graph):
         for name in result.get("proposed_actors", []):
             if not name or not (slug_terms(name) & context_terms):
                 continue
-            if is_political_party_name(name):
+            if is_known_political_party_name(name):
+                continue
+            if looks_like_official_body_name(name):
                 continue
             if slug_terms(name) & ACTOR_BLOCKLIST:
                 continue
@@ -491,17 +533,22 @@ def enrich_with_rag(graph):
             if (event_uri, NEWS.involvesActor, actor_uri) not in graph:
                 graph.add((event_uri, NEWS.involvesActor, actor_uri))
                 added_actors += 1
+                if completion_entry is not None:
+                    completion_entry["rag_added_actors"].append(str(actor_uri))
 
-        for name in result.get("proposed_departments", []):
-            if not name or not (slug_terms(name) & context_terms):
-                continue
-            body_kind = classify_rag_department_candidate(name)
-            if body_kind == "parliamentary_body":
-                continue
-            dept_uri, body_kind = ensure_government_body_node(graph, name)
-            if (event_uri, NEWS.involvesGovernmentBody, dept_uri) not in graph:
-                graph.add((event_uri, NEWS.involvesGovernmentBody, dept_uri))
-                added_depts += 1
+        if not has_department:
+            for name in result.get("proposed_departments", []):
+                if not name or not (slug_terms(name) & context_terms):
+                    continue
+                body_kind = classify_official_body_kind(name)
+                if body_kind == "parliamentary_body":
+                    continue
+                dept_uri, body_kind = ensure_government_body_node(graph, name)
+                if (event_uri, NEWS.involvesGovernmentBody, dept_uri) not in graph:
+                    graph.add((event_uri, NEWS.involvesGovernmentBody, dept_uri))
+                    added_depts += 1
+                    if completion_entry is not None:
+                        completion_entry["rag_added_departments"].append(str(dept_uri))
 
         for name in result.get("proposed_topics", []):
             topic_uri = topic_index.get(name)
@@ -510,20 +557,23 @@ def enrich_with_rag(graph):
             if (event_uri, NEWS.concernsPolicyTopic, topic_uri) not in graph:
                 graph.add((event_uri, NEWS.concernsPolicyTopic, topic_uri))
                 added_topics += 1
+                if completion_entry is not None:
+                    completion_entry["rag_added_topics"].append(str(topic_uri))
 
     return added_actors, added_depts, added_topics
 
 
-def enrich_graph(graph):
+def enrich_graph(graph, audit_log_path=None):
     enriched = Graph()
     for prefix, namespace in graph.namespace_manager.namespaces():
         enriched.bind(prefix, namespace)
     for triple in graph:
         enriched.add(triple)
 
+    completion_audit = build_completion_audit_index()
     inverse_count = add_reports_on_inverse(enriched)
-    matched_count, represented_count = enrich_cross_source_links(enriched)
-    actor_count, dept_count, topic_count = enrich_with_rag(enriched)
+    matched_count, represented_count = enrich_cross_source_links(enriched, completion_audit)
+    actor_count, dept_count, topic_count = enrich_with_rag(enriched, completion_audit)
 
     if inverse_count:
         print(f"[COMPLETE] Added {inverse_count} reportsOn inverse links.")
@@ -534,6 +584,9 @@ def enrich_graph(graph):
     print(
         f"[COMPLETE] RAG: added {actor_count} actor links, {dept_count} department links, {topic_count} topic links."
     )
+
+    if audit_log_path is not None:
+        save_completion_audit_log(completion_audit, audit_log_path)
 
     return enriched
 
