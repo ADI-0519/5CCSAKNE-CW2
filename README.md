@@ -33,6 +33,9 @@ UK parliamentary and government policy events reported in UK news between March 
 pip install -r requirements.txt
 pre-commit install
 ```
+```bash
+python -m spacy download en_core_web_sm
+```
 
 3. Copy `.env.example` to `.env` and fill in API keys (optional for cached runs):
 
