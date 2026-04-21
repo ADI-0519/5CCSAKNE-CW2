@@ -3,11 +3,17 @@ import re
 from datetime import date
 from pathlib import Path
 
-from rdflib import RDF, Graph
+from rdflib import RDF, Graph, Literal
 
 from src.build_ontology import NEWS, SCHEMA
 from src.config import CONFIG
 from src.data_normalisation import normalise_name
+from src.domain_knowledge import (
+    POLITICAL_PARTY_NAME_SET,
+    canonicalise_government_body_name,
+    classify_official_body_kind,
+)
+from src.json_to_rdf import organisation_uri, person_uri
 from src.openai_client import (
     build_cache_path,
     load_cache_payload,
@@ -69,8 +75,8 @@ RAG_INSTRUCTIONS = (
     "You are completing a UK politics knowledge graph. Given a policy event and "
     "retrieved source context, propose missing property values using only the "
     "declared vocabulary. Do not invent names not supported by the context. "
-    "proposed_actors must be named individual politicians or political parties only, "
-    "not departments, roles, or generic labels such as 'UK Government'. "
+    "proposed_actors must be named individual politicians only, "
+    "not political parties, departments, roles, or generic labels such as 'UK Government'. "
     "proposed_departments must be named UK government departments or official bodies only. "
     "proposed_topics must be chosen only from this list: "
     + str(sorted(CONFIG["TOPIC_GROUPS"].keys()))
@@ -78,11 +84,11 @@ RAG_INSTRUCTIONS = (
     "Prefer specific topics over Government Policy, which should only be used "
     "when no other topic applies. "
     "Example of correct output: "
-    '{"proposed_actors": ["Keir Starmer", "Labour Party"], '
+    '{"proposed_actors": ["Keir Starmer"], '
     '"proposed_departments": ["Home Office"], '
     '"proposed_topics": ["Housing", "Government Policy"]}. '
     "Example of incorrect output: "
-    '{"proposed_actors": ["UK Government", "Secretary of State"], '
+    '{"proposed_actors": ["Labour Party", "UK Government", "Secretary of State"], '
     '"proposed_departments": [], "proposed_topics": []}. '
     "Return only JSON."
 )
@@ -105,6 +111,8 @@ ACTOR_BLOCKLIST = {
     "regulator",
     "secretary",
 }
+
+NORMALISED_PARTY_NAMES = {normalise_name(name).lower() for name in POLITICAL_PARTY_NAME_SET}
 
 # retrieves articles, topics and sources linked to event through KG neighbourhood
 RAG_CONTEXT_QUERY = """
@@ -152,6 +160,39 @@ def first_literal(graph, subject, predicate):
 def text_value(graph, subject, predicate):
     literal = first_literal(graph, subject, predicate)
     return "" if literal is None else normalized_text(str(literal))
+
+
+def ensure_actor_node(graph, actor_name):
+    actor_uri = person_uri(actor_name)
+    graph.add((actor_uri, RDF.type, NEWS.PoliticalActor))
+    graph.add((actor_uri, RDF.type, SCHEMA.Person))
+    graph.add((actor_uri, SCHEMA.name, Literal(actor_name)))
+    return actor_uri
+
+
+def ensure_government_body_node(graph, body_name):
+    canonical_name = canonicalise_government_body_name(body_name) or body_name
+    body_uri = organisation_uri(canonical_name)
+    body_kind = classify_official_body_kind(canonical_name)
+
+    graph.add((body_uri, RDF.type, NEWS.OfficialBody))
+    if body_kind == "parliamentary_body":
+        graph.add((body_uri, RDF.type, NEWS.ParliamentaryBody))
+    elif body_kind == "government_department":
+        graph.add((body_uri, RDF.type, NEWS.GovernmentDepartment))
+        graph.add((body_uri, RDF.type, NEWS.GovernmentBody))
+    else:
+        graph.add((body_uri, RDF.type, NEWS.GovernmentBody))
+    graph.add((body_uri, SCHEMA.name, Literal(canonical_name)))
+    return body_uri, body_kind
+
+
+def is_political_party_name(name):
+    return normalise_name(name).lower() in NORMALISED_PARTY_NAMES
+
+
+def classify_rag_department_candidate(name):
+    return classify_official_body_kind(name)
 
 
 def parse_date_literal(value):
@@ -227,6 +268,8 @@ def score_event_to_official_match(event_data, official_article, source_record):
     event_terms = slug_terms(event_data["name"])
     headline_terms = slug_terms(official_article["headline"])
     shared_terms = event_terms & headline_terms
+    source_title_terms = slug_terms(source_record["title"])
+    shared_source_terms = event_terms & source_title_terms
 
     headline_score = 0
     if event_data["name"] and official_article["headline"]:
@@ -247,6 +290,8 @@ def score_event_to_official_match(event_data, official_article, source_record):
     if source_record["title"]:
         if event_data["name"] and event_data["name"].lower() == source_record["title"].lower():
             source_title_score += 5
+        elif event_data["name"] and event_data["name"].lower() in source_record["title"].lower():
+            source_title_score += 2
 
     date_score = 0
     if event_data["event_date"] and official_article["published_date"]:
@@ -263,10 +308,24 @@ def score_event_to_official_match(event_data, official_article, source_record):
         headline_lower = official_article["headline"].lower()
         topic_bonus = sum(1 for topic in event_data["topics"] if topic.lower() in headline_lower)
 
-    if not shared_terms and headline_score == 0 and source_title_score == 0:
+    exact_or_strong_lexical_match = (
+        headline_score >= 5
+        or source_title_score >= 5
+        or len(shared_terms) >= 2
+        or len(shared_source_terms) >= 2
+    )
+
+    if not exact_or_strong_lexical_match:
         return -1
 
-    return (len(shared_terms) * 2) + headline_score + source_title_score + date_score + topic_bonus
+    return (
+        (len(shared_terms) * 2)
+        + len(shared_source_terms)
+        + headline_score
+        + source_title_score
+        + date_score
+        + topic_bonus
+    )
 
 
 def build_official_indexes(graph):
@@ -424,10 +483,11 @@ def enrich_with_rag(graph):
         for name in result.get("proposed_actors", []):
             if not name or not (slug_terms(name) & context_terms):
                 continue
+            if is_political_party_name(name):
+                continue
             if slug_terms(name) & ACTOR_BLOCKLIST:
                 continue
-            actor_slug = re.sub(r"[^a-z0-9]+", "_", normalise_name(name).lower()).strip("_")
-            actor_uri = NEWS[actor_slug]
+            actor_uri = ensure_actor_node(graph, name)
             if (event_uri, NEWS.involvesActor, actor_uri) not in graph:
                 graph.add((event_uri, NEWS.involvesActor, actor_uri))
                 added_actors += 1
@@ -435,8 +495,10 @@ def enrich_with_rag(graph):
         for name in result.get("proposed_departments", []):
             if not name or not (slug_terms(name) & context_terms):
                 continue
-            dept_slug = re.sub(r"[^a-z0-9]+", "_", normalise_name(name).lower()).strip("_")
-            dept_uri = NEWS[dept_slug]
+            body_kind = classify_rag_department_candidate(name)
+            if body_kind == "parliamentary_body":
+                continue
+            dept_uri, body_kind = ensure_government_body_node(graph, name)
             if (event_uri, NEWS.involvesGovernmentBody, dept_uri) not in graph:
                 graph.add((event_uri, NEWS.involvesGovernmentBody, dept_uri))
                 added_depts += 1
