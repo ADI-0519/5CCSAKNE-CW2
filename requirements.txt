@@ -3,6 +3,7 @@ python-dotenv
 rdflib
 pyyaml
 openai
+oxrdflib
 
 # Test dependencies
 pytest

@@ -1,32 +1,69 @@
 # CQ Coverage Table
 
-This table records how each competency question maps to the current pipeline and what results it produces. The support assessment reflects the final pipeline state, including Wikidata-based entity typing and OpenAI-assisted triple completion. All 20 queries return results.
+This table records which sources and pipeline steps support each competency question.
+
+## Source and completion coverage
+
+| CQ | Title (brief) | Primary property tested | Guardian | Parliament | GOV.UK | Wikidata | Completion step |
+|---|---|---|---|---|---|---|---|
+| CQ01 | Debates by topic | `news:concernsPolicyTopic` | partial | yes | - | - | concernsPolicyTopic (RAG) |
+| CQ02 | Statements by department | `news:issuedByDepartment` | partial | yes | yes | partial | |
+| CQ03 | Actors in multiple events | `news:involvesActor` | yes | partial | partial | yes | involvesActor (RAG) |
+| CQ04 | Events in official sources | `news:representedInOfficialSource` | yes | yes | yes | - | matchedToSourceRecord |
+| CQ05 | Topics shared across event types | `news:concernsPolicyTopic` | partial | yes | yes | - | concernsPolicyTopic (RAG) |
+| CQ06 | Parliamentary bodies by topic | `news:occursInParliamentaryBody` | partial | yes | - | - | concernsPolicyTopic (RAG) |
+| CQ07 | Departments by event count | `news:involvesGovernmentBody` | partial | partial | yes | yes | involvesGovernmentBody (RAG) |
+| CQ08 | Parties spanning multiple topics | `news:memberOfParty` | partial | partial | partial | yes | involvesActor (RAG) |
+| CQ09 | Events lacking institution or topic | `news:reportedByArticle` | yes | partial | partial | - | |
+| CQ10 | Topics by reported event frequency | `news:concernsPolicyTopic` | yes | yes | yes | - | concernsPolicyTopic (RAG) |
+| CQ11 | Official events with department | `news:representedInOfficialSource` | partial | yes | yes | - | involvesGovernmentBody (RAG) |
+| CQ12 | Topics on officially sourced events | `news:concernsPolicyTopic` | partial | yes | yes | - | concernsPolicyTopic (RAG) |
+| CQ13 | Co-occurring topic pairs | `news:concernsPolicyTopic` | partial | partial | partial | - | concernsPolicyTopic (RAG) |
+| CQ14 | Topics by event type count | `news:concernsPolicyTopic` | partial | yes | yes | - | concernsPolicyTopic (RAG) |
+| CQ15 | Locations with multiple events | `news:occursInLocation` | yes | partial | partial | - | |
+| CQ16 | Actors spanning two or more topics | `news:involvesActor` | partial | partial | partial | yes | involvesActor (RAG) |
+| CQ17 | Journalists covering department events | `news:hasAuthor` | yes | - | - | - | involvesGovernmentBody (RAG) |
+| CQ18 | Topics with both actor and body | `news:involvesActor` | partial | partial | partial | partial | involvesActor (RAG) |
+| CQ19 | Topics shared by debates and statements | `news:concernsPolicyTopic` | partial | yes | partial | - | concernsPolicyTopic (RAG) |
+| CQ20 | Departments by topic breadth | `news:involvesGovernmentBody` | partial | partial | yes | yes | involvesGovernmentBody (RAG) |
+
+## Query results
+
+Counts come from running the current query set against the latest validated completed KG from `20260420T220006Z`, where all `20/20` queries returned at least one row.
 
 Classification legend:
 
-- `Answered`: query returns clean, meaningful results grounded in well-populated data.
-- `Answered (noisy)`: query returns results but the underlying data has known quality issues such as over-extraction, heuristic links, or unvalidated classifications.
-- `Partial`: query returns results but only for a subset of the intended question due to data gaps.
+- `Answered`: query returns meaningful rows using well-populated ontology terms.
+- `Answered (soft)`: query returns rows, but answer quality still depends on residual extraction noise or generic event labels.
+- `Diagnostic`: query is intended to expose incompleteness rather than produce only polished answers.
 
 | CQ | Classification | Result count | Notes |
-| --- | --- | --- | --- |
-| CQ01 | Answered (noisy) | 128 | journalist-author deduplication is weak; Guardian bylines include appended job titles |
-| CQ02 | Answered | 2 | Guardian and one NewsAPI source pass the politics-section filter |
-| CQ03 | Answered (noisy) | 1860 | person entity list is now cleaner after extraction fixes; count reduction from 2261 reflects removal of spurious nav-phrase entries |
-| CQ04 | Answered (noisy) | 534 | PoliticalParty typing from Wikidata; not all article-extracted mentions resolved |
-| CQ05 | Answered (noisy) | 200 | GovernmentBody typing from Wikidata; article-level classification still heuristic |
-| CQ06 | Answered (noisy) | 11 | sentiment from combined heuristic and OpenAI completion; not validated against ground truth |
-| CQ07 | Answered | 14 | topic coverage is flat with no hierarchy |
-| CQ08 | Answered | 246 | direct metadata mapping, no extraction needed |
-| CQ09 | Answered | 2 | one row per article group, clean comparison |
-| CQ10 | Answered (noisy) | 314 | follow-up links are heuristic; count reduction from 378 reflects removal of links grounded in spurious events |
-| CQ11 | Answered (noisy) | 15 | worksFor derived per-article, not from canonical journalist profiles |
-| CQ12 | Answered (noisy) | 25 | live-blog classification now locked by structural title/URL signals; body-keyword-only cases remain heuristic |
-| CQ13 | Answered (noisy) | 383 | location extraction is regex-based and still noisy in long-form live blog articles |
-| CQ14 | Answered | 239 | metadata-driven, reliable |
-| CQ15 | Answered | 251 | both person and organisation triples well-populated; slight reduction reflects articles that had only spurious person mentions |
-| CQ16 | Answered (noisy) | 2 | Guardian-dominant dataset limits publisher range |
-| CQ17 | Answered (noisy) | 30500 | combinatorial co-mention space; count reduction from 36755 reflects removal of spurious person nodes, not loss of real data |
-| CQ18 | Answered (noisy) | 52 | event location matching is string comparison only; slight increase reflects more policy events correctly assigned London location |
-| CQ19 | Answered (noisy) | 5 | event canonicalisation is heuristic |
-| CQ20 | Answered (noisy) | 1249 | politician and party typing from Wikidata; article-level co-mention is reliable |
+| --- | --- | ---: | --- |
+| CQ01 | Answered | 15 | Parliamentary debates are linked to policy topics and dates, mainly through PMQs-style records. |
+| CQ02 | Answered | 24 | Ministerial statements are linked to issuing government departments through official-source records. |
+| CQ03 | Answered (soft) | 9 | Political-actor extraction is useful but still depends on partial actor disambiguation. |
+| CQ04 | Answered | 233 | Confirms events can be both reported by news articles and represented in official source records. |
+| CQ05 | Answered | 3 | Shows shared policy topics across parliamentary and government policy events. |
+| CQ06 | Answered (soft) | 4 | Parliamentary-body links are populated, but some rows still use generic Parliamentary Debate labels. |
+| CQ07 | Answered | 8 | Government departments can be ranked by linked policy-event count. |
+| CQ08 | Answered (soft) | 4 | Party membership depends on actor-party typing quality and Wikidata enrichment. |
+| CQ09 | Diagnostic | 123 | Intentionally identifies reported events still missing a government body, parliamentary body, or topic; count fell from 193 to 123 as the RAG step filled in more links. |
+| CQ10 | Answered | 12 | Policy-topic frequency query over reported parliamentary and government policy events. |
+| CQ11 | Answered | 81 | Cross-source question requiring both official-source representation and a department link; the involvesGovernmentBody RAG step is what makes most rows appear. |
+| CQ12 | Answered | 11 | Topic aggregation over officially evidenced events; concernsPolicyTopic links from the RAG step significantly extend the result set. |
+| CQ13 | Answered | 41 | Topic co-occurrence query exercises event-topic self-joins. |
+| CQ14 | Answered | 12 | Comparative parliamentary-versus-government topic coverage query; now includes government-only topics as well. |
+| CQ15 | Answered (soft) | 6 | Location aggregation is supported, though event-location assignment remains conservative. |
+| CQ16 | Answered (soft) | 6 | Actor-party-topic aggregation works; result count depends partly on involvesActor links added by the RAG step. |
+| CQ17 | Answered (soft) | 6 | Journalist-to-article-to-event-to-department retrieval works, though it remains a softer, article-facing evaluation query. |
+| CQ18 | Answered | 9 | Finds topics on events involving both actors and government bodies; both involvesActor and involvesGovernmentBody are partly RAG-added. |
+| CQ19 | Answered (soft) | 1 | Date-and-topic overlap between parliamentary events and ministerial statements works, but still relies on some generic parliamentary-event labels. |
+| CQ20 | Answered | 8 | Ranks departments by distinct policy-topic breadth across linked events. |
+
+## Summary
+
+- Query coverage: `20/20`
+- Most robust areas: official source records, event-topic links, event-institution links, article-event reporting links.
+- Main residual risk: extraction precision and event canonicalisation, not ontology/query alignment.
+- Important correction since earlier versions: `CQ14` now counts both parliamentary and government coverage per topic without dropping government-only topics.
+- CQ11 and CQ12 now depend on RAG-added triples; their row counts reflect completion enrichment, not just extraction output.

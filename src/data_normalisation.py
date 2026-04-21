@@ -5,8 +5,49 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from src.config import CONFIG
+from src.govuk_scope import govuk_result_is_in_scope
 
 CONTROLLED_PREDICATES = CONFIG["CONTROLLED_PREDICATES"]
+
+MOJIBAKE_MARKERS = ("\u00c3", "\u00c2", "\u00e2\u20ac")
+MOJIBAKE_REPLACEMENTS = {
+    "\u00e2\u20ac\u2122": "\u2019",
+    "\u00e2\u20ac\u2018": "\u2018",
+    "\u00e2\u20ac\u0153": "\u201c",
+    "\u00e2\u20ac\x9d": "\u201d",
+    "\u00e2\u20ac\u201c": "\u2013",
+    "\u00e2\u20ac\u201d": "\u2014",
+    "\u00e2\u20ac\u00a6": "\u2026",
+    "\u00c2\u00a0": " ",
+}
+
+
+def mojibake_score(text):
+    return sum(str(text).count(marker) for marker in MOJIBAKE_MARKERS)
+
+
+def repair_common_mojibake(text):
+    repaired = str(text)
+    best = repaired
+    best_score = mojibake_score(repaired)
+
+    for _ in range(2):
+        try:
+            candidate = repaired.encode("latin-1").decode("utf-8")
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            break
+        candidate_score = mojibake_score(candidate)
+        if candidate_score < best_score:
+            best = candidate
+            best_score = candidate_score
+            repaired = candidate
+        else:
+            break
+
+    for broken, fixed in MOJIBAKE_REPLACEMENTS.items():
+        best = best.replace(broken, fixed)
+
+    return best
 
 
 def build_stable_id(url, title, published_at):
@@ -17,14 +58,15 @@ def build_stable_id(url, title, published_at):
 def normalise_name(name):
     if not name:
         return ""
-    return " ".join(str(name).strip().split())
+    repaired = repair_common_mojibake(name)
+    return " ".join(str(repaired).strip().split())
 
 
 def canonicalise_date(date_str):
     if not date_str:
         raise ValueError(f"Cannot parse date: {date_str!r}")
 
-    for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%d"):
+    for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
         try:
             dt = datetime.strptime(date_str, fmt)
             if dt.tzinfo is None:
@@ -33,6 +75,12 @@ def canonicalise_date(date_str):
         except ValueError:
             continue
     raise ValueError(f"Cannot parse date: {date_str!r}")
+
+
+def is_within_configured_window(date_str):
+    canonical = canonicalise_date(str(date_str))
+    date_only = canonical[:10]
+    return CONFIG["date_start"] <= date_only <= CONFIG["date_end"]
 
 
 def is_valid_url(url):
@@ -63,26 +111,6 @@ def count_words(text):
 def contains_scope_term(text, scope_terms):
     lowered = str(text or "").lower()
     return any(term in lowered for term in scope_terms)
-
-
-def is_relevant_newsapi_article(article):
-    source_name = normalise_name((article.get("source") or {}).get("name"))
-    if not source_name:
-        return False
-    if source_name not in CONFIG["NEWSAPI_ALLOWED_SOURCES"]:
-        return False
-    if source_name in CONFIG["NEWSAPI_BLOCKED_SOURCES"]:
-        return False
-
-    title = normalise_name(article.get("title"))
-    description = normalise_name(article.get("description"))
-    content = normalise_name(article.get("content"))
-    combined_text = " ".join(part for part in (title, description, content) if part)
-    if not combined_text:
-        return False
-
-    scope_terms = CONFIG["NEWSAPI_UK_SCOPE_TERMS"]
-    return contains_scope_term(combined_text, scope_terms)
 
 
 def normalise_relations(relations, record_index):
@@ -139,51 +167,194 @@ def guardian_content(article):
     return normalise_name(fields.get("bodyText"))
 
 
-def normalise_newsapi_articles(raw_data):
-    articles = raw_data.get("articles", [])
+def _first_present(mapping, keys, default=None):
+    for key in keys:
+        value = mapping.get(key)
+        if value not in (None, ""):
+            return value
+    return default
+
+
+def _coerce_iterable(value):
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
+def _normalise_search_result_url(value):
+    value = normalise_name(value)
+    if not value:
+        return ""
+    if value.startswith("http://") or value.startswith("https://"):
+        return value
+    if value.startswith("/"):
+        return f"https://www.gov.uk{value}"
+    return f"https://www.gov.uk/{value.lstrip('/')}"
+
+
+def _extract_text_fragments(value):
+    if isinstance(value, str):
+        cleaned = normalise_name(value)
+        return [cleaned] if cleaned else []
+    if isinstance(value, dict):
+        fragments = []
+        for item in value.values():
+            fragments.extend(_extract_text_fragments(item))
+        return fragments
+    if isinstance(value, list):
+        fragments = []
+        for item in value:
+            fragments.extend(_extract_text_fragments(item))
+        return fragments
+    return []
+
+
+def normalise_parliament_records(raw_data):
+    response = raw_data.get("response") or {}
+    candidates = []
+
+    if isinstance(response, dict):
+        if isinstance(response.get("results"), list):
+            candidates = response["results"]
+        elif isinstance(response.get("items"), list):
+            candidates = response["items"]
+        elif isinstance(response.get("value"), list):
+            candidates = response["value"]
+    elif isinstance(response, list):
+        candidates = response
+
     normalised = []
+    for item in candidates:
+        if not isinstance(item, dict):
+            continue
 
-    for i, article in enumerate(articles):
-        title = normalise_name(article.get("title"))
-        url = article.get("url") or ""
-        published_at = article.get("publishedAt") or ""
-        source_name = normalise_name((article.get("source") or {}).get("name"))
+        title = normalise_name(
+            _first_present(item, ["title", "name", "displayTitle", "sortTitle", "subject"])
+        )
+        url = _first_present(item, ["url", "webUrl", "link", "uri"], "") or ""
+        published_at = _first_present(
+            item,
+            [
+                "date",
+                "publishedAt",
+                "published_at",
+                "startDate",
+                "sittingDate",
+                "value",
+                "updated",
+            ],
+        )
 
-        if not title or not url or not published_at or not source_name:
+        if not title or not url or not published_at:
             continue
         if not is_valid_url(url):
             continue
-        if not is_relevant_newsapi_article(article):
+        if not is_within_configured_window(published_at):
             continue
 
-        summary = normalise_name(article.get("description"))
-        content = normalise_name(article.get("content"))
-        author = normalise_name(article.get("author"))
-        section = ""
-        updated_at = None
-        tags = []
-        text_for_word_count = content or summary or title
+        tags = deduplicate_list(
+            _extract_text_fragments(item.get("tags"))
+            + _extract_text_fragments(item.get("topics"))
+            + _extract_text_fragments(item.get("keywords"))
+            + _extract_text_fragments(item.get("houses"))
+        )
+
+        summary = normalise_name(
+            _first_present(item, ["summary", "description", "snippet", "excerpt"], "")
+        )
+        content_fragments = []
+        for key in ("content", "body", "abstract", "resultDescription", "description"):
+            content_fragments.extend(_extract_text_fragments(item.get(key)))
+        content = normalise_name(" ".join(content_fragments)) or None
+
+        body_name = normalise_name(
+            _first_present(
+                item,
+                ["house", "houseName", "chamber", "section", "category", "bodyName"],
+                "",
+            )
+        )
 
         normalised.append(
             {
                 "id": build_stable_id(url, title, published_at),
-                "source_system": "newsapi",
-                "source_name": source_name,
+                "source_system": "parliament",
+                "source_name": "UK Parliament",
                 "title": title,
                 "url": url,
-                "published_at": canonicalise_date(published_at),
-                "updated_at": updated_at,
-                "author": author or None,
-                "section": section or None,
+                "published_at": canonicalise_date(str(published_at)),
+                "updated_at": None,
+                "author": None,
+                "section": body_name or None,
                 "summary": summary or None,
-                "content": content or None,
+                "content": content,
                 "tags": tags,
-                "word_count": count_words(text_for_word_count),
-                "raw_article_type_hint": None,
+                "word_count": count_words(content or summary or title),
+                "raw_article_type_hint": "NewsArticle",
             }
         )
 
-    print(f"[NORMALISE] Normalised {len(normalised)} NewsAPI articles.")
+    print(f"[NORMALISE] Normalised {len(normalised)} Parliament source records.")
+    return normalised
+
+
+def normalise_govuk_records(raw_data):
+    response = raw_data.get("response") or {}
+    results = response.get("results", []) if isinstance(response, dict) else []
+    normalised = []
+
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+
+        title = normalise_name(_first_present(item, ["title"]))
+        url = _normalise_search_result_url(_first_present(item, ["link", "base_path", "url"], ""))
+        published_at = _first_present(item, ["public_timestamp", "timestamp", "updated_at"])
+
+        if not title or not url or not published_at:
+            continue
+        if not is_valid_url(url):
+            continue
+        if not is_within_configured_window(published_at):
+            continue
+        if not govuk_result_is_in_scope(item):
+            continue
+
+        format_label = normalise_name(_first_present(item, ["format"]))
+        document_type = normalise_name(_first_present(item, ["document_type"]))
+        section = format_label or document_type or None
+
+        tags = deduplicate_list(
+            [format_label, document_type]
+            + _extract_text_fragments(item.get("organisations"))
+            + _extract_text_fragments(item.get("government_name"))
+        )
+
+        summary = normalise_name(_first_present(item, ["description"], ""))
+        content = summary or None
+
+        normalised.append(
+            {
+                "id": build_stable_id(url, title, published_at),
+                "source_system": "govuk",
+                "source_name": "GOV.UK",
+                "title": title,
+                "url": url,
+                "published_at": canonicalise_date(str(published_at)),
+                "updated_at": None,
+                "author": None,
+                "section": section,
+                "summary": summary or None,
+                "content": content,
+                "tags": tags,
+                "word_count": count_words(content or title),
+                "raw_article_type_hint": "NewsArticle",
+            }
+        )
+
+    print(f"[NORMALISE] Normalised {len(normalised)} GOV.UK source records.")
     return normalised
 
 
@@ -201,6 +372,8 @@ def normalise_guardian_articles(raw_data):
         if not title or not url or not published_at:
             continue
         if not is_valid_url(url):
+            continue
+        if not is_within_configured_window(published_at):
             continue
 
         fields = article.get("fields") or {}
@@ -246,9 +419,10 @@ def normalise_guardian_articles(raw_data):
 
 def normalise_collected_sources(collected_data):
     sources = collected_data.get("sources", {})
-    newsapi_records = normalise_newsapi_articles(sources.get("newsapi") or {})
     guardian_records = normalise_guardian_articles(sources.get("guardian") or {})
-    combined = guardian_records + newsapi_records
+    parliament_records = normalise_parliament_records(sources.get("parliament") or {})
+    govuk_records = normalise_govuk_records(sources.get("govuk") or {})
+    combined = guardian_records + parliament_records + govuk_records
 
     seen_ids = set()
     deduped = []

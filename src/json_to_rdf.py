@@ -3,16 +3,49 @@ from datetime import date as _date
 
 from rdflib import RDF, XSD, Graph, Literal, Namespace
 
+from src.data_normalisation import normalise_name
+
 NEWS = Namespace("http://example.org/news#")
 SCHEMA = Namespace("https://schema.org/")
 
+OFFICIAL_SOURCE_SYSTEMS = {"parliament", "hansard", "govuk", "gov.uk"}
+GENERIC_EVENT_NAMES = {
+    "Budget",
+    "Election",
+    "Policy Announcement",
+    "Parliamentary Debate",
+    "Ministerial Statement",
+}
+DEPARTMENT_KEYWORDS = {
+    "department",
+    "office",
+    "treasury",
+    "ministry",
+    "cabinet",
+    "home office",
+    "foreign office",
+    "department for",
+}
+PARLIAMENTARY_BODY_KEYWORDS = {
+    "commons",
+    "lords",
+    "parliament",
+    "committee",
+    "house of commons",
+    "house of lords",
+}
+
 
 def slugify(text):
-    return re.sub(r"[^a-zA-Z0-9_-]", "_", str(text).strip())
+    return re.sub(r"[^a-zA-Z0-9_-]", "_", normalise_name(text).strip())
 
 
 def article_uri(article_id):
     return NEWS[f"article/{slugify(article_id)}"]
+
+
+def source_record_uri(source_system, record_id):
+    return NEWS[f"source-record/{slugify(source_system)}/{slugify(record_id)}"]
 
 
 def person_uri(name):
@@ -49,24 +82,16 @@ def normalise_event_date(value):
     return candidate
 
 
-# names extraction uses as fallback placeholders rather than specific event names
-GENERIC_EVENT_NAMES = {"Budget", "Election", "Policy Announcement"}
-
-
 def event_uri(event_name, event_date=None, event_location=None, article_id=None):
     key_parts = [slugify(event_name)]
-    normalized_date = normalise_event_date(event_date)
-    if normalized_date:
-        key_parts.append(slugify(normalized_date))
+    normalised_date = normalise_event_date(event_date)
+    if normalised_date:
+        key_parts.append(slugify(normalised_date))
     if event_location:
         key_parts.append(slugify(event_location))
     if article_id and event_name in GENERIC_EVENT_NAMES:
         key_parts.append(str(article_id)[:8])
     return NEWS[f"event/{'_'.join(key_parts)}"]
-
-
-def sentiment_uri(name):
-    return NEWS[slugify(name)]
 
 
 def add_literal(graph, subject, predicate, value, datatype=None):
@@ -82,89 +107,222 @@ def add_name(graph, subject, name):
     add_literal(graph, subject, SCHEMA.name, name)
 
 
-def event_name_keywords(text):
-    return {token.lower() for token in re.findall(r"[A-Za-z][A-Za-z'-]+", str(text or ""))}
-
-
-def canonical_event_name(event, record):
-    raw_name = str(event.get("name") or "").strip()
-    if not raw_name:
-        return ""
-
-    lowered_name = raw_name.lower()
-    event_type = str(event.get("type") or "NewsEvent").strip()
-    topics = {str(topic).strip() for topic in (record.get("entities", {}) or {}).get("topics", [])}
-    headline = str(record.get("title") or "")
-    summary = str(record.get("summary") or "")
-    keywords = event_name_keywords(" ".join([raw_name, headline, summary]))
-
-    if "spending review" in lowered_name:
-        return "Spending Review"
-    if "spring statement" in lowered_name:
-        return "Spring Statement"
-    if "budget" in keywords or "budget" in lowered_name:
-        return "Budget"
-    if (
-        "election" in keywords
-        or "campaign" in keywords
-        or "poll" in keywords
-        or "Election" in topics
-    ):
-        return "Election"
-    if (
-        "vote" in keywords
-        or "pmqs" in keywords
-        or "parliamentary" in keywords
-        or "debate" in keywords
-        or "Parliament" in topics
-    ):
-        return "Parliamentary Vote"
-    # only use generic fallbacks when raw_name is already placeholder, not extracted specific name
-    if raw_name in {"Budget", "Policy Announcement", "Election", "News Event"}:
-        if event_type == "EconomicEvent" and (
-            {"Economic Policy", "Public Spending", "Taxation"} & topics
-        ):
-            return "Budget"
-        if event_type == "PoliticalEvent" and (
-            {"Government Policy", "Parliament", "Immigration", "Healthcare"} & topics
-        ):
-            return "Policy Announcement"
-
-    return raw_name
-
-
 def bind_namespaces(graph):
     graph.bind("news", NEWS)
     graph.bind("schema", SCHEMA)
 
 
-def add_sentiment_scheme(graph):
-    for label in ("Positive", "Negative", "Neutral"):
-        uri = sentiment_uri(label)
-        graph.add((uri, RDF.type, NEWS.Sentiment))
-        add_name(graph, uri, label)
+def event_name_keywords(text):
+    cleaned = normalise_name(text or "")
+    return {token.lower() for token in re.findall(r"[A-Za-z][A-Za-z'-]+", cleaned)}
+
+
+def event_context_text(record, event):
+    parts = [
+        event.get("name"),
+        record.get("title"),
+        record.get("summary"),
+        record.get("section"),
+        " ".join(record.get("tags") or []),
+    ]
+    return normalise_name(" ".join(str(part) for part in parts if part)).lower()
+
+
+def alias_terms(name):
+    lowered = normalise_name(name).lower()
+    aliases = {lowered}
+    if lowered.startswith("the "):
+        aliases.add(lowered.removeprefix("the "))
+    if lowered == "house of commons":
+        aliases.update({"commons", "house of commons", "pmqs", "prime minister's questions"})
+    elif lowered == "house of lords":
+        aliases.update({"lords", "house of lords"})
+    elif lowered == "parliament":
+        aliases.update({"parliament", "westminster"})
+    elif lowered.startswith("department for "):
+        aliases.add(lowered.replace("department for ", "", 1))
+    elif lowered.startswith("department of "):
+        aliases.add(lowered.replace("department of ", "", 1))
+    elif lowered.startswith("ministry of "):
+        aliases.add(lowered.replace("ministry of ", "", 1))
+    return aliases
+
+
+def entity_matches_context(name, context_text):
+    aliases = alias_terms(name)
+    return any(alias and alias in context_text for alias in aliases)
+
+
+def canonical_event_name(event, record):
+    raw_name = normalise_name(event.get("name") or "")
+    if not raw_name:
+        return ""
+
+    lowered_name = raw_name.lower()
+    raw_keywords = event_name_keywords(raw_name)
+    event_type = str(event.get("type") or "").strip()
+    topics = {str(topic).strip() for topic in ((record.get("entities") or {}).get("topics") or [])}
+    headline = str(record.get("title") or "")
+    summary = str(record.get("summary") or "")
+    context_keywords = event_name_keywords(" ".join([headline, summary]))
+
+    if "spending review" in lowered_name:
+        return "Spending Review"
+    if "spring statement" in lowered_name:
+        return "Spring Statement"
+    if "orgreave" in lowered_name and "inquiry" in lowered_name:
+        return "Orgreave Inquiry"
+    if "prime minister's questions" in lowered_name or "pmqs" in lowered_name:
+        return "Prime Minister's Questions"
+    if (
+        "debate" in raw_keywords
+        or "pmqs" in raw_keywords
+        or "commons" in raw_keywords
+        or "lords" in raw_keywords
+    ):
+        return "Parliamentary Debate"
+    if "statement" in raw_keywords and (
+        "ministerial" in raw_keywords or "minister" in raw_keywords or "department" in raw_keywords
+    ):
+        return "Ministerial Statement"
+    if "budget" in raw_keywords or "budget" in lowered_name:
+        return "Budget"
+    if "election" in raw_keywords or "campaign" in raw_keywords or "poll" in raw_keywords:
+        return "Election"
+
+    # use broader article context only as a fallback when the event label itself is generic
+    if raw_name in {"Policy Announcement", "News Event", "Event"}:
+        if "budget" in context_keywords:
+            return "Budget"
+        if (
+            "election" in context_keywords
+            or "campaign" in context_keywords
+            or "poll" in context_keywords
+        ):
+            return "Election"
+        if (
+            "debate" in context_keywords
+            or "pmqs" in context_keywords
+            or "commons" in context_keywords
+            or "lords" in context_keywords
+        ):
+            return "Parliamentary Debate"
+        if "statement" in context_keywords and (
+            "ministerial" in context_keywords
+            or "minister" in context_keywords
+            or "department" in context_keywords
+        ):
+            return "Ministerial Statement"
+
+    if raw_name in {"Policy Announcement", "News Event"}:
+        if {"Government Policy", "Parliament", "Immigration", "Healthcare"} & topics:
+            return "Policy Announcement"
+
+    if event_type == "EconomicEvent" and (
+        {"Economic Policy", "Public Spending", "Taxation"} & topics
+    ):
+        return "Budget"
+
+    return raw_name
+
+
+def classify_government_body(name):
+    lowered = str(name or "").strip().lower()
+    if any(keyword in lowered for keyword in PARLIAMENTARY_BODY_KEYWORDS):
+        return NEWS.ParliamentaryBody
+    if any(keyword in lowered for keyword in DEPARTMENT_KEYWORDS):
+        return NEWS.GovernmentDepartment
+    return NEWS.GovernmentBody
+
+
+def classify_source_record_class(source_system):
+    lowered = str(source_system or "").strip().lower()
+    if lowered in {"parliament", "hansard"}:
+        return NEWS.ParliamentSourceRecord
+    if lowered in {"govuk", "gov.uk"}:
+        return NEWS.GovernmentSourceRecord
+    return NEWS.SourceRecord
+
+
+def is_official_source_system(source_system):
+    return str(source_system or "").strip().lower() in OFFICIAL_SOURCE_SYSTEMS
+
+
+def classify_event(record, event):
+    raw_name = normalise_name(event.get("name") or "")
+    lowered_name = raw_name.lower()
+    topics = {str(topic).strip() for topic in ((record.get("entities") or {}).get("topics") or [])}
+    government_bodies = {
+        str(name).strip()
+        for name in ((record.get("entities") or {}).get("government_bodies") or [])
+    }
+    source_system = str(record.get("source_system") or "").strip().lower()
+    raw_type = normalise_name(event.get("type") or "")
+    label_keywords = event_name_keywords(raw_name)
+    context_keywords = event_name_keywords(
+        " ".join([str(record.get("title") or ""), str(record.get("summary") or "")])
+    )
+
+    specific_type_map = {
+        "PolicyEvent": NEWS.PolicyEvent,
+        "ParliamentaryEvent": NEWS.ParliamentaryEvent,
+        "GovernmentPolicyEvent": NEWS.GovernmentPolicyEvent,
+        "ParliamentaryDebate": NEWS.ParliamentaryDebate,
+        "MinisterialStatement": NEWS.MinisterialStatement,
+    }
+
+    if raw_type in {"ParliamentaryDebate", "MinisterialStatement"}:
+        return specific_type_map[raw_type]
+
+    event_class = specific_type_map.get(raw_type, NEWS.PolicyEvent)
+    generic_name = raw_name in GENERIC_EVENT_NAMES or raw_name in {"", "Event", "News Event"}
+
+    if source_system == "hansard":
+        event_class = NEWS.ParliamentaryEvent
+    elif source_system in {"govuk", "gov.uk"}:
+        event_class = NEWS.GovernmentPolicyEvent
+    elif (
+        "debate" in label_keywords
+        or "pmqs" in label_keywords
+        or "commons" in label_keywords
+        or "lords" in label_keywords
+        or (
+            generic_name
+            and (
+                "debate" in context_keywords
+                or "pmqs" in context_keywords
+                or "commons" in context_keywords
+                or "lords" in context_keywords
+            )
+        )
+    ):
+        event_class = NEWS.ParliamentaryEvent
+    elif government_bodies or {"Government Policy", "Public Spending", "Economic Policy"} & topics:
+        event_class = NEWS.GovernmentPolicyEvent
+
+    if (
+        "debate" in label_keywords
+        or "pmqs" in label_keywords
+        or (generic_name and ("debate" in context_keywords or "pmqs" in context_keywords))
+    ):
+        return NEWS.ParliamentaryDebate
+    if (
+        "statement" in label_keywords
+        and ("ministerial" in label_keywords or "minister" in label_keywords or government_bodies)
+    ) or "ministerial statement" in lowered_name:
+        return NEWS.MinisterialStatement
+
+    return event_class
 
 
 def add_article_node(graph, record):
     uri = article_uri(record["id"])
-    article_type = record.get("article_type") or "NewsArticle"
-
     graph.add((uri, RDF.type, NEWS.NewsArticle))
-    if article_type != "NewsArticle":
-        graph.add((uri, RDF.type, NEWS[article_type]))
-
     add_literal(graph, uri, SCHEMA.headline, record.get("title"))
-    add_literal(graph, uri, NEWS.articleURL, record.get("url"))
-    add_literal(graph, uri, SCHEMA.url, record.get("url"))
+    add_literal(graph, uri, NEWS.articleURL, record.get("url"), XSD.anyURI)
+    add_literal(graph, uri, SCHEMA.url, record.get("url"), XSD.anyURI)
     add_literal(graph, uri, NEWS.publishedDate, record.get("published_at"), XSD.dateTime)
     add_literal(graph, uri, SCHEMA.datePublished, record.get("published_at"), XSD.dateTime)
-    add_literal(graph, uri, NEWS.hasUpdateTimestamp, record.get("updated_at"), XSD.dateTime)
-    add_literal(graph, uri, SCHEMA.dateModified, record.get("updated_at"), XSD.dateTime)
-    add_literal(graph, uri, NEWS.hasSection, record.get("section"))
-    add_literal(graph, uri, SCHEMA.articleSection, record.get("section"))
-    add_literal(graph, uri, SCHEMA.description, record.get("summary"))
-    add_literal(graph, uri, NEWS.wordCount, record.get("word_count"), XSD.integer)
-    add_literal(graph, uri, SCHEMA.wordCount, record.get("word_count"), XSD.integer)
     return uri
 
 
@@ -174,7 +332,6 @@ def add_publisher(graph, article, record):
         return None
 
     publisher = organisation_uri(source_name)
-    graph.add((publisher, RDF.type, NEWS.Organisation))
     graph.add((publisher, RDF.type, NEWS.NewsOrganisation))
     add_name(graph, publisher, source_name)
     graph.add((article, NEWS.publishedBy, publisher))
@@ -182,7 +339,7 @@ def add_publisher(graph, article, record):
     return publisher
 
 
-def add_author(graph, article, record, publisher):
+def add_author(graph, article, record):
     author_name = record.get("author")
     if not author_name:
         return None
@@ -192,123 +349,207 @@ def add_author(graph, article, record, publisher):
     add_name(graph, author, author_name)
     graph.add((article, NEWS.hasAuthor, author))
     graph.add((article, SCHEMA.author, author))
-    if publisher is not None:
-        graph.add((author, NEWS.worksFor, publisher))
-        graph.add((author, SCHEMA.worksFor, publisher))
     return author
 
 
-def add_person_entities(graph, article, entities):
-    politicians = set(entities.get("politicians", []))
-    all_people = set(entities.get("people", []))
-
-    for name in sorted(all_people):
+def add_political_actors(graph, record):
+    actor_uris = []
+    for name in sorted(set((record.get("entities") or {}).get("politicians", []))):
         uri = person_uri(name)
+        graph.add((uri, RDF.type, NEWS.PoliticalActor))
         graph.add((uri, RDF.type, SCHEMA.Person))
-        if name in politicians:
-            graph.add((uri, RDF.type, NEWS.Politician))
         add_name(graph, uri, name)
-        graph.add((article, NEWS.mentionsPerson, uri))
-        graph.add((article, SCHEMA.mentions, uri))
+        actor_uris.append(uri)
+    return actor_uris
 
 
-def add_organisation_entities(graph, article, entities):
-    parties = set(entities.get("political_parties", []))
-    bodies = set(entities.get("government_bodies", []))
-    organisations = set(entities.get("organizations", []))
-
-    for name in sorted(organisations):
+def add_political_parties(graph, record):
+    party_uris = []
+    for name in sorted(set((record.get("entities") or {}).get("political_parties", []))):
         uri = organisation_uri(name)
-        graph.add((uri, RDF.type, NEWS.Organisation))
-        if name in parties:
-            graph.add((uri, RDF.type, NEWS.PoliticalParty))
-        if name in bodies:
+        graph.add((uri, RDF.type, NEWS.PoliticalParty))
+        add_name(graph, uri, name)
+        party_uris.append(uri)
+    return party_uris
+
+
+def add_government_bodies(graph, record):
+    body_uris = []
+    for name in sorted(set((record.get("entities") or {}).get("government_bodies", []))):
+        uri = organisation_uri(name)
+        graph.add((uri, RDF.type, NEWS.OfficialBody))
+        body_type = classify_government_body(name)
+        graph.add((uri, RDF.type, body_type))
+        if body_type == NEWS.GovernmentDepartment:
             graph.add((uri, RDF.type, NEWS.GovernmentBody))
         add_name(graph, uri, name)
-        graph.add((article, NEWS.mentionsOrganisation, uri))
-        graph.add((article, SCHEMA.mentions, uri))
+        body_uris.append(uri)
+    return body_uris
 
 
-def add_location_entities(graph, article, entities):
-    for name in sorted(set(entities.get("locations", []))):
+def add_policy_topics(graph, record):
+    topic_uris = []
+    for name in sorted(set((record.get("entities") or {}).get("topics", []))):
+        uri = topic_uri(name)
+        graph.add((uri, RDF.type, NEWS.PolicyTopic))
+        add_name(graph, uri, name)
+        topic_uris.append(uri)
+    return topic_uris
+
+
+def add_locations(graph, record):
+    location_uris = {}
+    for name in sorted(set((record.get("entities") or {}).get("locations", []))):
         uri = location_uri(name)
         graph.add((uri, RDF.type, NEWS.Location))
-        graph.add((uri, RDF.type, SCHEMA.Place))
         add_name(graph, uri, name)
-        graph.add((article, NEWS.mentionsLocation, uri))
-        graph.add((article, SCHEMA.mentions, uri))
+        location_uris[name] = uri
+    return location_uris
 
 
-def add_topic_entities(graph, article, entities):
-    for name in sorted(set(entities.get("topics", []))):
-        uri = topic_uri(name)
-        graph.add((uri, RDF.type, NEWS.Topic))
-        add_name(graph, uri, name)
-        graph.add((article, NEWS.hasTopic, uri))
-        graph.add((article, SCHEMA.about, uri))
+def add_source_record(graph, record):
+    source_system = record.get("source_system")
+    if not source_system:
+        return None
+
+    uri = source_record_uri(source_system, record["id"])
+    graph.add((uri, RDF.type, NEWS.SourceRecord))
+    source_class = classify_source_record_class(source_system)
+    if source_class != NEWS.SourceRecord:
+        graph.add((uri, RDF.type, source_class))
+    # SPARQL needs explicit superclass types since there is no reasoner
+    if source_class in (NEWS.ParliamentSourceRecord, NEWS.GovernmentSourceRecord):
+        graph.add((uri, RDF.type, NEWS.OfficialSourceRecord))
+
+    add_literal(graph, uri, NEWS.sourceIdentifier, record.get("id"), XSD.string)
+    add_literal(graph, uri, NEWS.sourceSystem, source_system, XSD.string)
+    add_literal(graph, uri, NEWS.sourceTitle, record.get("title"), XSD.string)
+    add_name(graph, uri, record.get("title") or record.get("id"))
+    return uri
 
 
-def add_sentiment(graph, article, record):
-    sentiment_name = record.get("sentiment") or "Neutral"
-    sentiment = sentiment_uri(sentiment_name)
-    graph.add((article, NEWS.hasSentiment, sentiment))
+def select_government_bodies(graph, record, event, body_uris, event_class):
+    context = event_context_text(record, event)
+    selected = []
+    fallback = []
+
+    for body_uri in body_uris:
+        body_name = normalise_name(next(graph.objects(body_uri, SCHEMA.name), ""))
+        if not body_name:
+            continue
+        if (body_uri, RDF.type, NEWS.ParliamentaryBody) in graph:
+            continue
+        if entity_matches_context(body_name, context):
+            selected.append(body_uri)
+        else:
+            fallback.append(body_uri)
+
+    if selected:
+        return selected
+
+    if (
+        event_class in {NEWS.GovernmentPolicyEvent, NEWS.MinisterialStatement}
+        and len(fallback) == 1
+    ):
+        return fallback
+
+    return []
 
 
-def add_events(graph, article, record):
-    created_events = []
+def select_parliamentary_bodies(graph, record, event, body_uris, event_class):
+    if event_class not in {NEWS.ParliamentaryEvent, NEWS.ParliamentaryDebate}:
+        return []
+
+    context = event_context_text(record, event)
+    section = normalise_name(record.get("section") or "")
+    selected = []
+    fallback = []
+
+    for body_uri in body_uris:
+        if (body_uri, RDF.type, NEWS.ParliamentaryBody) not in graph:
+            continue
+        body_name = normalise_name(next(graph.objects(body_uri, SCHEMA.name), ""))
+        if not body_name:
+            continue
+        if entity_matches_context(body_name, context):
+            selected.append(body_uri)
+        elif section and section == body_name:
+            fallback.append(body_uri)
+
+    if selected:
+        return selected
+    if fallback:
+        return fallback
+    if "prime minister's questions" in context:
+        commons_uri = organisation_uri("House of Commons")
+        if commons_uri in body_uris:
+            return [commons_uri]
+    return []
+
+
+def add_events(
+    graph,
+    article,
+    record,
+    actor_uris,
+    body_uris,
+    topic_uris,
+    location_uris,
+    source_record,
+):
     for event in record.get("event_candidates", []):
-        event_name = event.get("name")
-        if not event_name:
+        raw_name = event.get("name")
+        if not raw_name:
             continue
 
-        uri = event_uri(event_name, event.get("date"), event.get("location"), record.get("id"))
-        event_type = event.get("type") or "NewsEvent"
-        canonical_name = canonical_event_name(event, record) or event_name
+        canonical_name = canonical_event_name(event, record) or raw_name
+        event_date = normalise_event_date(event.get("date")) or normalise_event_date(
+            record.get("published_at")
+        )
+        event_location = event.get("location")
+        uri = event_uri(canonical_name, event_date, event_location, record.get("id"))
+        event_class = classify_event(record, event)
 
-        graph.add((uri, RDF.type, NEWS.NewsEvent))
-        if event_type != "NewsEvent":
-            graph.add((uri, RDF.type, NEWS[event_type]))
+        graph.add((uri, RDF.type, NEWS.PolicyEvent))
+        if event_class != NEWS.PolicyEvent:
+            graph.add((uri, RDF.type, event_class))
         add_name(graph, uri, canonical_name)
-        if canonical_name != event_name:
-            add_literal(graph, uri, SCHEMA.alternateName, event_name)
-        graph.add((article, NEWS.coversEvent, uri))
 
-        if event.get("date"):
-            add_literal(
-                graph,
-                uri,
-                NEWS.eventDate,
-                normalise_event_date(event["date"]),
-                XSD.date,
-            )
+        graph.add((uri, NEWS.reportedByArticle, article))
+        for actor_uri in actor_uris:
+            graph.add((uri, NEWS.involvesActor, actor_uri))
+        selected_government_bodies = select_government_bodies(
+            graph, record, event, body_uris, event_class
+        )
+        selected_parliamentary_bodies = select_parliamentary_bodies(
+            graph, record, event, body_uris, event_class
+        )
+        for body_uri in selected_government_bodies:
+            graph.add((uri, NEWS.involvesGovernmentBody, body_uri))
+            if (
+                event_class == NEWS.MinisterialStatement
+                and (body_uri, RDF.type, NEWS.GovernmentDepartment) in graph
+            ):
+                graph.add((uri, NEWS.issuedByDepartment, body_uri))
+        for topic_uri_value in topic_uris:
+            graph.add((uri, NEWS.concernsPolicyTopic, topic_uri_value))
 
-        if event.get("location"):
-            loc_uri = location_uri(event["location"])
-            graph.add((loc_uri, RDF.type, NEWS.Location))
-            graph.add((loc_uri, RDF.type, SCHEMA.Place))
-            add_name(graph, loc_uri, event["location"])
-            graph.add((uri, NEWS.eventLocation, loc_uri))
+        if event_date:
+            add_literal(graph, uri, NEWS.occursOnDate, event_date, XSD.date)
+        if event_location:
+            location_uri_value = location_uris.get(event_location)
+            if location_uri_value is None:
+                location_uri_value = location_uri(event_location)
+                graph.add((location_uri_value, RDF.type, NEWS.Location))
+                add_name(graph, location_uri_value, event_location)
+            graph.add((uri, NEWS.occursInLocation, location_uri_value))
 
-        created_events.append(uri)
+        if event_class in {NEWS.ParliamentaryEvent, NEWS.ParliamentaryDebate}:
+            for body_uri in selected_parliamentary_bodies:
+                graph.add((uri, NEWS.occursInParliamentaryBody, body_uri))
 
-    return created_events
-
-
-def build_follow_up_links(graph, records):
-    groups = {}
-    for record in records:
-        for candidate in record.get("follow_up_candidates", []):
-            match_key = candidate.get("match_key")
-            if not match_key:
-                continue
-            groups.setdefault(match_key, []).append(record)
-
-    for records_with_key in groups.values():
-        ordered = sorted(records_with_key, key=lambda item: item.get("published_at") or "")
-        for current, follow_up in zip(ordered, ordered[1:]):
-            current_uri = article_uri(current["id"])
-            follow_uri = article_uri(follow_up["id"])
-            graph.add((current_uri, NEWS.hasFollowUp, follow_uri))
+        if source_record is not None and is_official_source_system(record.get("source_system")):
+            graph.add((uri, NEWS.representedInOfficialSource, source_record))
 
 
 def convert_json_to_rdf(normalised_data):
@@ -319,21 +560,27 @@ def convert_json_to_rdf(normalised_data):
 
     graph = Graph()
     bind_namespaces(graph)
-    add_sentiment_scheme(graph)
 
     for record in normalised_data:
         article = add_article_node(graph, record)
-        publisher = add_publisher(graph, article, record)
-        add_author(graph, article, record, publisher)
-        entities = record.get("entities", {})
-        add_person_entities(graph, article, entities)
-        add_organisation_entities(graph, article, entities)
-        add_location_entities(graph, article, entities)
-        add_topic_entities(graph, article, entities)
-        add_sentiment(graph, article, record)
-        add_events(graph, article, record)
-
-    build_follow_up_links(graph, normalised_data)
+        add_publisher(graph, article, record)
+        add_author(graph, article, record)
+        actor_uris = add_political_actors(graph, record)
+        add_political_parties(graph, record)
+        body_uris = add_government_bodies(graph, record)
+        topic_uris = add_policy_topics(graph, record)
+        location_uris = add_locations(graph, record)
+        source_record = add_source_record(graph, record)
+        add_events(
+            graph,
+            article,
+            record,
+            actor_uris,
+            body_uris,
+            topic_uris,
+            location_uris,
+            source_record,
+        )
 
     print(f"[RDF] Graph contains {len(graph)} triples.")
     return graph
