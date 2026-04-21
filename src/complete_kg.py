@@ -7,6 +7,13 @@ from rdflib import RDF, Graph
 
 from src.build_ontology import NEWS, SCHEMA
 from src.data_normalisation import normalise_name
+from src.openai_client import (
+    build_cache_path,
+    load_cache_payload,
+    request_structured_output,
+    save_cache_payload,
+)
+from src.config import CONFIG
 from src.run_queries import load_kg
 
 DEFAULT_OUTPUT_PATH = Path("kg/generated/completed_kg.ttl")
@@ -38,6 +45,75 @@ EVENT_MATCH_STOPWORDS = {
     "to",
     "update",
 }
+
+RAG_RESPONSE_FORMAT = {
+    "type": "json_schema",
+    "name": "rag_completion",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "proposed_actors": {"type": "array", "items": {"type": "string"}},
+            "proposed_departments": {"type": "array", "items": {"type": "string"}},
+            "proposed_topics": {
+                "type": "array",
+                "items": {"type": "string", "enum": sorted(CONFIG["TOPIC_GROUPS"].keys())},
+            },
+        },
+        "required": ["proposed_actors", "proposed_departments", "proposed_topics"],
+        "additionalProperties": False,
+    },
+}
+
+RAG_INSTRUCTIONS = (
+    "You are completing a UK politics knowledge graph. Given a policy event and "
+    "retrieved source context, propose missing property values using only the "
+    "declared vocabulary. Do not invent names not supported by the context. "
+    "proposed_actors must be named individual politicians or political parties only, "
+    "not departments, roles, or generic labels such as 'UK Government'. "
+    "proposed_departments must be named UK government departments or official bodies only. "
+    "proposed_topics must be chosen only from this list: "
+    + str(sorted(CONFIG["TOPIC_GROUPS"].keys())) + ". "
+    "Prefer specific topics over Government Policy, which should only be used "
+    "when no other topic applies. "
+    "Example of correct output: "
+    '{"proposed_actors": ["Keir Starmer", "Labour Party"], '
+    '"proposed_departments": ["Home Office"], '
+    '"proposed_topics": ["Housing", "Government Policy"]}. '
+    "Example of incorrect output: "
+    '{"proposed_actors": ["UK Government", "Secretary of State"], '
+    '"proposed_departments": [], "proposed_topics": []}. '
+    "Return only JSON."
+)
+
+ACTOR_BLOCKLIST = {
+    "agency", "authority", "board", "cabinet", "chair", "commission",
+    "committee", "council", "department", "director", "government",
+    "minister", "ministry", "office", "regulator", "secretary",
+}
+
+# retrieves articles, topics and sources linked to event through KG neighbourhood
+RAG_CONTEXT_QUERY = """
+SELECT DISTINCT ?headline ?publisherName ?topicName ?sourceTitle WHERE {
+    OPTIONAL {
+        ?event news:reportedByArticle ?article .
+        ?article schema:headline ?headline .
+        OPTIONAL {
+            ?article news:publishedBy ?pub .
+            ?pub schema:name ?publisherName .
+        }
+    }
+    OPTIONAL {
+        ?event news:concernsPolicyTopic ?topic .
+        ?topic schema:name ?topicName .
+    }
+    OPTIONAL {
+        ?event news:matchedToSourceRecord ?rec .
+        ?rec news:sourceTitle ?sourceTitle .
+    }
+}
+LIMIT 10
+"""
 
 
 def normalized_text(value):
@@ -248,6 +324,118 @@ def enrich_cross_source_links(graph):
     return added_matched, added_represented
 
 
+
+def enrich_with_rag(graph):
+    added_actors = 0
+    added_depts = 0
+    added_topics = 0
+    topic_index = {
+        text_value(graph, t, SCHEMA.name): t
+        for t in graph.subjects(RDF.type, NEWS.PolicyTopic)
+    }
+
+    for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
+        has_actor = next(graph.objects(event_uri, NEWS.involvesActor), None) is not None
+        has_body = next(graph.objects(event_uri, NEWS.involvesGovernmentBody), None) is not None
+        has_topic = next(graph.objects(event_uri, NEWS.concernsPolicyTopic), None) is not None
+        if has_actor and has_body and has_topic:
+            continue
+
+        event_name = text_value(graph, event_uri, SCHEMA.name)
+        if not event_name:
+            continue
+
+        # retrieve: SPARQL query over KG to get triples linked to event
+        rows = list(graph.query(
+            RAG_CONTEXT_QUERY,
+            initNs={"news": NEWS, "schema": SCHEMA},
+            initBindings={"event": event_uri},
+        ))
+
+        headlines = {str(r.headline) for r in rows if r.headline}
+        publishers = {str(r.publisherName) for r in rows if r.publisherName}
+        topic_names = {str(r.topicName) for r in rows if r.topicName}
+        source_titles = {str(r.sourceTitle) for r in rows if r.sourceTitle}
+
+        if not any([headlines, publishers, topic_names, source_titles]):
+            continue
+
+        cache_path = build_cache_path("rag_completion", str(event_uri))
+        result = load_cache_payload(cache_path)
+
+        if result is None:
+            event_type = "PolicyEvent"
+            for rdf_type in graph.objects(event_uri, RDF.type):
+                local = str(rdf_type).split("#")[-1]
+                if local != "PolicyEvent":
+                    event_type = local
+                    break
+
+            event_date = first_literal(graph, event_uri, NEWS.occursOnDate)
+
+            # verbalise retrieved triples as natural language sentences
+            parts = [f"'{event_name}' is a {event_type}"]
+            if event_date:
+                parts[0] += f" that occurred on {event_date}"
+            if headlines:
+                hl_str = ", ".join(f"'{h}'" for h in list(headlines)[:3])
+                pub = next(iter(publishers), None)
+                if pub:
+                    parts.append(f"reported by '{pub}' via headlines: {hl_str}")
+                else:
+                    parts.append(f"reported via headlines: {hl_str}")
+            if topic_names:
+                parts.append(f"concerns the topics: {', '.join(sorted(topic_names))}")
+            if source_titles:
+                titles_str = ", ".join(f"'{t}'" for t in list(source_titles)[:2])
+                parts.append(f"linked to official sources: {titles_str}")
+            user_input = ". ".join(parts) + "."
+
+            try:
+                result = request_structured_output(RAG_INSTRUCTIONS, user_input, RAG_RESPONSE_FORMAT)
+            except Exception as exc:
+                print(f"[COMPLETE] RAG request failed for {event_uri}: {exc}")
+                continue
+
+            if result is None:
+                continue
+            save_cache_payload(cache_path, result)
+
+        context_terms = set()
+        for s in (headlines | publishers | topic_names | source_titles):
+            context_terms |= slug_terms(s)
+
+        for name in result.get("proposed_actors", []):
+            if not name or not (slug_terms(name) & context_terms):
+                continue
+            if slug_terms(name) & ACTOR_BLOCKLIST:
+                continue
+            actor_slug = re.sub(r"[^a-z0-9]+", "_", normalise_name(name).lower()).strip("_")
+            actor_uri = NEWS[actor_slug]
+            if (event_uri, NEWS.involvesActor, actor_uri) not in graph:
+                graph.add((event_uri, NEWS.involvesActor, actor_uri))
+                added_actors += 1
+
+        for name in result.get("proposed_departments", []):
+            if not name or not (slug_terms(name) & context_terms):
+                continue
+            dept_slug = re.sub(r"[^a-z0-9]+", "_", normalise_name(name).lower()).strip("_")
+            dept_uri = NEWS[dept_slug]
+            if (event_uri, NEWS.involvesGovernmentBody, dept_uri) not in graph:
+                graph.add((event_uri, NEWS.involvesGovernmentBody, dept_uri))
+                added_depts += 1
+
+        for name in result.get("proposed_topics", []):
+            topic_uri = topic_index.get(name)
+            if topic_uri is None:
+                continue
+            if (event_uri, NEWS.concernsPolicyTopic, topic_uri) not in graph:
+                graph.add((event_uri, NEWS.concernsPolicyTopic, topic_uri))
+                added_topics += 1
+
+    return added_actors, added_depts, added_topics
+
+
 def enrich_graph(graph):
     enriched = Graph()
     for prefix, namespace in graph.namespace_manager.namespaces():
@@ -257,6 +445,7 @@ def enrich_graph(graph):
 
     inverse_count = add_reports_on_inverse(enriched)
     matched_count, represented_count = enrich_cross_source_links(enriched)
+    actor_count, dept_count, topic_count = enrich_with_rag(enriched)
 
     if inverse_count:
         print(f"[COMPLETE] Added {inverse_count} reportsOn inverse links.")
@@ -264,6 +453,7 @@ def enrich_graph(graph):
         print(f"[COMPLETE] Added {matched_count} matchedToSourceRecord links.")
     if represented_count:
         print(f"[COMPLETE] Added {represented_count} representedInOfficialSource links.")
+    print(f"[COMPLETE] RAG: added {actor_count} actor links, {dept_count} department links, {topic_count} topic links.")
 
     return enriched
 
