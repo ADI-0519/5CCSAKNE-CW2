@@ -2,9 +2,32 @@ import hashlib
 import re
 from collections import defaultdict
 from datetime import date
+from functools import lru_cache
 
 from src.config import CONFIG
 from src.data_normalisation import normalise_collected_sources, normalise_name
+from src.domain_knowledge import (
+    GOVERNMENT_BODY_NAME_SET,
+    POLITICAL_PARTY_NAME_SET,
+    POLITICIAN_NAME_SET,
+    TOPIC_NAME_SET,
+    UK_LOCATION_NAME_SET,
+    canonicalise_government_body_name,
+    canonicalise_political_party_name,
+    classify_known_government_bodies,
+    classify_known_political_parties,
+    classify_known_politicians,
+    has_ministerial_statement_signal,
+    infer_government_bodies_from_text,
+)
+from src.extraction_support import (
+    GENERIC_EVENT_NAMES,
+    derive_event_names,
+    event_context_signals,
+    is_historical_election_reference,
+    phrase_in_text,
+    phrase_match_count,
+)
 from src.openai_client import maybe_extract_article_with_openai
 
 ORG_SUFFIX = (
@@ -20,6 +43,60 @@ LOCATION_PATTERN = re.compile(
     r"\b(?:in|at|from|across|throughout|near)\s+"
     r"([A-Z][a-zA-Z'\-]+(?:\s+[A-Z][a-zA-Z'\-]+)?)\b"
 )
+
+CANONICAL_LOCATION_NAMES = UK_LOCATION_NAME_SET
+KNOWN_GOVERNMENT_BODY_NAMES = GOVERNMENT_BODY_NAME_SET
+KNOWN_POLITICAL_PARTY_NAMES = POLITICAL_PARTY_NAME_SET
+KNOWN_POLITICIAN_NAMES = POLITICIAN_NAME_SET
+KNOWN_TOPIC_NAMES = TOPIC_NAME_SET
+CANONICAL_LEXICONS = CONFIG["CANONICAL_LEXICONS"]
+FILTER_RULES = CONFIG["FILTER_RULES"]
+NLP_CONFIG = CONFIG["NLP_CONFIG"]
+
+
+@lru_cache(maxsize=1)
+def get_spacy_nlp():
+    if not NLP_CONFIG["enable_spacy_ner"]:
+        return None
+
+    try:
+        import spacy
+    except ImportError:
+        return None
+
+    try:
+        return spacy.load(NLP_CONFIG["spacy_model_name"])
+    except Exception:
+        return None
+
+
+def extract_spacy_entities(text):
+    nlp = get_spacy_nlp()
+    if nlp is None or not text.strip():
+        return {"people": [], "organizations": [], "locations": []}
+
+    people = set()
+    organizations = set()
+    locations = set()
+
+    doc = nlp(text)
+    for ent in getattr(doc, "ents", []):
+        label = str(getattr(ent, "label_", "")).upper()
+        value = normalise_label(getattr(ent, "text", ""))
+        if not value:
+            continue
+        if label == "PERSON":
+            people.add(value)
+        elif label == "ORG":
+            organizations.add(value)
+        elif label in {"GPE", "LOC"}:
+            locations.add(value)
+
+    return {
+        "people": unique_sorted(people),
+        "organizations": unique_sorted(organizations),
+        "locations": unique_sorted(locations),
+    }
 
 
 def build_article_id(url, title, published_at):
@@ -59,31 +136,18 @@ def find_named_matches(text, candidates):
     return unique_sorted(matches)
 
 
-def phrase_pattern(phrase):
-    escaped = re.escape(phrase.lower())
-    return re.compile(rf"(?<![a-z0-9]){escaped}(?![a-z0-9])")
-
-
-def phrase_in_text(text_lower, phrase):
-    return bool(phrase_pattern(phrase).search(text_lower))
-
-
-def phrase_match_count(text_lower, phrase):
-    return len(phrase_pattern(phrase).findall(text_lower))
-
-
 def extract_topics(text, tags=None, section=None):
     text_lower = text.lower()
     topic_scores = defaultdict(int)
 
-    for topic_name, hints in CONFIG["TOPIC_GROUPS"].items():
+    for topic_name, hints in CANONICAL_LEXICONS["topic_groups"].items():
         hits = sum(phrase_match_count(text_lower, hint) for hint in hints)
         if hits:
             topic_scores[topic_name] += hits
 
     for tag in tags or []:
         tag_lower = tag.lower()
-        for topic_name, hints in CONFIG["TOPIC_GROUPS"].items():
+        for topic_name, hints in CANONICAL_LEXICONS["topic_groups"].items():
             if phrase_in_text(tag_lower, topic_name):
                 topic_scores[topic_name] += 3
             tag_hits = sum(phrase_match_count(tag_lower, hint) for hint in hints)
@@ -94,7 +158,7 @@ def extract_topics(text, tags=None, section=None):
         section_lower = section.lower()
         if "politics" in section_lower:
             topic_scores["Politics"] += 2
-        if section_lower in CONFIG["OPINION_SECTION_NAMES"]:
+        if section_lower in FILTER_RULES["opinion_section_names"]:
             topic_scores["Opinion"] += 2
 
     if not topic_scores:
@@ -114,7 +178,7 @@ def extract_topics(text, tags=None, section=None):
     return selected
 
 
-def extract_people(text):
+def extract_people(text, spacy_candidates=None):
     entity_stoplist = CONFIG["ENTITY_STOPLIST"]
     person_stoplist = CONFIG["PERSON_STOPLIST"]
     blocked_person_words = {
@@ -163,7 +227,8 @@ def extract_people(text):
         "While",
         "From",
     }
-    found = set(find_named_matches(text, CONFIG["POLITICIAN_NAMES"]))
+    found = set(find_named_matches(text, KNOWN_POLITICIAN_NAMES))
+    found.update(spacy_candidates or [])
 
     for match in PERSON_PATTERN.finditer(text):
         name = normalise_label(match.group(1))
@@ -191,8 +256,9 @@ def extract_people(text):
     return sanitize_people(found)
 
 
-def extract_locations(text):
-    found = set(find_named_matches(text, CONFIG["UK_LOCATION_NAMES"]))
+def extract_locations(text, spacy_candidates=None):
+    found = set(find_named_matches(text, CANONICAL_LOCATION_NAMES))
+    found.update(spacy_candidates or [])
 
     for match in LOCATION_PATTERN.finditer(text):
         location = normalise_label(match.group(1))
@@ -210,25 +276,6 @@ _EVENT_TYPE_PRIORITY = {
     "ParliamentaryDebate": 2,
     "MinisterialStatement": 2,
 }
-_GENERIC_EVENT_NAMES = {
-    "Election",
-    "Ministerial Statement",
-    "Parliamentary Debate",
-    "Policy Announcement",
-}
-
-
-def has_any_phrase_signal(text_lower, phrases):
-    return any(phrase_in_text(text_lower, phrase) for phrase in phrases)
-
-
-def is_historical_election_reference(text_lower, phrase):
-    if "election" not in phrase:
-        return False
-    return any(
-        phrase_in_text(text_lower, f"{prefix}{phrase}")
-        for prefix in ["last ", "previous ", "past "]
-    )
 
 
 def is_location_candidate_valid(location):
@@ -243,7 +290,7 @@ def is_location_candidate_valid(location):
         return False
 
     tokens = candidate.split()
-    canonical_locations = set(CONFIG["UK_LOCATION_NAMES"])
+    canonical_locations = CANONICAL_LOCATION_NAMES
     if candidate not in canonical_locations and len(tokens) == 1 and len(tokens[0]) <= 2:
         return False
     if any(token in CONFIG["EXTRACTION_LOCATION_STOPWORDS"] for token in tokens):
@@ -252,11 +299,17 @@ def is_location_candidate_valid(location):
         return False
     if any(token in CONFIG["EXTRACTION_ORG_NOISE_TERMS"] for token in tokens):
         return False
+    if canonicalise_government_body_name(candidate) != candidate:
+        return False
+    if re.search(r"[A-Za-z]+\d", candidate):
+        return False
+    if candidate == candidate.lower() and candidate not in canonical_locations:
+        return False
 
     candidate_lower = candidate.lower()
     if " mp" in candidate_lower or candidate_lower.endswith(" mps"):
         return False
-    if any(party.lower() in candidate_lower for party in CONFIG["POLITICAL_PARTY_NAMES"]):
+    if any(party.lower() in candidate_lower for party in KNOWN_POLITICAL_PARTY_NAMES):
         return False
 
     return True
@@ -264,6 +317,17 @@ def is_location_candidate_valid(location):
 
 def label_token_set(value):
     return {token.lower() for token in normalise_label(value).split() if token}
+
+
+def event_label_matches_context(label, context_text):
+    candidate = normalise_label(label).lower()
+    if not candidate:
+        return False
+    if phrase_in_text(context_text, candidate):
+        return True
+    token_set = label_token_set(label)
+    context_tokens = {token for token in context_text.split() if token}
+    return bool(token_set) and token_set.issubset(context_tokens)
 
 
 def overlaps_blocked_entity(candidate, blocked_entities):
@@ -302,8 +366,8 @@ def sanitize_people(people):
 def sanitize_organizations(organizations):
     cleaned = []
     known_news_orgs = {"BBC News", "Financial Times", "Sky News", "The Guardian"}
-    known_locations = set(CONFIG["UK_LOCATION_NAMES"])
-    known_parties = set(CONFIG["POLITICAL_PARTY_NAMES"])
+    known_locations = CANONICAL_LOCATION_NAMES
+    known_parties = KNOWN_POLITICAL_PARTY_NAMES
 
     for organization in organizations:
         candidate = normalise_label(organization)
@@ -333,7 +397,7 @@ def sanitize_locations(locations, blocked_entities=None):
     blocked = {
         normalise_label(item) for item in (blocked_entities or set()) if normalise_label(item)
     }
-    canonical_locations = set(CONFIG["UK_LOCATION_NAMES"])
+    canonical_locations = CANONICAL_LOCATION_NAMES
     cleaned = []
     for location in locations:
         candidate = normalise_label(location)
@@ -343,6 +407,136 @@ def sanitize_locations(locations, blocked_entities=None):
             continue
         cleaned.append(candidate)
     return unique_sorted(cleaned)
+
+
+def choose_event_topics(event_name, context_text, record_topics):
+    selected = []
+    name_lower = normalise_label(event_name).lower()
+    for topic in record_topics:
+        hints = CANONICAL_LEXICONS["topic_groups"].get(topic, [])
+        if phrase_in_text(context_text, topic.lower()) or any(
+            phrase_in_text(context_text, hint) for hint in hints
+        ):
+            selected.append(topic)
+
+    if selected:
+        return unique_sorted(selected)
+    if len(record_topics) == 1:
+        return list(record_topics)
+    if "Parliament" in record_topics and any(
+        phrase in name_lower
+        for phrase in ["debate", "pmqs", "prime minister's questions", "commons", "lords"]
+    ):
+        return ["Parliament"]
+    return []
+
+
+def choose_event_entities(event_name, context_text, candidates):
+    selected = [
+        candidate
+        for candidate in candidates
+        if event_label_matches_context(candidate, context_text)
+    ]
+    if selected:
+        return unique_sorted(selected)
+    if len(candidates) == 1:
+        return list(candidates)
+    return []
+
+
+def choose_event_parliamentary_body(event_name, event_type, context_text, government_bodies):
+    parliamentary_bodies = [
+        body for body in government_bodies if body in CANONICAL_LEXICONS["parliamentary_body_names"]
+    ]
+    if not parliamentary_bodies:
+        return None
+    selected = choose_event_entities(event_name, context_text, parliamentary_bodies)
+    if selected:
+        return selected[0]
+    if (
+        event_type in {"ParliamentaryEvent", "ParliamentaryDebate"}
+        and len(parliamentary_bodies) == 1
+    ):
+        return parliamentary_bodies[0]
+    return None
+
+
+def build_event_evidence_spans(article, event_name, event_type, event_topics, actors, bodies):
+    parts = [article.get("title"), article.get("summary"), article.get("content")]
+    fragments = []
+    event_signals = {normalise_label(event_name).lower(), normalise_label(event_type).lower()}
+    event_signals.update(normalise_label(topic).lower() for topic in event_topics)
+    event_signals.update(normalise_label(actor).lower() for actor in actors)
+    event_signals.update(normalise_label(body).lower() for body in bodies)
+
+    for part in parts:
+        cleaned = normalise_label(part)
+        if not cleaned:
+            continue
+        cleaned_lower = cleaned.lower()
+        if any(signal and signal in cleaned_lower for signal in event_signals):
+            fragments.append(cleaned)
+        if len(fragments) == 3:
+            break
+
+    return unique_sorted(fragments[:3])
+
+
+def build_event_context_text(article, event_name, event_type, event_payload):
+    parts = [
+        normalise_label(event_name),
+        normalise_label(event_type),
+        normalise_label(article.get("title")),
+        normalise_label(article.get("summary")),
+        " ".join(normalise_label(tag) for tag in (article.get("tags") or [])),
+    ]
+    parts.extend(
+        normalise_label(span) for span in (event_payload.get("evidence_spans") or []) if span
+    )
+
+    content = normalise_label(article.get("content"))
+    if content:
+        content_lower = content.lower()
+        signal_terms = {
+            normalise_label(event_name).lower(),
+            normalise_label(event_type).lower(),
+        }
+        signal_terms.update(
+            normalise_label(value).lower()
+            for key in [
+                "policy_topics",
+                "political_actors",
+                "government_bodies",
+                "political_parties",
+            ]
+            for value in (event_payload.get(key) or [])
+            if value
+        )
+        parliamentary_body = normalise_label(event_payload.get("parliamentary_body"))
+        if parliamentary_body:
+            signal_terms.add(parliamentary_body.lower())
+        if any(term and term in content_lower for term in signal_terms):
+            parts.append(content)
+
+    return " ".join(part for part in parts if part).lower()
+
+
+def normalise_confidence_value(value):
+    lowered = str(value or "").strip().lower()
+    return lowered if lowered in {"high", "medium", "low"} else ""
+
+
+def resolve_event_extraction_method(event, used_heuristic_support):
+    explicit_method = str(event.get("extraction_method") or "").strip().lower()
+    if explicit_method in {"heuristic", "openai", "hybrid"}:
+        return explicit_method
+
+    source = str(event.get("source") or "").strip().lower()
+    if source == "openai":
+        return "hybrid" if used_heuristic_support else "openai"
+    if source == "heuristic":
+        return "heuristic"
+    return "hybrid"
 
 
 def choose_more_specific_event_type(current_type, event_name):
@@ -420,8 +614,9 @@ def build_govuk_fallback_event(article, text, topics, locations):
 
     text_lower = text.lower()
     event_type = "GovernmentPolicyEvent"
-
-    if section == "speech" or "statement" in title.lower():
+    if "statement" in title.lower() and has_ministerial_statement_signal(
+        title, article.get("summary"), article.get("content")
+    ):
         event_type = "MinisterialStatement"
 
     return [
@@ -452,9 +647,10 @@ def event_date_is_plausible(article, event_date):
     return True
 
 
-def extract_organisations(text):
-    found = set(find_named_matches(text, CONFIG["POLITICAL_PARTY_NAMES"]))
-    found.update(find_named_matches(text, CONFIG["GOVERNMENT_BODY_NAMES"]))
+def extract_organisations(text, spacy_candidates=None):
+    found = set(find_named_matches(text, KNOWN_POLITICAL_PARTY_NAMES))
+    found.update(find_named_matches(text, KNOWN_GOVERNMENT_BODY_NAMES))
+    found.update(spacy_candidates or [])
 
     for match in ORG_PATTERN.finditer(text):
         organisation = normalise_label(match.group(1))
@@ -468,18 +664,18 @@ def extract_organisations(text):
 
 
 def classify_politicians(people):
-    politician_names = set(CONFIG["POLITICIAN_NAMES"])
-    return sorted(person for person in people if person in politician_names)
+    return classify_known_politicians(people)
 
 
 def classify_political_parties(organisations):
-    party_names = set(CONFIG["POLITICAL_PARTY_NAMES"])
-    return sorted(organisation for organisation in organisations if organisation in party_names)
+    return [
+        canonicalise_political_party_name(name)
+        for name in classify_known_political_parties(organisations)
+    ]
 
 
 def classify_government_bodies(organisations):
-    body_names = set(CONFIG["GOVERNMENT_BODY_NAMES"])
-    return sorted(organisation for organisation in organisations if organisation in body_names)
+    return classify_known_government_bodies(organisations)
 
 
 def classify_sentiment(text):
@@ -504,10 +700,14 @@ def classify_article_type(article, text):
     summary = (article.get("summary") or "").strip().lower()
     combined = f"{title} {summary} {text.lower()}"
 
-    if section in CONFIG["OPINION_SECTION_NAMES"] or "opinion" in title or "analysis" in title:
+    if (
+        section in FILTER_RULES["opinion_section_names"]
+        or "opinion" in title
+        or "analysis" in title
+    ):
         return "OpinionArticle"
 
-    breaking_hits = sum(hint in combined for hint in CONFIG["BREAKING_NEWS_HINTS"])
+    breaking_hits = sum(hint in combined for hint in FILTER_RULES["breaking_news_hints"])
     if title.startswith("live") or title.endswith("as it happened"):
         return "BreakingNewsArticle"
     if breaking_hits >= 2:
@@ -524,8 +724,10 @@ def infer_event_type(event_name):
         or "pmqs" in event_lower
     ):
         return "ParliamentaryDebate"
-    if "statement" in event_lower:
+    if has_ministerial_statement_signal(event_name):
         return "MinisterialStatement"
+    if "statement" in event_lower:
+        return "GovernmentPolicyEvent"
     if "budget" in event_lower or "spending review" in event_lower:
         return "GovernmentPolicyEvent"
     if any(hint in event_lower for hint in CONFIG["ECONOMIC_EVENT_HINTS"]):
@@ -603,7 +805,7 @@ def generic_event_fallback_blocked(article, article_type=None):
     section_lower = normalise_label(article.get("section")).lower()
     inferred_type = article_type or article.get("raw_article_type_hint")
 
-    if inferred_type == "OpinionArticle" or section_lower in CONFIG["OPINION_SECTION_NAMES"]:
+    if inferred_type == "OpinionArticle" or section_lower in FILTER_RULES["opinion_section_names"]:
         return True
 
     if (
@@ -617,56 +819,6 @@ def generic_event_fallback_blocked(article, article_type=None):
         return True
 
     return False
-
-
-def build_salient_event_text(article):
-    parts = [
-        article.get("title"),
-        article.get("summary"),
-        " ".join(article.get("tags") or []),
-    ]
-    return " ".join(normalise_label(part) for part in parts if part).lower()
-
-
-def event_context_signals(article, text, topics):
-    text_lower = text.lower()
-    salient_text_lower = build_salient_event_text(article)
-    official_source = article.get("source_system") in {"govuk", "parliament"}
-    parliament_written_statement = article.get("source_system") == "parliament"
-    policy_signal = has_any_phrase_signal(
-        salient_text_lower, CONFIG["EXTRACTION_POLICY_ANNOUNCEMENT_SIGNAL_PHRASES"]
-    ) or (
-        official_source
-        and has_any_phrase_signal(
-            text_lower, CONFIG["EXTRACTION_POLICY_ANNOUNCEMENT_SIGNAL_PHRASES"]
-        )
-    )
-    election_signal = has_any_phrase_signal(
-        salient_text_lower, CONFIG["EXTRACTION_ELECTION_SIGNAL_PHRASES"]
-    )
-    parliamentary_signal = any(
-        phrase_in_text(salient_text_lower, phrase)
-        or (official_source and phrase_in_text(text_lower, phrase))
-        for phrase in [
-            "committee",
-            "commons",
-            "house of commons",
-            "house of lords",
-            "lords",
-            "parliament",
-            "westminster",
-        ]
-    )
-    return {
-        "text_lower": text_lower,
-        "salient_text_lower": salient_text_lower,
-        "official_source": official_source,
-        "parliament_written_statement": parliament_written_statement,
-        "policy_signal": policy_signal,
-        "election_signal": election_signal,
-        "parliamentary_signal": parliamentary_signal,
-        "topics": set(topics),
-    }
 
 
 def coerce_event_type_for_source(article, event_name, event_type, signals):
@@ -691,11 +843,17 @@ def coerce_event_type_for_source(article, event_name, event_type, signals):
     if parliamentary_specific:
         return event_type
 
-    if "statement" in event_lower:
+    if "statement" in event_lower or (
+        signals.get("parliament_written_statement")
+        and (
+            phrase_in_text(signals["salient_text_lower"], "statement")
+            or phrase_in_text(signals["text_lower"], "statement")
+        )
+    ):
         return "MinisterialStatement"
 
-    if event_type == "ParliamentaryEvent":
-        return "GovernmentPolicyEvent"
+    if event_type in {"PolicyEvent", "GovernmentPolicyEvent", "ParliamentaryEvent"}:
+        return "ParliamentaryEvent"
 
     return event_type
 
@@ -739,9 +897,16 @@ def event_supported_by_context(event_name, signals):
     )
 
 
-def sanitize_event_candidates(article, text, topics, locations, events):
+def sanitize_event_candidates(article, text, entities, topics, locations, events):
     signals = event_context_signals(article, text, topics)
     valid_locations = set(sanitize_locations(locations))
+    record_level_inferred_bodies = infer_government_bodies_from_text(
+        " ".join(
+            part
+            for part in [article.get("title"), article.get("summary"), article.get("content")]
+            if part
+        )
+    )
     sanitized = []
     seen = set()
     for event in events:
@@ -769,6 +934,80 @@ def sanitize_event_candidates(article, text, topics, locations, events):
         if key in seen:
             continue
         seen.add(key)
+        context_text = build_event_context_text(article, name, event_type, event)
+        heuristic_topics = choose_event_topics(name, context_text, topics)
+        heuristic_actors = choose_event_entities(
+            name, context_text, entities.get("politicians", [])
+        )
+        heuristic_bodies = choose_event_entities(
+            name, context_text, entities.get("government_bodies", [])
+        )
+        heuristic_parties = choose_event_entities(
+            name, context_text, entities.get("political_parties", [])
+        )
+        heuristic_parliamentary_body = choose_event_parliamentary_body(
+            name, event_type, context_text, entities.get("government_bodies", [])
+        )
+        event_topics = unique_sorted(event.get("policy_topics", []) or heuristic_topics)
+        event_actors = unique_sorted(event.get("political_actors", []) or heuristic_actors)
+        explicit_or_heuristic_bodies = event.get("government_bodies", []) or heuristic_bodies
+        if (
+            not explicit_or_heuristic_bodies
+            and event_type == "MinisterialStatement"
+            and record_level_inferred_bodies
+        ):
+            explicit_or_heuristic_bodies = record_level_inferred_bodies
+        event_bodies = unique_sorted(
+            canonicalise_government_body_name(name)
+            for name in explicit_or_heuristic_bodies
+            if canonicalise_government_body_name(name)
+        )
+        event_parties = unique_sorted(
+            canonicalise_political_party_name(name)
+            for name in (event.get("political_parties", []) or heuristic_parties)
+            if canonicalise_political_party_name(name)
+        )
+        event_parliamentary_body = (
+            normalise_label(event.get("parliamentary_body") or heuristic_parliamentary_body) or None
+        )
+        evidence_spans = unique_sorted(
+            event.get("evidence_spans", [])
+            or build_event_evidence_spans(
+                article, name, event_type, event_topics, event_actors, event_bodies
+            )
+        )
+        extraction_method = resolve_event_extraction_method(
+            event,
+            used_heuristic_support=any(
+                [
+                    not event.get("policy_topics") and bool(heuristic_topics),
+                    not event.get("political_actors") and bool(heuristic_actors),
+                    not event.get("government_bodies") and bool(heuristic_bodies),
+                    not event.get("political_parties") and bool(heuristic_parties),
+                    not event.get("parliamentary_body") and bool(heuristic_parliamentary_body),
+                    not event.get("evidence_spans") and bool(evidence_spans),
+                ]
+            ),
+        )
+        if event_type == "MinisterialStatement" and article.get("source_system") != "parliament":
+            ministerial_context = " ".join(
+                [
+                    name,
+                    article.get("title") or "",
+                    article.get("summary") or "",
+                    " ".join(event_bodies),
+                    " ".join(evidence_spans),
+                ]
+            )
+            if not has_ministerial_statement_signal(ministerial_context):
+                event_type = "GovernmentPolicyEvent"
+        if (
+            article.get("source_system") == "parliament"
+            and name in {"Policy Announcement", "Ministerial Statement"}
+            and event_type == "MinisterialStatement"
+            and not event_bodies
+        ):
+            event_type = "ParliamentaryEvent"
         sanitized.append(
             {
                 "name": name,
@@ -776,11 +1015,36 @@ def sanitize_event_candidates(article, text, topics, locations, events):
                 "date": event_date,
                 "location": location or None,
                 "source": event.get("source") or "heuristic",
+                "policy_topics": event_topics,
+                "political_actors": event_actors,
+                "government_bodies": event_bodies,
+                "parliamentary_body": event_parliamentary_body,
+                "political_parties": event_parties,
+                "evidence_spans": evidence_spans,
+                "confidence": infer_event_confidence(
+                    article,
+                    name,
+                    event_type,
+                    event,
+                    signals,
+                    evidence_spans=evidence_spans,
+                    event_topics=event_topics,
+                    event_actors=event_actors,
+                    event_bodies=event_bodies,
+                    event_parties=event_parties,
+                    parliamentary_body=event_parliamentary_body,
+                    heuristic_topics=heuristic_topics,
+                    heuristic_actors=heuristic_actors,
+                    heuristic_bodies=heuristic_bodies,
+                    heuristic_parties=heuristic_parties,
+                    heuristic_parliamentary_body=heuristic_parliamentary_body,
+                ),
+                "extraction_method": extraction_method,
             }
         )
 
     govuk_explicit_signal = govuk_has_explicit_event_signal(article, text)
-    has_specific_event = any(event["name"] not in _GENERIC_EVENT_NAMES for event in sanitized)
+    has_specific_event = any(event["name"] not in GENERIC_EVENT_NAMES for event in sanitized)
     if article.get("source_system") == "govuk":
         if not govuk_explicit_signal and not has_specific_event:
             return []
@@ -792,7 +1056,7 @@ def sanitize_event_candidates(article, text, topics, locations, events):
                 return govuk_fallback
 
     if has_specific_event:
-        sanitized = [event for event in sanitized if event["name"] not in _GENERIC_EVENT_NAMES]
+        sanitized = [event for event in sanitized if event["name"] not in GENERIC_EVENT_NAMES]
     elif sanitized and govuk_supports_event_fallback(article):
         govuk_fallback = build_govuk_fallback_event(article, text, topics, sorted(valid_locations))
         if govuk_fallback:
@@ -804,44 +1068,7 @@ def sanitize_event_candidates(article, text, topics, locations, events):
 def extract_events(article, text, topics, locations):
     signals = event_context_signals(article, text, topics)
     text_lower = signals["text_lower"]
-    salient_text_lower = signals["salient_text_lower"]
-    official_source = signals["official_source"]
-    event_names = set()
-
-    for hint in CONFIG["ECONOMIC_EVENT_HINTS"] + CONFIG["POLITICAL_EVENT_HINTS"]:
-        in_salient_text = phrase_in_text(salient_text_lower, hint)
-        in_full_text = phrase_in_text(text_lower, hint)
-        if in_salient_text or (official_source and in_full_text):
-            signal_text = salient_text_lower if in_salient_text else text_lower
-            if is_historical_election_reference(signal_text, hint):
-                continue
-            event_names.add(hint.title())
-
-    if phrase_in_text(salient_text_lower, "spring statement") or (
-        official_source and phrase_in_text(text_lower, "spring statement")
-    ):
-        event_names.add("Spring Statement")
-    if phrase_in_text(salient_text_lower, "leadership contest"):
-        event_names.add("Leadership Contest")
-    if (
-        phrase_in_text(salient_text_lower, "parliamentary vote")
-        or phrase_in_text(salient_text_lower, "commons vote")
-        or (official_source and phrase_in_text(text_lower, "parliamentary vote"))
-    ):
-        event_names.add("Parliamentary Vote")
-    if (
-        phrase_in_text(salient_text_lower, "prime minister's questions")
-        or phrase_in_text(salient_text_lower, "pmqs")
-        or (official_source and phrase_in_text(text_lower, "prime minister's questions"))
-    ):
-        event_names.add("Prime Minister's Questions")
-    if (
-        phrase_in_text(salient_text_lower, "lords debate")
-        or phrase_in_text(salient_text_lower, "commons debate")
-        or phrase_in_text(salient_text_lower, "house of lords debate")
-        or phrase_in_text(salient_text_lower, "house of commons debate")
-    ):
-        event_names.add("Debate")
+    event_names = derive_event_names(signals)
 
     event_date = (article.get("published_at") or "")[:10] or None
     policy_signal = signals["policy_signal"]
@@ -852,7 +1079,7 @@ def extract_events(article, text, topics, locations):
     fallback_blocked = generic_event_fallback_blocked(article)
 
     events = []
-    for event_name in sorted(event_names):
+    for event_name in event_names:
         event_type = infer_event_type(event_name)
         events.append(
             {
@@ -908,19 +1135,7 @@ def extract_events(article, text, topics, locations):
             )
         elif (
             "Government Policy" in topics
-            and (
-                policy_signal
-                or any(
-                    phrase_in_text(text_lower, phrase)
-                    for phrase in [
-                        "government",
-                        "minister",
-                        "ministers",
-                        "prime minister",
-                        "treasury",
-                    ]
-                )
-            )
+            and policy_signal
             and (article.get("source_system") != "govuk" or govuk_explicit_signal)
             and not fallback_blocked
         ):
@@ -983,11 +1198,7 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
     event_date = (article.get("published_at") or "")[:10] or None
     signals = event_context_signals(article, text, topics)
     text_lower = signals["text_lower"]
-    policy_signal = signals["policy_signal"] or any(
-        phrase_in_text(signals["salient_text_lower"], phrase)
-        or (signals["official_source"] and phrase_in_text(text_lower, phrase))
-        for phrase in ["government", "minister", "ministers", "prime minister", "treasury"]
-    )
+    policy_signal = signals["policy_signal"]
     election_signal = signals["election_signal"]
 
     if "Election" in topics and election_signal:
@@ -1036,6 +1247,118 @@ def add_topic_based_fallback_events(article, text, topics, locations, events):
             ]
 
     return events
+
+
+def infer_event_confidence(
+    article,
+    event_name,
+    event_type,
+    event_payload,
+    signals,
+    *,
+    evidence_spans=None,
+    event_topics=None,
+    event_actors=None,
+    event_bodies=None,
+    event_parties=None,
+    parliamentary_body=None,
+    heuristic_topics=None,
+    heuristic_actors=None,
+    heuristic_bodies=None,
+    heuristic_parties=None,
+    heuristic_parliamentary_body=None,
+):
+    explicit_confidence = normalise_confidence_value(event_payload.get("confidence"))
+    if explicit_confidence:
+        return explicit_confidence
+
+    source_name = str(event_payload.get("source") or "").strip().lower()
+    event_lower = event_name.lower()
+    generic_name = event_name in GENERIC_EVENT_NAMES
+    official_source = article.get("source_system") in {"govuk", "parliament"}
+    score = 0
+
+    if official_source and not generic_name:
+        score += 2
+    elif source_name == "openai" and not generic_name:
+        score += 1
+
+    if event_type == "MinisterialStatement" and (
+        "statement" in event_lower
+        or phrase_in_text(signals["salient_text_lower"], "statement")
+        or phrase_in_text(signals["text_lower"], "statement")
+    ):
+        score += 1
+
+    event_topics = unique_sorted(event_topics or [])
+    event_actors = unique_sorted(event_actors or [])
+    event_bodies = unique_sorted(event_bodies or [])
+    event_parties = unique_sorted(event_parties or [])
+    evidence_spans = unique_sorted(evidence_spans or [])
+
+    support_count = sum(
+        bool(values)
+        for values in [event_topics, event_actors, event_bodies, event_parties, evidence_spans]
+    ) + int(bool(parliamentary_body))
+    if support_count >= 3:
+        score += 2
+    elif support_count >= 1:
+        score += 1
+
+    agreement_signals = 0
+    if set(event_topics) & set(heuristic_topics or []):
+        agreement_signals += 1
+    if set(event_actors) & set(heuristic_actors or []):
+        agreement_signals += 1
+    if set(event_bodies) & set(heuristic_bodies or []):
+        agreement_signals += 1
+    if set(event_parties) & set(heuristic_parties or []):
+        agreement_signals += 1
+    if parliamentary_body and parliamentary_body == heuristic_parliamentary_body:
+        agreement_signals += 1
+
+    if agreement_signals >= 2:
+        score += 2
+    elif agreement_signals == 1:
+        score += 1
+
+    if generic_name:
+        score -= 2
+
+    if score >= 4:
+        return "high"
+    if score >= 1:
+        return "medium"
+    return "low"
+
+
+def merge_event_scoped_entities(
+    topics,
+    politicians,
+    political_parties,
+    government_bodies,
+    events,
+):
+    merged_topics = list(topics)
+    merged_politicians = list(politicians)
+    merged_parties = list(political_parties)
+    merged_bodies = list(government_bodies)
+
+    for event in events or []:
+        merged_topics.extend(event.get("policy_topics", []))
+        merged_politicians.extend(event.get("political_actors", []))
+        merged_parties.extend(event.get("political_parties", []))
+        merged_bodies.extend(event.get("government_bodies", []))
+        parliamentary_body = event.get("parliamentary_body")
+        if parliamentary_body:
+            merged_bodies.append(parliamentary_body)
+
+    return {
+        "topics": unique_sorted(merged_topics),
+        "politicians": sanitize_people(merged_politicians),
+        "political_parties": unique_sorted(merged_parties),
+        "government_bodies": unique_sorted(merged_bodies),
+    }
 
 
 def build_follow_up_candidates(article, topics, article_type):
@@ -1107,6 +1430,22 @@ def merge_event_candidates(
             "date": event.get("date") or default_date,
             "location": normalise_label(event.get("location")) or default_location,
             "source": "openai",
+            "policy_topics": unique_sorted(event.get("policy_topics", [])),
+            "political_actors": unique_sorted(event.get("political_actors", [])),
+            "government_bodies": unique_sorted(
+                canonicalise_government_body_name(name)
+                for name in event.get("government_bodies", [])
+                if canonicalise_government_body_name(name)
+            ),
+            "parliamentary_body": normalise_label(event.get("parliamentary_body")) or None,
+            "political_parties": unique_sorted(
+                canonicalise_political_party_name(name)
+                for name in event.get("political_parties", [])
+                if canonicalise_political_party_name(name)
+            ),
+            "evidence_spans": unique_sorted(event.get("evidence_spans", [])),
+            "confidence": normalise_label(event.get("confidence")) or "medium",
+            "extraction_method": str(event.get("extraction_method") or "").strip().lower(),
         }
 
     return [merged[name] for name in sorted(merged)]
@@ -1157,7 +1496,7 @@ def apply_openai_extraction(article, text, heuristic_result):
 
     topics = unique_sorted(
         heuristic_result["topics"]
-        + [topic for topic in llm_result.get("topics", []) if topic in CONFIG["TOPIC_GROUPS"]]
+        + [topic for topic in llm_result.get("topics", []) if topic in KNOWN_TOPIC_NAMES]
     )
     organisations = unique_sorted(
         heuristic_result["organizations"] + llm_result.get("organizations", [])
@@ -1167,10 +1506,21 @@ def apply_openai_extraction(article, text, heuristic_result):
 
     politicians = unique_sorted(classify_politicians(people) + llm_result.get("politicians", []))
     political_parties = unique_sorted(
-        classify_political_parties(organisations) + llm_result.get("political_parties", [])
+        classify_political_parties(organisations)
+        + [
+            canonicalise_political_party_name(name)
+            for name in llm_result.get("political_parties", [])
+            if canonicalise_political_party_name(name)
+        ]
     )
     government_bodies = unique_sorted(
-        classify_government_bodies(organisations) + llm_result.get("government_bodies", [])
+        classify_government_bodies(organisations)
+        + [
+            canonicalise_government_body_name(name)
+            for name in llm_result.get("government_bodies", [])
+            if canonicalise_government_body_name(name)
+        ]
+        + infer_government_bodies_from_text(text)
     )
 
     blocked_people = set(organisations) | set(political_parties) | set(government_bodies)
@@ -1205,15 +1555,22 @@ def apply_openai_extraction(article, text, heuristic_result):
         default_date=heuristic_result["default_event_date"],
         default_location=preferred_event_location(locations, text.lower(), topics),
     )
+    scoped_entities = merge_event_scoped_entities(
+        topics,
+        politicians,
+        political_parties,
+        government_bodies,
+        events,
+    )
 
     return {
         "people": people,
         "organizations": organisations,
         "locations": locations,
-        "topics": topics,
-        "politicians": politicians,
-        "political_parties": political_parties,
-        "government_bodies": government_bodies,
+        "topics": scoped_entities["topics"],
+        "politicians": scoped_entities["politicians"],
+        "political_parties": scoped_entities["political_parties"],
+        "government_bodies": scoped_entities["government_bodies"],
         "sentiment": sentiment,
         "article_type": article_type,
         "events": events,
@@ -1235,19 +1592,22 @@ def prepare_articles(raw_data):
 
 def extract_article_record(article):
     text = build_article_text(article)
+    spacy_entities = extract_spacy_entities(text)
     article_id = article.get("id") or build_article_id(
         article.get("url", ""),
         article.get("title", ""),
         article.get("published_at", ""),
     )
 
-    people = extract_people(text)
-    organisations = extract_organisations(text)
-    locations = extract_locations(text)
+    people = extract_people(text, spacy_candidates=spacy_entities["people"])
+    organisations = extract_organisations(text, spacy_candidates=spacy_entities["organizations"])
+    locations = extract_locations(text, spacy_candidates=spacy_entities["locations"])
     topics = extract_topics(text, tags=article.get("tags"), section=article.get("section"))
     politicians = classify_politicians(people)
     political_parties = classify_political_parties(organisations)
-    government_bodies = classify_government_bodies(organisations)
+    government_bodies = unique_sorted(
+        classify_government_bodies(organisations) + infer_government_bodies_from_text(text)
+    )
     blocked_people = set(organisations) | set(political_parties) | set(government_bodies)
     organisations = sanitize_organizations(organisations)
     people = sanitize_people(person for person in people if person not in blocked_people)
@@ -1297,18 +1657,6 @@ def extract_article_record(article):
         "BreakingNewsArticle",
     }:
         article_type = article["raw_article_type_hint"]
-    events = add_topic_based_fallback_events(
-        article,
-        text,
-        topics,
-        locations,
-        merged_extraction["events"],
-    )
-    events = sanitize_event_candidates(article, text, topics, locations, events)
-    enriched_article = dict(article)
-    enriched_article["event_candidates"] = events
-    follow_up_candidates = build_follow_up_candidates(enriched_article, topics, article_type)
-
     entities = {
         "people": people,
         "politicians": politicians,
@@ -1318,8 +1666,16 @@ def extract_article_record(article):
         "locations": locations,
         "topics": topics,
         "technologies": [],
-        "events": [event["name"] for event in events],
+        "events": [],
     }
+    events = add_topic_based_fallback_events(
+        article, text, topics, locations, merged_extraction["events"]
+    )
+    events = sanitize_event_candidates(article, text, entities, topics, locations, events)
+    enriched_article = dict(article)
+    enriched_article["event_candidates"] = events
+    follow_up_candidates = build_follow_up_candidates(enriched_article, topics, article_type)
+    entities["events"] = [event["name"] for event in events]
 
     return {
         "id": article_id,
