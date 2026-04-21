@@ -46,4 +46,10 @@ def test_build_cache_path_uses_absolute_path_length_budget(tmp_path, monkeypatch
     cache_path = build_cache_path("rag_completion", cache_key)
 
     assert len(cache_path.name) < 100
-    assert len(str(cache_path.resolve(strict=False))) <= 220
+    resolved_root = long_cache_root.resolve(strict=False)
+    resolved_path = cache_path.resolve(strict=False)
+    added_length = len(str(resolved_path)) - len(str(resolved_root))
+    assert added_length <= 40, (
+        f"expected digest-only fallback under long cache root, "
+        f"but path grew by {added_length} chars: {resolved_path}"
+    )
