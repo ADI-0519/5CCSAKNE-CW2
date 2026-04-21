@@ -6,6 +6,7 @@ from pathlib import Path
 from rdflib import Graph
 
 from src.config import CONFIG
+from src.data_normalisation import normalise_name
 
 DEFAULT_QUERY_PATH = Path("queries/news_competency_queries.rq")
 DEFAULT_KG_CANDIDATES = (
@@ -107,6 +108,24 @@ def term_to_string(term):
     return None if term is None else str(term)
 
 
+def normalise_result_value(variable_name, value):
+    if value is None:
+        return None
+    return normalise_name(value)
+
+
+def deduplicate_rows(rows):
+    seen = set()
+    deduped = []
+    for row in rows:
+        key = json.dumps(row, sort_keys=True, ensure_ascii=False)
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(row)
+    return deduped
+
+
 def execute_queries(graph, query_definitions):
     results = []
     for definition in query_definitions:
@@ -115,7 +134,14 @@ def execute_queries(graph, query_definitions):
         variables = [str(var) for var in query_result.vars]
 
         for row in query_result:
-            rows.append({var: term_to_string(row[var]) for var in query_result.vars})
+            rows.append(
+                {
+                    str(var): normalise_result_value(str(var), term_to_string(row[var]))
+                    for var in query_result.vars
+                }
+            )
+
+        rows = deduplicate_rows(rows)
 
         results.append(
             {
