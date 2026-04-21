@@ -129,10 +129,15 @@ def run(proto_path, completed_path):
         print(f"[EVAL] fetching LLM baseline for {cq_id}")
         llm = get_llm_answer(cq_id, title)
 
-        table_rows.append({
-            "cq_id": cq_id, "proto": proto, "completed": completed,
-            "delta": delta, "llm": llm,
-        })
+        table_rows.append(
+            {
+                "cq_id": cq_id,
+                "proto": proto,
+                "completed": completed,
+                "delta": delta,
+                "llm": llm,
+            }
+        )
         interpretations.append((cq_id, interpret_delta(cq_id, proto, completed)))
 
     return table_rows, interpretations

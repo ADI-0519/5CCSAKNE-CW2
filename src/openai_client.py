@@ -64,6 +64,7 @@ EXTRACTION_RESPONSE_FORMAT = {
     },
 }
 
+
 def slug_text(text):
     return re.sub(r"[^a-zA-Z0-9_-]", "_", str(text).strip()) or "item"
 
