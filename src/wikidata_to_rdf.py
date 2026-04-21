@@ -3,6 +3,12 @@ from datetime import date as _date
 
 from rdflib import RDF, RDFS, XSD, Graph, Literal, Namespace, URIRef
 
+from src.domain_knowledge import (
+    canonicalise_government_body_name,
+    canonicalise_political_party_name,
+    classify_official_body_kind,
+)
+
 NEWS = Namespace("http://example.org/news#")
 SCHEMA = Namespace("https://schema.org/")
 WD = Namespace("http://www.wikidata.org/entity/")
@@ -62,7 +68,7 @@ def add_politician(graph, record):
                 pass
 
     # link politician to their party
-    party_name = record.get("party")
+    party_name = canonicalise_political_party_name(record.get("party"))
     if party_name:
         party_uri = organisation_uri(party_name)
         graph.add((party_uri, RDF.type, NEWS.PoliticalParty))
@@ -81,7 +87,7 @@ def add_politician(graph, record):
 
 
 def add_party(graph, record):
-    name = record.get("name")
+    name = canonicalise_political_party_name(record.get("name"))
     if not name:
         return
 
@@ -129,13 +135,20 @@ def add_party(graph, record):
 
 
 def add_government_body(graph, record):
-    name = record.get("name")
+    name = canonicalise_government_body_name(record.get("name"))
     if not name:
         return
 
     uri = organisation_uri(name)
     graph.add((uri, RDF.type, NEWS.OfficialBody))
-    graph.add((uri, RDF.type, NEWS.GovernmentBody))
+    body_kind = classify_official_body_kind(name)
+    if body_kind == "parliamentary_body":
+        graph.add((uri, RDF.type, NEWS.ParliamentaryBody))
+    elif body_kind == "government_department":
+        graph.add((uri, RDF.type, NEWS.GovernmentDepartment))
+        graph.add((uri, RDF.type, NEWS.GovernmentBody))
+    else:
+        graph.add((uri, RDF.type, NEWS.GovernmentBody))
     graph.add((uri, RDF.type, SCHEMA.Organization))
     add_literal(graph, uri, SCHEMA.name, name)
 
