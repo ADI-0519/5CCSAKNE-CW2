@@ -19,6 +19,7 @@ from src.data_normalisation import (
 )
 from src.json_to_rdf import convert_json_to_rdf
 from src.run_queries import execute_queries, load_kg, load_query_definitions, save_results
+from src.summarise_kg import build_summary, save_summary
 from src.validate_graph import execute_validation, save_validation_report
 from src.wikidata_collection import collect_wikidata, load_cached_wikidata
 from src.wikidata_to_rdf import convert_wikidata_to_rdf
@@ -28,6 +29,8 @@ WIKIDATA_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "wikidata_kg.ttl"
 PROTOTYPE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "prototype_kg.ttl"
 LATEST_QUERY_RESULTS_PATH = Path("output/query_results.json")
 LATEST_VALIDATION_RESULTS_PATH = Path("output/validation_results.json")
+LATEST_COMPLETION_AUDIT_PATH = Path("output/completion_audit.json")
+LATEST_KG_SUMMARY_PATH = Path("output/kg_summary.json")
 
 
 def build_timestamp():
@@ -189,9 +192,19 @@ def main():
 
     # stage 9: enrich/complete the KG
     print("[PIPELINE] Stage 9: Enrich the KG")
-    completed_graph = enrich_graph(prototype_graph)
+    timestamped_completion_audit = Path("output") / f"{timestamp}_completion_audit.json"
+    completed_graph = enrich_graph(
+        prototype_graph,
+        audit_log_path=LATEST_COMPLETION_AUDIT_PATH,
+    )
     save_rdf(completed_graph, COMPLETED_KG_PATH)
     save_rdf(completed_graph, f"output/{timestamp}_completed_kg.ttl")
+    if LATEST_COMPLETION_AUDIT_PATH.exists():
+        ensure_parent(timestamped_completion_audit)
+        timestamped_completion_audit.write_text(
+            LATEST_COMPLETION_AUDIT_PATH.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
 
     # stage 10: run SPARQL competency queries
     print("[PIPELINE] Stage 10: Run competency queries")
@@ -218,6 +231,13 @@ def main():
         f"{validation_report['failed_rule_count']} failed, "
         f"{validation_report['total_violations']} violations found."
     )
+
+    # Stage 12: Save headline KG summary metrics
+    print("[PIPELINE] Stage 12: Save KG summary metrics")
+    summary_report = build_summary(completed_graph, kg_records, validation_report)
+    timestamped_summary = Path("output") / f"{timestamp}_kg_summary.json"
+    save_summary(summary_report, LATEST_KG_SUMMARY_PATH)
+    save_summary(summary_report, timestamped_summary)
 
     print("[PIPELINE] Done.")
 
