@@ -5,6 +5,7 @@ from pathlib import Path
 
 from rdflib import Graph, Namespace
 
+from src.data_normalisation import normalise_name
 from src.run_queries import load_kg
 
 NEWS = Namespace("http://example.org/news#")
@@ -24,7 +25,9 @@ class ValidationRule:
 
 
 def _row_to_dict(row, variables):
-    return {str(var): (None if row[var] is None else str(row[var])) for var in variables}
+    return {
+        str(var): (None if row[var] is None else normalise_name(str(row[var]))) for var in variables
+    }
 
 
 def load_validation_rules():
@@ -193,6 +196,72 @@ def load_validation_rules():
               ?event news:issuedByDepartment ?department .
               OPTIONAL { ?event schema:name ?eventName . }
               FILTER NOT EXISTS { ?event news:involvesGovernmentBody ?department . }
+            }
+            """,
+        ),
+        rule(
+            "V13",
+            "Policy events should be grounded in a source",
+            "warning",
+            "Every news:PolicyEvent should have news:reportedByArticle or news:representedInOfficialSource.",
+            """
+            SELECT ?event ?eventName WHERE {
+              ?event rdf:type news:PolicyEvent .
+              OPTIONAL { ?event schema:name ?eventName . }
+              FILTER NOT EXISTS { ?event news:reportedByArticle ?article . }
+              FILTER NOT EXISTS { ?event news:representedInOfficialSource ?record . }
+            }
+            """,
+        ),
+        rule(
+            "V14",
+            "Parliamentary debates should identify a parliamentary body",
+            "warning",
+            "Every news:ParliamentaryDebate should carry news:occursInParliamentaryBody.",
+            """
+            SELECT ?event ?eventName WHERE {
+              ?event rdf:type news:ParliamentaryDebate .
+              OPTIONAL { ?event schema:name ?eventName . }
+              FILTER NOT EXISTS { ?event news:occursInParliamentaryBody ?body . }
+            }
+            """,
+        ),
+        rule(
+            "V15",
+            "Government policy events should involve a government body",
+            "warning",
+            "Every news:GovernmentPolicyEvent should carry news:involvesGovernmentBody.",
+            """
+            SELECT ?event ?eventName WHERE {
+              ?event rdf:type news:GovernmentPolicyEvent .
+              OPTIONAL { ?event schema:name ?eventName . }
+              FILTER NOT EXISTS { ?event news:involvesGovernmentBody ?body . }
+            }
+            """,
+        ),
+        rule(
+            "V16",
+            "News articles should have a publisher",
+            "error",
+            "Every news:NewsArticle should declare news:publishedBy.",
+            """
+            SELECT ?article ?headline WHERE {
+              ?article rdf:type news:NewsArticle .
+              OPTIONAL { ?article schema:headline ?headline . }
+              FILTER NOT EXISTS { ?article news:publishedBy ?publisher . }
+            }
+            """,
+        ),
+        rule(
+            "V17",
+            "News articles should have an articleURL",
+            "error",
+            "Every news:NewsArticle should declare news:articleURL.",
+            """
+            SELECT ?article ?headline WHERE {
+              ?article rdf:type news:NewsArticle .
+              OPTIONAL { ?article schema:headline ?headline . }
+              FILTER NOT EXISTS { ?article news:articleURL ?url . }
             }
             """,
         ),
