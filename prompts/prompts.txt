@@ -110,9 +110,9 @@ For each item, explain:
 Then propose a RAG-based completion workflow that constrains outputs to the ontology.
 
 Justification:
-Identifying incompleteness rigorously requires looking at the ontology, the instance graph, and the competency questions together, which is time-consuming to do manually. Using an LLM to analyse the prototype KG across all three layers produced a structured list of gaps, their impact on CQ coverage, and concrete enrichment suggestions. The final implementation was then narrowed into a conservative ontology-aligned enrichment stage rather than an unconstrained generative completion step. In the current codebase, `complete_kg.py` only materialises safe inverse and cross-source alignment links such as `news:reportsOn`, `news:matchedToSourceRecord`, and `news:representedInOfficialSource`.
+Identifying incompleteness rigorously requires looking at the ontology, the instance graph, and the competency questions together, which is time-consuming to do manually. Using an LLM to analyse the prototype KG across all three layers produced a structured list of gaps, their impact on CQ coverage, and concrete enrichment suggestions. The gap analysis directly shaped the design of the RAG enrichment step in `complete_kg.py`, which retrieves source titles and article headlines for each incomplete event via SPARQL, verbalises the retrieved context as a natural language sentence, and prompts OpenAI to propose missing actor, department, and topic links constrained to the ontology vocabulary.
 
-Used for: `docs/completion_analysis.md`
+Used for: `docs/completion_analysis.md` and `src/complete_kg.py`
 
 
 
@@ -202,26 +202,38 @@ Used for: `src/data_extraction.py` and `src/openai_client.py`
 
 
 ## P08: LLM-Assisted KG Completion
-Task: Propose conservative ontology-aligned cross-source completion hints for events already in the knowledge graph.
+Task: Implement a retrieve-verbalise-validate RAG enrichment step for missing involvesActor, involvesGovernmentBody, and concernsPolicyTopic links.
 
 Prompt:
-You are completing a UK parliamentary and government policy event knowledge graph. Use only the supplied event label, article headline, official source metadata, dates, and current KG context. Do not invent facts. Return only JSON-compatible ontology-aligned updates that can be validated conservatively.
+You are completing a UK politics knowledge graph. Given a policy event and
+retrieved source context, propose missing property values using only the
+declared vocabulary. Do not invent names not supported by the context.
+proposed_actors must be named individual politicians or political parties only,
+not departments, roles, or generic labels such as 'UK Government'.
+proposed_departments must be named UK government departments or official bodies only.
+proposed_topics must be chosen only from this list: [Defence, Economic Policy,
+Education, Energy, Government Policy, Healthcare, Housing, Immigration, Parliament,
+Public Spending, Taxation].
+Prefer specific topics over Government Policy, which should only be used when no
+other topic applies.
+Example of correct output: {"proposed_actors": ["Keir Starmer", "Labour Party"],
+"proposed_departments": ["Home Office"], "proposed_topics": ["Housing"]}.
+Return only JSON.
 
 User input:
-The runtime payload includes the project scope, event label, article headline, official source title, candidate dates, current event topics, and heuristic matching context.
+The runtime payload is a verbalised natural language sentence describing the event. It includes the event name, event type, event date (if available), and up to three retrieved article headlines and official source titles selected by SPARQL from the event's KG neighbourhood.
 
 Required response schema:
 {
-  "matched_to_source_record": true,
-  "represented_in_official_source": true,
-  "confidence": "low | medium | high",
-  "justification": "string"
+  "proposed_actors": ["string"],
+  "proposed_departments": ["string"],
+  "proposed_topics": ["string (must be from allowed list)"]
 }
 
 Justification:
-This prompt reflects the stricter completion design used in the current project story: completion should only strengthen cross-source alignment where the evidence is already strong, rather than adding broad article metadata or speculative ontology content. The implemented code now keeps this stage conservative and ontology-aligned.
+Grounding the LLM in retrieved source titles and article headlines rather than training knowledge alone keeps proposals tied to evidence already in the dataset. The instructions explicitly distinguish actors (named politicians or parties) from departments (named government bodies) to prevent cross-type contamination, which was the main failure mode observed in early prompt iterations. A code-level blocklist of institutional terms provides a second validation layer independent of the LLM. Constraining proposed_topics to a closed enum prevents hallucinated topic names from entering the graph. The validation step requires slug-term overlap between each proposed value and the retrieved context string before any triple is merged. Results are cached per event URI so reruns do not consume API quota.
 
-Used for: `src/complete_kg.py` and `src/openai_client.py`
+Used for: `src/complete_kg.py`
 
 
 
