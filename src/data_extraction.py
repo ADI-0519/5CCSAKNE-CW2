@@ -66,7 +66,8 @@ def get_spacy_nlp():
 
     try:
         return spacy.load(NLP_CONFIG["spacy_model_name"])
-    except Exception:
+    except Exception as exc:
+        print(f"[NLP] spacy model {NLP_CONFIG['spacy_model_name']!r} unavailable: {exc}")
         return None
 
 
