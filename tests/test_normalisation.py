@@ -47,12 +47,12 @@ class TestUtilityFunctions:
 
     def test_normalise_name_repairs_common_mojibake(self):
         broken = "Starmer\u00e2\u20ac\u2122s plans \u00e2\u20ac\u201c update"
-        assert normalise_name(broken) == "Starmer’s plans – update"
+        assert normalise_name(broken) == "Starmer\u2019s plans \u2013 update"
 
     def test_repair_common_mojibake_prefers_cleaner_text(self):
         broken = "London\u00e2\u20ac\u2122s politics"
         repaired = repair_common_mojibake(broken)
-        assert repaired == "London’s politics"
+        assert repaired == "London\u2019s politics"
         assert mojibake_score(repaired) < mojibake_score(broken)
 
 

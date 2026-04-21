@@ -309,7 +309,7 @@ class TestExtractRelevantInformation:
 
     def test_liveblog_without_clear_event_signal_does_not_get_generic_policy_fallback(self):
         article = make_article(
-            title="Social media has led to a complete rewiring of childhood, says minister – UK politics live",
+            title="Social media has led to a complete rewiring of childhood, says minister - UK politics live",
             url="https://example.com/politics/live/2026/mar/27/uk-politics-live",
             summary="Rolling coverage of UK politics through the day.",
             content=(
@@ -792,7 +792,7 @@ class TestExtractRelevantInformation:
             "events": [],
         }
         article = make_article(
-            title="UK politics: ministers under pressure – as it happened",
+            title="UK politics: ministers under pressure - as it happened",
             url="https://example.com/live/article",
         )
 
