@@ -1,14 +1,3 @@
-"""Map Wikidata structured records directly to RDF triples.
-
-This module performs direct structured-to-RDF mapping without any NLP.
-Each Wikidata record has typed fields that map to ontology classes and
-properties through explicit field-to-property rules.
-
-This contrasts with the Guardian textual pipeline, which requires NLP
-extraction (regex NER, keyword matching, LLM-assisted extraction) to
-produce the same kinds of triples from unstructured article body text.
-"""
-
 import re
 from datetime import date as _date
 
@@ -45,13 +34,12 @@ def add_literal(graph, subject, predicate, value, datatype=None):
 
 
 def add_politician(graph, record):
-    """Map a Wikidata politician record to RDF triples."""
     name = record.get("name")
     if not name:
         return
 
     uri = person_uri(name)
-    graph.add((uri, RDF.type, NEWS.Politician))
+    graph.add((uri, RDF.type, NEWS.PoliticalActor))
     graph.add((uri, RDF.type, SCHEMA.Person))
     add_literal(graph, uri, SCHEMA.name, name)
 
@@ -73,17 +61,17 @@ def add_politician(graph, record):
             except ValueError:
                 pass
 
-    # Link politician to their party
+    # link politician to their party
     party_name = record.get("party")
     if party_name:
         party_uri = organisation_uri(party_name)
         graph.add((party_uri, RDF.type, NEWS.PoliticalParty))
-        graph.add((party_uri, RDF.type, NEWS.Organisation))
         graph.add((party_uri, RDF.type, SCHEMA.Organization))
         add_literal(graph, party_uri, SCHEMA.name, party_name)
+        graph.add((uri, NEWS.memberOfParty, party_uri))
         graph.add((uri, SCHEMA.memberOf, party_uri))
 
-    # Link politician to their constituency
+    # link politician to their constituency
     constituency_name = record.get("constituency")
     if constituency_name:
         const_uri = location_uri(constituency_name)
@@ -93,14 +81,12 @@ def add_politician(graph, record):
 
 
 def add_party(graph, record):
-    """Map a Wikidata political party record to RDF triples."""
     name = record.get("name")
     if not name:
         return
 
     uri = organisation_uri(name)
     graph.add((uri, RDF.type, NEWS.PoliticalParty))
-    graph.add((uri, RDF.type, NEWS.Organisation))
     graph.add((uri, RDF.type, SCHEMA.Organization))
     add_literal(graph, uri, SCHEMA.name, name)
 
@@ -137,20 +123,19 @@ def add_party(graph, record):
 
     if record.get("leader"):
         leader_uri = person_uri(record["leader"])
-        graph.add((leader_uri, RDF.type, NEWS.Politician))
+        graph.add((leader_uri, RDF.type, NEWS.PoliticalActor))
         graph.add((leader_uri, RDF.type, SCHEMA.Person))
         add_literal(graph, leader_uri, SCHEMA.name, record["leader"])
 
 
 def add_government_body(graph, record):
-    """Map a Wikidata government body record to RDF triples."""
     name = record.get("name")
     if not name:
         return
 
     uri = organisation_uri(name)
+    graph.add((uri, RDF.type, NEWS.OfficialBody))
     graph.add((uri, RDF.type, NEWS.GovernmentBody))
-    graph.add((uri, RDF.type, NEWS.Organisation))
     graph.add((uri, RDF.type, SCHEMA.Organization))
     add_literal(graph, uri, SCHEMA.name, name)
 
@@ -169,11 +154,6 @@ def add_government_body(graph, record):
 
 
 def convert_wikidata_to_rdf(wikidata_payload):
-    """Convert a full Wikidata payload to an RDF graph.
-
-    This is a direct structured mapping: each JSON field maps to a specific
-    ontology class or property without NLP processing.
-    """
     print("[WIKIDATA-RDF] Starting structured-to-RDF mapping...")
 
     graph = Graph()

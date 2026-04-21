@@ -1,12 +1,3 @@
-"""Collect structured entity data from the Wikidata SPARQL endpoint.
-
-This module queries Wikidata for UK politicians, political parties, and
-government bodies.  It serves as the structured data source for the KG
-pipeline, complementing the textual data extracted from Guardian articles.
-
-No API key is required.  All queries use the public Wikidata Query Service.
-"""
-
 import json
 import time
 from pathlib import Path
@@ -23,10 +14,6 @@ REQUEST_HEADERS = {
 REQUEST_TIMEOUT = 90
 
 RAW_SNAPSHOT_DIR = Path(CONFIG["RAW_DATA_DIR"]) / "wikidata"
-
-# ---------------------------------------------------------------------------
-# SPARQL queries
-# ---------------------------------------------------------------------------
 
 POLITICIANS_QUERY = """
 SELECT DISTINCT
@@ -87,13 +74,7 @@ LIMIT 500
 """
 
 
-# ---------------------------------------------------------------------------
-# Execution helpers
-# ---------------------------------------------------------------------------
-
-
 def run_sparql_query(query, label="query"):
-    """Execute a SPARQL query against the Wikidata endpoint."""
     print(f"[WIKIDATA] Running {label}...")
     try:
         response = requests.get(
@@ -107,13 +88,15 @@ def run_sparql_query(query, label="query"):
         bindings = data.get("results", {}).get("bindings", [])
         print(f"[WIKIDATA] {label}: {len(bindings)} results")
         return bindings
+    except json.JSONDecodeError as exc:
+        print(f"[WIKIDATA] {label} failed: {exc}")
+        return []
     except requests.exceptions.RequestException as exc:
         print(f"[WIKIDATA] {label} failed: {exc}")
         return []
 
 
 def binding_value(binding, key):
-    """Extract a plain string value from a SPARQL result binding."""
     entry = binding.get(key)
     if entry is None:
         return None
@@ -121,7 +104,6 @@ def binding_value(binding, key):
 
 
 def parse_politician(binding):
-    """Convert a SPARQL binding row into a politician record."""
     return {
         "wikidata_uri": binding_value(binding, "person"),
         "name": binding_value(binding, "personLabel"),
@@ -134,7 +116,6 @@ def parse_politician(binding):
 
 
 def parse_party(binding):
-    """Convert a SPARQL binding row into a political party record."""
     return {
         "wikidata_uri": binding_value(binding, "party"),
         "name": binding_value(binding, "partyLabel"),
@@ -147,7 +128,6 @@ def parse_party(binding):
 
 
 def parse_government_body(binding):
-    """Convert a SPARQL binding row into a government body record."""
     return {
         "wikidata_uri": binding_value(binding, "body"),
         "name": binding_value(binding, "bodyLabel"),
@@ -157,7 +137,6 @@ def parse_government_body(binding):
 
 
 def deduplicate_by_name(records):
-    """Keep one record per unique name (first occurrence wins)."""
     seen = set()
     deduped = []
     for record in records:
@@ -170,7 +149,7 @@ def deduplicate_by_name(records):
 
 
 def is_valid_label(name):
-    """Reject Wikidata URIs or Q-IDs that leaked through as labels."""
+    # Wikidata sometimes returns Q-IDs instead of labels when no English label exists
     if not name:
         return False
     if name.startswith("http://") or name.startswith("https://"):
@@ -180,13 +159,50 @@ def is_valid_label(name):
     return True
 
 
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
+def load_cached_wikidata(snapshot_path=None):
+    if snapshot_path is not None:
+        path = Path(snapshot_path)
+    else:
+        path = RAW_SNAPSHOT_DIR / "wikidata_entities.json"
+
+    if not path.exists():
+        raise FileNotFoundError(f"[WIKIDATA] Snapshot not found: {path}")
+
+    data = json.loads(path.read_text(encoding="utf-8"))
+    print(
+        f"[WIKIDATA] Loaded cached snapshot from {path}: "
+        f"{len(data.get('politicians', []))} politicians, "
+        f"{len(data.get('political_parties', []))} parties, "
+        f"{len(data.get('government_bodies', []))} government bodies"
+    )
+    return data
+
+
+def load_cached_wikidata_if_available(snapshot_path=None):
+    try:
+        return load_cached_wikidata(snapshot_path=snapshot_path)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def merge_with_cached_entities(live_records, cached_payload, key):
+    cached_records = (cached_payload or {}).get(key, [])
+    if live_records or not cached_records:
+        return live_records
+    print(
+        f"[WIKIDATA] Falling back to cached {key} because the live query returned no usable records."
+    )
+    return cached_records
+
+
+def has_minimum_wikidata_coverage(payload):
+    return all(
+        payload.get(key) for key in ("politicians", "political_parties", "government_bodies")
+    )
 
 
 def collect_wikidata(save_snapshot=True):
-    """Fetch politicians, parties, and government bodies from Wikidata."""
+    cached_payload = load_cached_wikidata_if_available()
 
     # Fetch with a small delay between queries to be polite to the endpoint
     politician_bindings = run_sparql_query(POLITICIANS_QUERY, "politicians")
@@ -202,15 +218,22 @@ def collect_wikidata(save_snapshot=True):
             if is_valid_label(binding_value(b, "personLabel"))
         ]
     )
+    politicians = merge_with_cached_entities(politicians, cached_payload, "politicians")
     parties = deduplicate_by_name(
         [parse_party(b) for b in party_bindings if is_valid_label(binding_value(b, "partyLabel"))]
     )
+    parties = merge_with_cached_entities(parties, cached_payload, "political_parties")
     government_bodies = deduplicate_by_name(
         [
             parse_government_body(b)
             for b in body_bindings
             if is_valid_label(binding_value(b, "bodyLabel"))
         ]
+    )
+    government_bodies = merge_with_cached_entities(
+        government_bodies,
+        cached_payload,
+        "government_bodies",
     )
 
     payload = {
@@ -229,32 +252,18 @@ def collect_wikidata(save_snapshot=True):
     if save_snapshot:
         RAW_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
         snapshot_path = RAW_SNAPSHOT_DIR / "wikidata_entities.json"
-        snapshot_path.write_text(
-            json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
-        print(f"[WIKIDATA] Saved snapshot to {snapshot_path}")
+        if has_minimum_wikidata_coverage(payload):
+            snapshot_path.write_text(
+                json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
+            )
+            print(f"[WIKIDATA] Saved snapshot to {snapshot_path}")
+        else:
+            print(
+                "[WIKIDATA] Snapshot not updated because the live payload was incomplete; "
+                "keeping any existing snapshot unchanged."
+            )
 
     return payload
-
-
-def load_cached_wikidata(snapshot_path=None):
-    """Load a previously saved Wikidata snapshot from disk."""
-    if snapshot_path is not None:
-        path = Path(snapshot_path)
-    else:
-        path = RAW_SNAPSHOT_DIR / "wikidata_entities.json"
-
-    if not path.exists():
-        raise FileNotFoundError(f"[WIKIDATA] Snapshot not found: {path}")
-
-    data = json.loads(path.read_text(encoding="utf-8"))
-    print(
-        f"[WIKIDATA] Loaded cached snapshot from {path}: "
-        f"{len(data.get('politicians', []))} politicians, "
-        f"{len(data.get('political_parties', []))} parties, "
-        f"{len(data.get('government_bodies', []))} government bodies"
-    )
-    return data
 
 
 if __name__ == "__main__":

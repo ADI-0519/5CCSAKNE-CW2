@@ -6,52 +6,23 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 news: a owl:Ontology ;
-    rdfs:label "UK Politics and Policy News Ontology" ;
-    rdfs:comment "An ontology for representing current UK politics and policy news, including articles, journalists, organisations, events, topics, places, and analytical metadata. Extends Schema.org and the BBC Core Concepts Ontology." .
+    rdfs:label "UK Parliamentary and Policy Event Ontology" ;
+    rdfs:comment "A CQ-driven ontology for UK parliamentary and government policy events reported in UK news. The ontology models events, actors, institutions, policy topics, reporting artefacts, and lightweight provenance through source records." .
 
-news:BreakingNewsArticle a owl:Class ;
-    rdfs:label "Breaking News Article" ;
-    rdfs:comment "An article published as breaking news." ;
-    rdfs:subClassOf news:NewsArticle .
+news:GovernmentSourceRecord a owl:Class ;
+    rdfs:label "Government Source Record" ;
+    rdfs:comment "A source record derived from a government source." ;
+    rdfs:subClassOf news:OfficialSourceRecord .
 
-news:EconomicEvent a owl:Class ;
-    rdfs:label "Economic Event" ;
-    rdfs:comment "A budget statement, fiscal announcement, spending review, or similar economic event." ;
-    rdfs:subClassOf news:NewsEvent .
+news:ParliamentSourceRecord a owl:Class ;
+    rdfs:label "Parliament Source Record" ;
+    rdfs:comment "A source record derived from a parliamentary source." ;
+    rdfs:subClassOf news:OfficialSourceRecord .
 
-news:GovernmentBody a owl:Class ;
-    rdfs:label "Government Body" ;
-    rdfs:comment "A department, regulator, parliamentary body, or public institution." ;
-    rdfs:subClassOf news:Organisation .
-
-news:Negative a news:Sentiment ;
-    rdfs:label "Negative" .
-
-news:Neutral a news:Sentiment ;
-    rdfs:label "Neutral" .
-
-news:OpinionArticle a owl:Class ;
-    rdfs:label "Opinion Article" ;
-    rdfs:comment "An editorial or opinion piece." ;
-    rdfs:subClassOf news:NewsArticle .
-
-news:PoliticalEvent a owl:Class ;
-    rdfs:label "Political Event" ;
-    rdfs:comment "An election, debate, or policy announcement." ;
-    rdfs:subClassOf news:NewsEvent .
-
-news:PoliticalParty a owl:Class ;
-    rdfs:label "Political Party" ;
-    rdfs:comment "A political party or party grouping active in UK politics." ;
-    rdfs:subClassOf news:Organisation .
-
-news:Politician a owl:Class ;
-    rdfs:label "Politician" ;
-    rdfs:comment "A political actor such as an MP, minister, mayor, or party leader." ;
-    rdfs:subClassOf schema:Person .
-
-news:Positive a news:Sentiment ;
-    rdfs:label "Positive" .
+news:ParliamentaryDebate a owl:Class ;
+    rdfs:label "Parliamentary Debate" ;
+    rdfs:comment "A parliamentary event in which one or more policy topics are debated." ;
+    rdfs:subClassOf news:ParliamentaryEvent .
 
 news:articleURL a owl:DatatypeProperty ;
     rdfs:label "article URL" ;
@@ -60,161 +31,205 @@ news:articleURL a owl:DatatypeProperty ;
     rdfs:range xsd:anyURI ;
     rdfs:subPropertyOf schema:url .
 
-news:authorOf a owl:ObjectProperty ;
-    rdfs:label "author of" ;
-    rdfs:comment "Inverse of hasAuthor: links journalist to articles they have written." ;
-    rdfs:domain news:Journalist ;
-    rdfs:range news:NewsArticle ;
-    owl:inverseOf news:hasAuthor .
+news:concernsPolicyTopic a owl:ObjectProperty ;
+    rdfs:label "concerns policy topic" ;
+    rdfs:comment "Links a policy event to the policy topic it concerns." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range news:PolicyTopic ;
+    rdfs:subPropertyOf schema:about .
 
-news:coversEvent a owl:ObjectProperty ;
-    rdfs:label "covers event" ;
-    rdfs:comment "Links a news article to the event it covers." ;
+news:hasAuthor a owl:ObjectProperty ;
+    rdfs:label "has author" ;
+    rdfs:comment "Links a news article to the journalist who authored it." ;
     rdfs:domain news:NewsArticle ;
-    rdfs:range news:NewsEvent ;
-    rdfs:subPropertyOf core:notablyAssociatedWith .
+    rdfs:range news:Journalist ;
+    rdfs:subPropertyOf schema:author .
 
-news:eventDate a owl:DatatypeProperty ;
-    rdfs:label "event date" ;
-    rdfs:comment "The date on which a news event occurred." ;
-    rdfs:domain news:NewsEvent ;
-    rdfs:range xsd:date ;
-    rdfs:subPropertyOf core:startDate .
+news:involvesActor a owl:ObjectProperty ;
+    rdfs:label "involves actor" ;
+    rdfs:comment "Links a policy event to a political actor involved in it." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range news:PoliticalActor .
 
-news:eventLocation a owl:ObjectProperty ;
-    rdfs:label "event location" ;
-    rdfs:comment "Links a news event to the place where it happened." ;
-    rdfs:domain news:NewsEvent ;
+news:issuedByDepartment a owl:ObjectProperty ;
+    rdfs:label "issued by department" ;
+    rdfs:comment "Links a ministerial statement to the government department that issued it." ;
+    rdfs:domain news:MinisterialStatement ;
+    rdfs:range news:GovernmentDepartment ;
+    rdfs:subPropertyOf news:involvesGovernmentBody .
+
+news:matchedToSourceRecord a owl:ObjectProperty ;
+    rdfs:label "matched to source record" ;
+    rdfs:comment "Links a policy event to a source record aligned to it across datasets for integration purposes, without asserting strict identity between records." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range news:SourceRecord .
+
+news:memberOfParty a owl:ObjectProperty ;
+    rdfs:label "member of party" ;
+    rdfs:comment "Links a political actor to the political party they belong to." ;
+    rdfs:domain news:PoliticalActor ;
+    rdfs:range news:PoliticalParty ;
+    rdfs:subPropertyOf schema:memberOf .
+
+news:occursInLocation a owl:ObjectProperty ;
+    rdfs:label "occurs in location" ;
+    rdfs:comment "Links a policy event to the location in which it occurs." ;
+    rdfs:domain news:PolicyEvent ;
     rdfs:range news:Location ;
     rdfs:subPropertyOf core:eventPlace .
 
-news:hasFollowUp a owl:AsymmetricProperty,
-        owl:IrreflexiveProperty,
-        owl:ObjectProperty ;
-    rdfs:label "has follow-up" ;
-    rdfs:comment "Links an article to a subsequent follow-up article." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range news:NewsArticle .
+news:occursInParliamentaryBody a owl:ObjectProperty ;
+    rdfs:label "occurs in parliamentary body" ;
+    rdfs:comment "Links a parliamentary event to the parliamentary body in which it occurs." ;
+    rdfs:domain news:ParliamentaryEvent ;
+    rdfs:range news:ParliamentaryBody .
 
-news:hasSection a owl:DatatypeProperty ;
-    rdfs:label "has section" ;
-    rdfs:comment "The editorial section assigned to an article." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range xsd:string ;
-    rdfs:subPropertyOf schema:articleSection .
+news:occursOnDate a owl:DatatypeProperty ;
+    rdfs:label "occurs on date" ;
+    rdfs:comment "The calendar date on which a policy event occurs." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range xsd:date ;
+    rdfs:subPropertyOf core:startDate .
 
-news:hasSentiment a owl:ObjectProperty ;
-    rdfs:label "has sentiment" ;
-    rdfs:comment "Links an article to its sentiment classification." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range news:Sentiment .
-
-news:hasTopic a owl:ObjectProperty ;
-    rdfs:label "has topic" ;
-    rdfs:comment "Links an article to a thematic topic discussed in it." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range news:Topic ;
-    rdfs:subPropertyOf schema:about .
-
-news:hasUpdateTimestamp a owl:DatatypeProperty ;
-    rdfs:label "update timestamp" ;
-    rdfs:comment "The timestamp of the latest update known for an article." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range xsd:dateTime ;
-    rdfs:subPropertyOf schema:dateModified .
-
-news:mentionsLocation a owl:ObjectProperty ;
-    rdfs:label "mentions location" ;
-    rdfs:comment "Links an article to a location mentioned in its content." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range news:Location ;
-    rdfs:subPropertyOf schema:mentions .
-
-news:mentionsOrganisation a owl:ObjectProperty ;
-    rdfs:label "mentions organisation" ;
-    rdfs:comment "Links an article to an organisation mentioned in its content." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range news:Organisation ;
-    rdfs:subPropertyOf schema:mentions .
-
-news:mentionsPerson a owl:ObjectProperty ;
-    rdfs:label "mentions person" ;
-    rdfs:comment "Links an article to a person mentioned in its content." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range schema:Person ;
-    rdfs:subPropertyOf schema:mentions .
-
-news:publishedBy a owl:FunctionalProperty,
-        owl:ObjectProperty ;
+news:publishedBy a owl:ObjectProperty ;
     rdfs:label "published by" ;
-    rdfs:comment "Links an article to the news organisation that published it." ;
+    rdfs:comment "Links a news article to the news organisation that published it." ;
     rdfs:domain news:NewsArticle ;
     rdfs:range news:NewsOrganisation ;
     rdfs:subPropertyOf schema:publisher .
 
 news:publishedDate a owl:DatatypeProperty ;
     rdfs:label "published date" ;
-    rdfs:comment "The publication date of a news article." ;
+    rdfs:comment "The publication timestamp of a news article." ;
     rdfs:domain news:NewsArticle ;
     rdfs:range xsd:dateTime ;
     rdfs:subPropertyOf schema:datePublished .
 
-news:wordCount a owl:DatatypeProperty ;
-    rdfs:label "word count" ;
-    rdfs:comment "The number of words available for an article representation." ;
+news:reportsOn a owl:ObjectProperty ;
+    rdfs:label "reports on" ;
+    rdfs:comment "Links a news article to the policy event it reports on." ;
     rdfs:domain news:NewsArticle ;
-    rdfs:range xsd:integer .
+    rdfs:range news:PolicyEvent ;
+    owl:inverseOf news:reportedByArticle .
 
-news:worksFor a owl:AsymmetricProperty,
-        owl:ObjectProperty ;
-    rdfs:label "works for" ;
-    rdfs:comment "Links a journalist to the news organisation they work for." ;
-    rdfs:domain news:Journalist ;
-    rdfs:range news:NewsOrganisation ;
-    rdfs:subPropertyOf schema:worksFor .
+news:representedInOfficialSource a owl:ObjectProperty ;
+    rdfs:label "represented in official source" ;
+    rdfs:comment "Links a policy event to an official source record that directly describes or evidences that event." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range news:OfficialSourceRecord .
 
-news:Topic a owl:Class ;
-    rdfs:label "Topic" ;
-    rdfs:comment "A policy or public-affairs theme discussed in reporting." ;
-    rdfs:subClassOf schema:Thing .
+news:sourceIdentifier a owl:DatatypeProperty ;
+    rdfs:label "source identifier" ;
+    rdfs:comment "An identifier assigned to a source record by its source system." ;
+    rdfs:domain news:SourceRecord ;
+    rdfs:range xsd:string .
 
-news:hasAuthor a owl:ObjectProperty ;
-    rdfs:label "has author" ;
-    rdfs:comment "Links an article to the journalist credited with writing it." ;
-    rdfs:domain news:NewsArticle ;
-    rdfs:range news:Journalist ;
-    rdfs:subPropertyOf schema:author .
+news:sourceSystem a owl:DatatypeProperty ;
+    rdfs:label "source system" ;
+    rdfs:comment "The name of the source system from which a source record was collected." ;
+    rdfs:domain news:SourceRecord ;
+    rdfs:range xsd:string .
 
-news:Location a owl:Class ;
-    rdfs:label "Location" ;
-    rdfs:comment "A geographic location mentioned in news." ;
-    rdfs:subClassOf core:Place .
+news:sourceTitle a owl:DatatypeProperty ;
+    rdfs:label "source title" ;
+    rdfs:comment "The title or headline held by a source record." ;
+    rdfs:domain news:SourceRecord ;
+    rdfs:range xsd:string .
 
-news:NewsOrganisation a owl:Class ;
-    rdfs:label "News Organisation" ;
-    rdfs:comment "A media company or news publisher." ;
-    rdfs:subClassOf news:Organisation .
+news:GovernmentDepartment a owl:Class ;
+    rdfs:label "Government Department" ;
+    rdfs:comment "A government department involved in a government policy event or issuing a ministerial statement." ;
+    rdfs:subClassOf news:GovernmentBody .
+
+news:GovernmentPolicyEvent a owl:Class ;
+    rdfs:label "Government Policy Event" ;
+    rdfs:comment "A policy event issued by or involving a government body or department." ;
+    rdfs:subClassOf news:PolicyEvent .
 
 news:Journalist a owl:Class ;
     rdfs:label "Journalist" ;
-    rdfs:comment "A person who writes or reports news articles." ;
+    rdfs:comment "A journalist who authors a news article reporting on a policy event." ;
     rdfs:subClassOf schema:Person .
 
-news:Organisation a owl:Class ;
-    rdfs:label "Organisation" ;
-    rdfs:comment "An organisation mentioned in current UK politics and policy reporting." ;
+news:Location a owl:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A location in which a policy event occurs." ;
+    rdfs:subClassOf core:Place .
+
+news:MinisterialStatement a owl:Class ;
+    rdfs:label "Ministerial Statement" ;
+    rdfs:comment "A government policy event in which a department issues an official ministerial statement." ;
+    rdfs:subClassOf news:GovernmentPolicyEvent .
+
+news:NewsOrganisation a owl:Class ;
+    rdfs:label "News Organisation" ;
+    rdfs:comment "A news publisher reporting on policy events." ;
     rdfs:subClassOf schema:Organization .
 
-news:Sentiment a owl:Class ;
-    rdfs:label "Sentiment" ;
-    rdfs:comment "Positive, negative, or neutral sentiment associated with a news article." .
+news:ParliamentaryBody a owl:Class ;
+    rdfs:label "Parliamentary Body" ;
+    rdfs:comment "A parliamentary chamber, committee, or institution in which a parliamentary event occurs." ;
+    rdfs:subClassOf news:OfficialBody .
 
-news:NewsEvent a owl:Class ;
-    rdfs:label "News Event" ;
-    rdfs:comment "A real-world event covered by news." ;
-    rdfs:subClassOf core:Event .
+news:PolicyTopic a owl:Class ;
+    rdfs:label "Policy Topic" ;
+    rdfs:comment "A policy topic such as immigration, healthcare, taxation, or public spending." ;
+    rdfs:subClassOf schema:Thing .
+
+news:PoliticalParty a owl:Class ;
+    rdfs:label "Political Party" ;
+    rdfs:comment "A political party linked to political actors participating in policy events." ;
+    rdfs:subClassOf schema:Organization .
+
+news:involvesGovernmentBody a owl:ObjectProperty ;
+    rdfs:label "involves government body" ;
+    rdfs:comment "Links a policy event to a government body involved in it." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range news:GovernmentBody .
+
+news:reportedByArticle a owl:ObjectProperty ;
+    rdfs:label "reported by article" ;
+    rdfs:comment "Links a policy event to a news article that reports on it." ;
+    rdfs:domain news:PolicyEvent ;
+    rdfs:range news:NewsArticle .
+
+news:GovernmentBody a owl:Class ;
+    rdfs:label "Government Body" ;
+    rdfs:comment "An executive government body involved in a policy event." ;
+    rdfs:subClassOf news:OfficialBody .
+
+news:OfficialBody a owl:Class ;
+    rdfs:label "Official Body" ;
+    rdfs:comment "An official public institution relevant to the domain, including executive government bodies and parliamentary institutions." ;
+    rdfs:subClassOf schema:Organization .
+
+news:ParliamentaryEvent a owl:Class ;
+    rdfs:label "Parliamentary Event" ;
+    rdfs:comment "A policy event taking place within a parliamentary setting or linked to a parliamentary body." ;
+    rdfs:subClassOf news:PolicyEvent .
+
+news:PoliticalActor a owl:Class ;
+    rdfs:label "Political Actor" ;
+    rdfs:comment "A person participating in a policy event in a political capacity." ;
+    rdfs:subClassOf schema:Person .
+
+news:OfficialSourceRecord a owl:Class ;
+    rdfs:label "Official Source Record" ;
+    rdfs:comment "A source record from an official parliamentary or government source." ;
+    rdfs:subClassOf news:SourceRecord .
+
+news:SourceRecord a owl:Class ;
+    rdfs:label "Source Record" ;
+    rdfs:comment "A source-side record used to construct or align the knowledge graph." ;
+    rdfs:subClassOf schema:CreativeWork .
 
 news:NewsArticle a owl:Class ;
     rdfs:label "News Article" ;
-    rdfs:comment "A news article from any source in our knowledge graph." ;
+    rdfs:comment "A news article that reports on a policy event." ;
     rdfs:subClassOf schema:NewsArticle .
+
+news:PolicyEvent a owl:Class ;
+    rdfs:label "Policy Event" ;
+    rdfs:comment "A real-world event concerning UK government policy or parliamentary policy activity." ;
+    rdfs:subClassOf core:Event .
+

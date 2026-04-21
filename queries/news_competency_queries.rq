@@ -2,319 +2,350 @@ PREFIX news: <http://example.org/news#>
 PREFIX schema: <https://schema.org/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-# CQ01: Which journalists wrote politics-section articles about government or policy issues during the project time window?
-SELECT DISTINCT ?journalistName ?headline ?publishedDate
+# CQ01: Which parliamentary debates in the selected time window concern which policy topics?
+SELECT DISTINCT ?debateName ?topicName ?eventDate
 WHERE {
+  ?debate a news:ParliamentaryDebate ;
+          schema:name ?debateName ;
+          news:concernsPolicyTopic ?topic ;
+          news:occursOnDate ?eventDate .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+ORDER BY ?eventDate ?debateName ?topicName
+
+
+# CQ02: Which ministerial statements in the selected time window are issued by which government departments?
+SELECT DISTINCT ?statementName ?departmentName ?eventDate
+WHERE {
+  ?statement a news:MinisterialStatement ;
+             schema:name ?statementName ;
+             news:issuedByDepartment ?department ;
+             news:occursOnDate ?eventDate .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+ORDER BY ?eventDate ?statementName ?departmentName
+
+
+# CQ03: Which political actors are involved in more than one policy event during the selected time window?
+SELECT ?actorName (COUNT(DISTINCT ?event) AS ?eventCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:involvesActor ?actor ;
+         news:occursOnDate ?eventDate .
+  ?actor a news:PoliticalActor ;
+         schema:name ?actorName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?actorName
+HAVING(COUNT(DISTINCT ?event) > 1)
+ORDER BY DESC(?eventCount) ?actorName
+
+
+# CQ04: Which policy events are reported by news articles and are also represented in official parliamentary or government sources?
+SELECT DISTINCT ?eventName ?headline ?sourceTitle ?eventDate
+WHERE {
+  ?sourceRecord a news:OfficialSourceRecord ;
+                news:sourceTitle ?sourceTitle .
+  ?event a news:PolicyEvent ;
+         schema:name ?eventName ;
+         news:representedInOfficialSource ?sourceRecord ;
+         news:reportedByArticle ?article ;
+         news:occursOnDate ?eventDate .
   ?article a news:NewsArticle ;
-           news:hasAuthor ?journalist ;
-           news:hasSection ?section ;
-           news:hasTopic ?topic ;
-           news:publishedDate ?publishedDate ;
            schema:headline ?headline .
-  ?journalist schema:name ?journalistName .
-  ?topic schema:name ?topicName .
-  FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?topicName IN ("Government Policy", "Parliament", "Economic Policy", "Public Spending"))
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
-ORDER BY ?journalistName ?publishedDate
+ORDER BY ?eventDate ?eventName ?headline
 
 
-# CQ02: Which news organisations published politics-section articles between March 6, 2026 and April 6, 2026?
-SELECT DISTINCT ?publisherName
+# CQ05: Which policy topics are common to both parliamentary events and government policy events during the selected time window?
+SELECT DISTINCT ?topicName
 WHERE {
-  ?article a news:NewsArticle ;
-           news:publishedBy ?publisher ;
-           news:hasSection ?section ;
-           news:publishedDate ?publishedDate .
-  ?publisher schema:name ?publisherName .
-  FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER EXISTS {
+    ?parliamentaryEvent a news:ParliamentaryEvent ;
+                        news:concernsPolicyTopic ?topic ;
+                        news:occursOnDate ?parliamentaryDate .
+    FILTER(?parliamentaryDate >= "{DATE_START}"^^xsd:date && ?parliamentaryDate <= "{DATE_END}"^^xsd:date)
+  }
+  FILTER EXISTS {
+    ?governmentEvent a news:GovernmentPolicyEvent ;
+                     news:concernsPolicyTopic ?topic ;
+                     news:occursOnDate ?governmentDate .
+    FILTER(?governmentDate >= "{DATE_START}"^^xsd:date && ?governmentDate <= "{DATE_END}"^^xsd:date)
+  }
 }
-ORDER BY ?publisherName
+ORDER BY ?topicName
 
 
-# CQ03: Which people were mentioned most often across the fixed article collection?
-SELECT ?personName (COUNT(DISTINCT ?article) AS ?articleCount)
+# CQ06: Which parliamentary bodies do events concerning a given policy topic occur in during the selected time window?
+SELECT DISTINCT ?bodyName ?topicName ?eventName ?eventDate
 WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsPerson ?person ;
-           news:publishedDate ?publishedDate .
-  ?person schema:name ?personName .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  ?event a news:ParliamentaryEvent ;
+         schema:name ?eventName ;
+         news:occursInParliamentaryBody ?body ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  ?body a news:ParliamentaryBody ;
+        schema:name ?bodyName .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
-GROUP BY ?personName
-ORDER BY DESC(?articleCount) ?personName
+ORDER BY ?topicName ?bodyName ?eventDate ?eventName
 
 
-# CQ04: Which political parties were mentioned in articles about elections or parliamentary politics?
-SELECT DISTINCT ?partyName ?headline
+# CQ07: Which government departments are involved in the highest number of policy events during the selected time window?
+SELECT ?departmentName (COUNT(DISTINCT ?event) AS ?eventCount)
 WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsOrganisation ?party ;
-           news:hasTopic ?topic ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
+  ?event a news:PolicyEvent ;
+         news:involvesGovernmentBody ?department ;
+         news:occursOnDate ?eventDate .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?departmentName
+ORDER BY DESC(?eventCount) ?departmentName
+
+
+# CQ08: Which political parties have members involved in events concerning more than one policy topic?
+SELECT ?partyName (COUNT(DISTINCT ?topic) AS ?topicCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:involvesActor ?actor ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  ?actor a news:PoliticalActor ;
+         news:memberOfParty ?party .
   ?party a news:PoliticalParty ;
          schema:name ?partyName .
-  ?topic schema:name ?topicName .
-  FILTER(?topicName IN ("Election", "Parliament"))
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
-ORDER BY ?partyName ?headline
+GROUP BY ?partyName
+HAVING(COUNT(DISTINCT ?topic) > 1)
+ORDER BY DESC(?topicCount) ?partyName
 
 
-# CQ05: Which government bodies were mentioned in articles about taxation, public spending, or healthcare policy?
-SELECT DISTINCT ?bodyName ?headline
+# CQ09: Which reported policy events lack a linked government body, parliamentary body, or policy topic in the knowledge graph?
+SELECT DISTINCT ?eventName ?headline ?eventDate
 WHERE {
+  ?event a news:PolicyEvent ;
+         schema:name ?eventName ;
+         news:reportedByArticle ?article ;
+         news:occursOnDate ?eventDate .
   ?article a news:NewsArticle ;
-           news:mentionsOrganisation ?body ;
-           news:hasTopic ?topic ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
-  ?body a news:GovernmentBody ;
-        schema:name ?bodyName .
-  ?topic schema:name ?topicName .
-  FILTER(?topicName IN ("Taxation", "Public Spending", "Healthcare"))
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+           schema:headline ?headline .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+  FILTER(
+    NOT EXISTS { ?event news:involvesGovernmentBody ?governmentBody . }
+    || (
+      EXISTS { ?event a news:ParliamentaryEvent . }
+      && NOT EXISTS { ?event news:occursInParliamentaryBody ?parliamentaryBody . }
+    )
+    || NOT EXISTS { ?event news:concernsPolicyTopic ?topic . }
+  )
 }
-ORDER BY ?bodyName ?headline
+ORDER BY ?eventDate ?eventName ?headline
 
 
-# CQ06: Which opinion articles were classified as negative in sentiment?
-SELECT DISTINCT ?headline ?publishedDate
+# CQ10: Which policy topics are most frequently linked to parliamentary and government policy events reported during the selected time window?
+SELECT ?topicName (COUNT(DISTINCT ?event) AS ?eventCount)
 WHERE {
-  ?article a news:OpinionArticle ;
-           news:hasSentiment news:Negative ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?publishedDate ?headline
-
-
-# CQ07: Which topics appeared most often in politics-section reporting during the project time window?
-SELECT ?topicName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:hasTopic ?topic ;
-           news:hasSection ?section ;
-           news:publishedDate ?publishedDate .
-  ?topic schema:name ?topicName .
-  FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  ?event a news:PolicyEvent ;
+         news:concernsPolicyTopic ?topic ;
+         news:reportedByArticle ?article ;
+         news:occursOnDate ?eventDate .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+  FILTER(
+    EXISTS { ?event a news:ParliamentaryEvent . } ||
+    EXISTS { ?event a news:GovernmentPolicyEvent . }
+  )
 }
 GROUP BY ?topicName
-ORDER BY DESC(?articleCount) ?topicName
+ORDER BY DESC(?eventCount) ?topicName
 
 
-# CQ08: Which articles were updated after their original publication time, and what are their canonical URLs?
-SELECT DISTINCT ?headline ?publishedDate ?updatedDate ?url
+# CQ11: Which policy events in the selected time window are represented in official source records and also involve a government department?
+SELECT DISTINCT ?eventName ?departmentName ?sourceTitle ?eventDate
 WHERE {
-  ?article a news:NewsArticle ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate ;
-           news:hasUpdateTimestamp ?updatedDate ;
-           news:articleURL ?url .
-  FILTER(?updatedDate > ?publishedDate)
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  ?event a news:PolicyEvent ;
+         schema:name ?eventName ;
+         news:representedInOfficialSource ?sourceRecord ;
+         news:involvesGovernmentBody ?department ;
+         news:occursOnDate ?eventDate .
+  ?sourceRecord a news:OfficialSourceRecord ;
+                news:sourceTitle ?sourceTitle .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
-ORDER BY ?publishedDate ?headline
+ORDER BY ?eventDate ?eventName ?departmentName
 
 
-# CQ09: How does the average word count of politics-section articles compare with the average word count of opinion articles?
-SELECT ?articleGroup (AVG(?words) AS ?averageWordCount)
+# CQ12: Which policy topics are most frequently linked to policy events represented in official source records during the selected time window?
+SELECT ?topicName (COUNT(DISTINCT ?event) AS ?eventCount)
 WHERE {
-  {
-    ?article a news:NewsArticle ;
-             news:hasSection ?section ;
-             news:wordCount ?words ;
-             news:publishedDate ?publishedDate .
-    FILTER(LCASE(STR(?section)) = "politics")
-    FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-    BIND("politics-section" AS ?articleGroup)
+  ?event a news:PolicyEvent ;
+         news:representedInOfficialSource ?record ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?topicName
+ORDER BY DESC(?eventCount) ?topicName
+
+
+# CQ13: Which pairs of policy topics co-occur across more than one policy event during the selected time window?
+SELECT ?topicNameA ?topicNameB (COUNT(DISTINCT ?event) AS ?coOccurrenceCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:concernsPolicyTopic ?topicA ;
+         news:concernsPolicyTopic ?topicB ;
+         news:occursOnDate ?eventDate .
+  ?topicA a news:PolicyTopic ;
+          schema:name ?topicNameA .
+  ?topicB a news:PolicyTopic ;
+          schema:name ?topicNameB .
+  FILTER(STR(?topicNameA) < STR(?topicNameB))
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?topicNameA ?topicNameB
+HAVING(COUNT(DISTINCT ?event) > 1)
+ORDER BY DESC(?coOccurrenceCount) ?topicNameA ?topicNameB
+
+
+# CQ14: How many parliamentary events and government policy events are linked to each policy topic during the selected time window?
+SELECT ?topicName
+       (COUNT(DISTINCT ?parliamentaryEvent) AS ?parliamentaryCount)
+       (COUNT(DISTINCT ?governmentEvent) AS ?governmentCount)
+WHERE {
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  OPTIONAL {
+    ?governmentEvent a news:GovernmentPolicyEvent ;
+                     news:concernsPolicyTopic ?topic ;
+                     news:occursOnDate ?governmentDate .
+    FILTER(?governmentDate >= "{DATE_START}"^^xsd:date && ?governmentDate <= "{DATE_END}"^^xsd:date)
   }
-  UNION
-  {
-    ?article a news:OpinionArticle ;
-             news:wordCount ?words ;
-             news:publishedDate ?publishedDate .
-    FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-    BIND("opinion" AS ?articleGroup)
+  OPTIONAL {
+    ?parliamentaryEvent a news:ParliamentaryEvent ;
+                        news:concernsPolicyTopic ?topic ;
+                        news:occursOnDate ?parliamentaryDate .
+    FILTER(?parliamentaryDate >= "{DATE_START}"^^xsd:date && ?parliamentaryDate <= "{DATE_END}"^^xsd:date)
   }
 }
-GROUP BY ?articleGroup
-ORDER BY ?articleGroup
+GROUP BY ?topicName
+HAVING(COUNT(DISTINCT ?parliamentaryEvent) > 0 || COUNT(DISTINCT ?governmentEvent) > 0)
+ORDER BY DESC(?parliamentaryCount) DESC(?governmentCount) ?topicName
 
 
-# CQ10: Which articles have a follow-up article, and do the original and follow-up share at least one topic?
-SELECT DISTINCT ?headline ?followUpHeadline ?topicName
+# CQ15: Which locations are linked to more than one distinct policy event during the selected time window?
+SELECT ?locationName (COUNT(DISTINCT ?event) AS ?eventCount)
 WHERE {
-  ?article a news:NewsArticle ;
-           news:hasFollowUp ?followUp ;
-           news:hasTopic ?topic ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
-  ?followUp a news:NewsArticle ;
-            news:hasTopic ?topic ;
-            schema:headline ?followUpHeadline .
-  ?topic schema:name ?topicName .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?headline ?followUpHeadline ?topicName
-
-
-# CQ11: Which journalists from the same news organisation wrote about the same topic during the project time window?
-SELECT ?publisherName ?topicName (COUNT(DISTINCT ?journalist) AS ?journalistCount)
-WHERE {
-  ?journalist a news:Journalist ;
-              news:worksFor ?publisher .
-  ?publisher schema:name ?publisherName .
-  ?article a news:NewsArticle ;
-           news:hasAuthor ?journalist ;
-           news:hasTopic ?topic ;
-           news:publishedDate ?publishedDate .
-  ?topic schema:name ?topicName .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-GROUP BY ?publisherName ?topicName
-HAVING (COUNT(DISTINCT ?journalist) > 1)
-ORDER BY DESC(?journalistCount) ?publisherName ?topicName
-
-
-# CQ12: Which breaking news articles were published in the politics section?
-SELECT DISTINCT ?headline ?publishedDate
-WHERE {
-  ?article a news:BreakingNewsArticle ;
-           schema:headline ?headline ;
-           news:hasSection ?section ;
-           news:publishedDate ?publishedDate .
-  FILTER(LCASE(STR(?section)) = "politics")
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?publishedDate ?headline
-
-
-# CQ13: Which locations were mentioned most often in articles about immigration, taxation, or healthcare policy?
-SELECT ?locationName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsLocation ?location ;
-           news:hasTopic ?topic ;
-           news:publishedDate ?publishedDate .
-  ?location schema:name ?locationName .
-  ?topic schema:name ?topicName .
-  FILTER(?topicName IN ("Immigration", "Taxation", "Healthcare"))
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  ?event a news:PolicyEvent ;
+         news:occursInLocation ?location ;
+         news:occursOnDate ?eventDate .
+  ?location a news:Location ;
+            schema:name ?locationName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
 GROUP BY ?locationName
-ORDER BY DESC(?articleCount) ?locationName
+HAVING(COUNT(DISTINCT ?event) > 1)
+ORDER BY DESC(?eventCount) ?locationName
 
 
-# CQ14: Which journalists wrote articles that were later updated?
-SELECT DISTINCT ?journalistName ?headline ?publishedDate ?updatedDate
+# CQ16: Which political actors are individually involved in events spanning at least two distinct policy topics, and which party do they belong to?
+SELECT ?actorName ?partyName (COUNT(DISTINCT ?topic) AS ?topicCount)
 WHERE {
-  ?article a news:NewsArticle ;
-           news:hasAuthor ?journalist ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate ;
-           news:hasUpdateTimestamp ?updatedDate .
-  ?journalist schema:name ?journalistName .
-  FILTER(?updatedDate > ?publishedDate)
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?journalistName ?publishedDate
-
-
-# CQ15: Which articles mention both a person and an organisation?
-SELECT DISTINCT ?headline ?publishedDate
-WHERE {
-  ?article a news:NewsArticle ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
-  FILTER EXISTS { ?article news:mentionsPerson ?person . }
-  FILTER EXISTS { ?article news:mentionsOrganisation ?organisation . }
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?publishedDate ?headline
-
-
-# CQ16: Which news organisations published the widest range of topics during the project time window?
-SELECT ?publisherName (COUNT(DISTINCT ?topic) AS ?topicCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:publishedBy ?publisher ;
-           news:hasTopic ?topic ;
-           news:publishedDate ?publishedDate .
-  ?publisher schema:name ?publisherName .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-GROUP BY ?publisherName
-ORDER BY DESC(?topicCount) ?publisherName
-
-
-# CQ17: Which people and organisations were co-mentioned most often in the same articles?
-SELECT ?personName ?organisationName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsPerson ?person ;
-           news:mentionsOrganisation ?organisation ;
-           news:publishedDate ?publishedDate .
-  ?person schema:name ?personName .
-  ?organisation schema:name ?organisationName .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-GROUP BY ?personName ?organisationName
-ORDER BY DESC(?articleCount) ?personName ?organisationName
-
-
-# CQ18: Which political events took place in London during the project time window, and when did they occur?
-SELECT DISTINCT ?eventName ?eventDate ?headline
-WHERE {
-  ?event a news:PoliticalEvent ;
-         schema:name ?eventName ;
-         news:eventLocation ?location ;
-         news:eventDate ?eventDate .
-  ?location schema:name ?locationName .
-  ?article a news:NewsArticle ;
-           news:coversEvent ?event ;
-           schema:headline ?headline ;
-           news:publishedDate ?publishedDate .
-  FILTER(LCASE(STR(?locationName)) = "london")
-  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-ORDER BY ?eventDate ?headline
-
-
-# CQ19: Which political or economic events were covered by more than one article?
-SELECT ?eventName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:coversEvent ?event ;
-           news:publishedDate ?publishedDate .
-  ?event a ?eventType ;
-         schema:name ?eventName .
-  FILTER(?eventType IN (news:PoliticalEvent, news:EconomicEvent))
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
-}
-GROUP BY ?eventName
-HAVING (COUNT(DISTINCT ?article) > 1)
-ORDER BY DESC(?articleCount) ?eventName
-
-
-# CQ20: Which politicians and political parties were mentioned together most often in the same articles?
-SELECT ?politicianName ?partyName (COUNT(DISTINCT ?article) AS ?articleCount)
-WHERE {
-  ?article a news:NewsArticle ;
-           news:mentionsPerson ?politician ;
-           news:mentionsOrganisation ?party ;
-           news:publishedDate ?publishedDate .
-  ?politician a news:Politician ;
-              schema:name ?politicianName .
+  ?event a news:PolicyEvent ;
+         news:involvesActor ?actor ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  ?actor a news:PoliticalActor ;
+         schema:name ?actorName ;
+         news:memberOfParty ?party .
   ?party a news:PoliticalParty ;
          schema:name ?partyName .
-  FILTER(?publishedDate >= "{DATE_START}T00:00:00Z"^^xsd:dateTime && ?publishedDate <= "{DATE_END}T23:59:59Z"^^xsd:dateTime)
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
-GROUP BY ?politicianName ?partyName
-ORDER BY DESC(?articleCount) ?politicianName ?partyName
+GROUP BY ?actorName ?partyName
+HAVING(COUNT(DISTINCT ?topic) >= 2)
+ORDER BY DESC(?topicCount) ?actorName
+
+
+# CQ17: Which journalists authored articles reporting on policy events that involve a government department?
+SELECT DISTINCT ?journalistName ?headline ?departmentName
+WHERE {
+  ?journalist a news:Journalist ;
+              schema:name ?journalistName .
+  ?article a news:NewsArticle ;
+           news:hasAuthor ?journalist ;
+           schema:headline ?headline .
+  ?event a news:PolicyEvent ;
+         news:reportedByArticle ?article ;
+         news:involvesGovernmentBody ?department ;
+         news:occursOnDate ?eventDate .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+ORDER BY ?journalistName ?departmentName ?headline
+
+
+# CQ18: Which policy topics appear in events that involve both a political actor and a government body?
+SELECT DISTINCT ?topicName
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:involvesActor ?actor ;
+         news:involvesGovernmentBody ?body ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  ?actor a news:PoliticalActor .
+  ?body a news:GovernmentBody .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+ORDER BY ?topicName
+
+
+# CQ19: Which policy topics are shared by parliamentary events and ministerial statements occurring on the same date?
+SELECT DISTINCT ?topicName ?sharedDate
+WHERE {
+  ?parliamentaryEvent a news:ParliamentaryEvent ;
+                      news:concernsPolicyTopic ?topic ;
+                      news:occursOnDate ?sharedDate .
+  ?statement a news:MinisterialStatement ;
+             news:concernsPolicyTopic ?topic ;
+             news:occursOnDate ?sharedDate .
+  ?topic a news:PolicyTopic ;
+         schema:name ?topicName .
+  FILTER(?sharedDate >= "{DATE_START}"^^xsd:date && ?sharedDate <= "{DATE_END}"^^xsd:date)
+}
+ORDER BY ?sharedDate ?topicName
+
+
+# CQ20: Which government departments are involved in policy events spanning the widest range of policy topics during the selected time window?
+SELECT ?departmentName (COUNT(DISTINCT ?topic) AS ?topicCount)
+WHERE {
+  ?event a news:PolicyEvent ;
+         news:involvesGovernmentBody ?department ;
+         news:concernsPolicyTopic ?topic ;
+         news:occursOnDate ?eventDate .
+  ?department a news:GovernmentDepartment ;
+              schema:name ?departmentName .
+  FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
+}
+GROUP BY ?departmentName
+HAVING(COUNT(DISTINCT ?topic) > 1)
+ORDER BY DESC(?topicCount) ?departmentName

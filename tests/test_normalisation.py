@@ -5,11 +5,15 @@ import pytest
 from src.data_normalisation import (
     build_stable_id,
     canonicalise_date,
-    is_relevant_newsapi_article,
     is_valid_url,
+    is_within_configured_window,
+    mojibake_score,
     normalise_collected_sources,
     normalise_data,
+    normalise_govuk_records,
     normalise_name,
+    normalise_parliament_records,
+    repair_common_mojibake,
 )
 
 
@@ -33,28 +37,29 @@ class TestUtilityFunctions:
         assert is_valid_url("http://example.com") is True
         assert is_valid_url("ftp://example.com") is False
 
+    def test_is_within_configured_window_uses_coursework_dates(self):
+        assert is_within_configured_window("2026-03-06T10:00:00Z") is True
+        assert is_within_configured_window("2026-04-20T10:00:00Z") is False
+
     def test_normalise_name_trims_and_collapses_whitespace(self):
         assert normalise_name("  hello   world  ") == "hello world"
         assert normalise_name(None) == ""
 
+    def test_normalise_name_repairs_common_mojibake(self):
+        broken = "Starmer\u00e2\u20ac\u2122s plans \u00e2\u20ac\u201c update"
+        assert normalise_name(broken) == "Starmer’s plans – update"
+
+    def test_repair_common_mojibake_prefers_cleaner_text(self):
+        broken = "London\u00e2\u20ac\u2122s politics"
+        repaired = repair_common_mojibake(broken)
+        assert repaired == "London’s politics"
+        assert mojibake_score(repaired) < mojibake_score(broken)
+
 
 class TestSourceNormalisation:
-    def test_normalise_collected_sources_preserves_both_sources(self):
+    def test_normalise_collected_sources_preserves_core_sources(self):
         collected = {
             "sources": {
-                "newsapi": {
-                    "articles": [
-                        {
-                            "source": {"name": "BBC News"},
-                            "author": "Laura Kuenssberg",
-                            "title": "Labour responds to budget row",
-                            "description": "A Westminster update.",
-                            "url": "https://example.com/newsapi-1",
-                            "publishedAt": "2026-03-06T08:00:00Z",
-                            "content": "The Treasury and Labour traded criticism in Parliament.",
-                        }
-                    ]
-                },
                 "guardian": {
                     "response": {
                         "results": [
@@ -75,51 +80,44 @@ class TestSourceNormalisation:
                         ]
                     }
                 },
+                "parliament": {
+                    "response": {
+                        "results": [
+                            {
+                                "title": "Budget debate",
+                                "url": "https://api.parliament.uk/event/1",
+                                "date": "2026-03-06T11:00:00Z",
+                                "house": "House of Commons",
+                                "description": "Members debated the Spring Budget.",
+                                "topics": ["Budget", "Taxation"],
+                            }
+                        ]
+                    }
+                },
+                "govuk": {
+                    "response": {
+                        "results": [
+                            {
+                                "title": "New immigration policy paper",
+                                "link": "/government/publications/new-immigration-policy-paper",
+                                "public_timestamp": "2026-03-06T12:00:00Z",
+                                "description": "A new policy paper from the Home Office.",
+                                "format": "policy_paper",
+                                "organisations": ["Home Office"],
+                            }
+                        ]
+                    }
+                },
             }
         }
 
         result = normalise_collected_sources(collected)
-        assert len(result) == 2
-        assert {record["source_system"] for record in result} == {"newsapi", "guardian"}
-
-    def test_newsapi_scope_filter_rejects_blocked_off_scope_source(self):
-        article = {
-            "source": {"name": "Screen Rant"},
-            "author": "Reporter",
-            "title": "10 Near-Perfect Forgotten Horror TV Shows That Deserve A Second Chance",
-            "description": "A television feature with no UK politics relevance.",
-            "url": "https://example.com/off-scope",
-            "publishedAt": "2026-03-06T08:00:00Z",
-            "content": "Entertainment coverage only.",
+        assert len(result) == 3
+        assert {record["source_system"] for record in result} == {
+            "guardian",
+            "parliament",
+            "govuk",
         }
-
-        assert is_relevant_newsapi_article(article) is False
-
-    def test_newsapi_scope_filter_keeps_uk_politics_article(self):
-        article = {
-            "source": {"name": "BBC News"},
-            "author": "Reporter",
-            "title": "Keir Starmer faces pressure over UK budget plans",
-            "description": "The prime minister and Treasury are under pressure in Westminster.",
-            "url": "https://example.com/on-scope",
-            "publishedAt": "2026-03-06T08:00:00Z",
-            "content": "Labour MPs said the UK government must rethink the budget.",
-        }
-
-        assert is_relevant_newsapi_article(article) is True
-
-    def test_newsapi_scope_filter_rejects_unapproved_publisher_even_if_text_matches(self):
-        article = {
-            "source": {"name": "Japan Today"},
-            "author": "Reporter",
-            "title": "Keir Starmer discusses UK budget in Westminster",
-            "description": "The prime minister and Treasury remain under pressure.",
-            "url": "https://example.com/matching-but-unapproved",
-            "publishedAt": "2026-03-06T08:00:00Z",
-            "content": "UK politics coverage from an out-of-scope publisher.",
-        }
-
-        assert is_relevant_newsapi_article(article) is False
 
     def test_guardian_contributor_tags_are_not_kept_as_topics(self):
         collected = {
@@ -152,6 +150,108 @@ class TestSourceNormalisation:
 
         result = normalise_collected_sources(collected)
         assert result[0]["tags"] == ["Labour"]
+
+    def test_normalise_parliament_records_maps_source_fields_to_shared_schema(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Health statement",
+                        "url": "https://api.parliament.uk/event/health-statement",
+                        "date": "2026-03-07T10:30:00Z",
+                        "house": "House of Commons",
+                        "description": "A statement on NHS performance.",
+                        "topics": ["NHS", "Healthcare"],
+                    }
+                ]
+            }
+        }
+
+        record = normalise_parliament_records(raw_data)[0]
+
+        assert record["source_system"] == "parliament"
+        assert record["source_name"] == "UK Parliament"
+        assert record["section"] == "House of Commons"
+        assert "Healthcare" in record["tags"]
+        assert record["published_at"] == "2026-03-07T10:30:00Z"
+
+    def test_normalise_govuk_records_maps_search_results_to_shared_schema(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Treasury growth plan",
+                        "link": "/government/publications/treasury-growth-plan",
+                        "public_timestamp": "2026-03-08T09:15:00Z",
+                        "description": "A policy paper about growth and investment.",
+                        "format": "policy_paper",
+                        "organisations": ["HM Treasury"],
+                    }
+                ]
+            }
+        }
+
+        record = normalise_govuk_records(raw_data)[0]
+
+        assert record["source_system"] == "govuk"
+        assert record["source_name"] == "GOV.UK"
+        assert record["section"] == "policy_paper"
+        assert record["url"] == "https://www.gov.uk/government/publications/treasury-growth-plan"
+        assert "HM Treasury" in record["tags"]
+
+    def test_normalise_govuk_records_filters_out_of_window_results(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Out-of-window policy paper",
+                        "link": "/government/publications/out-of-window-policy-paper",
+                        "public_timestamp": "2026-04-20T09:15:00Z",
+                        "description": "A policy paper outside the fixed coursework window.",
+                        "format": "policy_paper",
+                        "organisations": ["Cabinet Office"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+    def test_normalise_govuk_records_filters_reference_like_guidance_material(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Rates and allowances: Inheritance Tax thresholds and interest rates",
+                        "link": "/government/publications/inheritance-tax-thresholds",
+                        "public_timestamp": "2026-03-20T09:15:00Z",
+                        "description": "Reference rates and allowances material.",
+                        "format": "guidance",
+                        "organisations": ["HM Revenue and Customs"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+    def test_normalise_govuk_records_filters_admin_news_items_without_scope_signal(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Appointment of new private sector partner",
+                        "link": "/government/news/appointment-of-new-private-sector-partner",
+                        "public_timestamp": "2026-03-20T09:15:00Z",
+                        "description": "Administrative update from government.",
+                        "format": "news_story",
+                        "organisations": ["Cabinet Office"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
 
 
 class TestExtractedRecordNormalisation:

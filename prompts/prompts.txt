@@ -26,60 +26,60 @@ Used for: Planning
 
 
 ## P01: Competency Question Augmentation
-Task: Generate 10 additional competency questions that complement the manual set.
+Task:
+Generate 10 additional competency questions that complement the manual set.
 
 Prompts:
-You are helping with a knowledge-engineering coursework on the domain of current news.
-We already have 10 manually written competency questions for a news knowledge graph.
+You are helping with a knowledge-engineering coursework on a knowledge graph for UK parliamentary and government policy events reported in UK news during a fixed time window.
+We already have 10 manually written competency questions for an event-centred knowledge graph.
 Generate 10 additional competency questions that:
 1. stay within the same domain
-2. are answerable from a KG built around articles, journalists, organisations, locations, technologies, topics, and publishers
+2. are answerable from a KG built around policy events, parliamentary events, ministerial statements, political actors, political parties, government departments, parliamentary bodies, policy topics, official source records, and news articles
 3. complement the manual questions instead of repeating them
-4. vary the query style, including counting, comparison, co-occurrence, and trend questions
+4. vary the query style, including aggregation, comparison, co-occurrence, coverage, and cross-source linkage questions
+5. avoid vague article-metadata questions unless they still test a meaningful event or institution relation
 
 Return the result as a numbered list.
 For each question, add a one-line justification explaining what new information need it covers.
 
 Justification:
-The manually authored questions were written with the team's domain knowledge, but they risk being too narrow or overlapping. Using an LLM to generate a complementary set ensured broader coverage of query styles (counting, comparison, co-occurrence, trend) and surfaced information needs we had not considered, such as journalist collaboration, cross-publisher event coverage, and co-mention patterns. The generated questions were then manually reviewed and revised to align with the current 30-day collection window and the actual ontology terms before being accepted into the final set.
+The manually authored questions were written with the team's domain knowledge, but they risked clustering too tightly around the core ontology-driving information needs. Using an LLM to generate a complementary set helped broaden the space of aggregation, cross-source, and coverage questions while still staying within the same event-centred domain. The generated questions were then manually reviewed and rewritten so they matched the final ontology vocabulary, the fixed coursework time window, and the distinction between the primary manually authored set and the supplementary LLM-generated set.
 
 Used for: `docs/competency_questions.md`
 
 
-
 ## P02: Ontology Review Against Reused Vocabularies
-Task: Check the local ontology against Schema.org and BBC Core Concepts.
+Task:
+Check the local ontology against Schema.org and BBC Core Concepts.
 
 Prompts:
 Review this ontology draft for a current-news knowledge graph.
 The ontology reuses Schema.org and BBC Core Concepts.
-
 Identify:
 1. classes that should be aligned more explicitly
 2. properties that should become typed subproperties rather than generic relations
 3. missing modelling distinctions between publishers and mentioned organisations
 4. any class or property defined in the ontology but not represented in the generated RDF
-
 Return:
 1. concrete modelling issues
 2. a revised alignment proposal
 3. the minimum code changes needed in the RDF generation step
 
 Justification:
-The ontology was initially drafted locally without a systematic check against established vocabularies. Running an LLM review against Schema.org and BBC Core Concepts helped identify where local classes should become explicit subclasses, where generic object properties should be typed subproperties, and where the distinction between publisher entities and mentioned organisations was underspecified. The output fed directly into the alignment table in the mapping specification and informed the RDF generation refactor that introduced typed subproperties such as `news:hasAuthor`, `news:publishedBy`, and `news:hasTopic`.
+LLM review identified where local classes should become explicit subclasses and generic properties should be typed subproperties. Output informed the alignment table in the mapping specification and the RDF refactor introducing `news:hasAuthor`, `news:publishedBy`, and `news:hasTopic`.
 
 Used for: `docs/mapping_specification.md` and the ontology/RDF alignment refactor.
 
 
 
 ## P03: Source-to-Ontology Mapping Draft
-Task: Turn source fields and extracted entities into an explicit mapping specification.
+Task:
+Turn source fields and extracted entities into an explicit mapping specification.
 
 Prompts:
 Given a news API response with fields such as source.name, author, title, url, publishedAt,
 description, content, plus extracted entities (organisation, person, location, technology, topic),
 produce a mapping table from source data to ontology classes and properties.
-
 Include:
 1. source field or extraction output
 2. ontology class or property
@@ -94,7 +94,8 @@ Used for: `docs/mapping_specification.md`
 
 
 ## P04: Completion Analysis
-Task: Identify incompleteness in both the ontology and the instance layer.
+Task:
+Identify incompleteness in both the ontology and the instance layer.
 
 Prompts:
 Analyse the current-news KG prototype and identify:
@@ -109,14 +110,15 @@ For each item, explain:
 Then propose a RAG-based completion workflow that constrains outputs to the ontology.
 
 Justification:
-Identifying incompleteness rigorously requires looking at the ontology, the instance graph, and the competency questions together, which is time-consuming to do manually. Using an LLM to analyse the prototype KG across all three layers produced a structured list of gaps, their impact on CQ coverage, and concrete enrichment suggestions. This became the basis for the completion analysis document and directly shaped the design of the `complete_kg.py` enrichment stage, including the decision to prioritise sentiment refinement, section assignment, topic expansion, article subtype reinforcement, and `news:hasFollowUp` materialisation.
+Identifying incompleteness rigorously requires looking at the ontology, the instance graph, and the competency questions together, which is time-consuming to do manually. Using an LLM to analyse the prototype KG across all three layers produced a structured list of gaps, their impact on CQ coverage, and concrete enrichment suggestions. The gap analysis directly shaped the design of the RAG enrichment step in `complete_kg.py`, which retrieves source titles and article headlines for each incomplete event via SPARQL, verbalises the retrieved context as a natural language sentence, and prompts OpenAI to propose missing actor, department, and topic links constrained to the ontology vocabulary.
 
-Used for: `docs/completion_analysis.md`
+Used for: `docs/completion_analysis.md` and `src/complete_kg.py`
 
 
 
 ## P05: Evaluation Methodology Design
-Task: Define a quantitative evaluation strategy for the automated KG-construction pipeline.
+Task:
+Define a quantitative evaluation strategy for the automated KG-construction pipeline.
 
 Prompts:
 Design an evaluation methodology for an automated current-news KG pipeline.
@@ -129,7 +131,7 @@ It should cover:
 Return the methodology as a concise, coursework-ready plan.
 
 Justification:
-Designing an evaluation methodology that covers performance, extraction quality, completion quality, CQ coverage, and a KG-vs-LLM baseline comparison is complex enough that starting from scratch would risk missing important dimensions. Using an LLM to produce an initial plan gave us a comprehensive framework covering all relevant metric categories, which we then refined to match the actual pipeline stages and artefacts. The resulting methodology document directly informed the evaluation code in `src/evaluation/` and the manual audit template in `data/evaluation/`.
+Designing an evaluation methodology that covers performance, extraction quality, completion quality, CQ coverage, and a KG-vs-LLM baseline comparison is complex enough that starting from scratch would risk missing important dimensions. Using an LLM to produce an initial plan gave us a comprehensive framework covering all relevant metric categories, which we then refined to match the actual pipeline stages and artefacts. The resulting methodology informed the final manual audit process, the competency-query coverage review, and the comparison between the prototype graph and the ontology-aligned completed graph.
 
 Used for: `docs/evaluation_methodology.md`
 
@@ -143,7 +145,7 @@ Technique: iterative refinement with successive constraints
 Prompts:
 
 Prompt 1 (zero-shot generation):
-You are writing a technical report for a university knowledge engineering coursework. The project built a knowledge graph for UK politics and policy news. The pipeline covered: data collection from NewsAPI and The Guardian API, LLM-assisted entity and event extraction using spaCy and OpenAI, ontology construction extending Schema.org and BBC Core Concepts, RDF/Turtle generation using rdflib, RAG-based KG completion, and SPARQL evaluation across 20 competency questions. Write a complete LaTeX report covering all required sections: introduction, data source selection, extension of existing ontologies, data source mappings, queries, evaluation methodology, and KG completion. Include a pipeline architecture diagram and an evaluation results table. Do not impose any page limit at this stage.
+You are writing a technical report for a university knowledge engineering coursework. The project built a knowledge graph for UK parliamentary and government policy events reported in UK news. The pipeline covered: data collection from The Guardian API, the UK Parliament written-statements API, GOV.UK search, and optional Wikidata enrichment; event and entity extraction using heuristics and constrained OpenAI support; ontology construction extending Schema.org; RDF/Turtle generation using rdflib; conservative ontology-aligned KG enrichment; and SPARQL evaluation across 20 competency questions. Write a complete LaTeX report covering all required sections: introduction, data source selection, extension of existing ontologies, data source mappings, queries, evaluation methodology, and KG completion. Include a pipeline architecture diagram and an evaluation results table. Do not impose any page limit at this stage.
 
 Prompt 2 (spec alignment):
 Here is the full coursework specification [spec pasted in full]. Review the report against each required section in the spec. Identify any gaps in coverage, missing justifications, or sections that describe what was done without explaining why it was done. Produce an updated version that fills the gaps.
@@ -162,16 +164,15 @@ Used for: `Report.tex`
 
 
 ## P07: LLM-Assisted Entity and Event Extraction
-Task: Extract named entities, sentiment, article type, and events from article text to supplement heuristic extraction.
+Task:
+Extract named entities, sentiment, article type, and events from article text to supplement heuristic extraction.
 
-Prompt:
+Prompts:
 You are an information extraction assistant for a knowledge graph about current UK
-politics and policy news. Use only evidence from the supplied article. Do not invent
+parliamentary and government policy events reported in UK news. Use only evidence from the supplied article. Do not invent
 entities or events. Return only ontology-aligned JSON.
-
 User input:
 The runtime payload includes the project scope, allowed topics, article title, summary, content, section, tags, publication date, heuristic extraction output, and concatenated article text.
-
 Required response schema:
 {
   "people": ["string"],
@@ -186,7 +187,7 @@ Required response schema:
   "events": [
     {
       "name": "string",
-      "type": "EconomicEvent | NewsEvent | PoliticalEvent",
+      "type": "PolicyEvent | ParliamentaryEvent | GovernmentPolicyEvent | ParliamentaryDebate | MinisterialStatement",
       "date": "string | null",
       "location": "string | null"
     }
@@ -201,28 +202,38 @@ Used for: `src/data_extraction.py` and `src/openai_client.py`
 
 
 ## P08: LLM-Assisted KG Completion
-Task: Refine sentiment, section, article subtypes, and topic assignments for articles already in the knowledge graph.
+Task: Implement a retrieve-verbalise-validate RAG enrichment step for missing involvesActor, involvesGovernmentBody, and concernsPolicyTopic links.
 
 Prompt:
-You are completing a UK politics and policy news knowledge graph. Use only the supplied
-headline, description, and current KG context. Do not invent facts. Return only
-JSON-compatible ontology-aligned updates.
+You are completing a UK politics knowledge graph. Given a policy event and
+retrieved source context, propose missing property values using only the
+declared vocabulary. Do not invent names not supported by the context.
+proposed_actors must be named individual politicians or political parties only,
+not departments, roles, or generic labels such as 'UK Government'.
+proposed_departments must be named UK government departments or official bodies only.
+proposed_topics must be chosen only from this list: [Defence, Economic Policy,
+Education, Energy, Government Policy, Healthcare, Housing, Immigration, Parliament,
+Public Spending, Taxation].
+Prefer specific topics over Government Policy, which should only be used when no
+other topic applies.
+Example of correct output: {"proposed_actors": ["Keir Starmer", "Labour Party"],
+"proposed_departments": ["Home Office"], "proposed_topics": ["Housing"]}.
+Return only JSON.
 
 User input:
-The runtime payload includes the project scope, allowed topics, article headline, description, existing topics, mentioned organisations, and heuristic completion output.
+The runtime payload is a verbalised natural language sentence describing the event. It includes the event name, event type, event date (if available), and up to three retrieved article headlines and official source titles selected by SPARQL from the event's KG neighbourhood.
 
 Required response schema:
 {
-  "sentiment": "Negative | Neutral | Positive",
-  "section": "string",
-  "article_types": ["BreakingNewsArticle | NewsArticle | OpinionArticle"],
-  "additional_topics": ["string"]
+  "proposed_actors": ["string"],
+  "proposed_departments": ["string"],
+  "proposed_topics": ["string (must be from allowed list)"]
 }
 
 Justification:
-This prompt supports the completion/enrichment stage after the prototype RDF graph has been built. It keeps completion bounded to fields that can be validated against the ontology, so generated updates can improve topic coverage, article subtype classification, and sentiment without overwriting stronger source metadata.
+Grounding the LLM in retrieved source titles and article headlines rather than training knowledge alone keeps proposals tied to evidence already in the dataset. The instructions explicitly distinguish actors (named politicians or parties) from departments (named government bodies) to prevent cross-type contamination, which was the main failure mode observed in early prompt iterations. A code-level blocklist of institutional terms provides a second validation layer independent of the LLM. Constraining proposed_topics to a closed enum prevents hallucinated topic names from entering the graph. The validation step requires slug-term overlap between each proposed value and the retrieved context string before any triple is merged. Results are cached per event URI so reruns do not consume API quota.
 
-Used for: `src/complete_kg.py` and `src/openai_client.py`
+Used for: `src/complete_kg.py`
 
 
 
@@ -234,7 +245,7 @@ Technique: few-shot
 Prompts:
 
 Prompt 1 (initial generation):
-We are building an OWL2 ontology for a UK politics and policy news knowledge graph. Generate valid Turtle for the following classes and their subclass relationships: NewsArticle (subclass of schema:NewsArticle), BreakingNewsArticle and OpinionArticle (subclasses of NewsArticle), NewsEvent (subclass of schema:Event), PoliticalEvent and EconomicEvent (subclasses of NewsEvent), Organisation (subclass of schema:Organization), NewsOrganisation, GovernmentBody, PoliticalParty (subclasses of Organisation), Politician and Journalist (subclasses of schema:Person), Topic, Location, Sentiment. Also generate these object properties with domain and range: hasAuthor, publishedBy, hasTopic, mentionsPerson, mentionsOrganisation, mentionsLocation, coversEvent, hasSentiment, hasFollowUp. Use the prefix news: <http://example.org/news#>.
+We are building an OWL2 ontology for a UK parliamentary and government policy event knowledge graph. Generate valid Turtle for the following classes and their subclass relationships: NewsArticle (subclass of schema:NewsArticle), PolicyEvent (subclass of schema:Event), ParliamentaryEvent and GovernmentPolicyEvent (subclasses of PolicyEvent), ParliamentaryDebate and MinisterialStatement (subclasses of ParliamentaryEvent / GovernmentPolicyEvent as appropriate), OfficialBody (subclass of schema:Organization), GovernmentBody and ParliamentaryBody (subclasses of OfficialBody), GovernmentDepartment (subclass of GovernmentBody), PoliticalActor (subclass of schema:Person), PoliticalParty, PolicyTopic, Location, SourceRecord, OfficialSourceRecord. Also generate these object properties with domain and range: hasAuthor, publishedBy, reportedByArticle, reportsOn, concernsPolicyTopic, involvesActor, involvesGovernmentBody, occursInParliamentaryBody, issuedByDepartment, representedInOfficialSource, matchedToSourceRecord. Use the prefix news: <http://example.org/news#>.
 
 Prompt 2 (few-shot correction):
 The output has some problems. Here is an example of exactly the format we need for one class and one property:
@@ -252,7 +263,7 @@ news:hasAuthor a owl:ObjectProperty ;
 Following this pattern, regenerate all the classes and properties from the list above. Do not add anything that is not in that list.
 
 Justification:
-The first attempt got the class hierarchy mostly right but kept doing two things wrong. It invented properties we did not ask for (news:hasCategory, news:isAbout, news:relatedArticle) and it modelled Sentiment wrong. Instead of making Sentiment a class with instances (news:Positive, news:Negative, news:Neutral) and hasSentiment an object property, it generated hasSentiment as a datatype property with xsd:string range. Even when we explained what we actually wanted in the prompt text, it kept going back to the string version. Giving it the concrete example snippet in prompt 2 fixed the format and stopped it adding extra terms, but the Sentiment part still had to be written by hand. The property characteristics were also missing from both attempts: publishedBy came out as a plain owl:ObjectProperty without the FunctionalProperty part, and hasFollowUp had no owl:AsymmetricProperty or owl:IrreflexiveProperty. Those were added manually, along with the BBC Core Concepts subproperty alignments (coversEvent to core:notablyAssociatedWith, Location to core:Place, NewsEvent to core:Event, and others) which came from reading the BBC ontology spec directly and were not in either prompt attempt. The ontology is also built programmatically in build_ontology.py rather than stored as a static Turtle file, so the LLM output could not be used directly even for the parts it got right; everything had to be translated into rdflib calls anyway.
+The prompt was useful for generating an initial class/property inventory, but the final ontology still had to be refined manually and implemented programmatically in `build_ontology.py`. In particular, the current model depends on distinctions such as `OfficialBody` versus `GovernmentBody`/`ParliamentaryBody`, event-centred properties like `reportedByArticle` and `representedInOfficialSource`, and conservative property choices that were easier to defend after manual review than to trust directly from raw LLM output.
 
 Used for: `ontology/news_ontology.ttl`
 
@@ -275,6 +286,6 @@ Prompt 2 (fix broken queries):
 CQ06, CQ09, and CQ20 either return empty results or the wrong structure when we run them against the graph. Here is a sample of actual triples from one article [sample Turtle pasted]. Rewrite those three queries to match how the data is actually stored.
 
 Justification:
-Most queries came back usable, which saved a lot of time. The main failure was with sentiment. Every query that filtered on sentiment was written as FILTER(?s = "Negative") treating sentiment as a plain string, but in the actual graph hasSentiment points to actual URIs like news:Negative, not string values. This broke CQ06 and every other sentiment query silently. Once we pasted a sample triple showing how it was actually stored, the LLM fixed all of them correctly. CQ09 came back as two separate queries with a note saying to run both and compare the results manually instead of one query computing the average, so we wrote that one from scratch. CQ20 used a nested SELECT that rdflib cannot handle and had to be rewritten as a flat pattern with GROUP BY. The other 17 queries worked after small prefix or variable name fixes.
+Most queries came back usable as a first draft, which saved time, but the final set still required manual rewriting against the actual graph shape and rdflib/Oxigraph behaviour. The most common issues were assuming outdated ontology terms, generating article-centric rather than event-centric patterns, or producing overly nested queries that were fragile against the local SPARQL engine. The final query file was therefore treated as a manually validated artefact rather than raw LLM output.
 
 Used for: `src/run_queries.py`
