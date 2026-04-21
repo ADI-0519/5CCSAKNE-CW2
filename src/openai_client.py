@@ -105,9 +105,7 @@ def build_cache_path(stage, cache_key):
     slug = slug_text(cache_key)
     digest = hashlib.sha256(cache_key.encode("utf-8")).hexdigest()
 
-    # Windows path handling is still fragile in many environments, especially when
-    # a descriptive event URI is used as the cache key. Keep cache filenames short
-    # enough that the full nested path remains portable across machines.
+    # long URIs as cache keys can exceed Windows path limits, so truncate when needed
     path_candidate = (cache_dir / f"{slug}.json").resolve(strict=False)
     if len(slug) > 120 or len(str(path_candidate)) > 220:
         readable_prefix = slug[:40].rstrip("_") or "item"

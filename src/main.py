@@ -116,9 +116,7 @@ def main():
     print(f"[PIPELINE] Starting CW2 KG pipeline at {timestamp}")
     print(f"[PIPELINE] Scope: {CONFIG['project_scope']}")
 
-    # ------------------------------------------------------------------
-    # Stage 1: Collect all source data (textual + structured)
-    # ------------------------------------------------------------------
+    # stage 1: collect all source data
     print("[PIPELINE] Stage 1a: Collect core source data (Guardian + Parliament + GOV.UK)")
     if args.from_cache:
         print("[PIPELINE] Mode: offline cached snapshots")
@@ -142,9 +140,7 @@ def main():
     else:
         wikidata_data = collect_wikidata(save_snapshot=not args.no_save_snapshots)
 
-    # ------------------------------------------------------------------
-    # Stage 2: Normalise news source records
-    # ------------------------------------------------------------------
+    # stage 2: normalise source records
     print("[PIPELINE] Stage 2: Normalise collected source records")
     source_records = normalise_collected_sources(collected_data)
     save_normalised_articles(source_records, filename="normalised_articles.json")
@@ -152,40 +148,30 @@ def main():
         source_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_normalised_articles.json"
     )
 
-    # ------------------------------------------------------------------
-    # Stage 3: Extract KG-ready information (NLP over textual sources)
-    # ------------------------------------------------------------------
+    # stage 3: extract KG-ready information
     print("[PIPELINE] Stage 3: Extract KG-ready information")
     extracted_records = extract_relevant_information(source_records)
     save_json(
         extracted_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_extracted_articles.json"
     )
 
-    # ------------------------------------------------------------------
-    # Stage 4: Normalise extracted records
-    # ------------------------------------------------------------------
+    # stage 4: normalise extracted records
     print("[PIPELINE] Stage 4: Normalise extracted records")
     kg_records = normalise_data(extracted_records)
     save_json(kg_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_kg_records.json")
 
-    # ------------------------------------------------------------------
-    # Stage 5: Build ontology (TBox)
-    # ------------------------------------------------------------------
+    # stage 5: build ontology (TBox)
     print("[PIPELINE] Stage 5: Build ontology")
     ontology_graph = build_ontology()
     save_rdf(ontology_graph, ONTOLOGY_OUTPUT_PATH)
 
-    # ------------------------------------------------------------------
-    # Stage 6: Convert news records to RDF (textual source → RDF)
-    # ------------------------------------------------------------------
+    # stage 6: convert news records to RDF
     print("[PIPELINE] Stage 6: Convert KG-ready records to RDF instances")
     instance_graph = convert_json_to_rdf(kg_records)
     save_rdf(instance_graph, INSTANCE_KG_PATH)
     save_rdf(instance_graph, f"output/{timestamp}_instance_kg.ttl")
 
-    # ------------------------------------------------------------------
-    # Stage 7: Map Wikidata to RDF (structured source → RDF, no NLP)
-    # ------------------------------------------------------------------
+    # stage 7: map Wikidata to RDF
     print("[PIPELINE] Stage 7: Map optional Wikidata enrichment to RDF")
     wikidata_graph = Graph()
     if wikidata_data is not None:
@@ -195,25 +181,19 @@ def main():
     else:
         print("[PIPELINE] No Wikidata data to map (skipped)")
 
-    # ------------------------------------------------------------------
-    # Stage 8: Merge all graphs into prototype KG
-    # ------------------------------------------------------------------
+    # stage 8: merge all graphs into prototype KG
     print("[PIPELINE] Stage 8: Merge ontology, source-derived instances, and enrichment triples")
     prototype_graph = merge_graphs(ontology_graph, instance_graph, wikidata_graph)
     save_rdf(prototype_graph, PROTOTYPE_KG_PATH)
     save_rdf(prototype_graph, f"output/{timestamp}_prototype_kg.ttl")
 
-    # ------------------------------------------------------------------
-    # Stage 9: Enrich / complete the KG
-    # ------------------------------------------------------------------
+    # stage 9: enrich/complete the KG
     print("[PIPELINE] Stage 9: Enrich the KG")
     completed_graph = enrich_graph(prototype_graph)
     save_rdf(completed_graph, COMPLETED_KG_PATH)
     save_rdf(completed_graph, f"output/{timestamp}_completed_kg.ttl")
 
-    # ------------------------------------------------------------------
-    # Stage 10: Run SPARQL competency queries
-    # ------------------------------------------------------------------
+    # stage 10: run SPARQL competency queries
     print("[PIPELINE] Stage 10: Run competency queries")
     query_graph = load_kg(COMPLETED_KG_PATH)
     query_results = execute_queries(query_graph, load_query_definitions())
@@ -227,9 +207,7 @@ def main():
         "queries returned at least one row."
     )
 
-    # ------------------------------------------------------------------
-    # Stage 11: Run SPARQL-based graph validation checks
-    # ------------------------------------------------------------------
+    # stage 11: run graph validation checks
     print("[PIPELINE] Stage 11: Run graph validation checks")
     validation_report = execute_validation(query_graph)
     timestamped_validation = Path("output") / f"{timestamp}_validation_results.json"
