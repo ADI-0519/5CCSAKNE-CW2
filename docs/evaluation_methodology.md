@@ -1,299 +1,208 @@
 # Evaluation Methodology
 
-This document defines how the UK politics and policy knowledge graph should be evaluated in a way that matches the current codebase and pipeline.
+This document defines how the current UK parliamentary and government policy event KG should be evaluated.
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`UK parliamentary and government policy events reported in UK news during 6 March 2026 to 6 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
 
-The current pipeline now produces several distinct artefacts:
+The pipeline produces these artefacts:
 
-- a normalised article set
+- raw source snapshots under `data/raw/`
+- normalised source records
 - extracted KG-ready records
-- an ontology graph
-- an instance graph
-- a merged prototype KG
-- a completed/enriched KG
-- a query result set over the completed KG
-
-So evaluation should no longer focus on only one generated graph. It should compare the system across stages, especially:
-
-- the prototype KG before completion
-- the completed KG after enrichment
+- ontology graph in `ontology/news_ontology.ttl`
+- source-derived instance KG
+- optional Wikidata enrichment KG
+- merged prototype KG
+- completed/enriched KG
+- SPARQL query results over the completed KG
 
 ## 1. Structural Correctness
 
-Goal: confirm that the pipeline produces syntactically valid and structurally coherent outputs at each stage.
+Goal: confirm that every generated artefact is syntactically valid and aligned with the current ontology.
 
-### What to check
+Checks:
 
-- all JSON artefacts are generated successfully
-- all Turtle outputs parse successfully
-- ontology, prototype KG, and completed KG are all valid RDF graphs
-- expected namespaces and ontology terms appear in the final graph
-- the required article fields survive collection, normalisation, extraction, and RDF conversion
+- all JSON artefacts are generated
+- all Turtle outputs parse as RDF graphs
+- expected namespaces appear in the final graph
+- the ontology declares the classes and properties used by the RDF pipeline
+- source records are typed as `news:SourceRecord`, `news:ParliamentSourceRecord`, or `news:GovernmentSourceRecord`
+- policy events carry dates, topics, article links, and institution links where source evidence supports them
 
-### Metrics
+Metrics:
 
-- JSON generation success rate
-- Turtle parse success rate
-- total triple count
-- triples per article
-- percentage of articles that retain required metadata:
-  - title
-  - URL
-  - publication date
-  - publisher
-  - section
-  - word count
+- total records by source
+- total triples by graph stage
+- number of ontology triples
+- number of policy events
+- number of official source records
+- number of completed graph links added
 
-### Evidence sources
+Evidence sources:
 
-- pipeline smoke tests
-- normalisation tests
-- RDF tests
-- successful execution of the end-to-end pipeline in `src/main.py`
+- `python -m src.main`
+- `python -m pytest`
+- `kg/generated/*.ttl`
+- `output/*_query_results.json`
 
 ## 2. Competency-Question Coverage
 
-Goal: measure how well the generated KG supports the final set of competency questions.
+Goal: measure whether the generated KG supports the final 20 competency questions.
 
-### Method
+Method:
 
-- use the final 20 competency questions as the evaluation target
-- run the full SPARQL query set over the completed KG
-- record whether each query:
-  - executes successfully
-  - returns meaningful rows
-  - is only partially supported because the graph is incomplete or noisy
+- run `queries/news_competency_queries.rq` against `kg/generated/completed_kg.ttl`
+- record whether each query executes successfully
+- record row counts
+- classify whether each result is clean, noisy, or diagnostic
 
-### Labels
-
-Each CQ should be classified as:
-
-- `answered`
-- `partially answered`
-- `unanswered`
-
-### Metrics
+Metrics:
 
 - query parse success rate
 - query execution success rate
-- answerability rate on the prototype KG
-- answerability rate on the completed KG
-- improvement in answerability after completion
+- number of queries returning at least one row
+- row counts per CQ
+- whether completion improves answerability for source-matching CQs
 
-### Why this matters
+Latest validated result:
 
-This is the most important evaluation category for coursework quality because it connects:
+- `20/20` current queries returned at least one row against the completed KG from run `20260420T202251Z`
 
-- ontology design
-- extraction quality
-- completion quality
-- SPARQL usefulness
+## 3. Extraction And Mapping Quality
 
-## 3. Extraction And Classification Quality
+Goal: assess how accurately the pipeline maps source evidence into ontology terms.
 
-Goal: assess how accurate the extraction stage is for the ontology elements that matter most to the final KG.
+Core elements to inspect:
 
-### Core extracted elements
+- article metadata: title, URL, publication date, publisher, author
+- source records: identifier, title, system, source subclass
+- event classes: `PolicyEvent`, `ParliamentaryEvent`, `GovernmentPolicyEvent`, `ParliamentaryDebate`, `MinisterialStatement`
+- actors: `PoliticalActor`
+- institutions: `OfficialBody`, `GovernmentBody`, `GovernmentDepartment`, `ParliamentaryBody`
+- topics: `PolicyTopic`
+- places: `Location`
+- links: `reportedByArticle`, `representedInOfficialSource`, `matchedToSourceRecord`, `concernsPolicyTopic`, `involvesGovernmentBody`
 
-- journalists/authors
-- publishers
-- people
-- politicians
-- organisations
-- political parties
-- government bodies
-- locations
-- topics
-- article subtype
-- sentiment
-- event candidates
+Manual audit setup:
 
-### Manual evaluation setup
+- sample records across Guardian, Parliament, and GOV.UK
+- check whether event labels, dates, topics, and institution links are plausible
+- check whether official-source records are represented accurately
+- check whether article-event links reflect the article headline and content
+- inspect a subset of `matchedToSourceRecord` links for false positives
 
-- sample 30 to 50 articles from the fixed dataset
-- include both Guardian and NewsAPI articles
-- create a small gold sheet with the expected:
-  - author
-  - publisher
-  - people
-  - organisations
-  - locations
-  - topics
-  - sentiment
-  - article subtype
-  - key events where obvious
+Recommended metrics:
 
-If time is limited, priority should go to:
-
-- political actors
-- topics
-- sentiment
-- article subtype
-- event candidates
-
-### Metrics
-
-- precision, recall, and F1 for people, organisations, locations, and topics
-- classification accuracy for:
-  - politicians
-  - political parties
-  - government bodies
-  - sentiment
-  - article subtype
-- event extraction precision on the manually reviewed sample
-- metadata accuracy for:
-  - author
-  - publisher
-  - publication date
-  - section
-  - update timestamp
-  - word count
-
-### Practical note
-
-The extraction layer is now partly heuristic and partly OpenAI-assisted. Evaluation should therefore describe whether errors are mostly caused by:
-
-- heuristic over-generation
-- weak event grounding
-- incomplete actor typing
-- poor LLM refinement
+- metadata accuracy
+- event-type precision
+- topic precision
+- institution-link precision
+- official-source match precision
+- number of missing source or modelling links found by CQ09 and source-integration audits
 
 ## 4. Completion Quality
 
-Goal: determine whether the completion stage genuinely improves the graph.
+Goal: determine whether graph enrichment improves queryability without adding unsupported assertions.
 
-The current completion stage already enriches the prototype KG with:
+The current completion stage adds:
 
-- sentiment
-- section
-- word count
-- update timestamp
-- additional topics
-- article subtype reinforcement
-- follow-up links
+- `news:reportsOn` inverse links from existing `news:reportedByArticle` triples
+- `news:matchedToSourceRecord` links for official-source matching
+- occasional additional `news:representedInOfficialSource` links when a match score is strong enough
 
-and it can optionally use OpenAI completion with cached structured outputs.
+Method:
 
-### Method
+- compare prototype KG and completed KG triple counts
+- count completion-added links
+- run the CQ suite against the completed KG
+- manually inspect a sample of matched source records
 
-- compare prototype KG and completed KG on the same query set
-- inspect a sample of completion-generated triples manually
-- separate heuristic completions from OpenAI-assisted completions where possible
+Latest validated result:
 
-### Metrics
+- prototype KG: `39545` triples
+- completed KG: `40049` triples
+- completion delta: `504` triples
+- `reportsOn` links added: `266`
+- `matchedToSourceRecord` links added: `238`
 
-- number of completion triples added
-- number of articles affected by completion
-- percentage of completion triples that are ontology-compatible
-- precision of sampled completion triples
-- number of CQs improved after completion
+Important quality questions:
 
-### Important remaining quality questions
-
-- are added topics relevant rather than over-broad?
-- are subtype corrections sensible?
-- are follow-up links meaningful?
-- does OpenAI completion improve quality or merely add noise?
+- are matched source records from the correct source system?
+- do source-record titles support the event they are matched to?
+- do completion-added source matches improve provenance without inflating false matches?
+- should future RAG work add confidence and evidence metadata?
 
 ## 5. Cross-Source Evaluation
 
-Goal: show that the system genuinely works across more than one source and identify source-specific weaknesses.
+Goal: show that the system integrates textual reporting and official structured sources.
 
-### Method
+Sources to compare:
 
-- compare Guardian and NewsAPI records after normalisation and extraction
-- compare the kinds of metadata available from each
-- compare whether one source produces cleaner entities or more useful topics/events
+- Guardian: textual news reporting source
+- Parliament/Hansard: official parliamentary source records
+- GOV.UK: official government policy source records
+- Wikidata: optional structured enrichment for political background entities
 
-### Metrics
+Metrics:
 
-- number of articles collected per source
-- number of usable articles per source after normalisation
-- coverage of key fields by source:
-  - author
-  - section
-  - summary
-  - content
-  - tags
-  - word count
-- extraction quality by source on the manual sample
+- number of records by source
+- number of official source records represented in RDF
+- number of events linked to official source records
+- number of events matched to source records after completion
+- number of publishers and articles reporting policy events
 
-### Important context
+Latest validated source counts:
 
-NewsAPI developer-tier limits restrict retrieval to the first 100 results in the project window. This should be treated as a documented data-source limitation rather than as a pipeline failure.
+- Guardian: `253`
+- Parliament: `20`
+- GOV.UK: `459`
+- Wikidata: `1730` politicians, `968` parties, `490` government bodies
 
 ## 6. Performance And Reproducibility
 
-Goal: quantify runtime cost and show that the system can be rerun consistently.
+Goal: show that the pipeline can be rerun and audited.
 
-### Metrics
+Checks:
 
-- end-to-end runtime of `src/main.py`
-- runtime of each major stage:
-  - collection
-  - normalisation
-  - extraction
-  - ontology build
-  - RDF conversion
-  - completion
-  - query execution
-- number of articles processed
+- live run works with configured API keys
+- cached run works with `python -m src.main --from-cache`
+- raw snapshots are saved under `data/raw/`
+- processed JSON files are saved under `data/processed/`
+- generated KGs are saved under `kg/generated/` and `output/`
+- query results are saved in `output/query_results.json` and timestamped files
+
+Metrics:
+
+- end-to-end runtime
+- total records processed
 - total triples generated
-- triples per article
+- query coverage
+- test pass count
 
-### Reproducibility checks
+## 7. LLM Baseline Comparison
 
-- confirm that raw snapshots are saved under `data/raw`
-- confirm that processed JSON artefacts are saved under `data/processed`
-- confirm that the same cached raw snapshots can be reused with offline mode
-- confirm that OpenAI outputs can be cached and reused rather than recomputed every run
+Goal: compare KG-based answering with direct LLM answering on a small subset of competency questions.
 
-This is especially important because the coursework values automation and reproducibility, not just a one-off demonstration.
+Method:
 
-## 7. Baseline Comparison With Direct LLM Answers
+- choose 5 representative CQs
+- ask an LLM to answer directly from the source text or summaries
+- compare those answers with SPARQL results
 
-Goal: compare KG-based answering with direct LLM answering on a smaller subset of questions.
+Comparison criteria:
 
-### Method
-
-- select 5 to 10 representative competency questions
-- answer them directly from the article texts with the LLM
-- compare those answers with SPARQL results over the completed KG
-
-### Comparison criteria
-
-- factual grounding
-- traceability to source metadata
 - reproducibility
+- source traceability
 - consistency of answer format
 - ease of auditing
+- failure modes
 
-### Expected conclusion
+Expected framing:
 
-The KG plus SPARQL approach should be more reproducible and structurally auditable, while direct LLM answers may be more fluent but less transparent.
-
-## 8. Minimum Tables And Figures To Produce
-
-The final evaluation section should include at least:
-
-- a CQ support table for all 20 competency questions
-- a prototype-KG versus completed-KG comparison table
-- a manual quality-audit table for the sampled articles
-- a per-source article-count table
-- a runtime and triple-count table
+The KG/SPARQL approach is more structured and auditable. Direct LLM answers may be fluent but are harder to reproduce and verify.
 
 ## Final Evaluation Position
 
-The current project is now advanced enough that evaluation should not be framed as "does the pipeline run at all?".
-
-The more important questions are:
-
-- how accurate is the extraction?
-- how much does completion improve the graph?
-- how many competency questions are genuinely answerable?
-- how reproducible is the pipeline under API and model constraints?
-
-That framing is much closer to the actual maturity of the codebase and much stronger for the final submission.
+The project should be evaluated as a working automated KG pipeline, not as a one-off manual graph. The strongest evidence is the successful live run, valid generated RDF artefacts, deterministic completion delta, passing tests, and `20/20` competency-query coverage.

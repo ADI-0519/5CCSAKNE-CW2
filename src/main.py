@@ -18,7 +18,7 @@ from src.data_normalisation import (
     save_normalised_articles,
 )
 from src.json_to_rdf import convert_json_to_rdf
-from src.run_queries import execute_queries, load_query_definitions, save_results
+from src.run_queries import execute_queries, load_kg, load_query_definitions, save_results
 from src.wikidata_collection import collect_wikidata, load_cached_wikidata
 from src.wikidata_to_rdf import convert_wikidata_to_rdf
 
@@ -63,23 +63,31 @@ def merge_graphs(*graphs):
 
 
 def build_arg_parser():
-    parser = argparse.ArgumentParser(description="Build the UK politics and policy news KG.")
+    parser = argparse.ArgumentParser(
+        description="Build the UK parliamentary and government policy event KG."
+    )
     parser.add_argument(
         "--from-cache",
         action="store_true",
         help="Load the latest saved raw JSON snapshots instead of calling external APIs.",
     )
     parser.add_argument(
-        "--newsapi-snapshot",
-        type=Path,
-        default=None,
-        help="Optional path to a cached NewsAPI JSON snapshot.",
-    )
-    parser.add_argument(
         "--guardian-snapshot",
         type=Path,
         default=None,
         help="Optional path to a cached Guardian JSON snapshot.",
+    )
+    parser.add_argument(
+        "--parliament-snapshot",
+        type=Path,
+        default=None,
+        help="Optional path to a cached Parliament/Hansard JSON snapshot.",
+    )
+    parser.add_argument(
+        "--govuk-snapshot",
+        type=Path,
+        default=None,
+        help="Optional path to a cached GOV.UK JSON snapshot.",
     )
     parser.add_argument(
         "--no-save-snapshots",
@@ -103,24 +111,27 @@ def build_arg_parser():
 def main():
     args = build_arg_parser().parse_args()
     timestamp = build_timestamp()
-    print(f"[PIPELINE] Starting news KG pipeline at {timestamp}")
+    print(f"[PIPELINE] Starting CW2 KG pipeline at {timestamp}")
     print(f"[PIPELINE] Scope: {CONFIG['project_scope']}")
 
     # ------------------------------------------------------------------
     # Stage 1: Collect all source data (textual + structured)
     # ------------------------------------------------------------------
-    print("[PIPELINE] Stage 1a: Collect news source data (Guardian + NewsAPI)")
+    print("[PIPELINE] Stage 1a: Collect core source data (Guardian + Parliament + GOV.UK)")
     if args.from_cache:
         print("[PIPELINE] Mode: offline cached snapshots")
         collected_data = load_cached_sources(
-            newsapi_snapshot=args.newsapi_snapshot,
             guardian_snapshot=args.guardian_snapshot,
+            parliament_snapshot=args.parliament_snapshot,
+            govuk_snapshot=args.govuk_snapshot,
         )
     else:
         print("[PIPELINE] Mode: live API collection")
-        collected_data = collect_all_sources(save_snapshots=not args.no_save_snapshots)
+        collected_data = collect_all_sources(
+            save_snapshots=not args.no_save_snapshots,
+        )
 
-    print("[PIPELINE] Stage 1b: Collect Wikidata structured data")
+    print("[PIPELINE] Stage 1b: Collect optional Wikidata enrichment data")
     wikidata_data = None
     if args.skip_wikidata:
         print("[PIPELINE] Wikidata stage skipped (--skip-wikidata)")
@@ -132,7 +143,7 @@ def main():
     # ------------------------------------------------------------------
     # Stage 2: Normalise news source records
     # ------------------------------------------------------------------
-    print("[PIPELINE] Stage 2: Normalise news source records")
+    print("[PIPELINE] Stage 2: Normalise collected source records")
     source_records = normalise_collected_sources(collected_data)
     save_normalised_articles(source_records, filename="normalised_articles.json")
     save_json(
@@ -165,7 +176,7 @@ def main():
     # ------------------------------------------------------------------
     # Stage 6: Convert news records to RDF (textual source → RDF)
     # ------------------------------------------------------------------
-    print("[PIPELINE] Stage 6: Convert news records to RDF instances")
+    print("[PIPELINE] Stage 6: Convert KG-ready records to RDF instances")
     instance_graph = convert_json_to_rdf(kg_records)
     save_rdf(instance_graph, INSTANCE_KG_PATH)
     save_rdf(instance_graph, f"output/{timestamp}_instance_kg.ttl")
@@ -173,7 +184,7 @@ def main():
     # ------------------------------------------------------------------
     # Stage 7: Map Wikidata to RDF (structured source → RDF, no NLP)
     # ------------------------------------------------------------------
-    print("[PIPELINE] Stage 7: Map Wikidata structured data to RDF")
+    print("[PIPELINE] Stage 7: Map optional Wikidata enrichment to RDF")
     wikidata_graph = Graph()
     if wikidata_data is not None:
         wikidata_graph = convert_wikidata_to_rdf(wikidata_data)
@@ -185,7 +196,7 @@ def main():
     # ------------------------------------------------------------------
     # Stage 8: Merge all graphs into prototype KG
     # ------------------------------------------------------------------
-    print("[PIPELINE] Stage 8: Merge ontology, news instances, and Wikidata triples")
+    print("[PIPELINE] Stage 8: Merge ontology, source-derived instances, and enrichment triples")
     prototype_graph = merge_graphs(ontology_graph, instance_graph, wikidata_graph)
     save_rdf(prototype_graph, PROTOTYPE_KG_PATH)
     save_rdf(prototype_graph, f"output/{timestamp}_prototype_kg.ttl")
@@ -202,7 +213,8 @@ def main():
     # Stage 10: Run SPARQL competency queries
     # ------------------------------------------------------------------
     print("[PIPELINE] Stage 10: Run competency queries")
-    query_results = execute_queries(completed_graph, load_query_definitions())
+    query_graph = load_kg(COMPLETED_KG_PATH)
+    query_results = execute_queries(query_graph, load_query_definitions())
     timestamped_results = Path("output") / f"{timestamp}_query_results.json"
     save_results(query_results, LATEST_QUERY_RESULTS_PATH)
     save_results(query_results, timestamped_results)

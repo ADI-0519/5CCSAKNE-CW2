@@ -13,22 +13,6 @@ from src.json_to_rdf import NEWS, convert_json_to_rdf
 def sample_collected_data():
     return {
         "sources": {
-            "newsapi": {
-                "articles": [
-                    {
-                        "source": {"name": "BBC News"},
-                        "author": "Laura Kuenssberg",
-                        "title": "Keir Starmer under pressure as Treasury defends spring budget plans",
-                        "description": "Labour faces questions over tax and public spending in Westminster.",
-                        "url": "https://example.com/article-1",
-                        "publishedAt": "2026-03-20T10:00:00Z",
-                        "content": (
-                            "Keir Starmer and Rachel Reeves faced criticism in London after the Treasury "
-                            "outlined budget and public spending changes in Parliament."
-                        ),
-                    }
-                ]
-            },
             "guardian": {
                 "response": {
                     "results": [
@@ -47,6 +31,34 @@ def sample_collected_data():
                                 "lastModified": "2026-03-25T09:00:00Z",
                                 "wordcount": "650",
                             },
+                        }
+                    ]
+                }
+            },
+            "parliament": {
+                "response": {
+                    "results": [
+                        {
+                            "title": "Budget debate in the House of Commons",
+                            "url": "https://api.parliament.uk/event/1",
+                            "date": "2026-03-20T11:00:00Z",
+                            "house": "House of Commons",
+                            "description": "MPs debated tax and public spending measures.",
+                            "topics": ["Budget", "Taxation"],
+                        }
+                    ]
+                }
+            },
+            "govuk": {
+                "response": {
+                    "results": [
+                        {
+                            "title": "Home Office immigration statement",
+                            "link": "/government/speeches/home-office-immigration-statement",
+                            "public_timestamp": "2026-03-22T09:30:00Z",
+                            "description": "A ministerial statement on immigration policy.",
+                            "format": "speech",
+                            "organisations": ["Home Office"],
                         }
                     ]
                 }
@@ -76,11 +88,12 @@ def rdf_graph(kg_records):
 
 
 class TestPipelineStages:
-    def test_source_normalisation_keeps_both_sources(self, source_records):
-        assert len(source_records) == 2
+    def test_source_normalisation_keeps_core_sources(self, source_records):
+        assert len(source_records) == 3
         assert Counter(record["source_system"] for record in source_records) == {
-            "newsapi": 1,
             "guardian": 1,
+            "parliament": 1,
+            "govuk": 1,
         }
 
     def test_extraction_outputs_kg_ready_fields(self, extracted_records):
@@ -119,9 +132,9 @@ class TestPipelineStages:
             article_uri = NEWS[f"article/{record['id']}"]
             assert (article_uri, None, None) in rdf_graph
 
-    def test_graph_contains_event_and_sentiment_information(self, rdf_graph):
-        assert any(True for _ in rdf_graph.triples((None, NEWS.hasSentiment, None)))
-        assert any(True for _ in rdf_graph.triples((None, NEWS.coversEvent, None)))
+    def test_graph_contains_event_centric_links(self, rdf_graph):
+        assert any(True for _ in rdf_graph.triples((None, NEWS.reportedByArticle, None)))
+        assert any(True for _ in rdf_graph.triples((None, NEWS.concernsPolicyTopic, None)))
 
     def test_guardian_opinion_article_survives_end_to_end(self, kg_records):
         opinion_records = [

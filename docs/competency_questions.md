@@ -1,61 +1,88 @@
 # Final Competency Questions
 
-This document contains the final wording for the 20 competency questions used in the coursework.
+This document contains the current competency-question design for the coursework.
 
 Project scope:
 
-`A knowledge graph for current UK politics and policy news, using articles published between March 6, 2026 and April 6, 2026 from GuardianAPI and NewsAPI, with OpenAI used for extraction, classification, and completion.`
+`A knowledge graph for UK parliamentary and government policy events reported in UK news during a fixed time window, using automated mappings from textual and structured sources, with OpenAI used critically for augmentation, extraction support, and evaluation baselines.`
 
-The first 10 questions are the manually authored set. The second 10 were LLM-assisted and then revised so they align with the fixed time window, the current ontology, and the implemented pipeline outputs.
+The first 10 questions below are the revised manually authored set. The second 10 are LLM-assisted questions that were reviewed and edited manually so they complement the manual set rather than duplicating it.
 
-Implementation difficulty and current pipeline support are tracked separately in [cq_coverage_table.md](5CCSAKNE-CW2/docs/cq_coverage_table.md).
+Implementation difficulty and runtime support should be tracked separately in [cq_coverage_table.md](cq_coverage_table.md).
 
 ## Manual Competency Questions
 
-`CQ01.` Which journalists wrote politics-section articles about government or policy issues during the project time window?
+`CQ01.` Which parliamentary debates in the selected time window concern which policy topics?
 
-`CQ02.` Which news organisations published politics-section articles between March 6, 2026 and April 6, 2026?
+`CQ02.` Which ministerial statements in the selected time window are issued by which government departments?
 
-`CQ03.` Which people were mentioned most often across the fixed article collection?
+`CQ03.` Which political actors are involved in more than one policy event during the selected time window?
 
-`CQ04.` Which political parties were mentioned in articles about elections or parliamentary politics?
+`CQ04.` Which policy events are reported by news articles and are also represented in official parliamentary or government sources?
 
-`CQ05.` Which government bodies were mentioned in articles about taxation, public spending, or healthcare policy?
+`CQ05.` Which policy topics are common to both parliamentary events and government policy events during the selected time window?
 
-`CQ06.` Which opinion articles were classified as negative in sentiment?
+`CQ06.` Which parliamentary bodies do events concerning a given policy topic occur in during the selected time window?
 
-`CQ07.` Which topics appeared most often in politics-section reporting during the project time window?
+`CQ07.` Which government departments are involved in the highest number of policy events during the selected time window?
 
-`CQ08.` Which articles were updated after their original publication time, and what are their canonical URLs?
+`CQ08.` Which political parties have members involved in events concerning more than one policy topic?
 
-`CQ09.` How does the average word count of politics-section articles compare with the average word count of opinion articles?
+`CQ09.` Which reported policy events lack a linked government body, parliamentary body, or policy topic in the knowledge graph?
 
-`CQ10.` Which articles have a follow-up article, and do the original and follow-up share at least one topic?
+`CQ10.` Which policy topics are most frequently linked to parliamentary and government policy events reported during the selected time window?
+
+## CQ-To-Ontology Mapping
+
+This table records the minimum ontology support each CQ requires. It is aligned with [news_ontology.ttl](../ontology/news_ontology.ttl), [build_ontology.py](../src/build_ontology.py), and [news_competency_queries.rq](../queries/news_competency_queries.rq).
+
+| CQ | Main classes justified | Main properties justified | Query shape / strict-marker rationale |
+| --- | --- | --- | --- |
+| CQ01 | `ParliamentaryDebate`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Event-topic retrieval; not article lookup; supports temporal filtering. |
+| CQ02 | `MinisterialStatement`, `GovernmentDepartment` | `issuedByDepartment`, `occursOnDate` | Official-source event-to-institution linkage; justifies department modelling. |
+| CQ03 | `PoliticalActor`, `PolicyEvent` | `involvesActor`, `occursOnDate` | Aggregation with `COUNT` / `HAVING`; easy to construct boundary cases. |
+| CQ04 | `PolicyEvent`, `NewsArticle`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `reportedByArticle`, `representedInOfficialSource` | Cross-source integration question; validates multi-source KG design without overclaiming identity. |
+| CQ05 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `concernsPolicyTopic` | Tests whether event subclasses are meaningfully distinguished but still connected by shared topics. |
+| CQ06 | `ParliamentaryBody`, `PolicyEvent`, `PolicyTopic` | `occursInParliamentaryBody`, `concernsPolicyTopic`, `occursOnDate` | Institution-event-topic linkage; supports non-trivial joins. |
+| CQ07 | `GovernmentDepartment`, `PolicyEvent` | `involvesGovernmentBody`, `occursOnDate` | Ranking / `ORDER BY` / `LIMIT`; requires true aggregation cases. |
+| CQ08 | `PoliticalParty`, `PoliticalActor`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic` | Multi-hop party-actor-event-topic query; stronger than simple party mention lookup. |
+| CQ09 | `PolicyEvent`, `OfficialBody`, `GovernmentBody`, `ParliamentaryBody`, `PolicyTopic` | missing-link detection over `involvesGovernmentBody`, `occursInParliamentaryBody`, `concernsPolicyTopic` | Completion-oriented CQ over the relevant subclasses of `OfficialBody`; explicitly supports incompleteness analysis. |
+| CQ10 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent`, `NewsArticle` | `concernsPolicyTopic`, `reportedByArticle` | Frequency / topic ranking query; supports counterexamples and meaningful limits. |
+| CQ11 | `PolicyEvent`, `OfficialSourceRecord`, `GovernmentDepartment` | `representedInOfficialSource`, `involvesGovernmentBody`, `occursOnDate` | Cross-source institutional linkage; extends CQ04 toward department-level analysis without duplicating ministerial statements. |
+| CQ12 | `PolicyTopic`, `PolicyEvent`, `OfficialSourceRecord` | `concernsPolicyTopic`, `representedInOfficialSource`, `occursOnDate` | Topic aggregation over officially evidenced events; complements CQ10 with an official-source perspective. |
+| CQ13 | `PolicyEvent`, `PolicyTopic` | `concernsPolicyTopic`, `occursOnDate` | Topic co-occurrence via self-join with `HAVING`; non-trivial join pattern. |
+| CQ14 | `PolicyTopic`, `ParliamentaryEvent`, `GovernmentPolicyEvent` | `concernsPolicyTopic`, `occursOnDate` | Comparative topic coverage counts across event subclasses; domain-centred counterpart to CQ05 and CQ10 without assuming one side dominates. |
+| CQ15 | `Location`, `PolicyEvent` | `occursInLocation`, `occursOnDate` | Location aggregation; exercises the geographic dimension of the event model. |
+| CQ16 | `PoliticalActor`, `PoliticalParty`, `PolicyEvent`, `PolicyTopic` | `memberOfParty`, `involvesActor`, `concernsPolicyTopic`, `occursOnDate` | Per-actor multi-topic aggregation; distinct from CQ08 which aggregates at party level. |
+| CQ17 | `Journalist`, `NewsArticle`, `PolicyEvent`, `GovernmentDepartment` | `hasAuthor`, `reportedByArticle`, `involvesGovernmentBody` | Four-hop retrieval linking journalists to articles, policy events, and government departments; source-dependent because byline metadata is only available where article authors are captured reliably. |
+| CQ18 | `PolicyTopic`, `PolicyEvent`, `PoliticalActor`, `GovernmentBody` | `involvesActor`, `involvesGovernmentBody`, `concernsPolicyTopic` | Multi-constraint intersection query; tests joint actor-institution-topic linkage on the same event. |
+| CQ19 | `ParliamentaryEvent`, `MinisterialStatement`, `PolicyTopic` | `occursOnDate`, `concernsPolicyTopic` | Temporal-topic overlap across disjoint event subclasses; stronger than weak date-only co-occurrence and better aligned to what the KG can support reliably. |
+| CQ20 | `GovernmentDepartment`, `PolicyEvent`, `PolicyTopic` | `involvesGovernmentBody`, `concernsPolicyTopic`, `occursOnDate` | Department-topic breadth ranking; domain-facing aggregation over institutional policy scope. |
 
 ## LLM-Assisted Competency Questions
 
-`CQ11.` Which journalists from the same news organisation wrote about the same topic during the project time window?
+`CQ11.` Which policy events in the selected time window are represented in official source records and also involve a government department?
 
-`CQ12.` Which breaking news articles were published in the politics section?
+`CQ12.` Which policy topics are most frequently linked to policy events represented in official source records during the selected time window?
 
-`CQ13.` Which locations were mentioned most often in articles about immigration, taxation, or healthcare policy?
+`CQ13.` Which pairs of policy topics co-occur across more than one policy event during the selected time window?
 
-`CQ14.` Which journalists wrote articles that were later updated?
+`CQ14.` How many parliamentary events and government policy events are linked to each policy topic during the selected time window?
 
-`CQ15.` Which articles mention both a person and an organisation?
+`CQ15.` Which locations are linked to more than one distinct policy event during the selected time window?
 
-`CQ16.` Which news organisations published the widest range of topics during the project time window?
+`CQ16.` Which political actors are individually involved in events spanning at least two distinct policy topics, and which party do they belong to?
 
-`CQ17.` Which people and organisations were co-mentioned most often in the same articles?
+`CQ17.` Which journalists authored articles reporting on policy events that involve a government department?
 
-`CQ18.` Which political events took place in London during the project time window, and when did they occur?
+`CQ18.` Which policy topics appear in events that involve both a political actor and a government body?
 
-`CQ19.` Which political or economic events were covered by more than one news organisation?
+`CQ19.` Which policy topics are shared by parliamentary events and ministerial statements occurring on the same date?
 
-`CQ20.` Which politicians and political parties were mentioned together most often in the same articles?
+`CQ20.` Which government departments are involved in policy events spanning the widest range of policy topics during the selected time window?
 
 ## Notes
 
-- This set is now fully aligned to the fixed March 6, 2026 to April 6, 2026 dataset window.
-- The wording avoids the earlier generic news and technology framing.
-- The set is designed to exercise both the stronger metadata-driven parts of the KG and the harder analytical areas such as political-actor typing, sentiment, follow-up links, and event modelling.
+- This revised manual set is intentionally more TBox-aware and less ABox-retrieval-heavy than the earlier article-centric version.
+- The wording has been tightened to avoid vague relations such as `associated with` where more explicit ontology links are intended.
+- `OfficialBody` is the superclass for official institutions in scope, with `GovernmentBody` and `ParliamentaryBody` used where the CQs need subclass-level distinctions.
