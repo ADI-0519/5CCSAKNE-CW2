@@ -6,6 +6,7 @@ from pathlib import Path
 from rdflib import RDF, Graph
 
 from src.build_ontology import NEWS, SCHEMA
+from src.config import CONFIG
 from src.data_normalisation import normalise_name
 from src.openai_client import (
     build_cache_path,
@@ -13,7 +14,6 @@ from src.openai_client import (
     request_structured_output,
     save_cache_payload,
 )
-from src.config import CONFIG
 from src.run_queries import load_kg
 
 DEFAULT_OUTPUT_PATH = Path("kg/generated/completed_kg.ttl")
@@ -73,7 +73,8 @@ RAG_INSTRUCTIONS = (
     "not departments, roles, or generic labels such as 'UK Government'. "
     "proposed_departments must be named UK government departments or official bodies only. "
     "proposed_topics must be chosen only from this list: "
-    + str(sorted(CONFIG["TOPIC_GROUPS"].keys())) + ". "
+    + str(sorted(CONFIG["TOPIC_GROUPS"].keys()))
+    + ". "
     "Prefer specific topics over Government Policy, which should only be used "
     "when no other topic applies. "
     "Example of correct output: "
@@ -87,9 +88,22 @@ RAG_INSTRUCTIONS = (
 )
 
 ACTOR_BLOCKLIST = {
-    "agency", "authority", "board", "cabinet", "chair", "commission",
-    "committee", "council", "department", "director", "government",
-    "minister", "ministry", "office", "regulator", "secretary",
+    "agency",
+    "authority",
+    "board",
+    "cabinet",
+    "chair",
+    "commission",
+    "committee",
+    "council",
+    "department",
+    "director",
+    "government",
+    "minister",
+    "ministry",
+    "office",
+    "regulator",
+    "secretary",
 }
 
 # retrieves articles, topics and sources linked to event through KG neighbourhood
@@ -324,14 +338,12 @@ def enrich_cross_source_links(graph):
     return added_matched, added_represented
 
 
-
 def enrich_with_rag(graph):
     added_actors = 0
     added_depts = 0
     added_topics = 0
     topic_index = {
-        text_value(graph, t, SCHEMA.name): t
-        for t in graph.subjects(RDF.type, NEWS.PolicyTopic)
+        text_value(graph, t, SCHEMA.name): t for t in graph.subjects(RDF.type, NEWS.PolicyTopic)
     }
 
     for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
@@ -346,11 +358,13 @@ def enrich_with_rag(graph):
             continue
 
         # retrieve: SPARQL query over KG to get triples linked to event
-        rows = list(graph.query(
-            RAG_CONTEXT_QUERY,
-            initNs={"news": NEWS, "schema": SCHEMA},
-            initBindings={"event": event_uri},
-        ))
+        rows = list(
+            graph.query(
+                RAG_CONTEXT_QUERY,
+                initNs={"news": NEWS, "schema": SCHEMA},
+                initBindings={"event": event_uri},
+            )
+        )
 
         headlines = {str(r.headline) for r in rows if r.headline}
         publishers = {str(r.publisherName) for r in rows if r.publisherName}
@@ -392,7 +406,9 @@ def enrich_with_rag(graph):
             user_input = ". ".join(parts) + "."
 
             try:
-                result = request_structured_output(RAG_INSTRUCTIONS, user_input, RAG_RESPONSE_FORMAT)
+                result = request_structured_output(
+                    RAG_INSTRUCTIONS, user_input, RAG_RESPONSE_FORMAT
+                )
             except Exception as exc:
                 print(f"[COMPLETE] RAG request failed for {event_uri}: {exc}")
                 continue
@@ -402,7 +418,7 @@ def enrich_with_rag(graph):
             save_cache_payload(cache_path, result)
 
         context_terms = set()
-        for s in (headlines | publishers | topic_names | source_titles):
+        for s in headlines | publishers | topic_names | source_titles:
             context_terms |= slug_terms(s)
 
         for name in result.get("proposed_actors", []):
@@ -453,7 +469,9 @@ def enrich_graph(graph):
         print(f"[COMPLETE] Added {matched_count} matchedToSourceRecord links.")
     if represented_count:
         print(f"[COMPLETE] Added {represented_count} representedInOfficialSource links.")
-    print(f"[COMPLETE] RAG: added {actor_count} actor links, {dept_count} department links, {topic_count} topic links.")
+    print(
+        f"[COMPLETE] RAG: added {actor_count} actor links, {dept_count} department links, {topic_count} topic links."
+    )
 
     return enriched
 
