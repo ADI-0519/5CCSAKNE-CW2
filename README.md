@@ -30,9 +30,11 @@ Generated artefacts land in `output/` with a UTC timestamp prefix:
 
 - `output/<ts>_completed_kg.ttl` — the final knowledge graph.
 - `output/<ts>_query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
-- `output/<ts>_validation_results.json` — SPARQL-based graph validation report (12 rules, expected: `0` violations).
+- `output/<ts>_validation_results.json` — SPARQL-based graph validation report (expected: `0` violations).
+- `output/<ts>_completion_audit.json` — per-event summary of links added during Stage 9 completion.
+- `output/<ts>_kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
 
-The non-timestamped `output/query_results.json` and `output/validation_results.json` always reflect the most recent run.
+The non-timestamped copies in `output/` always reflect the most recent run.
 
 ## Data Sources
 
@@ -53,7 +55,7 @@ The non-timestamped `output/query_results.json` and `output/validation_results.j
 
 ## Pipeline Stages
 
-`src/main.py` runs 11 stages end to end:
+`src/main.py` runs 12 stages end to end:
 
 1. **Collect** — fetch Guardian articles, Parliament written statements, GOV.UK records, and optional Wikidata enrichment (or load cached snapshots under `--from-cache`).
 2. **Normalise sources** — convert source payloads into a shared record format.
@@ -66,6 +68,7 @@ The non-timestamped `output/query_results.json` and `output/validation_results.j
 9. **Enrich / complete** — three sub-steps: (a) add `news:reportsOn` inverse links, (b) add `news:matchedToSourceRecord` cross-source matches, (c) RAG step that proposes missing `news:involvesActor` / `news:involvesGovernmentBody` / `news:concernsPolicyTopic` links, grounded in retrieved KG context and validated against a closed vocabulary and institutional blocklist. Writes `kg/generated/completed_kg.ttl`.
 10. **Query** — run the 20 SPARQL competency queries against the completed KG and save results.
 11. **Validate** — run SPARQL-based graph validation rules and save a violations report.
+12. **Summarise** — write a completion audit and a KG summary (triple counts, coverage, completion deltas) to `output/`.
 
 ## Running Tests
 
