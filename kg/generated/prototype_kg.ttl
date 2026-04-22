@@ -4853,8 +4853,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Parliament>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-20"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/8ffbfd8c7f45f0cf> ;
@@ -4874,8 +4873,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/Attacks_on_international_shipping_in_the_Gulf_have_been_deeply_damaging_for_the_world__UK_Statement_at_the_UN_General_Assembly_2026-04-17_Westminster> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-17"^^xsd:date ;
@@ -4919,8 +4917,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Immigration> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Revenue_and_Customs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Revenue_and_Customs> ;
     news:occursOnDate "2026-04-09"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/daf482108c0af572> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/daf482108c0af572> ;
@@ -4930,8 +4927,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Cabinet_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Cabinet_Office> ;
     news:occursOnDate "2026-04-14"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/0a7c500b90dd7f13> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/0a7c500b90dd7f13> ;
@@ -4957,7 +4953,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/Competition_and_scaling__Tech_eu_Summit_London_2026_2026-04-22_London> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/44d60457220543e7> ;
@@ -4967,8 +4962,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Competition_to_launch_national_forest_in_Ox-Cam_Growth_Corridor_2026-03-25_Ox-Cam_Growth> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs> ;
     news:occursInLocation <http://example.org/news#location/Ox-Cam_Growth> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/a5e2a85fbbdb70d1> ;
@@ -4978,7 +4972,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Connect_Fund_to_award_additional__1_5_million_to_community_and_voluntary_groups_2026-04-16_Northern_Ireland> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Northern_Ireland> ;
     news:occursOnDate "2026-04-16"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/93d7512d977ebce1> ;
@@ -5016,11 +5009,9 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/79a60e8346806cc5> ;
     schema:name "Crackdown on water companies delivers record funding to restore harm done to waterways" .
 
-<http://example.org/news#event/Crispin_Blunt_fined_for_drug_possession_2026-03-25_Westminster> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Crispin_Blunt_fined_for_drug_possession_2026-03-25_Westminster> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Drugs_Policy> ;
     news:involvesActor <http://example.org/news#person/Crispin_Blunt> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/85aa2166b08cd744> ;
@@ -5030,7 +5021,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-30"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/92cd8193ab383218> ;
@@ -5060,12 +5050,10 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/d643a32952e9973c> ;
     schema:name "Defence Secretary No9 speech - 09 April 2026" .
 
-<http://example.org/news#event/Doctors_Strikes_2026-04-07_England> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Doctors_Strikes_2026-04-07_England> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Healthcare>,
         <http://example.org/news#topic/Politics> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-07"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/5c367a818ca61f69> ;
@@ -5077,52 +5065,47 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Ed_Davey>,
         <http://example.org/news#person/Kemi_Badenoch> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/db8e86d23fa55986> ;
     schema:name "Election" .
 
-<http://example.org/news#event/Election_2026-04-10_Bolton_bc727d25> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Election_2026-04-10_Bolton_bc727d25> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Bolton> ;
     news:occursOnDate "2026-04-10"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/bc727d25d9898c4b> ;
     schema:name "Election" .
 
-<http://example.org/news#event/Election_2026-04-14_Edinburgh_57d0409b> a news:PolicyEvent ;
+<http://example.org/news#event/Election_2026-04-14_Edinburgh_57d0409b> a news:GovernmentPolicyEvent,
+        news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Housing>,
-        <http://example.org/news#topic/Parliament>,
         <http://example.org/news#topic/Taxation> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesActor <http://example.org/news#person/Angus_Robertson>,
+        <http://example.org/news#person/Scottish_Greens> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Holyrood> ;
     news:occursInLocation <http://example.org/news#location/Edinburgh> ;
     news:occursOnDate "2026-04-14"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/57d0409bedcaecdf> ;
     schema:name "Election" .
 
-<http://example.org/news#event/Election_2026-04-17_Birmingham_706e35cc> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Election_2026-04-17_Birmingham_706e35cc> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Housing>,
         <http://example.org/news#topic/Immigration>,
         <http://example.org/news#topic/Parliament> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Birmingham> ;
     news:occursOnDate "2026-04-17"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/706e35cc4b770464> ;
     schema:name "Election" .
 
-<http://example.org/news#event/Election_2026-04-18_London_bb3b5158> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Election_2026-04-18_London_bb3b5158> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Parliament>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-04-18"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/bb3b5158207f98f8> ;
@@ -5142,8 +5125,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Taxation> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury> ;
     news:issuedByDepartment <http://example.org/news#organisation/HM_Treasury> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/2f8a5bd2c6c615c4> ;
@@ -5187,8 +5169,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade> ;
     news:issuedByDepartment <http://example.org/news#organisation/Department_for_Business_and_Trade> ;
     news:occursOnDate "2026-04-07"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/8397a999683069bf> ;
@@ -5314,8 +5295,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/HMRC_s_Strategic_Approach_to_External_Integration_2026-03-26> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Revenue_and_Customs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Revenue_and_Customs> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/c4faf631146bac64> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/c4faf631146bac64> ;
@@ -5338,7 +5318,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/b64f7cf8a0102c10> ;
@@ -5349,7 +5328,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/053089c73532309b> ;
@@ -5359,7 +5337,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Homes_England_marks_National_Housing_Bank_launch_as_part_of_a_once-in-a-generation_investment_offer_to_accelerate_delivery_of_new_homes_and_mixed-use_schemes_2026-03-31_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Housing> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/0d0243531c185cfb> ;
@@ -5389,8 +5366,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Iconic_golden_eagles_to_make_comeback_in_England_2026-04-11_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-11"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/7b25aab0b1710f6c> ;
@@ -5466,7 +5442,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Healthcare>,
         <http://example.org/news#topic/Public_Spending> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics>,
         <http://example.org/news#organisation/Scottish_Government>,
         <http://example.org/news#organisation/Welsh_Government> ;
     news:issuedByDepartment <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs> ;
@@ -5479,8 +5454,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Joint_Statement_at_the_Aurora_Forum__26_March_2026_2026-03-26_Denmark> a news:MinisterialStatement,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Denmark> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
@@ -5510,8 +5484,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/Joint_Statement_of_G7_Foreign_Ministers_on_Iran_2026-03-27_Vaux-de-Cernay> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Vaux-de-Cernay> ;
     news:occursOnDate "2026-03-27"^^xsd:date ;
@@ -5531,8 +5504,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Joint_statement_from_Tallinn_Mechanism_member_states__10_March_2026_2026-03-23_London> a news:MinisterialStatement,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-03-23"^^xsd:date ;
@@ -5562,16 +5534,14 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Largest_ever_Government_investment_in_threatened_species_recovery_2026-04-03_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-03"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/10b871f38a51b091> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/10b871f38a51b091> ;
     schema:name "Largest ever Government investment in threatened species recovery" .
 
-<http://example.org/news#event/Leadership_Contest_2026-03-30> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Leadership_Contest_2026-03-30> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Housing>,
         <http://example.org/news#topic/Parliament>,
@@ -5579,7 +5549,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:involvesActor <http://example.org/news#person/Angela_Rayner>,
         <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Wes_Streeting> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-03-30"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/f2fe729e7a5336b4> ;
     schema:name "Leadership Contest" .
@@ -5619,7 +5588,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Healthcare>,
         <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-04-08"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e902449ffca8d78b> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/e902449ffca8d78b> ;
@@ -5677,15 +5645,13 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/38ece79c1685d25f> ;
     schema:name "Mann recommendations agreed in consultation on GMC overhaul" .
 
-<http://example.org/news#event/March_against_the_far_right_2026-03-28_London> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/March_against_the_far_right_2026-03-28_London> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Parliament>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Andy_Burnham>,
         <http://example.org/news#person/Dawn_Butler>,
         <http://example.org/news#person/Nigel_Farage>,
         <http://example.org/news#person/Zack_Polanski> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-03-28"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/cd929aefb90b587d> ;
@@ -5709,8 +5675,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence> ;
     news:occursInLocation <http://example.org/news#location/DPRTE> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/845937e9b26b9271> ;
@@ -5731,8 +5696,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade> ;
     news:issuedByDepartment <http://example.org/news#organisation/Department_for_Business_and_Trade> ;
     news:occursOnDate "2026-03-27"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/ad76658b2c89d6de> ;
@@ -5744,8 +5708,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Immigration>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Home_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Home_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Home_Office> ;
     news:occursOnDate "2026-04-20"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/d3538cf07e5793e1> ;
@@ -5762,10 +5725,13 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/parliament/08124cd753879368> ;
     schema:name "Ministerial Statement" .
 
-<http://example.org/news#event/Ministerial_Statement_2026-04-22_83a31463> a news:PolicyEvent ;
+<http://example.org/news#event/Ministerial_Statement_2026-04-22_83a31463> a news:MinisterialStatement,
+        news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Taxation> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury> ;
+    news:issuedByDepartment <http://example.org/news#organisation/HM_Treasury> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/83a31463fe260068> ;
     news:representedInOfficialSource <http://example.org/news#source-record/parliament/83a31463fe260068> ;
@@ -5797,8 +5763,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Parliament> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Attorney_General_s_Office>,
         <http://example.org/news#organisation/Cabinet_Office>,
-        <http://example.org/news#organisation/HM_Treasury>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+        <http://example.org/news#organisation/HM_Treasury> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/6c45619899d0baf7> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/6c45619899d0baf7> ;
@@ -5819,7 +5784,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/b58d634309a2199c> ;
@@ -5927,8 +5891,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Attorney_General_s_Office>,
         <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/HM_Treasury>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+        <http://example.org/news#organisation/HM_Treasury> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
         <http://example.org/news#organisation/HM_Treasury> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
@@ -5951,8 +5914,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
@@ -5964,8 +5926,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Parliament> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
-    news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Lords> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/0de59430032818f6> ;
     schema:name "Parliamentary Debate" .
@@ -5974,8 +5934,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-03-27"^^xsd:date ;
@@ -5988,9 +5947,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Parliament> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Delaware> ;
-    news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/57b3dda15836c6a9> ;
     schema:name "Parliamentary Debate" .
@@ -6000,7 +5957,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Parliament>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-04-19"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e1004497b81a57be> ;
     schema:name "Parliamentary Debate" .
@@ -6012,7 +5968,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Washington> ;
-    news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-04-20"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e1a95d7504bff4f2> ;
     schema:name "Parliamentary Debate" .
@@ -6037,21 +5992,18 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:involvesActor <http://example.org/news#person/Emily_Thornberry>,
         <http://example.org/news#person/Olly_Robbins> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/No_10>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+        <http://example.org/news#organisation/No_10> ;
     news:occursInLocation <http://example.org/news#location/Washington> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-04-21"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/c2e9b785cc4558e1> ;
     schema:name "Parliamentary Debate" .
 
-<http://example.org/news#event/Policy_Announcement_2026-03-24_452f62bb> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-03-24_452f62bb> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Parliament> ;
     news:involvesActor <http://example.org/news#person/Rachel_Reeves> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/452f62bbd02a883b> ;
     schema:name "Policy Announcement" .
@@ -6068,16 +6020,10 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:reportedByArticle <http://example.org/news#article/f349e8065760290c> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-03-25_f7a503b0> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Policy_Announcement_2026-04-01_London_d0c7250d> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
-    news:occursOnDate "2026-03-25"^^xsd:date ;
-    news:reportedByArticle <http://example.org/news#article/f7a503b08201b6b9> ;
-    schema:name "Policy Announcement" .
-
-<http://example.org/news#event/Policy_Announcement_2026-04-01_London_d0c7250d> a news:PolicyEvent ;
-    news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Home_Office> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-04-01"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/d0c7250d8349c708> ;
@@ -6099,19 +6045,17 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Immigration> ;
     news:involvesActor <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/No_10> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-07"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/9777e0b98347bb64> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-08_Westminster_24972cfc> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-08_Westminster_24972cfc> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Politics>,
         <http://example.org/news#topic/Public_Spending> ;
     news:involvesActor <http://example.org/news#person/Kemi_Badenoch>,
         <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-08"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/24972cfc952b1d42> ;
@@ -6123,43 +6067,37 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Downing_Street> ;
     news:occursInLocation <http://example.org/news#location/Qatar> ;
     news:occursOnDate "2026-04-10"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/ca9dfd5f6bfa0303> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-12_Pakistan_e193d7e1> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-12_Pakistan_e193d7e1> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Wes_Streeting> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Pakistan> ;
     news:occursOnDate "2026-04-12"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e193d7e12fb0b57e> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-13_Hungary_5deb4787> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-13_Hungary_5deb4787> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Immigration>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Kemi_Badenoch>,
         <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Hungary> ;
     news:occursOnDate "2026-04-13"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/5deb4787261030d1> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-13_Westminster_449b7c82> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-13_Westminster_449b7c82> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Government_Policy> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-13"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/449b7c8290eaaf6b> ;
@@ -6194,8 +6132,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Parliament>,
         <http://example.org/news#topic/Politics> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Education>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Education> ;
     news:occursOnDate "2026-04-20"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/f4132ca7c91e3fd9> ;
     schema:name "Policy Announcement" .
@@ -6242,20 +6179,16 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/parliament/f1bcfcd667bee2af> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-22_034c2c94> a news:ParliamentaryEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-22_034c2c94> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Energy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/034c2c94d35f00c2> ;
     news:representedInOfficialSource <http://example.org/news#source-record/parliament/034c2c94d35f00c2> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-22_0a3d18cf> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-22_0a3d18cf> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/0a3d18cf481d9cf2> ;
     news:representedInOfficialSource <http://example.org/news#source-record/parliament/0a3d18cf481d9cf2> ;
@@ -6270,7 +6203,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/Policy_Announcement_2026-04-22_Dorset_3a700ff8> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Dorset> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/3a700ff83083fd1f> ;
@@ -6292,8 +6224,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Housing__Communities_and_Local_Government>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Housing__Communities_and_Local_Government> ;
     news:issuedByDepartment <http://example.org/news#organisation/Ministry_of_Housing__Communities_and_Local_Government> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
@@ -6326,7 +6257,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Kemi_Badenoch>,
         <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/5f97439665fef257> ;
@@ -6341,8 +6271,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Kemi_Badenoch>,
         <http://example.org/news#person/Wes_Streeting> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Cabinet_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Cabinet_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
@@ -6357,8 +6286,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Kemi_Badenoch> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/9bb3fa1cc7766a38> ;
@@ -6388,7 +6316,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Kemi_Badenoch>,
         <http://example.org/news#person/Rachel_Reeves> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursInParliamentaryBody <http://example.org/news#organisation/House_of_Commons> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
@@ -6420,8 +6347,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/6f58337ab59b415e> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/6f58337ab59b415e> ;
@@ -6444,7 +6370,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Healthcare>,
         <http://example.org/news#topic/Public_Spending> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics>,
         <http://example.org/news#organisation/Scottish_Government>,
         <http://example.org/news#organisation/Welsh_Government> ;
     news:issuedByDepartment <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs> ;
@@ -6564,7 +6489,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/SFO_launch_appeal_into_suspected_home_heating___insulation_fraud_2026-04-22> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/c53ddc8c77733484> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/c53ddc8c77733484> ;
@@ -6574,22 +6498,19 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Cabinet_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Cabinet_Office> ;
     news:occursInLocation <http://example.org/news#location/CYBERUK> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/f574be24961e1c54> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/f574be24961e1c54> ;
     schema:name "Security Minister’s speech to CYBERUK 2026" .
 
-<http://example.org/news#event/Simon_Dudley_sacked_from_Reform_UK_2026-04-02_England> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Simon_Dudley_sacked_from_Reform_UK_2026-04-02_England> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Nigel_Farage>,
         <http://example.org/news#person/Simon_Dudley> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-02"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/5ee8f500dab7e359> ;
@@ -6607,16 +6528,24 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Sir_Martyn_Oliver_s_speech_at_the_Early_Years_Alliance_Connect_Roadshow_2026-04-17_London> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-04-17"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e0adca604557bda8> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/e0adca604557bda8> ;
     schema:name "Sir Martyn Oliver's speech at the Early Years Alliance Connect Roadshow" .
 
+<http://example.org/news#event/Social_Media_Ban_Pilot_2026-03-25> a news:PolicyEvent ;
+    news:concernsPolicyTopic <http://example.org/news#topic/Child_Protection>,
+        <http://example.org/news#topic/Social_Media_Restrictions> ;
+    news:involvesActor <http://example.org/news#person/John_Nash>,
+        <http://example.org/news#person/Liz_Kendall>,
+        <http://example.org/news#person/Lord_Nash> ;
+    news:occursOnDate "2026-03-25"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/f7a503b08201b6b9> ;
+    schema:name "Social Media Ban Pilot" .
+
 <http://example.org/news#event/Summer_boost_for_HM_Coastguard_Search_and_Rescue_helicopters_2026-04-07> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursOnDate "2026-04-07"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/63cf1f207c7bc7f8> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/63cf1f207c7bc7f8> ;
@@ -6637,20 +6566,17 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Housing__Communities_and_Local_Government>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Housing__Communities_and_Local_Government> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/871f0c11607c5767> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/871f0c11607c5767> ;
     schema:name "Support for housebuilding in London: package of support" .
 
-<http://example.org/news#event/Suspension_of_Chris_Parry_2026-03-24_England> a news:GovernmentPolicyEvent,
-        news:PolicyEvent ;
+<http://example.org/news#event/Suspension_of_Chris_Parry_2026-03-24_England> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/David_Lammy>,
         <http://example.org/news#person/Nigel_Farage> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/cf1fe964c3c9e06c> ;
@@ -6743,8 +6669,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/The_United_Kingdom_remains_concerned_by_the_deteriorating_humanitarian_situation_in_the_Great_Lakes_region__UK_statement_at_the_UN_Security_Council_2026-04-15_Westminster> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
@@ -6755,8 +6680,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/The_Universal_Credit__Personal_Independence_Payment_and_Employment_and_Support_Allowance__Amendment__Regulations_2026__unnumbered_act_paper_2026-04-13_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Work_and_Pensions>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Work_and_Pensions> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-13"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/0cb02820c05f397f> ;
@@ -6768,8 +6692,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Parliament> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Energy_Security_and_Net_Zero>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Energy_Security_and_Net_Zero> ;
     news:occursOnDate "2026-04-21"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/c8d931d8646606aa> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/c8d931d8646606aa> ;
@@ -6787,8 +6710,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/The_only_solution_to_the_current_crisis_in_South_Sudan_is_through_the_immediate_cessation_of_hostilities__UK_statement_at_the_UN_Security_Council_2026-04-17_Westminster> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-17"^^xsd:date ;
@@ -6799,8 +6721,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Third_International_Sudan_Conference__April_2026__co-hosts__statement_2026-04-16_Berlin> a news:MinisterialStatement,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Berlin> ;
     news:occursOnDate "2026-04-16"^^xsd:date ;
@@ -6811,8 +6732,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 <http://example.org/news#event/Threatened_species_set_for_major_funding_boost_2026-04-09_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Environment__Food_and_Rural_Affairs> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-09"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/4d9aba1638947155> ;
@@ -6929,8 +6849,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/UN_Human_Rights_Council_61__UK_Introductory_Statement_on_the_draft_resolution_on_Syria_2026-03-27_Syria> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Syria> ;
     news:occursOnDate "2026-03-27"^^xsd:date ;
@@ -6940,8 +6859,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/UN_Human_Rights_Council_61__UK_Statement_for_the_Interactive_Dialogue_on_Ukraine_2026-03-26_Westminster> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
@@ -6951,8 +6869,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/UN_Human_Rights_Council_61__UK_Statement_for_the_resolution_on_South_Sudan_2026-03-27_Westminster> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-03-27"^^xsd:date ;
@@ -6962,8 +6879,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
 
 <http://example.org/news#event/UN_Human_Rights_Council_61__UK_Statement_on_the_Appointment_of_Mandate_Holders_2026-04-01_Westminster> a news:MinisterialStatement,
         news:PolicyEvent ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-01"^^xsd:date ;
@@ -6989,8 +6905,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Taxation> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury> ;
     news:issuedByDepartment <http://example.org/news#organisation/HM_Treasury> ;
     news:occursOnDate "2026-04-08"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/2bdfea7fd8e093b8> ;
@@ -7026,8 +6941,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Energy>,
         <http://example.org/news#topic/Government_Policy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/62293833926f1586> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/62293833926f1586> ;
@@ -7119,8 +7033,7 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         <http://example.org/news#topic/Taxation> ;
     news:involvesActor <http://example.org/news#person/Rachel_Reeves> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
-        <http://example.org/news#organisation/HM_Treasury>,
-        <http://example.org/news#organisation/Office_for_National_Statistics> ;
+        <http://example.org/news#organisation/HM_Treasury> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office>,
         <http://example.org/news#organisation/HM_Treasury> ;
     news:occursInLocation <http://example.org/news#location/Westminster> ;
@@ -7170,7 +7083,6 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Public_Spending> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Office_for_National_Statistics> ;
     news:occursInLocation <http://example.org/news#location/Maritime> ;
     news:occursOnDate "2026-04-13"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/540a16a882511728> ;
@@ -7397,9 +7309,6 @@ news:issuedByDepartment a owl:ObjectProperty ;
 
 <http://example.org/news#location/Egypt> a news:Location ;
     schema:name "Egypt" .
-
-<http://example.org/news#location/English> a news:Location ;
-    schema:name "English" .
 
 <http://example.org/news#location/Erdington> a news:Location ;
     schema:name "Erdington" .
@@ -7715,6 +7624,9 @@ news:issuedByDepartment a owl:ObjectProperty ;
 
 <http://example.org/news#location/Paris> a news:Location ;
     schema:name "Paris" .
+
+<http://example.org/news#location/Parliament> a news:Location ;
+    schema:name "Parliament" .
 
 <http://example.org/news#location/Pazoozoo> a news:Location ;
     schema:name "Pazoozoo" .
@@ -11667,6 +11579,10 @@ news:occursOnDate a owl:DatatypeProperty ;
     schema:foundingDate "2019-02-08"^^xsd:date ;
     schema:name "Horwich and Blackrod First" .
 
+<http://example.org/news#organisation/House_of_Lords> a news:OfficialBody,
+        news:ParliamentaryBody ;
+    schema:name "House of Lords" .
+
 <http://example.org/news#organisation/Hull_Independent_Labour_Group> a news:PoliticalParty,
         schema:Organization ;
     rdfs:seeAlso <http://www.wikidata.org/entity/Q39931879> ;
@@ -12026,10 +11942,6 @@ news:occursOnDate a owl:DatatypeProperty ;
     schema:description "executive agency of the Department for Business and Trade" ;
     schema:location <http://example.org/news#location/London> ;
     schema:name "Insolvency Service" .
-
-<http://example.org/news#organisation/Intellectual_Property_Office> a news:GovernmentBody,
-        news:OfficialBody ;
-    schema:name "Intellectual Property Office" .
 
 <http://example.org/news#organisation/International_Socialist_Group> a news:PoliticalParty,
         schema:Organization ;
@@ -13949,6 +13861,14 @@ news:occursOnDate a owl:DatatypeProperty ;
     schema:description "office of the United Kingdom Government" ;
     schema:location <http://example.org/news#location/London> ;
     schema:name "Office for Equality and Opportunity" .
+
+<http://example.org/news#organisation/Office_for_National_Statistics> a news:GovernmentBody,
+        news:OfficialBody,
+        schema:Organization ;
+    rdfs:seeAlso <http://www.wikidata.org/entity/Q1334971> ;
+    schema:description "United Kingdom's principal government institution in charge of statistics and census data" ;
+    schema:location <http://example.org/news#location/Newport> ;
+    schema:name "Office for National Statistics" .
 
 <http://example.org/news#organisation/Office_for_Nuclear_Regulation> a news:GovernmentBody,
         news:GovernmentDepartment,
@@ -18998,16 +18918,6 @@ news:occursOnDate a owl:DatatypeProperty ;
     schema:gender "male" ;
     schema:memberOf <http://example.org/news#organisation/Conservative_Party> ;
     schema:name "Angus Maude" .
-
-<http://example.org/news#person/Angus_Robertson> a news:PoliticalActor,
-        schema:Person ;
-    news:memberOfParty <http://example.org/news#organisation/Scottish_National_Party> ;
-    rdfs:seeAlso <http://www.wikidata.org/entity/Q480184> ;
-    schema:birthDate "1969-09-28"^^xsd:date ;
-    schema:description "British politician (born 1969)" ;
-    schema:gender "male" ;
-    schema:memberOf <http://example.org/news#organisation/Scottish_National_Party> ;
-    schema:name "Angus Robertson" .
 
 <http://example.org/news#person/Anita_Gale__Baroness_Gale> a news:PoliticalActor,
         schema:Person ;
@@ -28530,16 +28440,6 @@ news:occursOnDate a owl:DatatypeProperty ;
     schema:gender "female" ;
     schema:memberOf <http://example.org/news#organisation/Labour_Party> ;
     schema:name "Lisa Nandy" .
-
-<http://example.org/news#person/Liz_Kendall> a news:PoliticalActor,
-        schema:Person ;
-    news:memberOfParty <http://example.org/news#organisation/Labour_Party> ;
-    rdfs:seeAlso <http://www.wikidata.org/entity/Q750260> ;
-    schema:birthDate "1971-06-11"^^xsd:date ;
-    schema:description "British politician (born 1971)" ;
-    schema:gender "female" ;
-    schema:memberOf <http://example.org/news#organisation/Labour_Party> ;
-    schema:name "Liz Kendall" .
 
 <http://example.org/news#person/Liz_Lynne> a news:PoliticalActor,
         schema:Person ;
@@ -41689,13 +41589,9 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
     schema:description "law in the United Kingdom" ;
     schema:name "Competition Appeal Tribunal" .
 
-<http://example.org/news#organisation/House_of_Lords> a news:OfficialBody,
-        news:ParliamentaryBody ;
-    schema:name "House of Lords" .
-
-<http://example.org/news#organisation/No_10> a news:GovernmentBody,
+<http://example.org/news#organisation/Holyrood> a news:GovernmentBody,
         news:OfficialBody ;
-    schema:name "No 10" .
+    schema:name "Holyrood" .
 
 <http://example.org/news#person/Andy_Burnham> a news:PoliticalActor,
         schema:Person ;
@@ -41710,6 +41606,16 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
 <http://example.org/news#person/Angela_Rayner> a news:PoliticalActor,
         schema:Person ;
     schema:name "Angela Rayner" .
+
+<http://example.org/news#person/Angus_Robertson> a news:PoliticalActor,
+        schema:Person ;
+    news:memberOfParty <http://example.org/news#organisation/Scottish_National_Party> ;
+    rdfs:seeAlso <http://www.wikidata.org/entity/Q480184> ;
+    schema:birthDate "1969-09-28"^^xsd:date ;
+    schema:description "British politician (born 1969)" ;
+    schema:gender "male" ;
+    schema:memberOf <http://example.org/news#organisation/Scottish_National_Party> ;
+    schema:name "Angus Robertson" .
 
 <http://example.org/news#person/Crispin_Blunt> a news:PoliticalActor,
         schema:Person ;
@@ -41767,6 +41673,10 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
     schema:memberOf <http://example.org/news#organisation/Labour_Party> ;
     schema:name "John Healey" .
 
+<http://example.org/news#person/John_Nash> a news:PoliticalActor,
+        schema:Person ;
+    schema:name "John Nash" .
+
 <http://example.org/news#person/John_Swinney> a news:PoliticalActor,
         schema:Person ;
     news:memberOfParty <http://example.org/news#organisation/Scottish_National_Party> ;
@@ -41777,6 +41687,20 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
     schema:memberOf <http://example.org/news#organisation/Scottish_National_Party> ;
     schema:name "John Swinney" .
 
+<http://example.org/news#person/Liz_Kendall> a news:PoliticalActor,
+        schema:Person ;
+    news:memberOfParty <http://example.org/news#organisation/Labour_Party> ;
+    rdfs:seeAlso <http://www.wikidata.org/entity/Q750260> ;
+    schema:birthDate "1971-06-11"^^xsd:date ;
+    schema:description "British politician (born 1971)" ;
+    schema:gender "female" ;
+    schema:memberOf <http://example.org/news#organisation/Labour_Party> ;
+    schema:name "Liz Kendall" .
+
+<http://example.org/news#person/Lord_Nash> a news:PoliticalActor,
+        schema:Person ;
+    schema:name "Lord Nash" .
+
 <http://example.org/news#person/Nick_Thomas-Symonds> a news:PoliticalActor,
         schema:Person ;
     schema:name "Nick Thomas-Symonds" .
@@ -41784,6 +41708,10 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
 <http://example.org/news#person/President_Putin> a news:PoliticalActor,
         schema:Person ;
     schema:name "President Putin" .
+
+<http://example.org/news#person/Scottish_Greens> a news:PoliticalActor,
+        schema:Person ;
+    schema:name "Scottish Greens" .
 
 <http://example.org/news#person/Simon_Dudley> a news:PoliticalActor,
         schema:Person ;
@@ -43077,11 +43005,17 @@ news:reportedByArticle a owl:ObjectProperty ;
 <http://example.org/news#topic/Aviation_Subsidy> a news:PolicyTopic ;
     schema:name "Aviation Subsidy" .
 
+<http://example.org/news#topic/Child_Protection> a news:PolicyTopic ;
+    schema:name "Child Protection" .
+
 <http://example.org/news#topic/Drugs_Policy> a news:PolicyTopic ;
     schema:name "Drugs Policy" .
 
 <http://example.org/news#topic/Security_Clearance> a news:PolicyTopic ;
     schema:name "Security Clearance" .
+
+<http://example.org/news#topic/Social_Media_Restrictions> a news:PolicyTopic ;
+    schema:name "Social Media Restrictions" .
 
 <http://example.org/news#topic/Subsidy_Control> a news:PolicyTopic ;
     schema:name "Subsidy Control" .
@@ -43382,6 +43316,10 @@ news:reportedByArticle a owl:ObjectProperty ;
 <http://example.org/news#organisation/New_Zealand_Reform_Party> a news:PoliticalParty,
         schema:Organization ;
     schema:name "New Zealand Reform Party" .
+
+<http://example.org/news#organisation/No_10> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "No 10" .
 
 <http://example.org/news#organisation/Non-affiliated_members_of_the_House_of_Lords> a news:PoliticalParty,
         schema:Organization ;
@@ -43892,10 +43830,6 @@ news:NewsOrganisation a owl:Class ;
         news:OfficialBody ;
     schema:name "Department for Science, Innovation and Technology" .
 
-<http://example.org/news#organisation/Downing_Street> a news:GovernmentBody,
-        news:OfficialBody ;
-    schema:name "Downing Street" .
-
 <http://example.org/news#organisation/Fianna_F_il> a news:PoliticalParty,
         schema:Organization ;
     schema:name "Fianna Fáil" .
@@ -44017,6 +43951,10 @@ news:NewsOrganisation a owl:Class ;
         news:OfficialBody ;
     schema:name "Department for Energy Security and Net Zero" .
 
+<http://example.org/news#organisation/Downing_Street> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Downing Street" .
+
 <http://example.org/news#organisation/Welsh_Government> a news:GovernmentBody,
         news:OfficialBody ;
     schema:name "Welsh Government" .
@@ -44116,6 +44054,11 @@ news:ParliamentaryDebate a owl:Class ;
         news:OfficialBody ;
     schema:name "Ministry of Housing, Communities and Local Government" .
 
+news:ParliamentaryEvent a owl:Class ;
+    rdfs:label "Parliamentary Event" ;
+    rdfs:comment "A policy event taking place within a parliamentary setting or linked to a parliamentary body." ;
+    rdfs:subClassOf news:PolicyEvent .
+
 <http://example.org/news#location/Belfast> a news:Location,
         schema:Place ;
     schema:name "Belfast" .
@@ -44128,6 +44071,10 @@ news:ParliamentaryDebate a owl:Class ;
     schema:description "United Kingdom government ministerial department" ;
     schema:location <http://example.org/news#location/Richmond_House> ;
     schema:name "Department of Health and Social Care" .
+
+<http://example.org/news#organisation/House_of_Commons> a news:OfficialBody,
+        news:ParliamentaryBody ;
+    schema:name "House of Commons" .
 
 <http://example.org/news#organisation/Scottish_Liberal_Democrats> a news:PoliticalParty,
         schema:Organization ;
@@ -44175,23 +44122,9 @@ news:ParliamentaryDebate a owl:Class ;
 <http://example.org/news#person/Zoe_Williams> a news:Journalist ;
     schema:name "Zoe Williams" .
 
-news:ParliamentaryEvent a owl:Class ;
-    rdfs:label "Parliamentary Event" ;
-    rdfs:comment "A policy event taking place within a parliamentary setting or linked to a parliamentary body." ;
-    rdfs:subClassOf news:PolicyEvent .
-
 <http://example.org/news#location/Edinburgh> a news:Location,
         schema:Place ;
     schema:name "Edinburgh" .
-
-<http://example.org/news#organisation/Home_Office> a news:GovernmentBody,
-        news:GovernmentDepartment,
-        news:OfficialBody ;
-    schema:name "Home Office" .
-
-<http://example.org/news#organisation/House_of_Commons> a news:OfficialBody,
-        news:ParliamentaryBody ;
-    schema:name "House of Commons" .
 
 <http://example.org/news#organisation/Reform_UK> a news:PoliticalParty,
         schema:Organization ;
@@ -44227,6 +44160,11 @@ news:ParliamentaryBody a owl:Class ;
     rdfs:label "Parliamentary Body" ;
     rdfs:comment "A parliamentary chamber, committee, or institution in which a parliamentary event occurs." ;
     rdfs:subClassOf news:OfficialBody .
+
+<http://example.org/news#organisation/Home_Office> a news:GovernmentBody,
+        news:GovernmentDepartment,
+        news:OfficialBody ;
+    schema:name "Home Office" .
 
 <http://example.org/news#organisation/Ministry_of_Defence> a news:GovernmentBody,
         news:GovernmentDepartment,
@@ -44341,15 +44279,6 @@ news:ParliamentSourceRecord a owl:Class ;
     rdfs:comment "A source record derived from a parliamentary source." ;
     rdfs:subClassOf news:OfficialSourceRecord .
 
-<http://example.org/news#organisation/HM_Treasury> a news:GovernmentBody,
-        news:GovernmentDepartment,
-        news:OfficialBody,
-        schema:Organization ;
-    rdfs:seeAlso <http://www.wikidata.org/entity/Q578269> ;
-    schema:description "United Kingdom government department" ;
-    schema:location <http://example.org/news#location/Government_Offices_Great_George_Street> ;
-    schema:name "HM Treasury" .
-
 <http://example.org/news#organisation/Scottish_Labour_Party> a news:PoliticalParty,
         schema:Organization ;
     rdfs:seeAlso <http://www.wikidata.org/entity/Q3179541> ;
@@ -44369,6 +44298,15 @@ news:ParliamentSourceRecord a owl:Class ;
 
 <http://example.org/news#topic/Economic_Policy> a news:PolicyTopic ;
     schema:name "Economic Policy" .
+
+<http://example.org/news#organisation/HM_Treasury> a news:GovernmentBody,
+        news:GovernmentDepartment,
+        news:OfficialBody,
+        schema:Organization ;
+    rdfs:seeAlso <http://www.wikidata.org/entity/Q578269> ;
+    schema:description "United Kingdom government department" ;
+    schema:location <http://example.org/news#location/Government_Offices_Great_George_Street> ;
+    schema:name "HM Treasury" .
 
 news:PolicyTopic a owl:Class ;
     rdfs:label "Policy Topic" ;
@@ -44461,14 +44399,6 @@ news:GovernmentDepartment a owl:Class ;
     rdfs:comment "A government department involved in a government policy event or issuing a ministerial statement." ;
     rdfs:subClassOf news:GovernmentBody .
 
-<http://example.org/news#organisation/Office_for_National_Statistics> a news:GovernmentBody,
-        news:OfficialBody,
-        schema:Organization ;
-    rdfs:seeAlso <http://www.wikidata.org/entity/Q1334971> ;
-    schema:description "United Kingdom's principal government institution in charge of statistics and census data" ;
-    schema:location <http://example.org/news#location/Newport> ;
-    schema:name "Office for National Statistics" .
-
 <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> a news:GovernmentBody,
         news:GovernmentDepartment,
         news:OfficialBody,
@@ -44482,6 +44412,11 @@ news:GovernmentDepartment a owl:Class ;
         schema:Place ;
     schema:name "London" .
 
+news:GovernmentPolicyEvent a owl:Class ;
+    rdfs:label "Government Policy Event" ;
+    rdfs:comment "A policy event issued by or involving a government body or department." ;
+    rdfs:subClassOf news:PolicyEvent .
+
 <http://example.org/news#organisation/Scottish_National_Party> a news:PoliticalParty,
         schema:Organization ;
     rdfs:seeAlso <http://www.wikidata.org/entity/Q10658> ;
@@ -44494,11 +44429,6 @@ news:Journalist a owl:Class ;
     rdfs:label "Journalist" ;
     rdfs:comment "A journalist who authors a news article reporting on a policy event." ;
     rdfs:subClassOf schema:Person .
-
-news:GovernmentPolicyEvent a owl:Class ;
-    rdfs:label "Government Policy Event" ;
-    rdfs:comment "A policy event issued by or involving a government body or department." ;
-    rdfs:subClassOf news:PolicyEvent .
 
 <http://example.org/news#organisation/Liberal_Party> a news:PoliticalParty,
         schema:Organization ;
