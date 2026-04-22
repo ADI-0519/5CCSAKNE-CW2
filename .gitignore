@@ -52,3 +52,6 @@ data/raw/*
 # LLM response cache: ship only the OpenAI cache required by `--from-cache`.
 data/cache/*
 !data/cache/openai/
+
+data/cache/openai/baseline_llm/
+data/cache/openai/completion/
