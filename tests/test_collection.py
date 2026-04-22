@@ -22,7 +22,7 @@ def test_guardian_result_is_normalised_to_unified_schema():
             "results": [
                 {
                     "sectionName": "Politics",
-                    "webPublicationDate": "2026-03-25T08:30:00Z",
+                    "webPublicationDate": "2026-03-15T08:30:00Z",
                     "webTitle": "Government unveils new housing policy",
                     "webUrl": "https://www.theguardian.com/politics/2026/mar/15/housing-policy",
                     "fields": {
@@ -30,7 +30,7 @@ def test_guardian_result_is_normalised_to_unified_schema():
                         "trailText": "Ministers announced new housing measures.",
                         "bodyText": "The UK government set out a new plan for housing reform.",
                         "byline": "Jane Reporter",
-                        "lastModified": "2026-03-25T09:00:00Z",
+                        "lastModified": "2026-03-15T09:00:00Z",
                         "wordcount": "420",
                     },
                     "tags": [
@@ -49,7 +49,7 @@ def test_guardian_result_is_normalised_to_unified_schema():
     assert record["section"] == "Politics"
     assert record["tags"] == ["Housing", "Politics"]
     assert record["word_count"] == 420
-    assert record["updated_at"] == "2026-03-25T09:00:00Z"
+    assert record["updated_at"] == "2026-03-15T09:00:00Z"
 
 
 def test_govuk_record_is_normalised_to_unified_schema():
@@ -59,7 +59,7 @@ def test_govuk_record_is_normalised_to_unified_schema():
                 {
                     "title": "Labour sets out transport plan",
                     "link": "/government/publications/transport-plan",
-                    "public_timestamp": "2026-03-24T11:00:00Z",
+                    "public_timestamp": "2026-03-20T11:00:00Z",
                     "description": "A transport policy package.",
                     "format": "policy_paper",
                     "organisations": ["Department for Transport"],
@@ -73,7 +73,7 @@ def test_govuk_record_is_normalised_to_unified_schema():
     assert record["source_system"] == "govuk"
     assert record["source_name"] == "GOV.UK"
     assert record["section"] == "policy_paper"
-    assert record["published_at"] == "2026-03-24T11:00:00Z"
+    assert record["published_at"] == "2026-03-20T11:00:00Z"
     assert record["word_count"] is not None
 
 
@@ -81,7 +81,7 @@ def test_combined_source_normalisation_deduplicates_same_article():
     duplicate_article = {
         "title": "Labour sets out transport plan",
         "link": "/government/publications/transport-plan",
-        "public_timestamp": "2026-03-24T11:00:00Z",
+        "public_timestamp": "2026-03-20T11:00:00Z",
         "description": "The party outlined a transport policy package.",
         "format": "policy_paper",
         "organisations": ["Department for Transport"],
@@ -161,7 +161,7 @@ def test_fetch_govuk_data_paginates_until_window_results_found(monkeypatch):
             {
                 "title": "Too new result",
                 "link": "/government/publications/too-new-result",
-                "public_timestamp": "2026-04-25T11:00:00Z",
+                "public_timestamp": "2026-04-20T11:00:00Z",
                 "description": "Outside the coursework window.",
                 "format": "policy_paper",
                 "organisations": ["Cabinet Office"],
@@ -175,7 +175,7 @@ def test_fetch_govuk_data_paginates_until_window_results_found(monkeypatch):
             {
                 "title": "In-window policy paper",
                 "link": "/government/publications/in-window-policy-paper",
-                "public_timestamp": "2026-03-24T11:00:00Z",
+                "public_timestamp": "2026-03-20T11:00:00Z",
                 "description": "Inside the coursework window.",
                 "format": "policy_paper",
                 "organisations": ["Cabinet Office"],
@@ -183,7 +183,7 @@ def test_fetch_govuk_data_paginates_until_window_results_found(monkeypatch):
             {
                 "title": "Older result",
                 "link": "/government/publications/older-result",
-                "public_timestamp": "2026-03-15T11:00:00Z",
+                "public_timestamp": "2026-03-01T11:00:00Z",
                 "description": "Older than the coursework window.",
                 "format": "policy_paper",
                 "organisations": ["Cabinet Office"],
@@ -212,7 +212,7 @@ def test_fetch_govuk_data_filters_out_of_scope_reference_material(monkeypatch):
             {
                 "title": "Rates and allowances: Inheritance Tax thresholds and interest rates",
                 "link": "/government/publications/inheritance-tax-thresholds",
-                "public_timestamp": "2026-03-24T11:00:00Z",
+                "public_timestamp": "2026-03-20T11:00:00Z",
                 "description": "Reference rates and allowances material.",
                 "format": "guidance",
                 "organisations": ["HM Revenue and Customs"],
@@ -220,7 +220,7 @@ def test_fetch_govuk_data_filters_out_of_scope_reference_material(monkeypatch):
             {
                 "title": "Treasury growth plan",
                 "link": "/government/publications/treasury-growth-plan",
-                "public_timestamp": "2026-03-24T11:05:00Z",
+                "public_timestamp": "2026-03-20T11:05:00Z",
                 "description": "A policy paper about growth and investment.",
                 "format": "policy_paper",
                 "organisations": ["HM Treasury"],
