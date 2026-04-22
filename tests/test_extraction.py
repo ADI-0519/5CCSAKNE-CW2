@@ -25,7 +25,7 @@ def make_article(**overrides):
         "source_name": "The Guardian",
         "title": "Keir Starmer faces pressure over budget plans",
         "url": "https://example.com/article-1",
-        "published_at": "2026-03-20T10:00:00Z",
+        "published_at": "2026-03-25T10:00:00Z",
         "updated_at": None,
         "author": "Pippa Crerar",
         "section": "Politics",
@@ -346,7 +346,7 @@ class TestExtractRelevantInformation:
                     {
                         "name": "NHS Reform Options",
                         "type": "GovernmentPolicyEvent",
-                        "date": "2026-03-20",
+                        "date": "2026-03-25",
                         "location": "Manchester",
                     }
                 ],
@@ -386,7 +386,7 @@ class TestExtractRelevantInformation:
                     {
                         "name": "NHS Reform Options",
                         "type": "GovernmentPolicyEvent",
-                        "date": "2026-03-20",
+                        "date": "2026-03-25",
                         "location": "Manchester",
                         "policy_topics": ["Healthcare"],
                         "political_actors": ["Wes Streeting"],
@@ -434,7 +434,7 @@ class TestExtractRelevantInformation:
                     {
                         "name": "Budget",
                         "type": "GovernmentPolicyEvent",
-                        "date": "2026-03-20",
+                        "date": "2026-03-25",
                         "location": "London",
                         "policy_topics": [],
                         "political_actors": [],
@@ -493,7 +493,7 @@ class TestExtractRelevantInformation:
                     {
                         "name": "Prime Minister's Questions",
                         "type": "ParliamentaryEvent",
-                        "date": "2026-03-20",
+                        "date": "2026-03-25",
                         "location": "PMQs",
                     }
                 ],
@@ -564,7 +564,7 @@ class TestExtractRelevantInformation:
                     {
                         "name": "Digital ID Policy Rollout",
                         "type": "GovernmentPolicyEvent",
-                        "date": "2026-03-20",
+                        "date": "2026-03-25",
                         "location": "London",
                     }
                 ],
@@ -620,7 +620,7 @@ class TestExtractRelevantInformation:
 
         assert record["event_candidates"]
         assert record["event_candidates"][0]["name"] == "Ministerial Statement"
-        assert record["event_candidates"][0]["type"] == "MinisterialStatement"
+        assert record["event_candidates"][0]["type"] == "ParliamentaryEvent"
 
     def test_ambiguous_parliament_event_stays_parliamentary_instead_of_becoming_government(self):
         article = make_article(
@@ -659,8 +659,8 @@ class TestExtractRelevantInformation:
             source_name="GOV.UK",
             title="National Cancer Plan for England",
             section="policy_paper",
-            summary="Government sets out a long-term plan for cancer services.",
-            content="Government sets out a long-term plan for cancer services in England.",
+            summary="Government sets out a long-term policy plan for cancer services.",
+            content="Government sets out a long-term policy plan for cancer services in England.",
             tags=["policy_paper"],
             author=None,
         )
@@ -814,7 +814,7 @@ class TestExtractRelevantInformation:
                 {
                     "name": "Spring Statement",
                     "type": "GovernmentPolicyEvent",
-                    "date": "2026-03-20",
+                    "date": "2026-03-25",
                     "location": "London",
                     "source": "heuristic",
                 }

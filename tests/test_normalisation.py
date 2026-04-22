@@ -25,7 +25,7 @@ class TestUtilityFunctions:
         assert len(first) == 16
 
     def test_canonicalise_date_accepts_supported_formats(self):
-        assert canonicalise_date("2026-03-06T10:00:00Z") == "2026-03-06T10:00:00Z"
+        assert canonicalise_date("2026-03-24T10:00:00Z") == "2026-03-24T10:00:00Z"
         assert canonicalise_date("2026-03-06").startswith("2026-03-06")
 
     def test_canonicalise_date_rejects_invalid_input(self):
@@ -74,14 +74,14 @@ class TestSourceNormalisation:
                             {
                                 "webTitle": "Opinion: Immigration policy needs reform",
                                 "webUrl": "https://example.com/guardian-1",
-                                "webPublicationDate": "2026-03-06T09:00:00Z",
+                                "webPublicationDate": "2026-03-24T09:00:00Z",
                                 "sectionName": "Comment is Free",
                                 "tags": [{"webTitle": "Immigration and asylum"}],
                                 "fields": {
                                     "byline": "Polly Toynbee",
                                     "trailText": "An opinion column on immigration.",
                                     "bodyText": "The Home Office is under pressure over immigration policy.",
-                                    "lastModified": "2026-03-06T10:00:00Z",
+                                    "lastModified": "2026-03-24T10:00:00Z",
                                     "wordcount": "500",
                                 },
                             }
@@ -94,7 +94,7 @@ class TestSourceNormalisation:
                             {
                                 "title": "Budget debate",
                                 "url": "https://api.parliament.uk/event/1",
-                                "date": "2026-03-06T11:00:00Z",
+                                "date": "2026-03-24T11:00:00Z",
                                 "house": "House of Commons",
                                 "description": "Members debated the Spring Budget.",
                                 "topics": ["Budget", "Taxation"],
@@ -108,7 +108,7 @@ class TestSourceNormalisation:
                             {
                                 "title": "New immigration policy paper",
                                 "link": "/government/publications/new-immigration-policy-paper",
-                                "public_timestamp": "2026-03-06T12:00:00Z",
+                                "public_timestamp": "2026-03-24T12:00:00Z",
                                 "description": "A new policy paper from the Home Office.",
                                 "format": "policy_paper",
                                 "organisations": ["Home Office"],
@@ -136,7 +136,7 @@ class TestSourceNormalisation:
                             {
                                 "webTitle": "Politics article",
                                 "webUrl": "https://example.com/guardian-2",
-                                "webPublicationDate": "2026-03-06T09:00:00Z",
+                                "webPublicationDate": "2026-03-24T09:00:00Z",
                                 "sectionName": "Politics",
                                 "tags": [
                                     {"type": "contributor", "webTitle": "John Harris"},
@@ -146,7 +146,7 @@ class TestSourceNormalisation:
                                     "byline": "John Harris",
                                     "trailText": "Politics update.",
                                     "bodyText": "Labour responds in Parliament.",
-                                    "lastModified": "2026-03-06T10:00:00Z",
+                                    "lastModified": "2026-03-24T10:00:00Z",
                                     "wordcount": "400",
                                 },
                             }
@@ -166,7 +166,7 @@ class TestSourceNormalisation:
                     {
                         "title": "Health statement",
                         "url": "https://api.parliament.uk/event/health-statement",
-                        "date": "2026-03-07T10:30:00Z",
+                        "date": "2026-03-25T10:30:00Z",
                         "house": "House of Commons",
                         "description": "A statement on NHS performance.",
                         "topics": ["NHS", "Healthcare"],
@@ -181,7 +181,7 @@ class TestSourceNormalisation:
         assert record["source_name"] == "UK Parliament"
         assert record["section"] == "House of Commons"
         assert "Healthcare" in record["tags"]
-        assert record["published_at"] == "2026-03-07T10:30:00Z"
+        assert record["published_at"] == "2026-03-25T10:30:00Z"
 
     def test_normalise_govuk_records_maps_search_results_to_shared_schema(self):
         raw_data = {
@@ -190,7 +190,7 @@ class TestSourceNormalisation:
                     {
                         "title": "Treasury growth plan",
                         "link": "/government/publications/treasury-growth-plan",
-                        "public_timestamp": "2026-03-08T09:15:00Z",
+                        "public_timestamp": "2026-03-26T09:15:00Z",
                         "description": "A policy paper about growth and investment.",
                         "format": "policy_paper",
                         "organisations": ["HM Treasury"],
@@ -232,7 +232,7 @@ class TestSourceNormalisation:
                     {
                         "title": "Rates and allowances: Inheritance Tax thresholds and interest rates",
                         "link": "/government/publications/inheritance-tax-thresholds",
-                        "public_timestamp": "2026-03-20T09:15:00Z",
+                        "public_timestamp": "2026-04-01T09:15:00Z",
                         "description": "Reference rates and allowances material.",
                         "format": "guidance",
                         "organisations": ["HM Revenue and Customs"],
@@ -250,7 +250,7 @@ class TestSourceNormalisation:
                     {
                         "title": "Appointment of new private sector partner",
                         "link": "/government/news/appointment-of-new-private-sector-partner",
-                        "public_timestamp": "2026-03-20T09:15:00Z",
+                        "public_timestamp": "2026-04-01T09:15:00Z",
                         "description": "Administrative update from government.",
                         "format": "news_story",
                         "organisations": ["Cabinet Office"],
@@ -270,7 +270,7 @@ class TestExtractedRecordNormalisation:
             "source_name": "The Guardian",
             "title": "Keir Starmer faces pressure over budget plans",
             "url": "https://example.com/test",
-            "published_at": "2026-03-06T10:00:00Z",
+            "published_at": "2026-03-24T10:00:00Z",
             "updated_at": None,
             "author": "Jane Doe",
             "section": "Politics",
@@ -284,7 +284,7 @@ class TestExtractedRecordNormalisation:
                 {
                     "name": "Budget",
                     "type": "EconomicEvent",
-                    "date": "2026-03-06",
+                    "date": "2026-03-24",
                     "location": "London",
                     "source": "heuristic",
                     "confidence": "high",

@@ -89,7 +89,7 @@ def test_execute_queries_normalises_and_deduplicates_identical_rows():
             Literal("Joint Statement: EU-UK Financial Regulatory Forum, March 2026"),
         )
     )
-    graph.add((event, NEWS.occursOnDate, Literal("2026-03-12")))
+    graph.add((event, NEWS.occursOnDate, Literal("2026-03-25")))
     graph.add((department, SCHEMA.name, Literal("  HM Treasury  ")))
     graph.add((duplicate_department, SCHEMA.name, Literal("HM Treasury")))
 
@@ -122,7 +122,7 @@ WHERE {
         {
             "statementName": "Joint Statement: EU-UK Financial Regulatory Forum, March 2026",
             "departmentName": "HM Treasury",
-            "eventDate": "2026-03-12",
+            "eventDate": "2026-03-25",
         }
     ]
 
@@ -151,7 +151,7 @@ def test_cq17_only_returns_articles_backed_by_matched_source_records():
         graph.add((event, RDF.type, NEWS.GovernmentPolicyEvent))
         graph.add((event, NEWS.reportedByArticle, article))
         graph.add((event, NEWS.involvesGovernmentBody, department))
-        graph.add((event, NEWS.occursOnDate, Literal("2026-03-12", datatype=XSD.date)))
+        graph.add((event, NEWS.occursOnDate, Literal("2026-03-25", datatype=XSD.date)))
 
     graph.add((matched_event, NEWS.matchedToSourceRecord, source_record))
 
