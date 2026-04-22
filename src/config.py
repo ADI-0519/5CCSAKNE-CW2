@@ -413,6 +413,7 @@ EXTRACTION_LOCATION_BLOCKLIST = {
     "CenTax",
     "Common",
     "Conservatives",
+    "English",
     "Farage",
     "Kemi",
     "Labour MPs",
