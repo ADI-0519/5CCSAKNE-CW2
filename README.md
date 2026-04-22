@@ -26,15 +26,15 @@ If either directory is shipped as a separate archive, unpack it at the repo root
 
 ### What to look for after the run
 
-Generated artefacts land in `output/` with a UTC timestamp prefix:
+The current pipeline keeps the latest final artefacts in `output/`:
 
-- `output/<ts>_completed_kg.ttl` — the final knowledge graph.
-- `output/<ts>_query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
-- `output/<ts>_validation_results.json` — SPARQL-based graph validation report (expected: `0` violations).
-- `output/<ts>_completion_audit.json` — per-event summary of links added during Stage 9 completion.
-- `output/<ts>_kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
+- `output/completed_kg.ttl` — the final knowledge graph.
+- `output/query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
+- `output/validation_results.json` — SPARQL-based graph validation report (expected: `0` violations).
+- `output/completion_audit.json` — per-event summary of links added during Stage 9 completion.
+- `output/kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
 
-The non-timestamped copies in `output/` always reflect the most recent run.
+Processed JSON files in `data/processed/` still keep a UTC timestamp prefix for each run.
 
 ## Data Sources
 
