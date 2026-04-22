@@ -106,9 +106,6 @@ GOVERNMENT_BODY_NAMES = GOVERNMENT_DEPARTMENT_NAMES + [
     "Attorney General's Office",
     "Welsh Government",
     "Scottish Government",
-    "House of Commons",
-    "House of Lords",
-    "Parliament",
 ]
 
 UK_LOCATION_NAMES = [
@@ -253,6 +250,8 @@ MINISTER_ROLE_DEPARTMENT_MAP = {
     "secretary of state for culture, media and sport": "Department for Culture, Media and Sport",
     "minister for the cabinet office": "Cabinet Office",
     "paymaster general": "Cabinet Office",
+    "exchequer": "HM Treasury",
+    "levy": "HM Treasury",
 }
 
 MINISTERIAL_STATEMENT_SIGNAL_TERMS = frozenset(
