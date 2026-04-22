@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 from src.evaluate_rag import build_entry, build_report, uri_to_label
 
