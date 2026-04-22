@@ -29,28 +29,28 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260420T202251Z`
+- timestamp: `20260422T172612Z`
 - normalised source records: `732`
 - Guardian articles: `253`
 - Parliament source records: `20`
 - GOV.UK source records: `459`
-- Wikidata entities: `1730` politicians, `967` parties, `490` government bodies
+- Wikidata entities: `1765` politicians, `1006` parties, `483` government bodies
 - ontology graph: `188` triples
-- source-derived instance KG: `14429` triples
-- Wikidata KG: `25064` triples
-- prototype KG: `39510` triples
-- completed KG: `40279` triples
+- source-derived instance KG: `14862` triples
+- Wikidata KG: `25020` triples
+- prototype KG: `39895` triples
+- completed KG: `40600` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
-- `255` `news:reportsOn` inverse links
+- `274` `news:reportsOn` inverse links
 - `236` `news:matchedToSourceRecord` cross-source links
-- `35` `news:involvesActor` links (RAG)
-- `91` `news:involvesGovernmentBody` links (RAG)
-- `144` `news:concernsPolicyTopic` links (RAG)
+- `9` `news:involvesActor` links (RAG)
+- `15` `news:involvesGovernmentBody` links (RAG)
+- `139` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `769` triples.
+The completed KG is therefore larger than the prototype KG by `705` triples.
 
 ## What Is Covered Well
 
@@ -121,7 +121,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
-- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 35 actor links, 91 department links, and 144 topic links were not present in the prototype KG.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 9 actor links, 15 department links, and 139 topic links were not present in the prototype KG.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 

@@ -4,21 +4,22 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260421T232429Z`
+- `20260422T172612Z`
 
 Primary artefacts:
 
-- `data/processed/20260421T232429Z_normalised_articles.json`
-- `data/processed/20260421T232429Z_extracted_articles.json`
-- `data/processed/20260421T232429Z_kg_records.json`
-- `output/20260421T232429Z_instance_kg.ttl`
-- `output/20260421T232429Z_wikidata_kg.ttl`
-- `output/20260421T232429Z_prototype_kg.ttl`
-- `output/20260421T232429Z_completed_kg.ttl`
-- `output/20260421T232429Z_query_results.json`
-- `output/20260421T232429Z_validation_results.json`
-- `output/20260421T232429Z_completion_audit.json`
-- `output/20260421T232429Z_kg_summary.json`
+- `data/processed/20260422T172612Z_normalised_articles.json`
+- `data/processed/20260422T172612Z_extracted_articles.json`
+- `data/processed/20260422T172612Z_kg_records.json`
+- `output/20260422T172612Z_instance_kg.ttl`
+- `output/20260422T172612Z_wikidata_kg.ttl`
+- `output/20260422T172612Z_prototype_kg.ttl`
+- `output/20260422T172612Z_completed_kg.ttl`
+- `output/20260422T172612Z_query_results.json`
+- `output/20260422T172612Z_validation_results.json`
+- `output/20260422T172612Z_completion_audit.json`
+- `output/20260422T172612Z_kg_summary.json`
+- `output/rag_evaluation.json`
 
 ## 1. Structural Results
 
@@ -33,25 +34,25 @@ Source records:
 
 Wikidata enrichment:
 
-- Politicians: `1722`
-- Political parties: `968`
-- Government bodies: `490`
+- Politicians: `1765`
+- Political parties: `1006`
+- Government bodies: `483`
 
 Generated graph counts:
 
 - Ontology graph: `188` triples
-- Source-derived instance KG: `15032` triples
-- Wikidata KG: `25051` triples
-- Prototype KG: `40107` triples
-- Completed KG: `40830` triples
+- Source-derived instance KG: `14862` triples
+- Wikidata KG: `25020` triples
+- Prototype KG: `39895` triples
+- Completed KG: `40600` triples
 
 Completion additions:
 
-- `272` `news:reportsOn` inverse links
-- `237` `news:matchedToSourceRecord` links
-- `4` `news:representedInOfficialSource` links
-- RAG additions: `13` actor links, `14` department links, `138` topic links
-- Total delta from prototype to completed KG: `723` triples
+- `274` `news:reportsOn` inverse links
+- `236` `news:matchedToSourceRecord` links
+- `2` `news:representedInOfficialSource` links
+- RAG additions: `9` actor links, `15` department links, `139` topic links
+- Total delta from prototype to completed KG: `705` triples
 
 Structural judgment:
 
@@ -68,23 +69,23 @@ All `20/20` competency queries returned at least one row when the current query 
 | --- | ---: |
 | CQ01 | 14 |
 | CQ02 | 66 |
-| CQ03 | 8 |
-| CQ04 | 237 |
-| CQ05 | 4 |
-| CQ06 | 9 |
+| CQ03 | 11 |
+| CQ04 | 235 |
+| CQ05 | 3 |
+| CQ06 | 6 |
 | CQ07 | 16 |
 | CQ08 | 4 |
 | CQ09 | 8 |
-| CQ10 | 12 |
-| CQ11 | 224 |
+| CQ10 | 16 |
+| CQ11 | 222 |
 | CQ12 | 12 |
 | CQ13 | 41 |
-| CQ14 | 12 |
-| CQ15 | 12 |
-| CQ16 | 5 |
-| CQ17 | 2 |
-| CQ18 | 12 |
-| CQ19 | 1 |
+| CQ14 | 16 |
+| CQ15 | 9 |
+| CQ16 | 8 |
+| CQ17 | 1 |
+| CQ18 | 15 |
+| CQ19 | 2 |
 | CQ20 | 16 |
 
 Important judgments:
@@ -104,30 +105,30 @@ Validation:
 
 Summary metrics:
 
-- Policy events: `271`
-- Government policy events: `182`
-- Parliamentary events: `6`
+- Policy events: `273`
+- Government policy events: `185`
+- Parliamentary events: `5`
 - Parliamentary debates: `9`
 - Ministerial statements: `66`
-- Events with dates: `271` (`100%`)
-- Events with topics: `271` (`100%`)
-- Events with a government body: `263` (`97.05%`)
-- Events linked to official source records: `237` (`87.45%`)
+- Events with dates: `273` (`100%`)
+- Events with topics: `273` (`100%`)
+- Events with a government body: `265` (`97.07%`)
+- Events linked to official source records: `235` (`86.08%`)
 
 Extraction summary:
 
-- Extracted events: `272`
-- Generic fallback events: `31`
+- Extracted events: `274`
+- Generic fallback events: `32`
 - Generic fallback names:
-  - `Policy Announcement`: `22`
+  - `Policy Announcement`: `23`
   - `Ministerial Statement`: `9`
 - Confidence counts:
-  - `high`: `157`
-  - `medium`: `108`
+  - `high`: `160`
+  - `medium`: `107`
   - `low`: `7`
 - Extraction methods:
-  - `heuristic`: `254`
-  - `openai`: `18`
+  - `heuristic`: `263`
+  - `openai`: `11`
 
 ## 4. Baseline Comparison
 
@@ -139,16 +140,17 @@ Reference file:
 
 Headline results:
 
-- `CQ04`: prototype `233`, completed `237`, delta `+4`
-- `CQ11`: prototype `212`, completed `224`, delta `+12`
-- `CQ12`: prototype `11`, completed `12`, delta `+1`
-- `CQ16`: prototype `5`, completed `5`, delta `+0`
+- `CQ04`: prototype `134`, completed `134`, delta `+0`
+- `CQ11`: prototype `117`, completed `123`, delta `+6`
+- `CQ12`: prototype `11`, completed `11`, delta `+0`
+- `CQ16`: prototype `7`, completed `7`, delta `+0`
 - `CQ18`: prototype `11`, completed `12`, delta `+1`
 
 Interpretation:
 
-- The completed KG improves several query families in ways that a direct LLM answer cannot reliably ground in the actual dataset.
-- `CQ16` shows that some actor-party-topic structure was already present before completion, while other target queries measurably benefit from completion and enrichment.
+- `CQ11` shows the clearest completion benefit, with 6 additional rows from `matchedToSourceRecord` links enabling cross-source traversal that the prototype graph cannot support.
+- `CQ04`, `CQ12`, and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
+- A direct LLM answer cannot ground any of these results in the actual dataset.
 
 ## 5. Evaluation Position
 

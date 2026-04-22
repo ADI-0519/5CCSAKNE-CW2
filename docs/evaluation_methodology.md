@@ -46,6 +46,7 @@ Evidence sources:
 - `python -m pytest`
 - `kg/generated/*.ttl`
 - `output/*_query_results.json`
+- `output/rag_evaluation.json`
 
 ## 2. Competency-Question Coverage
 
@@ -68,7 +69,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260420T202251Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260422T172612Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -121,18 +122,18 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `39545` triples
-- completed KG: `40049` triples
-- completion delta: `504` triples
-- `reportsOn` links added: `266`
-- `matchedToSourceRecord` links added: `238`
+- prototype KG: `39895` triples
+- completed KG: `40600` triples
+- completion delta: `705` triples
+- `reportsOn` links added: `274`
+- `matchedToSourceRecord` links added: `236`
 
 Important quality questions:
 
 - are matched source records from the correct source system?
 - do source-record titles support the event they are matched to?
 - do completion-added source matches improve provenance without inflating false matches?
-- should future RAG work add confidence and evidence metadata?
+- what is the precision of RAG-added actor, department, and topic triples? (auditable via `output/rag_evaluation.json`)
 
 ## 5. Cross-Source Evaluation
 
@@ -158,7 +159,7 @@ Latest validated source counts:
 - Guardian: `253`
 - Parliament: `20`
 - GOV.UK: `459`
-- Wikidata: `1730` politicians, `968` parties, `490` government bodies
+- Wikidata: `1765` politicians, `1006` parties, `483` government bodies
 
 ## 6. Performance And Reproducibility
 
