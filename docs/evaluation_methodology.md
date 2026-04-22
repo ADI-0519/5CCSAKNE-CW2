@@ -56,7 +56,7 @@ Method:
 - run `queries/news_competency_queries.rq` against `kg/generated/completed_kg.ttl`
 - record whether each query executes successfully
 - record row counts
-- classify whether each result is clean, noisy, or diagnostic
+- classify whether each result is direct-answer, coverage-audit, or cross-source
 
 Metrics:
 
@@ -68,7 +68,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260420T202251Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260422T202216Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -121,18 +121,20 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `39545` triples
-- completed KG: `40049` triples
-- completion delta: `504` triples
-- `reportsOn` links added: `266`
-- `matchedToSourceRecord` links added: `238`
+- prototype KG: `40125` triples
+- completed KG: `40836` triples
+- completion delta: `711` triples
+- `reportsOn` links added: `274`
+- `matchedToSourceRecord` links added: `236`
+- `representedInOfficialSource` links added: `2`
+- RAG additions: `10` actor links, `14` department links, `142` topic links
 
 Important quality questions:
 
 - are matched source records from the correct source system?
 - do source-record titles support the event they are matched to?
 - do completion-added source matches improve provenance without inflating false matches?
-- should future RAG work add confidence and evidence metadata?
+- would additional confidence and evidence metadata further strengthen auditing?
 
 ## 5. Cross-Source Evaluation
 
@@ -158,7 +160,7 @@ Latest validated source counts:
 - Guardian: `253`
 - Parliament: `20`
 - GOV.UK: `459`
-- Wikidata: `1730` politicians, `968` parties, `490` government bodies
+- Wikidata: `1715` politicians, `968` parties, `489` government bodies
 
 ## 6. Performance And Reproducibility
 
@@ -170,8 +172,8 @@ Checks:
 - cached run works with `python -m src.main --from-cache`
 - raw snapshots are saved under `data/raw/`
 - processed JSON files are saved under `data/processed/`
-- generated KGs are saved under `kg/generated/` and `output/`
-- query results are saved in `output/query_results.json` and timestamped files
+- generated KGs are saved under `kg/generated/`
+- final evaluation outputs are saved in `output/query_results.json`, `output/validation_results.json`, `output/completion_audit.json`, and `output/kg_summary.json`
 
 Metrics:
 

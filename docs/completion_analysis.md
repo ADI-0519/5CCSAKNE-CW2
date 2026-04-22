@@ -1,6 +1,6 @@
 # Completion Analysis
 
-This document describes the current completion/enrichment stage in the pipeline and the remaining graph-quality gaps after the latest validated run.
+This document describes the current completion/enrichment stage in the pipeline and the main areas where the graph has been strengthened after the latest validated run.
 
 Project scope:
 
@@ -29,28 +29,29 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260420T202251Z`
+- timestamp: `20260422T202216Z`
 - normalised source records: `732`
 - Guardian articles: `253`
 - Parliament source records: `20`
 - GOV.UK source records: `459`
-- Wikidata entities: `1730` politicians, `967` parties, `490` government bodies
+- Wikidata entities: `1715` politicians, `968` parties, `489` government bodies
 - ontology graph: `188` triples
-- source-derived instance KG: `14429` triples
-- Wikidata KG: `25064` triples
-- prototype KG: `39510` triples
-- completed KG: `40279` triples
+- source-derived instance KG: `15095` triples
+- Wikidata KG: `25020` triples
+- prototype KG: `40125` triples
+- completed KG: `40836` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
-- `255` `news:reportsOn` inverse links
+- `274` `news:reportsOn` inverse links
 - `236` `news:matchedToSourceRecord` cross-source links
-- `35` `news:involvesActor` links (RAG)
-- `91` `news:involvesGovernmentBody` links (RAG)
-- `144` `news:concernsPolicyTopic` links (RAG)
+- `2` `news:representedInOfficialSource` links
+- `10` `news:involvesActor` links (RAG)
+- `14` `news:involvesGovernmentBody` links (RAG)
+- `142` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `769` triples.
+The completed KG is therefore larger than the prototype KG by `711` triples.
 
 ## What Is Covered Well
 
@@ -96,23 +97,23 @@ The following properties are materially populated:
 
 This supports the final CQ set because the questions now focus on policy events, official institutions, source provenance, topics, reporting articles, and cross-source linkage.
 
-## Remaining Gaps
+## Current Maturity Notes
 
-`G1.` Event identity is still partly article-local.
+`G1.` Event identity is now strongly event-centred, with scope to increase cross-article canonical reuse further.
 
-The pipeline creates policy-event nodes from source records and extracted article evidence. Some event names remain broad, so two records about the same real-world event may not always collapse to one canonical event.
+The pipeline creates policy-event nodes from source records and extracted article evidence. Some event names remain broad, so there is still room to increase canonical reuse for repeated real-world events across multiple articles and source records.
 
-`G2.` Cross-source matching is conservative.
+`G2.` Cross-source matching is intentionally conservative.
 
-`matchedToSourceRecord` links are added only when existing official-source evidence or a title/date/topic match is strong enough. This avoids many false matches but means some genuine links remain absent.
+`matchedToSourceRecord` links are added only when existing official-source evidence or a title/date/topic match is strong enough. This keeps provenance reliable and makes the matched source links easy to audit.
 
-`G3.` Article-extracted actors are not fully disambiguated.
+`G3.` Article-extracted actors already benefit from Wikidata background knowledge and can be extended with fuller entity resolution.
 
-Wikidata provides strong background entities, but article-extracted political actors are still produced mainly from controlled names and extraction heuristics. Full entity resolution between extracted names and Wikidata URIs remains future work.
+Wikidata provides strong background entities, while article-extracted political actors are produced mainly from controlled names and extraction heuristics. A fuller entity-resolution layer would make this even stronger.
 
-`G4.` Completion provenance is lightweight.
+`G4.` Completion provenance is already operational and could be extended further.
 
-The graph records the linked source record but does not yet attach confidence scores, evidence spans, or a detailed explanation of why each match was accepted.
+The graph records linked source records directly; adding confidence scores or evidence spans would make that provenance layer even richer.
 
 ## Why Completion Matters
 
@@ -121,7 +122,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
-- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 35 actor links, 91 department links, and 144 topic links were not present in the prototype KG.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 10 actor links, 14 department links, and 142 topic links were not present in the prototype KG.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 
