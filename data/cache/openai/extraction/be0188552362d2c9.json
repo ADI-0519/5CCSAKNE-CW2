@@ -1,58 +1,37 @@
 {
   "people": [
     "Ella Smith",
-    "Hannah Nicholls-Harrison",
+    "Hannah Nicholls",
     "James Taylor",
     "Samuel Thomas",
     "Tom Pollard"
   ],
   "organizations": [
-    "Z2K",
-    "ME Association",
-    "Scope",
+    "Labour",
+    "Mencap",
     "Mind",
-    "Department for Work and Pensions"
+    "Scope"
   ],
   "locations": [],
   "topics": [
     "Government Policy",
     "Healthcare",
-    "Politics"
+    "Politics",
+    "Parliament"
   ],
   "politicians": [],
   "political_parties": [
-    "Labour Party"
+    "Labour"
   ],
-  "government_bodies": [
-    "Department for Work and Pensions"
-  ],
+  "government_bodies": [],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Universal Credit Benefit Changes",
+      "name": "Policy Announcement",
       "type": "GovernmentPolicyEvent",
-      "date": "2026-04-01",
-      "location": null,
-      "policy_topics": [
-        "Welfare",
-        "Disability Benefits"
-      ],
-      "political_actors": [
-        "Department for Work and Pensions"
-      ],
-      "government_bodies": [
-        "Department for Work and Pensions"
-      ],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Labour Party"
-      ],
-      "evidence_spans": [
-        "In April, the health element of universal credit will be halved to \u00a350 a week..."
-      ],
-      "confidence": "high",
-      "extraction_method": "heuristic"
+      "date": "2026-03-29",
+      "location": null
     }
   ]
 }

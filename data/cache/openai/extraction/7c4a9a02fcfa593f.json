@@ -10,14 +10,16 @@
     "The Guardian"
   ],
   "locations": [
+    "Channel beaches",
     "Heathrow",
-    "English Channel"
+    "France"
   ],
   "topics": [
     "Immigration",
     "Public Spending"
   ],
   "politicians": [
+    "Shabana Mahmood",
     "Nigel Farage"
   ],
   "political_parties": [
@@ -30,30 +32,10 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Temporary funding agreement for Channel patrols",
+      "name": "UK to pay France extra \u00a316m in stopgap deal",
       "type": "GovernmentPolicyEvent",
       "date": "2026-03-31",
-      "location": null,
-      "policy_topics": [
-        "Immigration"
-      ],
-      "political_actors": [
-        "Shabana Mahmood",
-        "Nigel Farage",
-        "Xavier Ducept"
-      ],
-      "government_bodies": [
-        "Home Office"
-      ],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Reform UK"
-      ],
-      "evidence_spans": [
-        "The UK will pay France an extra \u00a316.2m to keep police patrolling Channel beaches"
-      ],
-      "confidence": "high",
-      "extraction_method": "heuristic"
+      "location": "Channel beaches"
     }
   ]
 }

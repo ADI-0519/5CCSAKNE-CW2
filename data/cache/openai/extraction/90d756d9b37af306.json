@@ -1,0 +1,32 @@
+{
+  "people": [
+    "Al Carns",
+    "James Murray"
+  ],
+  "organizations": [
+    "Labour",
+    "Independent Parliamentary Standards Authority",
+    "Ipsa"
+  ],
+  "locations": [
+    "Birmingham",
+    "London"
+  ],
+  "topics": [
+    "Public Spending",
+    "Government Policy",
+    "Politics",
+    "Economic Policy"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Parliament",
+    "Treasury"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

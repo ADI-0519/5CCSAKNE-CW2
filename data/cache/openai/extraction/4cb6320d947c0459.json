@@ -7,11 +7,11 @@
     "Richard Walker"
   ],
   "organizations": [
+    "Labour",
+    "Treasury",
     "Greenpeace UK",
     "National Education Union",
-    "Tax Justice UK",
-    "Labour",
-    "HM Treasury"
+    "Tax Justice UK"
   ],
   "locations": [
     "Chingford"
@@ -19,6 +19,7 @@
   "topics": [
     "Energy",
     "Taxation",
+    "Defence",
     "Economic Policy"
   ],
   "politicians": [
@@ -26,11 +27,10 @@
     "Rachel Reeves"
   ],
   "political_parties": [
-    "Labour Party"
+    "Labour"
   ],
   "government_bodies": [
-    "HM Treasury",
-    "Competition and Markets Authority"
+    "Treasury"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
@@ -38,26 +38,8 @@
     {
       "name": "US-Israel war on Iran",
       "type": "GovernmentPolicyEvent",
-      "date": null,
-      "location": null,
-      "policy_topics": [
-        "Energy",
-        "Taxation"
-      ],
-      "political_actors": [
-        "Rachel Reeves",
-        "Keir Starmer"
-      ],
-      "government_bodies": [
-        "HM Treasury"
-      ],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Labour Party"
-      ],
-      "evidence_spans": [],
-      "confidence": "medium",
-      "extraction_method": "heuristic"
+      "date": "2026-03-26",
+      "location": null
     }
   ]
 }

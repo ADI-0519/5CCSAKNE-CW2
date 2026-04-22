@@ -6,7 +6,7 @@
     "Zarah Dickinson"
   ],
   "organizations": [
-    "Conservative Party",
+    "Conservative",
     "Parliament"
   ],
   "locations": [
@@ -26,5 +26,30 @@
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Crispin Blunt fined for drug possession",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-25",
+      "location": null,
+      "policy_topics": [
+        "Drugs Policy"
+      ],
+      "political_actors": [
+        "Crispin Blunt"
+      ],
+      "government_bodies": [
+        "Parliament"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Conservative Party"
+      ],
+      "evidence_spans": [
+        "Crispin Blunt has been fined \u00a31,200 for possessing illegal drugs after he told a court he entered the world of chemsex parties to help inform government policy."
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

@@ -708,6 +708,24 @@ def add_events(
         event_location = event.get("location")
         uri = event_uri(canonical_name, event_date, event_location, record.get("id"))
         event_class = classify_event(record, event)
+        source_system = str(record.get("source_system") or "").strip().lower()
+
+        selected_government_bodies = select_government_bodies(
+            graph, record, event, body_uris, event_class
+        )
+        selected_parliamentary_bodies = select_parliamentary_bodies(
+            graph, record, event, body_uris, event_class
+        )
+
+        # Text-news events should not remain typed as GovernmentPolicyEvent when
+        # event-specific body grounding fails. Keeping them as generic PolicyEvent
+        # avoids overclaiming official government involvement from broad article noise.
+        if (
+            event_class == NEWS.GovernmentPolicyEvent
+            and source_system not in OFFICIAL_SOURCE_SYSTEMS
+            and not selected_government_bodies
+        ):
+            event_class = NEWS.PolicyEvent
 
         graph.add((uri, RDF.type, NEWS.PolicyEvent))
         if event_class != NEWS.PolicyEvent:
@@ -717,12 +735,6 @@ def add_events(
         graph.add((uri, NEWS.reportedByArticle, article))
         for actor_uri in event_actor_uris(event, actor_uri_map, record):
             graph.add((uri, NEWS.involvesActor, actor_uri))
-        selected_government_bodies = select_government_bodies(
-            graph, record, event, body_uris, event_class
-        )
-        selected_parliamentary_bodies = select_parliamentary_bodies(
-            graph, record, event, body_uris, event_class
-        )
         for body_uri in selected_government_bodies:
             graph.add((uri, NEWS.involvesGovernmentBody, body_uri))
             if (

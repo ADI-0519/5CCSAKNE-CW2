@@ -1,0 +1,35 @@
+{
+  "people": [
+    "James MacCleary",
+    "Keir Starmer",
+    "Shabana Mahmood",
+    "Zeena Luchowa"
+  ],
+  "organizations": [
+    "Home Office",
+    "Passport Office",
+    "Laura Devine Immigration"
+  ],
+  "locations": [
+    "Copenhagen",
+    "Denmark",
+    "London",
+    "Sussex"
+  ],
+  "topics": [
+    "Education",
+    "Immigration"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

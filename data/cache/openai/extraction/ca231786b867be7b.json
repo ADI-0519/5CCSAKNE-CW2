@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Andy Burnham",
+    "Angela Rayner",
+    "Chris Curtis",
+    "Dan Tomlinson",
+    "Keir Starmer",
+    "Lucy Rigby",
+    "Mark McVitie",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Department for Education",
+    "Good Growth Foundation",
+    "Labour",
+    "Labour Party",
+    "Reform UK",
+    "Treasury"
+  ],
+  "locations": [],
+  "topics": [
+    "Economic Policy",
+    "Taxation",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "Keir Starmer",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Labour",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Department for Education",
+    "Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

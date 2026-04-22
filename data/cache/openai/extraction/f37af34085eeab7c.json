@@ -16,19 +16,17 @@
     "Sri Lanka"
   ],
   "topics": [
-    "Public Spending",
-    "Politics"
+    "Politics",
+    "Public Spending"
   ],
   "politicians": [
     "Nigel Farage"
   ],
   "political_parties": [
-    "Labour Party",
+    "Labour",
     "Reform UK"
   ],
-  "government_bodies": [
-    "Electoral Commission"
-  ],
+  "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": []

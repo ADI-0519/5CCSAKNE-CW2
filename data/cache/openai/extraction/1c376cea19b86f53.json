@@ -1,0 +1,34 @@
+{
+  "people": [
+    "Briton Paul Buxton",
+    "Prof Prokar Dasgupta"
+  ],
+  "organizations": [
+    "The London Clinic",
+    "Presidio",
+    "European Association of Urology"
+  ],
+  "locations": [
+    "Gibraltar",
+    "London",
+    "Burnham-on-Sea",
+    "Somerset",
+    "St Bernard"
+  ],
+  "topics": [
+    "Healthcare"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Remote robotic surgery",
+      "type": "PolicyEvent",
+      "date": "2026-03-06",
+      "location": "Gibraltar"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "people": [],
+  "organizations": [
+    "Home Office",
+    "The Home Office"
+  ],
+  "locations": [],
+  "topics": [
+    "Immigration",
+    "Education"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

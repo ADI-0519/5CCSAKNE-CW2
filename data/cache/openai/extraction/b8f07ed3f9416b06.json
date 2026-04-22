@@ -1,21 +1,19 @@
 {
   "people": [
-    "Keir Starmer",
     "Pete Hegseth",
     "Donald Trump",
-    "Gen Sir Gwyn Jenkins",
-    "Richard Barrons"
+    "Keir Starmer",
+    "Richard Barrons",
+    "Gen Sir Gwyn Jenkins"
   ],
   "organizations": [
     "House of Commons",
     "Labour",
-    "Ministry of Defence",
-    "Center for European Policy Analysis"
+    "Ministry of Defence"
   ],
   "locations": [
     "Bahrain",
-    "Cyprus",
-    "Iran"
+    "Cyprus"
   ],
   "topics": [
     "Defence",
@@ -26,7 +24,7 @@
     "Keir Starmer"
   ],
   "political_parties": [
-    "Labour"
+    "Labour Party"
   ],
   "government_bodies": [
     "House of Commons",
@@ -34,27 +32,5 @@
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "House of Commons defence committee meeting",
-      "type": "ParliamentaryEvent",
-      "date": "2026-03-10",
-      "location": null,
-      "policy_topics": [
-        "Defence",
-        "Military Readiness"
-      ],
-      "political_actors": [],
-      "government_bodies": [
-        "House of Commons"
-      ],
-      "parliamentary_body": "House of Commons",
-      "political_parties": [],
-      "evidence_spans": [
-        "House of Commons defence committee expressed grave concerns over navy readiness."
-      ],
-      "confidence": "high",
-      "extraction_method": "hybrid"
-    }
-  ]
+  "events": []
 }

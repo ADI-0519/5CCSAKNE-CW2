@@ -1,0 +1,91 @@
+{
+  "people": [
+    "Anand Menon",
+    "Chris Bryant",
+    "Mark Corver",
+    "Nick Thomas-Symonds",
+    "Rachel Reeves",
+    "Roberta Metsola",
+    "Stephen Doughty"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Department for Education",
+    "European Commission",
+    "Labour",
+    "Parliament",
+    "The Treasury"
+  ],
+  "locations": [
+    "Brussels",
+    "London"
+  ],
+  "topics": [
+    "Education",
+    "Government Policy",
+    "Politics",
+    "Economic Policy"
+  ],
+  "politicians": [
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Department for Education",
+    "The Treasury",
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "UK-EU Parliamentary Partnership Assembly Meeting",
+      "type": "ParliamentaryEvent",
+      "date": "2026-03-15",
+      "location": "Brussels",
+      "policy_topics": [
+        "Education",
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Nick Thomas-Symonds",
+        "Stephen Doughty",
+        "Chris Bryant"
+      ],
+      "government_bodies": [
+        "Cabinet Office",
+        "Department for Education"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Mais Lecture to the Finance Industry",
+      "type": "MinisterialStatement",
+      "date": "2026-03-16",
+      "location": "London",
+      "policy_topics": [
+        "Economic Policy"
+      ],
+      "political_actors": [
+        "Rachel Reeves"
+      ],
+      "government_bodies": [
+        "The Treasury"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

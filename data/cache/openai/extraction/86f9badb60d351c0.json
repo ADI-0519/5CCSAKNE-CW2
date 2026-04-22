@@ -4,9 +4,9 @@
     "Christian Candy",
     "Donald Trump",
     "Donald Trump Jr.",
-    "Elon Musk",
     "Holly Valance",
-    "Nigel Farage"
+    "Nigel Farage",
+    "Elon Musk"
   ],
   "organizations": [
     "Reform UK",
@@ -14,14 +14,15 @@
   ],
   "locations": [
     "London",
-    "Chelsea",
     "Mayfair",
-    "Royal Chelsea Hospital",
-    "Los Angeles"
+    "England",
+    "Royal Chelsea Hospital"
   ],
   "topics": [
     "Politics",
-    "Property"
+    "Property",
+    "Public Spending",
+    "Taxation"
   ],
   "politicians": [
     "Nigel Farage"
@@ -33,5 +34,12 @@
   "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Fundraising event for Donald Trump",
+      "type": "PolicyEvent",
+      "date": "2024-01-01",
+      "location": "Providence House"
+    }
+  ]
 }

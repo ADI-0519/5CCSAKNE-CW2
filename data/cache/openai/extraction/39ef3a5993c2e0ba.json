@@ -5,6 +5,7 @@
   ],
   "organizations": [
     "Home Office",
+    "Deighton Pierce Glynn",
     "Imperial College London"
   ],
   "locations": [
@@ -23,5 +24,12 @@
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Visa Ban Announcement",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-23",
+      "location": "UK"
+    }
+  ]
 }

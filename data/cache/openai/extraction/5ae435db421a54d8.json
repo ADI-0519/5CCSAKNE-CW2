@@ -1,30 +1,32 @@
 {
   "people": [
+    "Boris Johnson",
     "Keir Starmer",
     "Kemi Badenoch",
     "Nigel Farage",
-    "Zack Polanski",
-    "Boris Johnson"
+    "Zack Polanski"
   ],
   "organizations": [
-    "Labour Party",
-    "Conservative Party",
-    "Reform UK",
-    "Scottish National Party",
-    "Plaid Cymru",
+    "Conservative",
     "Green Party",
-    "Liberal Democrats"
+    "Labour",
+    "Liberal Democrats",
+    "Plaid Cymru",
+    "Reform UK",
+    "SNP",
+    "Scottish National Party",
+    "Sinn F\u00e9in"
   ],
   "locations": [
+    "England",
     "Scotland",
     "Wales",
-    "England",
-    "Northern Ireland",
-    "London"
+    "London",
+    "Northern Ireland"
   ],
   "topics": [
-    "Parliament",
-    "Politics"
+    "Politics",
+    "Parliament"
   ],
   "politicians": [
     "Keir Starmer",
@@ -32,47 +34,20 @@
     "Nigel Farage"
   ],
   "political_parties": [
-    "Labour Party",
-    "Conservative Party",
-    "Reform UK",
-    "Scottish National Party",
-    "Plaid Cymru",
+    "Conservative",
     "Green Party",
-    "Liberal Democrats"
+    "Labour",
+    "Liberal Democrats",
+    "Plaid Cymru",
+    "Reform UK",
+    "SNP",
+    "Scottish National Party",
+    "Sinn F\u00e9in"
   ],
   "government_bodies": [
     "Parliament"
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Local Elections",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-05-07",
-      "location": "Scotland, Wales, England",
-      "policy_topics": [],
-      "political_actors": [
-        "Reform UK",
-        "SNP",
-        "Plaid Cymru",
-        "Labour",
-        "Conservative Party",
-        "Green Party"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Labour Party",
-        "Conservative Party",
-        "Reform UK",
-        "Scottish National Party",
-        "Plaid Cymru",
-        "Green Party"
-      ],
-      "evidence_spans": [],
-      "confidence": "medium",
-      "extraction_method": "heuristic"
-    }
-  ]
+  "events": []
 }

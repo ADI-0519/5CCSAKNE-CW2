@@ -1,39 +1,37 @@
 {
   "people": [
     "Andrew Tate",
-    "Caprice Bourret",
-    "Donald Trump",
-    "Greta Thunberg",
-    "Holly Valance",
-    "Jeffrey Epstein",
-    "Lady Victoria Hervey",
-    "Laila Cunningham",
+    "Nigel Farage",
+    "Tommy Robinson",
+    "Stephen Yaxley-Lennon",
     "Louis Theroux",
     "Luke Tryl",
     "Matthew Goodwin",
-    "Nigel Farage",
-    "Stephen Yaxley-Lennon",
+    "Caprice Bourret",
     "Suella Braverman",
-    "Tommy Robinson"
+    "Lady Victoria Hervey",
+    "Holly Valance",
+    "Greta Thunberg"
   ],
   "organizations": [
     "Reform UK",
-    "Conservative Party"
+    "Conservative"
   ],
   "locations": [
-    "Palm Beach",
+    "UK",
     "London",
-    "England"
+    "Palm Beach"
   ],
   "topics": [
     "Politics"
   ],
   "politicians": [
-    "Nigel Farage"
+    "Nigel Farage",
+    "Suella Braverman"
   ],
   "political_parties": [
     "Reform UK",
-    "Conservative Party"
+    "Conservative"
   ],
   "government_bodies": [],
   "sentiment": "Negative",

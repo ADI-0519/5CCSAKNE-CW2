@@ -7,11 +7,11 @@
   ],
   "organizations": [
     "Cabinet Office",
-    "Conservative Party",
-    "Labour Party",
+    "Conservative",
+    "Labour",
     "Downing Street",
     "No 10",
-    "Metropolitan Police"
+    "Parliament"
   ],
   "locations": [
     "London",
@@ -26,13 +26,14 @@
     "Keir Starmer"
   ],
   "political_parties": [
-    "Labour Party",
-    "Conservative Party"
+    "Conservative",
+    "Labour"
   ],
   "government_bodies": [
     "Cabinet Office",
     "Downing Street",
-    "Metropolitan Police"
+    "No 10",
+    "Parliament"
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",

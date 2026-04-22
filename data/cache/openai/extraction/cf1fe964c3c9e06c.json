@@ -14,10 +14,11 @@
     "Reform UK"
   ],
   "locations": [
-    "Hampshire",
+    "England",
     "London"
   ],
   "topics": [
+    "Parliament",
     "Politics"
   ],
   "politicians": [
@@ -25,12 +26,19 @@
     "Nigel Farage"
   ],
   "political_parties": [
-    "Labour Party",
+    "Labour",
     "Liberal Democrats",
     "Reform UK"
   ],
   "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Suspension of Chris Parry",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-24",
+      "location": "England"
+    }
+  ]
 }

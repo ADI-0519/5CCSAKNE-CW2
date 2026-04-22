@@ -1,21 +1,23 @@
 {
   "people": [
-    "King Charles III",
+    "King Charles",
     "Queen Camilla",
     "Emily Thornberry",
     "Ed Davey",
     "Zack Polanski",
     "Donald Trump",
-    "Kim Johnson",
-    "Clive Lewis",
     "John McDonnell",
-    "Pete Hegseth",
-    "Jake Atkinson"
+    "Clive Lewis",
+    "Kim Johnson",
+    "Jake Atkinson",
+    "Pete Hegseth"
   ],
   "organizations": [
-    "Green Party",
-    "Labour Party",
+    "Buckingham Palace",
     "Foreign Office",
+    "Labour Party",
+    "Liberal Democrats",
+    "Green Party",
     "Stop Trump Coalition"
   ],
   "locations": [
@@ -25,16 +27,17 @@
   "topics": [
     "Government Policy",
     "Defence",
-    "Parliament",
-    "Foreign Policy"
+    "Foreign Policy",
+    "Public Sentiment"
   ],
   "politicians": [
     "Keir Starmer",
     "Ed Davey"
   ],
   "political_parties": [
+    "Labour Party",
     "Green Party",
-    "Labour Party"
+    "Liberal Democrats"
   ],
   "government_bodies": [
     "Foreign, Commonwealth and Development Office"
@@ -43,25 +46,29 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "State Visit of King Charles III to the US",
+      "name": "State Visit of King Charles to the US",
       "type": "GovernmentPolicyEvent",
       "date": "2026-04-27",
       "location": "United States",
       "policy_topics": [
-        "Foreign Policy",
-        "Defence"
+        "Foreign Policy"
       ],
       "political_actors": [
-        "King Charles III",
-        "Queen Camilla"
+        "Donald Trump",
+        "Ed Davey",
+        "Emily Thornberry"
       ],
       "government_bodies": [
         "Foreign, Commonwealth and Development Office"
       ],
       "parliamentary_body": null,
-      "political_parties": [],
+      "political_parties": [
+        "Labour Party",
+        "Green Party",
+        "Liberal Democrats"
+      ],
       "evidence_spans": [
-        "King Charles will go ahead with a state visit to the US in April"
+        "The announcement of the visit came just minutes after Trump launched another verbal attack on the UK."
       ],
       "confidence": "high",
       "extraction_method": "heuristic"

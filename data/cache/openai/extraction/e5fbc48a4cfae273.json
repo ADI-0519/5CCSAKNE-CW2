@@ -11,10 +11,10 @@
     "Wes Streeting"
   ],
   "organizations": [
+    "Conservative",
     "Conservative Party",
-    "Labour Party",
-    "Department of Health and Social Care",
-    "Office for National Statistics"
+    "Labour",
+    "Labour Party"
   ],
   "locations": [],
   "topics": [
@@ -29,13 +29,12 @@
     "Wes Streeting"
   ],
   "political_parties": [
+    "Conservative",
     "Conservative Party",
+    "Labour",
     "Labour Party"
   ],
-  "government_bodies": [
-    "Department of Health and Social Care",
-    "Office for National Statistics"
-  ],
+  "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": []

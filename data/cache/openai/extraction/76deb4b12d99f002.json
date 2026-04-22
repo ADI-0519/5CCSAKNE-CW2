@@ -4,31 +4,29 @@
     "Liz Truss",
     "Jacob Rees-Mogg",
     "Kemi Badenoch",
-    "Matt Schlapp",
     "Tim Montgomerie",
+    "Matt Schlapp",
     "Lois Perry",
     "Donald Trump",
-    "Ron DeSantis",
-    "Tulsi Gabbard",
-    "Viktor Orb\u00e1n"
+    "Tulsi Gabbard"
   ],
   "organizations": [
     "Reform UK",
     "Conservative Party",
-    "Heartland Institute"
+    "Conservative Political Action Conference"
   ],
   "locations": [
     "London",
-    "England",
-    "Texas"
+    "Texas",
+    "England"
   ],
   "topics": [
     "Politics",
     "Economic Policy"
   ],
   "politicians": [
-    "Kemi Badenoch",
-    "Nigel Farage"
+    "Nigel Farage",
+    "Kemi Badenoch"
   ],
   "political_parties": [
     "Conservative Party",
@@ -42,26 +40,7 @@
       "name": "CPAC UK Conference",
       "type": "PolicyEvent",
       "date": "2026-07-16",
-      "location": "London",
-      "policy_topics": [
-        "Conservatism"
-      ],
-      "political_actors": [
-        "Liz Truss",
-        "Nigel Farage"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Conservative Party",
-        "Reform UK"
-      ],
-      "evidence_spans": [
-        "'We will be steering well clear of it,' a Reform UK source said",
-        "A spokesperson for Kemi Badenoch, the leader of the Conservative party, said she has 'no plans' to show up."
-      ],
-      "confidence": "high",
-      "extraction_method": "heuristic"
+      "location": "London"
     }
   ]
 }

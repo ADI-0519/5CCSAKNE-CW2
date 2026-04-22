@@ -694,6 +694,50 @@ class TestConvertJsonToRdf:
         assert (event, NEWS.involvesGovernmentBody, home_office) not in graph
         assert (event, NEWS.involvesGovernmentBody, downing_street) not in graph
 
+    def test_text_news_event_without_grounded_body_is_downgraded_from_government_policy_event(self):
+        record = sample_record(
+            source_system="guardian",
+            source_name="The Guardian",
+            title="Starmer overruled warning of reputational risk over Mandelson appointment, files show",
+            summary="Documents raise questions about Mandelson's appointment and later dismissal.",
+            event_candidates=[
+                {
+                    "name": "Mandelson's dismissal as ambassador",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-11",
+                    "location": None,
+                    "source": "openai",
+                    "policy_topics": ["Government Policy"],
+                    "political_actors": ["Keir Starmer", "Darren Jones"],
+                    "government_bodies": [
+                        "Cabinet Office",
+                        "Foreign, Commonwealth and Development Office",
+                    ],
+                    "evidence_spans": [
+                        "The documents suggest Mandelson raised the prospect of legal action after his dismissal until a settlement was reached."
+                    ],
+                    "confidence": "high",
+                }
+            ],
+            entities={
+                "organizations": [],
+                "people": ["Keir Starmer", "Darren Jones", "Peter Mandelson"],
+                "politicians": ["Keir Starmer", "Darren Jones", "Peter Mandelson"],
+                "political_parties": ["Labour Party"],
+                "government_bodies": [],
+                "locations": [],
+                "technologies": [],
+                "topics": ["Government Policy", "Politics"],
+                "events": ["Mandelson's dismissal as ambassador"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS["event/Mandelson_s_dismissal_as_ambassador_2026-03-11"]
+
+        assert (event, RDF.type, NEWS.PolicyEvent) in graph
+        assert (event, RDF.type, NEWS.GovernmentPolicyEvent) not in graph
+
     def test_specific_event_names_gain_canonical_labels(self):
         record = sample_record(
             event_candidates=[

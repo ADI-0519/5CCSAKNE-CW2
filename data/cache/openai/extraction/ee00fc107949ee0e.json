@@ -1,17 +1,16 @@
 {
   "people": [
-    "Nigel Farage",
-    "Corey Edwards",
-    "Simon Dudley",
-    "Chris Parry",
-    "David Lammy",
     "Amanda Crawford",
-    "Richard Tice"
+    "Chris Parry",
+    "Corey Edwards",
+    "David Lammy",
+    "Nigel Farage",
+    "Richard Tice",
+    "Simon Dudley"
   ],
   "organizations": [
-    "Reform UK",
-    "Conservative Party",
-    "Homes England"
+    "Conservative",
+    "Reform UK"
   ],
   "locations": [
     "England",
@@ -19,18 +18,19 @@
   ],
   "topics": [
     "Housing",
-    "Politics"
+    "Politics",
+    "Parliament"
   ],
   "politicians": [
-    "Nigel Farage",
-    "David Lammy"
+    "David Lammy",
+    "Nigel Farage"
   ],
   "political_parties": [
-    "Reform UK",
-    "Conservative Party"
+    "Conservative",
+    "Reform UK"
   ],
   "government_bodies": [],
-  "sentiment": "Negative",
+  "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": []
 }

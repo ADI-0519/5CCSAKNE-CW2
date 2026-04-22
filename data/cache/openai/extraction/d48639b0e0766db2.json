@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Andrea Jenkyns",
+    "Danny Kruger",
+    "Dicky Tice",
+    "Kwasi Kwarteng",
+    "Nadhim Zahawi",
+    "Nigel Farage",
+    "Robert Jenrick",
+    "Richard Tice",
+    "Sarah Pochin",
+    "Suella Braverman",
+    "Zia Yusuf"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Direct Bullion"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Energy",
+    "Politics",
+    "Defence",
+    "Economic Policy"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -6,24 +6,23 @@
     "Kim Darroch",
     "Nigel Farage",
     "Robert Jenrick",
-    "Emmanuel Macron",
+    "Prince William",
     "Brigitte Macron",
-    "King Charles"
+    "Emmanuel Macron"
   ],
   "organizations": [
-    "Downing Street",
     "Labour",
+    "Conservative Party",
     "Reform UK",
-    "Conservative",
-    "Parliament",
-    "Business Insider"
+    "Downing Street",
+    "Parliament"
   ],
   "locations": [],
   "topics": [
-    "Parliament",
-    "Defence",
     "Government Policy",
-    "Politics"
+    "Defence",
+    "Politics",
+    "Parliament"
   ],
   "politicians": [
     "Keir Starmer",
@@ -31,8 +30,8 @@
   ],
   "political_parties": [
     "Labour Party",
-    "Reform UK",
-    "Conservative Party"
+    "Conservative Party",
+    "Reform UK"
   ],
   "government_bodies": [
     "Downing Street",

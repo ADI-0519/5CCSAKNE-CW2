@@ -8,10 +8,11 @@
   ],
   "organizations": [
     "Cabinet Office",
-    "Conservative Party",
+    "Conservative",
     "Downing Street",
-    "Labour Party",
+    "Labour",
     "No 10",
+    "Parliament",
     "Sky News"
   ],
   "locations": [],
@@ -24,15 +25,23 @@
     "Kemi Badenoch"
   ],
   "political_parties": [
-    "Conservative Party",
-    "Labour Party"
+    "Conservative",
+    "Labour"
   ],
   "government_bodies": [
     "Cabinet Office",
     "Downing Street",
+    "No 10",
     "Parliament"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Mandelson's ambassador appointment investigation",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-27",
+      "location": null
+    }
+  ]
 }

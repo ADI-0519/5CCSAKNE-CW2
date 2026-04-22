@@ -25,28 +25,5 @@
   "government_bodies": [],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Announcement of pledge to cut cost of living",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-03-31",
-      "location": null,
-      "policy_topics": [
-        "Economic Policy"
-      ],
-      "political_actors": [
-        "Nigel Farage"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Reform UK"
-      ],
-      "evidence_spans": [
-        "Farage had come to Heathrow airport to promote a plan to scrap taxes on short-haul journeys."
-      ],
-      "confidence": "high",
-      "extraction_method": "heuristic"
-    }
-  ]
+  "events": []
 }

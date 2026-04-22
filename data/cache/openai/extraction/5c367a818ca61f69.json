@@ -3,10 +3,9 @@
     "Doctors Industrial"
   ],
   "organizations": [
-    "British Medical Association (BMA)",
+    "British Medical Association",
     "GMB",
-    "Unison",
-    "Office for National Statistics (ONS)"
+    "Unison"
   ],
   "locations": [
     "England"
@@ -18,10 +17,15 @@
   ],
   "politicians": [],
   "political_parties": [],
-  "government_bodies": [
-    "Office for National Statistics"
-  ],
+  "government_bodies": [],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Doctors Strikes",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-07",
+      "location": "England"
+    }
+  ]
 }

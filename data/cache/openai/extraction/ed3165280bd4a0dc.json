@@ -1,20 +1,19 @@
 {
   "people": [
-    "Adolf Hitler",
-    "Basil Fawlty",
     "Corey Edwards",
-    "David TC Davies",
-    "John Cleese",
-    "Laura Anne Jones",
     "Nigel Farage",
-    "Stuart Niven",
-    "Tommy Robinson",
+    "Adolf Hitler",
+    "John Cleese",
     "Wayne Hennessey",
-    "Humza Yousaf"
+    "Laura Anne Jones",
+    "Stuart Niven",
+    "Humza Yousaf",
+    "Basil Fawlty"
   ],
   "organizations": [
     "Reform UK",
-    "Conservative Party"
+    "Conservative",
+    "Parliament"
   ],
   "locations": [
     "Wales",
@@ -29,7 +28,7 @@
   ],
   "political_parties": [
     "Reform UK",
-    "Conservative Party"
+    "Conservative"
   ],
   "government_bodies": [
     "Parliament"

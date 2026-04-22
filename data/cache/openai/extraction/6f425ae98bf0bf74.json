@@ -4,13 +4,12 @@
   ],
   "organizations": [
     "UK Health Security Agency",
-    "NHS Kent and Medway",
     "Kent County Council",
-    "NHS England"
+    "NHS England",
+    "NHS Kent and Medway"
   ],
   "locations": [
     "Kent",
-    "University of Kent",
     "England"
   ],
   "topics": [
@@ -21,8 +20,7 @@
   "political_parties": [],
   "government_bodies": [
     "UK Health Security Agency",
-    "NHS England",
-    "Kent County Council"
+    "NHS England"
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",

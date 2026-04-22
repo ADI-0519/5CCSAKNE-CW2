@@ -6,11 +6,12 @@
     "Laurence Taylor"
   ],
   "organizations": [
+    "Police News",
     "The Guardian"
   ],
   "locations": [
-    "Southport",
-    "London"
+    "London",
+    "Southport"
   ],
   "topics": [
     "Government Policy",
@@ -23,34 +24,10 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Increase in Prevent referrals",
+      "name": "Policy Announcement",
       "type": "GovernmentPolicyEvent",
       "date": "2026-04-02",
-      "location": null,
-      "policy_topics": [],
-      "political_actors": [
-        "Laurence Taylor"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [],
-      "evidence_spans": [],
-      "confidence": "high",
-      "extraction_method": "heuristic"
-    },
-    {
-      "name": "Independent review into Southport",
-      "type": "PolicyEvent",
-      "date": "2026-04-05",
-      "location": null,
-      "policy_topics": [],
-      "political_actors": [],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [],
-      "evidence_spans": [],
-      "confidence": "high",
-      "extraction_method": "heuristic"
+      "location": "London"
     }
   ]
 }

@@ -9,11 +9,11 @@
     "Richard Hermer"
   ],
   "organizations": [
-    "Conservative Party"
+    "Conservative"
   ],
   "locations": [
-    "Trafalgar Square",
-    "London"
+    "London",
+    "Trafalgar Square"
   ],
   "topics": [
     "Politics",
@@ -24,35 +24,10 @@
     "Kemi Badenoch"
   ],
   "political_parties": [
-    "Conservative Party"
+    "Conservative"
   ],
   "government_bodies": [],
   "sentiment": "Negative",
   "article_type": "BreakingNewsArticle",
-  "events": [
-    {
-      "name": "Open Iftar",
-      "type": "PolicyEvent",
-      "date": "2026-03-22",
-      "location": "Trafalgar Square",
-      "policy_topics": [
-        "Religion",
-        "Public Prayer"
-      ],
-      "political_actors": [
-        "James Cleverly",
-        "Nick Timothy",
-        "Kemi Badenoch",
-        "Emma Best"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Conservative Party"
-      ],
-      "evidence_spans": [],
-      "confidence": "medium",
-      "extraction_method": "heuristic"
-    }
-  ]
+  "events": []
 }

@@ -1,19 +1,17 @@
 {
   "people": [
-    "Joe Twyman",
+    "Find Out Now",
     "Jane Green",
+    "Joe Twyman",
     "Keir Starmer",
     "Nigel Farage",
-    "Prof Curtice",
-    "Prof Green",
     "Zack Polanski"
   ],
   "organizations": [
-    "Conservative Party",
-    "Labour Party",
+    "Conservative",
+    "Labour",
     "Plaid Cymru",
-    "Scottish National Party",
-    "Deltapoll"
+    "SNP"
   ],
   "locations": [
     "Caerphilly",
@@ -22,20 +20,22 @@
     "Wales"
   ],
   "topics": [
-    "Politics"
+    "Political Volatility",
+    "Polling",
+    "Five-party system"
   ],
   "politicians": [
     "Keir Starmer",
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative Party",
-    "Labour Party",
+    "Conservative",
+    "Labour",
     "Plaid Cymru",
-    "Scottish National Party",
-    "Greens",
-    "Reform Party",
-    "Lib Dems"
+    "SNP",
+    "Reform",
+    "Lib Dems",
+    "Greens"
   ],
   "government_bodies": [],
   "sentiment": "Neutral",

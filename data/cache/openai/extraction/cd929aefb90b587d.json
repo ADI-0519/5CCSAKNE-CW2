@@ -1,41 +1,38 @@
 {
   "people": [
-    "Billy Bragg",
     "Andy Burnham",
-    "Zack Polanski",
-    "Dawn Butler",
-    "Sabby Dhalu",
-    "Donald Trump",
-    "Nigel Farage",
-    "Tommy Robinson",
+    "Beverley Knight",
+    "Billy Bragg",
+    "Brian Eno",
+    "Charlotte Church",
     "Christopher Eccleston",
     "David Harewood",
-    "Lenny Henry",
-    "Steve Coogan",
-    "Toby Jones",
-    "Lolly Adefope",
-    "Maxine Peake",
-    "Paloma Faith",
-    "Charlotte Church",
-    "Brian Eno",
-    "Beverley Knight",
+    "Dawn Butler",
+    "Donald Trump",
     "James Acaster",
-    "Self Esteem",
     "Jessie Ware",
     "Joy Crookes",
-    "UB40",
-    "Hot Chip"
+    "Lenny Henry",
+    "Lolly Adefope",
+    "Maxine Peake",
+    "Nigel Farage",
+    "Paloma Faith",
+    "Sabby Dhalu",
+    "Self Esteem",
+    "Steve Coogan",
+    "Toby Jones",
+    "Zack Polanski",
+    "Tommy Robinson"
   ],
   "organizations": [
-    "Together Alliance",
     "Green Party",
-    "Labour Party",
-    "Stand Up to Racism"
+    "Labour",
+    "Together Alliance"
   ],
   "locations": [
+    "England",
     "London",
     "Manchester",
-    "England",
     "Park Lane",
     "Trafalgar Square"
   ],
@@ -44,44 +41,24 @@
     "Parliament"
   ],
   "politicians": [
-    "Nigel Farage"
+    "Nigel Farage",
+    "Andy Burnham",
+    "Zack Polanski",
+    "Dawn Butler"
   ],
   "political_parties": [
     "Green Party",
-    "Labour Party"
+    "Labour"
   ],
-  "government_bodies": [
-    "Office for National Statistics"
-  ],
+  "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Multicultural March against the Far Right",
+      "name": "March against the far right",
       "type": "PolicyEvent",
       "date": "2026-03-28",
-      "location": "London",
-      "policy_topics": [
-        "Politics of Hate"
-      ],
-      "political_actors": [
-        "Billy Bragg",
-        "Andy Burnham",
-        "Zack Polanski",
-        "Dawn Butler"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Green Party",
-        "Labour Party"
-      ],
-      "evidence_spans": [
-        "expected to be UK\u2019s biggest ever multicultural rally",
-        "March from Park Lane to Trafalgar Square"
-      ],
-      "confidence": "high",
-      "extraction_method": "heuristic"
+      "location": "London"
     }
   ]
 }

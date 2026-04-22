@@ -1,41 +1,45 @@
 {
   "people": [
-    "Alex Barros-Curtis",
+    "Rebecca Harris",
     "Joshua Bonehill-Paine",
     "Kemi Badenoch",
     "Nick Timothy",
+    "Alex Barros-Curtis",
     "Luciana Berger",
     "Keir Starmer",
     "Angela Rayner",
     "Andy Burnham",
     "Nigel Farage",
-    "Rebecca Harris"
+    "Amy Winehouse",
+    "Barry Manilow",
+    "Elton John"
   ],
   "organizations": [
-    "Crewkerne Gazette",
     "Conservative Party",
-    "Labour Party"
+    "Labour"
   ],
   "locations": [
-    "Cardiff West",
-    "Castle Point",
-    "Leicester",
-    "Trafalgar Square"
+    "Cardiff",
+    "Leicester"
   ],
   "topics": [
+    "Politics",
+    "Immigration",
     "Hate crime",
-    "Antisemitism",
-    "Immigration"
+    "Antisemitism"
   ],
   "politicians": [
-    "Alex Barros-Curtis",
+    "Rebecca Harris",
     "Kemi Badenoch",
-    "Nigel Farage",
-    "Luciana Berger"
+    "Alex Barros-Curtis",
+    "Luciana Berger",
+    "Keir Starmer",
+    "Angela Rayner",
+    "Nigel Farage"
   ],
   "political_parties": [
     "Conservative Party",
-    "Labour Party"
+    "Labour"
   ],
   "government_bodies": [],
   "sentiment": "Negative",

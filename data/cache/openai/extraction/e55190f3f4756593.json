@@ -1,16 +1,17 @@
 {
   "people": [
-    "Bernard Jenkin",
-    "Donald Trump",
     "Keir Starmer",
+    "Donald Trump",
+    "Bernard Jenkin",
+    "Tan Singh Dhesi",
     "Meg Hillier",
     "Peter Mandelson",
-    "Tan Singh Dhesi"
+    "John Crace"
   ],
   "organizations": [
-    "House of Commons",
-    "Labour Party",
-    "Conservative Party"
+    "Labour",
+    "Conservative",
+    "House of Commons"
   ],
   "locations": [
     "London"
@@ -25,8 +26,8 @@
     "Keir Starmer"
   ],
   "political_parties": [
-    "Conservative Party",
-    "Labour Party"
+    "Labour",
+    "Conservative"
   ],
   "government_bodies": [
     "House of Commons"

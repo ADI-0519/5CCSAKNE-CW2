@@ -1,0 +1,34 @@
+{
+  "people": [
+    "Rachel Reeves",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "The Treasury",
+    "Conservative",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "locations": [],
+  "topics": [
+    "Energy",
+    "Economic Policy",
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Rachel Reeves",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Treasury"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}
