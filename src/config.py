@@ -182,7 +182,6 @@ GOVUK_DOCUMENT_FORMATS = [
     "consultation",
 ]
 GOVUK_ALWAYS_INCLUDE_FORMATS = {
-    "policy_paper",
     "consultation",
 }
 GOVUK_SCOPE_SIGNAL_TERMS = {
@@ -207,15 +206,20 @@ GOVUK_SCOPE_SIGNAL_TERMS = {
     "welfare",
 }
 GOVUK_EXCLUDED_TEXT_TERMS = {
+    "annual report",
     "appointments to",
+    "code of practice",
+    "data strategy",
     "extension notice",
     "form ",
     "helpsheet",
     "manual",
     "minutes",
+    "privacy policy",
     "rates and allowances",
     "report:",
     "self assessment",
+    "small and medium-sized enterprise",
     "terms of reference",
 }
 
@@ -273,22 +277,18 @@ GOVUK_EVENT_FALLBACK_SECTIONS = {
 GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS = {
     "agreement",
     "announcement",
-    "charter",
     "consultation",
     "crackdown",
     "declaration",
     "funding",
     "investment",
     "launch",
-    "measures",
-    "plan",
     "policy",
     "reform",
     "response",
     "rules",
     "speech",
     "statement",
-    "strategy",
     "summit",
     "vision",
 }
