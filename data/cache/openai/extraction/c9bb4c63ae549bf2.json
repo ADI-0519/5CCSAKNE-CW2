@@ -1,18 +1,20 @@
 {
   "people": [
+    "Calais Food Collective",
     "Emmanuel Macron",
-    "Shabana Mahmood",
-    "Rishi Sunak",
-    "Xavier Ducept",
     "Lachlan Macrae",
     "Lavanya Pallapi",
-    "Martin Hewitt"
+    "Martin Hewitt",
+    "Rishi Sunak",
+    "Shabana Mahmood",
+    "Xavier Ducept"
   ],
   "organizations": [
-    "Home Office",
     "Downing Street",
+    "Home Office",
     "Joint Council",
-    "Calais Food Collective"
+    "No 10",
+    "Parliament"
   ],
   "locations": [
     "France"
@@ -26,12 +28,37 @@
   ],
   "political_parties": [],
   "government_bodies": [
-    "Home Office",
     "Downing Street",
+    "Home Office",
     "No 10",
     "Parliament"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Negotiations between UK and France regarding small boats deal",
+      "type": "PolicyEvent",
+      "date": "2026-03-30",
+      "location": "France",
+      "policy_topics": [
+        "Immigration"
+      ],
+      "political_actors": [
+        "Rishi Sunak",
+        "Shabana Mahmood",
+        "Emmanuel Macron",
+        "Xavier Ducept"
+      ],
+      "government_bodies": [
+        "Home Office",
+        "Downing Street"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

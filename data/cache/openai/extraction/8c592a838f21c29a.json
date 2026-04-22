@@ -1,0 +1,35 @@
+{
+  "people": [
+    "Anand Menon",
+    "Boris Johnson",
+    "John Curtice",
+    "Neil Kinnock",
+    "Tom Brufatto"
+  ],
+  "organizations": [
+    "Best for Britain",
+    "Labour Party",
+    "Conservative Party",
+    "Liberal Democrat",
+    "Green Party"
+  ],
+  "locations": [
+    "Westminster"
+  ],
+  "topics": [
+    "Government Policy",
+    "Economic Policy",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Conservative Party",
+    "Liberal Democrat",
+    "Labour Party",
+    "Green Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

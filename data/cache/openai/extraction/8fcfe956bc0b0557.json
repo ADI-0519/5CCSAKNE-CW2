@@ -1,0 +1,48 @@
+{
+  "people": [
+    "David Lammy",
+    "Donald Trump",
+    "Keir Starmer",
+    "Rachel Reeves",
+    "Yvette Cooper",
+    "Marco Rubio",
+    "King Charles",
+    "Queen Camilla",
+    "Margaret Thatcher",
+    "Ronald Reagan"
+  ],
+  "organizations": [
+    "Labour Party"
+  ],
+  "locations": [
+    "Iran",
+    "Pakistan",
+    "Washington",
+    "Barcelona",
+    "Europe",
+    "Afghanistan",
+    "Ukraine"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Energy",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Rachel Reeves",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

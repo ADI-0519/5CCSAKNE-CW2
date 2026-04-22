@@ -1,16 +1,20 @@
 {
   "people": [
-    "Duncan Lewis",
+    "Maddie Harris",
     "Elizabeth Cole",
-    "Maddie Harris"
+    "Duncan Lewis"
   ],
   "organizations": [
-    "Humans for Rights Network",
-    "Home Office"
+    "Home Office",
+    "Humans for Rights Network"
   ],
-  "locations": [],
+  "locations": [
+    "France"
+  ],
   "topics": [
-    "Immigration"
+    "Immigration",
+    "Child protection",
+    "Human rights"
   ],
   "politicians": [],
   "political_parties": [],
@@ -19,5 +23,27 @@
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "High court ruling halting removal of age-disputed children",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-25",
+      "location": "UK",
+      "policy_topics": [
+        "Immigration",
+        "Child protection"
+      ],
+      "political_actors": [
+        "Elizabeth Cole"
+      ],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

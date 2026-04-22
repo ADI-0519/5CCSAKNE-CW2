@@ -1,0 +1,47 @@
+{
+  "people": [
+    "Diane Abbott",
+    "Donald Trump",
+    "Fiona Hill",
+    "Gen Richard Barrons",
+    "George Robertson",
+    "John Healey",
+    "John Hutton",
+    "Keir Starmer",
+    "Lord Robertson",
+    "Rachel Reeves",
+    "Tan Dhesi",
+    "Vladimir Putin"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Ministry of Defence",
+    "No 10",
+    "Treasury"
+  ],
+  "locations": [
+    "London",
+    "Salisbury"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Ministry of Defence",
+    "No 10",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

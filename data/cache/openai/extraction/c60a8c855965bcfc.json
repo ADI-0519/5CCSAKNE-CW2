@@ -4,9 +4,9 @@
     "Jesy Nelson"
   ],
   "organizations": [
-    "NHS",
     "SMA UK",
-    "Novartis"
+    "Novartis",
+    "Office for National Statistics"
   ],
   "locations": [
     "Scotland"
@@ -14,19 +14,43 @@
   "topics": [
     "Healthcare",
     "Government Policy",
+    "Parliament",
     "Public Spending"
   ],
   "politicians": [],
   "political_parties": [],
-  "government_bodies": [],
+  "government_bodies": [
+    "Scottish government",
+    "UK National Screening Committee"
+  ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Policy Announcement",
+      "name": "SMA screening pilot in Scotland",
       "type": "GovernmentPolicyEvent",
       "date": "2026-03-23",
-      "location": null
+      "location": "Scotland",
+      "policy_topics": [
+        "Healthcare",
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Giles Lomax",
+        "Jesy Nelson"
+      ],
+      "government_bodies": [
+        "Scottish government"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "Newborn screening pilot",
+        "Jesy Nelson's petition",
+        "NHS-funded drug treatments"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
     }
   ]
 }

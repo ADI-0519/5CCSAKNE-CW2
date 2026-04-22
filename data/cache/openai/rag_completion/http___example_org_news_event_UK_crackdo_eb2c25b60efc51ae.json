@@ -1,9 +1,11 @@
 {
   "proposed_actors": [],
   "proposed_departments": [
-    "Home Office"
+    "Home Office",
+    "Office of Financial Sanctions Implementation"
   ],
   "proposed_topics": [
-    "Government Policy"
+    "Government Policy",
+    "Immigration"
   ]
 }

@@ -1,0 +1,49 @@
+{
+  "people": [],
+  "organizations": [
+    "Welsh Government",
+    "Bristol Airport",
+    "Cardiff Airport"
+  ],
+  "locations": [
+    "Bristol",
+    "Cardiff",
+    "Wales"
+  ],
+  "topics": [
+    "Government Policy",
+    "Transport"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Competition Appeal Tribunal"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Legal Challenge Decision",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-08",
+      "location": "Cardiff",
+      "policy_topics": [
+        "Subsidy Control Act"
+      ],
+      "political_actors": [
+        "Bristol Airport",
+        "Welsh Government"
+      ],
+      "government_bodies": [
+        "Competition Appeal Tribunal"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "Tribunal dismisses claim that the Welsh government\u2019s financial package breached competition rules"
+      ],
+      "confidence": "high",
+      "extraction_method": "openai"
+    }
+  ]
+}

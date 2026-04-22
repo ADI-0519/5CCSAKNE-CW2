@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Adam Mitula",
+    "Aron Webb",
+    "Audra Murray",
+    "Chris Parry",
+    "Daniel Bennett",
+    "Jackie Olden",
+    "Matthew Goodwin",
+    "Simon Dudley"
+  ],
+  "organizations": [
+    "Green Party",
+    "Reform UK",
+    "Hope Not Hate",
+    "The Guardian"
+  ],
+  "locations": [
+    "Manchester",
+    "Scotland",
+    "Tameside",
+    "Wales"
+  ],
+  "topics": [
+    "Politics",
+    "Race",
+    "Antisemitism"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Green Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,27 @@
+{
+  "people": [
+    "Miranda Biddle"
+  ],
+  "organizations": [
+    "HMRC",
+    "Home Office",
+    "The Independent Monitoring Authority for the Citizens\u2019 Rights Agreements",
+    "The3million",
+    "The National Audit Office",
+    "Oxford University"
+  ],
+  "locations": [],
+  "topics": [
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "HM Revenue and Customs",
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

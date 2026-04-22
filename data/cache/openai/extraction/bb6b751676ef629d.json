@@ -10,25 +10,24 @@
     "Torsten Bell"
   ],
   "organizations": [
-    "Conservative",
+    "Conservative Party",
     "Green Party",
-    "Labour",
     "Labour Party",
     "Liberal Democrats",
     "Plaid Cymru",
     "Reform UK",
-    "Scottish National Party (SNP)",
-    "Treasury",
+    "Scottish National Party",
     "Workers Party"
   ],
   "locations": [
     "England",
     "Gorton",
+    "Greater Manchester",
     "London",
-    "Manchester",
     "Scotland",
     "Wales",
-    "West Yorkshire"
+    "West Yorkshire",
+    "Westminster"
   ],
   "topics": [
     "Politics"
@@ -38,17 +37,16 @@
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
+    "Conservative Party",
     "Green Party",
-    "Labour",
     "Labour Party",
     "Liberal Democrats",
     "Plaid Cymru",
     "Reform UK",
-    "Scottish National Party (SNP)"
+    "Scottish National Party"
   ],
   "government_bodies": [
-    "Treasury"
+    "HM Treasury"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

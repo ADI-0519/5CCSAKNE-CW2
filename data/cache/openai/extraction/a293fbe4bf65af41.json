@@ -12,14 +12,14 @@
     "Green Party",
     "Labour Party",
     "Liberal Democrats",
-    "Resolution Foundation"
+    "Resolution Foundation",
+    "Competition and Markets Authority"
   ],
   "locations": [],
   "topics": [
     "Energy",
     "Economic Policy",
-    "Government Policy",
-    "Politics"
+    "Government Policy"
   ],
   "politicians": [
     "Rachel Reeves"
@@ -31,7 +31,7 @@
   ],
   "government_bodies": [
     "HM Treasury",
-    "Competition and Markets Authority"
+    "Office for National Statistics"
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",

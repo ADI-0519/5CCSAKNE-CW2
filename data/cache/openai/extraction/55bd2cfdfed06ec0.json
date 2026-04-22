@@ -1,0 +1,31 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Philip Barton"
+  ],
+  "organizations": [
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "No 10"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

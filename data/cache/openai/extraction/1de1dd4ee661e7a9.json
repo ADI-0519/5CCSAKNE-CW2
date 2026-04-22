@@ -1,0 +1,65 @@
+{
+  "people": [
+    "Chris Curtis",
+    "David Lammy",
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Yvette Cooper",
+    "Sir Olly Robbins",
+    "Sir Philip Barton",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Foreign, Commonwealth and Development Office",
+    "Downing Street",
+    "Foreign Office",
+    "Labour Party",
+    "The Guardian",
+    "The Times"
+  ],
+  "locations": [
+    "Ukraine"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Olly Robbins forced out",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-17",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer",
+        "Yvette Cooper"
+      ],
+      "government_bodies": [
+        "Foreign, Commonwealth and Development Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

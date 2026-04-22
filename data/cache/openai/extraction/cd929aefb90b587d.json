@@ -1,38 +1,41 @@
 {
   "people": [
-    "Andy Burnham",
-    "Beverley Knight",
     "Billy Bragg",
-    "Brian Eno",
-    "Charlotte Church",
+    "Andy Burnham",
+    "Zack Polanski",
+    "Dawn Butler",
+    "Sabby Dhalu",
+    "Donald Trump",
+    "Nigel Farage",
+    "Tommy Robinson",
     "Christopher Eccleston",
     "David Harewood",
-    "Dawn Butler",
-    "Donald Trump",
-    "James Acaster",
-    "Jessie Ware",
-    "Joy Crookes",
     "Lenny Henry",
-    "Lolly Adefope",
-    "Maxine Peake",
-    "Nigel Farage",
-    "Paloma Faith",
-    "Sabby Dhalu",
-    "Self Esteem",
     "Steve Coogan",
     "Toby Jones",
-    "Zack Polanski",
-    "Tommy Robinson"
+    "Lolly Adefope",
+    "Maxine Peake",
+    "Paloma Faith",
+    "Charlotte Church",
+    "Brian Eno",
+    "Beverley Knight",
+    "James Acaster",
+    "Self Esteem",
+    "Jessie Ware",
+    "Joy Crookes",
+    "UB40",
+    "Hot Chip"
   ],
   "organizations": [
+    "Together Alliance",
     "Green Party",
-    "Labour",
-    "Together Alliance"
+    "Labour Party",
+    "Stand Up to Racism"
   ],
   "locations": [
-    "England",
     "London",
     "Manchester",
+    "England",
     "Park Lane",
     "Trafalgar Square"
   ],
@@ -41,24 +44,44 @@
     "Parliament"
   ],
   "politicians": [
-    "Nigel Farage",
-    "Andy Burnham",
-    "Zack Polanski",
-    "Dawn Butler"
+    "Nigel Farage"
   ],
   "political_parties": [
     "Green Party",
-    "Labour"
+    "Labour Party"
   ],
-  "government_bodies": [],
+  "government_bodies": [
+    "Office for National Statistics"
+  ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "March against the far right",
+      "name": "Multicultural March against the Far Right",
       "type": "PolicyEvent",
       "date": "2026-03-28",
-      "location": "London"
+      "location": "London",
+      "policy_topics": [
+        "Politics of Hate"
+      ],
+      "political_actors": [
+        "Billy Bragg",
+        "Andy Burnham",
+        "Zack Polanski",
+        "Dawn Butler"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Green Party",
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "expected to be UK\u2019s biggest ever multicultural rally",
+        "March from Park Lane to Trafalgar Square"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
     }
   ]
 }

@@ -1,0 +1,57 @@
+{
+  "people": [
+    "Angus Robertson",
+    "Rhun ap Iorwerth",
+    "John Swinney",
+    "Keir Starmer",
+    "Eluned Morgan",
+    "Michelle O\u2019Neill",
+    "Nigel Farage",
+    "Michael Keating"
+  ],
+  "organizations": [
+    "Plaid Cymru",
+    "Scottish National Party",
+    "Sinn F\u00e9in",
+    "Labour Party",
+    "Conservative Party",
+    "Democratic Unionist Party",
+    "Reform UK"
+  ],
+  "locations": [
+    "Scotland",
+    "Wales",
+    "Northern Ireland",
+    "Belfast",
+    "Cardiff",
+    "Edinburgh",
+    "London"
+  ],
+  "topics": [
+    "Government Policy",
+    "Politics",
+    "Public Spending",
+    "Scottish independence"
+  ],
+  "politicians": [
+    "Angus Robertson",
+    "John Swinney",
+    "Keir Starmer",
+    "Eluned Morgan"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Scottish National Party",
+    "Plaid Cymru",
+    "Sinn F\u00e9in",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Scottish Government",
+    "Welsh Government",
+    "UK Government"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

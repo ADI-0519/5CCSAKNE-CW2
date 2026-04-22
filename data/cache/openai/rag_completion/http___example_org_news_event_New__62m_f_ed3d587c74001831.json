@@ -1,10 +1,12 @@
 {
-  "proposed_actors": [],
+  "proposed_actors": [
+    "Michael Gove"
+  ],
   "proposed_departments": [
     "Department for Levelling Up, Housing and Communities"
   ],
   "proposed_topics": [
-    "Economic Policy",
-    "Housing"
+    "Housing",
+    "Economic Policy"
   ]
 }

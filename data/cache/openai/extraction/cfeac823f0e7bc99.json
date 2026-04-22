@@ -4,9 +4,10 @@
     "Stella Creasy"
   ],
   "organizations": [
-    "Foreign Office",
+    "European Union",
     "Home Office",
-    "Labour"
+    "Foreign Office",
+    "Labour Movement for Europe"
   ],
   "locations": [
     "Brussels",
@@ -15,27 +16,47 @@
   "topics": [
     "Immigration",
     "Defence",
-    "Politics",
-    "Economic Policy"
+    "Government Policy"
   ],
   "politicians": [
     "Keir Starmer"
   ],
   "political_parties": [
-    "Labour"
+    "Labour Party"
   ],
   "government_bodies": [
-    "Foreign Office",
-    "Home Office"
+    "Home Office",
+    "Foreign, Commonwealth and Development Office"
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "EU Youth Experience Scheme Negotiations",
+      "name": "Youth Mobility Scheme Negotiations",
       "type": "GovernmentPolicyEvent",
       "date": "2026-03-29",
-      "location": "Brussels"
+      "location": "Brussels",
+      "policy_topics": [
+        "Youth Mobility",
+        "Migration Policy"
+      ],
+      "political_actors": [
+        "UK Government",
+        "EU Negotiators"
+      ],
+      "government_bodies": [
+        "Home Office",
+        "Foreign Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "EU offers UK \u2018emergency brake\u2019 on youth mobility scheme numbers"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
     }
   ]
 }

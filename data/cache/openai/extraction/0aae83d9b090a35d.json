@@ -1,0 +1,58 @@
+{
+  "people": [
+    "Zack Polanski",
+    "Keir Starmer",
+    "Sadiq Khan",
+    "Steve Reed"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour"
+  ],
+  "locations": [
+    "Israel",
+    "Lebanon",
+    "London",
+    "England"
+  ],
+  "topics": [
+    "Defence",
+    "Housing",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Launch of the Green party local election campaign",
+      "type": "PolicyEvent",
+      "date": "2026-04-09",
+      "location": "London",
+      "policy_topics": [
+        "Defence",
+        "Housing"
+      ],
+      "political_actors": [
+        "Zack Polanski"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Green Party"
+      ],
+      "evidence_spans": [
+        "Polanski has called on the government to tear up the UK-Israel trade agreement..."
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

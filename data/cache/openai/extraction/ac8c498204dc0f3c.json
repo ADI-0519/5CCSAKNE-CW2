@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Donald Trump",
+    "Keir Starmer",
+    "Rachel Reeves",
+    "Andrew Bailey",
+    "Scott Bessent"
+  ],
+  "organizations": [
+    "Sky News",
+    "HM Treasury",
+    "International Monetary Fund"
+  ],
+  "locations": [
+    "Iran",
+    "Washington",
+    "UK"
+  ],
+  "topics": [
+    "Government Policy",
+    "Energy",
+    "Immigration",
+    "Foreign policy"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "HM Treasury",
+    "Office for National Statistics"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

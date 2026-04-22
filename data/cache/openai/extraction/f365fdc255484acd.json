@@ -1,15 +1,17 @@
 {
   "people": [
-    "Keir Starmer",
-    "Prof Philip Murphy"
+    "Philip Murphy",
+    "Keir Starmer"
   ],
   "organizations": [
-    "Conservative",
     "Labour",
+    "Conservative Party",
     "Reform UK"
   ],
   "locations": [],
   "topics": [
+    "Brexit",
+    "European Union",
     "Government Policy",
     "Politics"
   ],
@@ -17,12 +19,12 @@
     "Keir Starmer"
   ],
   "political_parties": [
-    "Conservative Party",
     "Labour Party",
+    "Conservative Party",
     "Reform UK"
   ],
   "government_bodies": [],
   "sentiment": "Positive",
-  "article_type": "NewsArticle",
+  "article_type": "OpinionArticle",
   "events": []
 }

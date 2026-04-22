@@ -1,0 +1,56 @@
+{
+  "people": [
+    "Uran Ferizi",
+    "Shabana Mahmood",
+    "Stella Creasy",
+    "Suella Braverman",
+    "Ariseld Muca"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Home Office",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Comments on immigration by Shabana Mahmood",
+      "type": "ParliamentaryEvent",
+      "date": "2023-11",
+      "location": "Parliament",
+      "policy_topics": [
+        "Immigration"
+      ],
+      "political_actors": [
+        "Shabana Mahmood"
+      ],
+      "government_bodies": [
+        "Parliament"
+      ],
+      "parliamentary_body": "House of Commons",
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "Comments about the impact of failed asylum-seeking families"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

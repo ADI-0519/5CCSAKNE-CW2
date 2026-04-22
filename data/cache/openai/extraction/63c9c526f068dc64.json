@@ -1,0 +1,63 @@
+{
+  "people": [
+    "Sadiq Khan",
+    "Keir Starmer",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Parliament"
+  ],
+  "locations": [
+    "London",
+    "England",
+    "Iran",
+    "Ukraine"
+  ],
+  "topics": [
+    "Politics",
+    "Public Spending",
+    "Local Elections"
+  ],
+  "politicians": [
+    "Sadiq Khan",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Local elections",
+      "type": "ParliamentaryEvent",
+      "date": "2026-05-07",
+      "location": "London",
+      "policy_topics": [
+        "Local Politics",
+        "Elections"
+      ],
+      "political_actors": [
+        "Sadiq Khan",
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "Parliament"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "Labour expected to perform very poorly at elections",
+        "Khan warns about protest votes for other parties"
+      ],
+      "confidence": "high",
+      "extraction_method": "hybrid"
+    }
+  ]
+}

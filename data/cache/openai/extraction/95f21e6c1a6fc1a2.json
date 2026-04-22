@@ -1,0 +1,45 @@
+{
+  "people": [
+    "Angela Rayner",
+    "Chris Curtis",
+    "Darren Jones",
+    "David Lammy",
+    "Keir Starmer",
+    "Louise Haigh",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Good Growth Foundation",
+    "Labour",
+    "No 10",
+    "Downtown Street"
+  ],
+  "locations": [
+    "Westminster",
+    "North Sea",
+    "Pall Mall",
+    "Portcullis House"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Energy",
+    "Taxation",
+    "Parliament"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "David Lammy",
+    "Keir Starmer",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Department of Health and Social Care",
+    "Office for National Statistics"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -3,14 +3,12 @@
     "Suella Braverman",
     "Lisa Nandy",
     "Mark Bullingham",
-    "Nigel Farage",
     "Dame Tracey Crouch",
-    "Alex"
+    "Nigel Farage"
   ],
   "organizations": [
     "Reform UK",
     "Football Association",
-    "Conservative",
     "PA Media"
   ],
   "locations": [
@@ -18,9 +16,8 @@
     "Ipswich"
   ],
   "topics": [
-    "Politics",
-    "Football",
-    "Diversity and Inclusion"
+    "Government Policy",
+    "Football Politics"
   ],
   "politicians": [
     "Suella Braverman",
@@ -28,10 +25,31 @@
   ],
   "political_parties": [
     "Reform UK",
-    "Conservative"
+    "Conservative Party"
   ],
   "government_bodies": [],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Discussion on FA's diversity policies",
+      "type": "PolicyEvent",
+      "date": null,
+      "location": "England",
+      "policy_topics": [
+        "Diversity and Inclusion"
+      ],
+      "political_actors": [
+        "Suella Braverman"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Reform UK"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "Angus Robertson",
+    "David Phillips",
+    "John Swinney",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party",
+    "Institute for Fiscal Studies",
+    "CBI Scotland"
+  ],
+  "locations": [
+    "Edinburgh",
+    "Scotland"
+  ],
+  "topics": [
+    "Taxation",
+    "Housing",
+    "Healthcare",
+    "Politics"
+  ],
+  "politicians": [
+    "John Swinney",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "government_bodies": [
+    "Scottish Treasury",
+    "Institute for Fiscal Studies"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

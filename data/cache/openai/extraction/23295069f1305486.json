@@ -1,24 +1,25 @@
 {
   "people": [
-    "Boris Johnson",
     "Keir Starmer",
-    "David Cameron",
     "Rishi Sunak",
-    "Theresa May",
-    "Tony Blair"
+    "Boris Johnson",
+    "Tony Blair",
+    "David Cameron",
+    "Theresa May"
   ],
   "organizations": [
     "Downing Street",
     "Labour",
     "Network Rail",
     "Nuclear Decommissioning Authority",
-    "HS2"
+    "HS2",
+    "Foreign, Commonwealth and Development Office"
   ],
   "locations": [
     "Brazil",
     "India",
-    "Egypt",
     "Johannesburg",
+    "Egypt",
     "Dubai"
   ],
   "topics": [
@@ -34,7 +35,7 @@
   ],
   "government_bodies": [
     "Downing Street",
-    "Foreign, Commonwealth and Development Office"
+    "Office for National Statistics"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

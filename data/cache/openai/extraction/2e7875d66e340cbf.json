@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Ben Barry",
+    "George Robertson",
+    "Keir Starmer",
+    "Matthew Savill"
+  ],
+  "organizations": [
+    "Ministry of Defence",
+    "International Institute for Strategic Studies",
+    "Royal United Services Institute",
+    "HM Treasury"
+  ],
+  "locations": [
+    "Gulf",
+    "Ukraine",
+    "Europe",
+    "Germany"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Politics",
+    "Taxation"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Ministry of Defence",
+    "HM Treasury"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

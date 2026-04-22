@@ -1,24 +1,23 @@
 {
   "people": [
     "Mandira Moitra Sarkar",
-    "Julian Denis",
     "James Nolan",
-    "Theresa May",
-    "Keir Starmer",
-    "Fizza Qureshi",
-    "Alex Pretti",
-    "Renee Good",
-    "Kevin Barker",
+    "Julian Denis",
     "Seema Syeda",
-    "Tanya Goldfarb"
+    "Fizza Qureshi",
+    "Kevin Barker",
+    "Keir Starmer",
+    "Nigella Lawson",
+    "Jamie Oliver",
+    "Renee Good",
+    "Alex Pretti"
   ],
   "organizations": [
     "Home Office",
-    "Surrey police",
     "Joint Council for the Welfare of Immigrants",
-    "Migrants' Rights Network (MRN)",
-    "Labour",
-    "Conservative",
+    "Migrants' Rights Network",
+    "Conservative Party",
+    "Labour Party",
     "Reform UK"
   ],
   "locations": [
@@ -27,22 +26,25 @@
     "London",
     "California",
     "Tanzania",
-    "Lewisham"
+    "Lewisham",
+    "Broadway Market"
   ],
   "topics": [
     "Immigration",
+    "Government Policy",
     "Public Spending"
   ],
   "politicians": [
     "Keir Starmer"
   ],
   "political_parties": [
-    "Labour",
-    "Conservative",
+    "Conservative Party",
+    "Labour Party",
     "Reform UK"
   ],
   "government_bodies": [
-    "Home Office"
+    "Home Office",
+    "Parliament"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

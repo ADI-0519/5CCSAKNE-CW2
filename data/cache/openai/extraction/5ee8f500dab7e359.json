@@ -9,9 +9,10 @@
   ],
   "organizations": [
     "Reform UK",
-    "Inside Housing",
     "Grenfell United",
-    "Fire Brigades Union"
+    "Fire Brigades Union",
+    "Inside Housing",
+    "Homes England"
   ],
   "locations": [
     "England"
@@ -33,25 +34,27 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Simon Dudley sacked from Reform UK",
+      "name": "Sacking of Simon Dudley",
       "type": "GovernmentPolicyEvent",
       "date": "2026-04-02",
-      "location": "England",
+      "location": null,
       "policy_topics": [
         "Housing",
         "Government Policy"
       ],
       "political_actors": [
-        "Simon Dudley",
+        "Keir Starmer",
         "Nigel Farage",
-        "Keir Starmer"
+        "Richard Tice"
       ],
       "government_bodies": [],
       "parliamentary_body": null,
       "political_parties": [
         "Reform UK"
       ],
-      "evidence_spans": [],
+      "evidence_spans": [
+        "Simon Dudley fired after his comments were condemned by prime minister and families of fire victims."
+      ],
       "confidence": "high",
       "extraction_method": "heuristic"
     }

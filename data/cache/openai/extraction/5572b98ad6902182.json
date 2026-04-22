@@ -5,6 +5,7 @@
     "Sarah Jones"
   ],
   "organizations": [
+    "Conservative",
     "Home Office",
     "Youth Endowment Fund"
   ],
@@ -17,12 +18,40 @@
   ],
   "politicians": [],
   "political_parties": [
-    "Conservative"
+    "Conservative Party"
   ],
   "government_bodies": [
     "Home Office"
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Hyper-targeted scheme to help at-risk schools",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-06",
+      "location": "England",
+      "policy_topics": [
+        "Knife crime",
+        "Education"
+      ],
+      "political_actors": [
+        "Chris Philp",
+        "Sarah Jones"
+      ],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Conservative Party"
+      ],
+      "evidence_spans": [
+        "Home Office will use mapping technology and crime data",
+        "The safety in and around schools partnership will identify the schools most in need of assistance"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

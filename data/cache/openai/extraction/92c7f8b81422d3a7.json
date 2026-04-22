@@ -1,0 +1,68 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Olivia Bailey",
+    "John Nash",
+    "Liz Kendall",
+    "Ian Cheshire"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Meta",
+    "Google",
+    "Ofcom",
+    "House of Lords",
+    "Downing Street"
+  ],
+  "locations": [],
+  "topics": [
+    "Internet safety",
+    "Government Policy",
+    "Education"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Ofcom",
+    "House of Lords",
+    "Downing Street"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Meeting on internet safety",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-16",
+      "location": "Downing Street",
+      "policy_topics": [
+        "Internet safety",
+        "Children's wellbeing"
+      ],
+      "political_actors": [
+        "Keir Starmer",
+        "Olivia Bailey"
+      ],
+      "government_bodies": [
+        "Downing Street"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Conservative Party"
+      ],
+      "evidence_spans": [
+        "Starmer told executives",
+        "pressure has mounted on the prime minister"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

@@ -8,22 +8,42 @@
     "Australia"
   ],
   "topics": [
-    "Government Policy",
     "Education"
   ],
   "politicians": [
     "Keir Starmer"
   ],
   "political_parties": [],
-  "government_bodies": [],
+  "government_bodies": [
+    "Department for Education"
+  ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Government Digital Wellbeing Consultation",
+      "name": "Digital Wellbeing Consultation",
       "type": "PolicyEvent",
-      "date": "2026-05-26",
-      "location": null
+      "date": "2026-03-29",
+      "location": null,
+      "policy_topics": [
+        "Social media",
+        "Addictive content"
+      ],
+      "political_actors": [
+        "Keir Starmer",
+        "Bridget Phillipson"
+      ],
+      "government_bodies": [
+        "Department for Education"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "The government\u2019s consultation on use of social media would look closely at how addictive features could be tackled.",
+        "A ban on addictive algorithms for younger users was 'something we\u2019re considering through that wider consultation about young people overall.'"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
     }
   ]
 }

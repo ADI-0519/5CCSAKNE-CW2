@@ -1,0 +1,57 @@
+{
+  "people": [
+    "Kezia Dugdale",
+    "Jenny Gilruth",
+    "Jeremy Corbyn",
+    "JK Rowling",
+    "Ruth Davidson"
+  ],
+  "organizations": [
+    "Stonewall",
+    "Scottish Labour",
+    "Scottish National Party",
+    "Conservative Party",
+    "Fabian Review"
+  ],
+  "locations": [
+    "Edinburgh",
+    "Scotland",
+    "Italy"
+  ],
+  "topics": [
+    "LGBTQ+ rights",
+    "Government Policy",
+    "Politics",
+    "Transgender"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour Party",
+    "Scottish National Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Kezia Dugdale appointed chair of Stonewall",
+      "type": "PolicyEvent",
+      "date": "2026-04-19",
+      "location": "Edinburgh",
+      "policy_topics": [
+        "LGBTQ+ rights",
+        "Transgender"
+      ],
+      "political_actors": [
+        "Kezia Dugdale"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

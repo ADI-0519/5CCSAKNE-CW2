@@ -8,17 +8,19 @@
     "Joint Expeditionary Force"
   ],
   "locations": [
-    "Cyprus",
     "Helsinki",
+    "Cyprus",
+    "Iran",
+    "Chagos Islands",
+    "Diego Garcia",
     "Lebanon",
-    "Indian Ocean",
-    "Chagos Islands"
+    "Russia"
   ],
   "topics": [
     "Defence",
     "Government Policy",
-    "Energy",
-    "Politics"
+    "Politics",
+    "Energy"
   ],
   "politicians": [
     "Keir Starmer"
@@ -29,5 +31,24 @@
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Joint Expeditionary Force leaders\u2019 summit",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-26",
+      "location": "Helsinki",
+      "policy_topics": [
+        "Defence"
+      ],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

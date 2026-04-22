@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Matt Forde",
+    "Nigel Farage",
+    "Shabana Mahmood"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Reform UK",
+    "Green New Deal Rising"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [
+    "Nigel Farage",
+    "Shabana Mahmood"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

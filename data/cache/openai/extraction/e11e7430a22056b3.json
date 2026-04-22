@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Peter Mandelson",
+    "Keir Starmer",
+    "Jeffrey Epstein"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "House of Commons",
+    "Labour",
+    "Conservative Party",
+    "United Kingdom Security Vetting (UKSV)"
+  ],
+  "locations": [
+    "London",
+    "York"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "House of Commons"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

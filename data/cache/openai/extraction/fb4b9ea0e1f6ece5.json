@@ -1,0 +1,79 @@
+{
+  "people": [
+    "Boris Johnson",
+    "Darren Jones",
+    "Ed Davey",
+    "Emily Thornberry",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Olly Robbins",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "House of Commons",
+    "Labour",
+    "Liberal Democrats",
+    "Conservative",
+    "Green Party",
+    "Reform UK"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Ed Davey",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "House of Commons"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Commons privileges committee inquiry",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-17",
+      "location": null,
+      "policy_topics": [
+        "Parliament",
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Ed Davey",
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "House of Commons"
+      ],
+      "parliamentary_body": "House of Commons",
+      "political_parties": [
+        "Liberal Democrats",
+        "Labour"
+      ],
+      "evidence_spans": [
+        "Commons privileges inquiry regarding Keir Starmer"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

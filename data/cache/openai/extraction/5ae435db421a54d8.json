@@ -1,32 +1,30 @@
 {
   "people": [
-    "Boris Johnson",
     "Keir Starmer",
     "Kemi Badenoch",
     "Nigel Farage",
-    "Zack Polanski"
+    "Zack Polanski",
+    "Boris Johnson"
   ],
   "organizations": [
-    "Conservative",
-    "Green Party",
-    "Labour",
-    "Liberal Democrats",
-    "Plaid Cymru",
+    "Labour Party",
+    "Conservative Party",
     "Reform UK",
-    "SNP",
     "Scottish National Party",
-    "Sinn F\u00e9in"
+    "Plaid Cymru",
+    "Green Party",
+    "Liberal Democrats"
   ],
   "locations": [
-    "England",
     "Scotland",
     "Wales",
-    "London",
-    "Northern Ireland"
+    "England",
+    "Northern Ireland",
+    "London"
   ],
   "topics": [
-    "Politics",
-    "Parliament"
+    "Parliament",
+    "Politics"
   ],
   "politicians": [
     "Keir Starmer",
@@ -34,20 +32,47 @@
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
-    "Green Party",
-    "Labour",
-    "Liberal Democrats",
-    "Plaid Cymru",
+    "Labour Party",
+    "Conservative Party",
     "Reform UK",
-    "SNP",
     "Scottish National Party",
-    "Sinn F\u00e9in"
+    "Plaid Cymru",
+    "Green Party",
+    "Liberal Democrats"
   ],
   "government_bodies": [
     "Parliament"
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Local Elections",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-05-07",
+      "location": "Scotland, Wales, England",
+      "policy_topics": [],
+      "political_actors": [
+        "Reform UK",
+        "SNP",
+        "Plaid Cymru",
+        "Labour",
+        "Conservative Party",
+        "Green Party"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Conservative Party",
+        "Reform UK",
+        "Scottish National Party",
+        "Plaid Cymru",
+        "Green Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

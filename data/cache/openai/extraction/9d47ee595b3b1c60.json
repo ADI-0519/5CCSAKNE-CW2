@@ -1,0 +1,40 @@
+{
+  "people": [
+    "Angela Rayner",
+    "Jonathan Portes",
+    "Max Wilkinson",
+    "Shabana Mahmood",
+    "Stella Creasy",
+    "Sunder Katwala"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour",
+    "The Guardian",
+    "British Future"
+  ],
+  "locations": [
+    "King's College London",
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Economic Policy",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Angela Rayner"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Home Office",
+    "Treasury",
+    "Office for National Statistics"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

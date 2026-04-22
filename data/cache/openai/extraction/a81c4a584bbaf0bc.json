@@ -1,0 +1,46 @@
+{
+  "people": [
+    "Alex Burghart",
+    "David Lammy",
+    "Ed Davey",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Liz Kendall",
+    "Oliver Robbins",
+    "Peter Mandelson",
+    "Robert Jenrick"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign Office",
+    "Labour",
+    "Liberal Democrats",
+    "Parliament",
+    "Sky News",
+    "Treasury"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Ed Davey",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

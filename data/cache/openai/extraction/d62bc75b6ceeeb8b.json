@@ -1,0 +1,29 @@
+{
+  "people": [
+    "Vanderbilt McIntosh",
+    "Hetticia McIntosh",
+    "Rev Clive Foster"
+  ],
+  "organizations": [
+    "Home Office",
+    "National Audit Office",
+    "Windrush Defenders Legal CIC"
+  ],
+  "locations": [
+    "Manchester",
+    "St Lucia"
+  ],
+  "topics": [
+    "Immigration",
+    "Public Spending"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office",
+    "National Audit Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,54 @@
+{
+  "people": [
+    "Andrew Webley",
+    "Ben Delo",
+    "Christopher Harborne",
+    "Daisy Cooper",
+    "Fraser Nelson",
+    "Giorgia Meloni",
+    "Kwasi Kwarteng",
+    "Liz Truss",
+    "Matthew Goodwin",
+    "Narinder Kaur",
+    "Nigel Farage",
+    "Paul Withers",
+    "Rachel Reeves",
+    "Richard Tice",
+    "Zia Yusuf"
+  ],
+  "organizations": [
+    "GB News",
+    "HM Revenue and Customs",
+    "Liberal Democrats",
+    "No 10",
+    "Reform UK",
+    "Smarter Web",
+    "Times Radio"
+  ],
+  "locations": [
+    "Bristol",
+    "London",
+    "Stack"
+  ],
+  "topics": [
+    "Politics",
+    "Public Spending",
+    "Parliament"
+  ],
+  "politicians": [
+    "Nigel Farage",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Revenue and Customs",
+    "No 10"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

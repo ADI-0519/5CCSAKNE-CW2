@@ -1,0 +1,48 @@
+{
+  "people": [
+    "Alex Norris",
+    "Imran Hussain",
+    "Chris Philp",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "Home Office",
+    "Refugee Council",
+    "Labour",
+    "Reform UK"
+  ],
+  "locations": [
+    "England",
+    "Scotland",
+    "Northern Ireland",
+    "Bangor",
+    "Aberdeen",
+    "Cheltenham",
+    "Wolverhampton",
+    "Crewe",
+    "Heathrow",
+    "Halifax",
+    "St Helens",
+    "Telford",
+    "Oxfordshire",
+    "Rotherham"
+  ],
+  "topics": [
+    "Immigration",
+    "Housing"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Chris Philp"
+  ],
+  "political_parties": [
+    "Labour",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

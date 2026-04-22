@@ -2,19 +2,19 @@
   "people": [
     "Polly Billington",
     "Keir Starmer",
-    "Gordon Brown",
     "Ed Davey"
   ],
   "organizations": [
-    "Labour",
-    "Conservative",
+    "Labour Party",
+    "Conservative Party",
     "Liberal Democrats",
     "Reform UK",
     "Scottish National Party",
-    "Treasury"
+    "HM Treasury"
   ],
   "locations": [
     "East Thanet",
+    "Hormuz",
     "Easter"
   ],
   "topics": [
@@ -24,19 +24,19 @@
     "Parliament"
   ],
   "politicians": [
-    "Keir Starmer",
-    "Ed Davey"
+    "Ed Davey",
+    "Keir Starmer"
   ],
   "political_parties": [
-    "Labour",
-    "Conservative",
+    "Labour Party",
+    "Conservative Party",
     "Liberal Democrats",
     "Reform UK",
     "Scottish National Party"
   ],
   "government_bodies": [
-    "Parliament",
-    "Treasury"
+    "HM Treasury",
+    "Parliament"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

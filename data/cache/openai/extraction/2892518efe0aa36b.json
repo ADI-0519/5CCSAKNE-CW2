@@ -1,0 +1,54 @@
+{
+  "people": [
+    "Wes Streeting",
+    "Nigel Farage",
+    "Rachel Reeves",
+    "Yvette Cooper",
+    "John Healey",
+    "Richard Tice",
+    "Sebastian Rees",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "Labour",
+    "Plaid Cymru",
+    "Reform UK",
+    "Green Party",
+    "SNP",
+    "Institute for Public Policy Research",
+    "Sunday Times"
+  ],
+  "locations": [
+    "Wales",
+    "Scotland",
+    "England",
+    "Europe"
+  ],
+  "topics": [
+    "Healthcare",
+    "Politics",
+    "Public Spending",
+    "Taxation"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Wes Streeting",
+    "Nigel Farage",
+    "Rachel Reeves",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour",
+    "Plaid Cymru",
+    "Reform UK",
+    "Green Party",
+    "Scottish National Party"
+  ],
+  "government_bodies": [
+    "Department of Health and Social Care",
+    "Office for National Statistics"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

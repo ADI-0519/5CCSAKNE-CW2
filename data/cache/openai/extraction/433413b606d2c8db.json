@@ -1,12 +1,13 @@
 {
   "people": [
-    "Catherine Blaiklock",
     "Chris Parry",
+    "Catherine Blaiklock",
     "David Lammy",
     "Rabbi Herschel Gluck"
   ],
   "organizations": [
-    "Reform UK"
+    "Reform UK",
+    "Hatzola"
   ],
   "locations": [
     "Hampshire",
@@ -17,6 +18,7 @@
     "Antisemitism"
   ],
   "politicians": [
+    "Chris Parry",
     "David Lammy"
   ],
   "political_parties": [

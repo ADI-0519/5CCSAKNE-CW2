@@ -4,22 +4,47 @@
     "Tim Bonner"
   ],
   "organizations": [
-    "Labour"
+    "Labour",
+    "League Against Cruel Sports",
+    "Countryside Alliance"
   ],
   "locations": [
     "England",
     "Wales"
   ],
   "topics": [
+    "Animal Welfare",
     "Hunting",
-    "Animal welfare"
+    "Government Policy"
   ],
   "politicians": [],
   "political_parties": [
-    "Labour"
+    "Labour Party"
   ],
   "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Public consultation on ban of trail hunting",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-26",
+      "location": "England and Wales",
+      "policy_topics": [
+        "Animal Welfare",
+        "Hunting"
+      ],
+      "political_actors": [
+        "Labour Party"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

@@ -7,30 +7,34 @@
   ],
   "organizations": [
     "Reform UK",
-    "Conservative",
-    "Berkley Group",
+    "Grenfell United",
+    "Grenfell Next of Kin",
     "Fire Brigades Union",
+    "Berkley Group",
+    "Ebbsfleet Development Corporation",
+    "Inside Housing",
     "Homes England",
-    "Inside Housing"
+    "Office for National Statistics"
   ],
   "locations": [
-    "England",
-    "London"
+    "London",
+    "England"
   ],
   "topics": [
     "Housing",
-    "Politics",
-    "Immigration"
+    "Government Policy"
   ],
   "politicians": [
     "Keir Starmer",
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
+    "Conservative Party",
     "Reform UK"
   ],
-  "government_bodies": [],
+  "government_bodies": [
+    "Office for National Statistics"
+  ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
   "events": []

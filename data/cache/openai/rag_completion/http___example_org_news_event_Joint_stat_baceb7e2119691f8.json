@@ -1,7 +1,10 @@
 {
   "proposed_actors": [],
-  "proposed_departments": [],
+  "proposed_departments": [
+    "Foreign, Commonwealth & Development Office"
+  ],
   "proposed_topics": [
+    "Defence",
     "Government Policy"
   ]
 }

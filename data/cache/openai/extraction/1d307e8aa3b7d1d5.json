@@ -1,0 +1,46 @@
+{
+  "people": [
+    "Andrew Griffith",
+    "Prof Anand Menon",
+    "Donald Trump",
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK",
+    "House of Lords",
+    "Parliament",
+    "Office for National Statistics"
+  ],
+  "locations": [
+    "England",
+    "Scotland",
+    "Wales"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "House of Lords",
+    "Office for National Statistics",
+    "Parliament"
+  ],
+  "sentiment": "Positive",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

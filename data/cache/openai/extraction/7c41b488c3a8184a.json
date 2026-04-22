@@ -10,8 +10,8 @@
   "locations": [
     "Gulf",
     "Iran",
-    "Saudi Arabia",
     "Qatar",
+    "Saudi Arabia",
     "Bahrain",
     "Kuwait"
   ],
@@ -29,5 +29,31 @@
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "UK sends more military support to Gulf",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-31",
+      "location": "Gulf",
+      "policy_topics": [
+        "Defence"
+      ],
+      "political_actors": [
+        "John Healey",
+        "Donald Trump"
+      ],
+      "government_bodies": [
+        "Ministry of Defence"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "Deployment of 1,000 troops to the Gulf",
+        "Sending additional Typhoon jets to Qatar",
+        "Deployment of Sky Sabre system to Gulf nations"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

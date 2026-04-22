@@ -1,0 +1,30 @@
+{
+  "people": [
+    "David Galan",
+    "Donald Trump",
+    "Ian Taylor",
+    "Jai Patel",
+    "Kwasi Kwarteng",
+    "Nigel Farage",
+    "Paul Withers"
+  ],
+  "organizations": [
+    "GB News",
+    "Reform UK"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

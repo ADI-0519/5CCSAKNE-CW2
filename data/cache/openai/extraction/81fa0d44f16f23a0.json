@@ -1,0 +1,51 @@
+{
+  "people": [
+    "Ann Watkins",
+    "Charlie Falconer",
+    "Derry Irvine",
+    "Dorothy Phillips",
+    "Gerald Hayden Phillips",
+    "Hayden Phillips",
+    "Jack Straw",
+    "Jim Hacker",
+    "Neil MacGregor",
+    "Peter Brooke",
+    "Roy Jenkins",
+    "Laura Grenfell"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Department for Culture, Media and Sport",
+    "European Commission",
+    "Home Office",
+    "House of Lords",
+    "National Theatre"
+  ],
+  "locations": [
+    "Luton",
+    "Cambridge",
+    "Kensington Palace",
+    "Windsor Castle",
+    "Salisbury",
+    "Yale"
+  ],
+  "topics": [
+    "Public Spending",
+    "Parliament",
+    "Education",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Cabinet Office",
+    "Department for Culture, Media and Sport",
+    "Downing Street",
+    "HM Treasury",
+    "Home Office",
+    "House of Lords"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

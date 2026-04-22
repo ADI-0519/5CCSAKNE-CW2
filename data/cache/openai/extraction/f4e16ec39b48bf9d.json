@@ -1,0 +1,64 @@
+{
+  "people": [
+    "Donald Trump",
+    "Jeremy Corbyn",
+    "Keir Starmer",
+    "Nigel Farage",
+    "Steve Reed",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "locations": [
+    "Clacton",
+    "Essex",
+    "London",
+    "Wales"
+  ],
+  "topics": [
+    "Politics",
+    "Housing",
+    "Antisemitism"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Local elections",
+      "type": "PolicyEvent",
+      "date": "2026-05-07",
+      "location": "England",
+      "policy_topics": [],
+      "political_actors": [
+        "Steve Reed",
+        "Nigel Farage",
+        "Zack Polanski"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Green Party",
+        "Reform UK"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}
