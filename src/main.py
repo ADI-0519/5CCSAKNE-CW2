@@ -27,6 +27,7 @@ from src.wikidata_to_rdf import convert_wikidata_to_rdf
 INSTANCE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "new_kg.ttl"
 WIKIDATA_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "wikidata_kg.ttl"
 PROTOTYPE_KG_PATH = Path(CONFIG["GENERATED_KG_DIR"]) / "prototype_kg.ttl"
+LATEST_COMPLETED_KG_PATH = Path("output/completed_kg.ttl")
 LATEST_QUERY_RESULTS_PATH = Path("output/query_results.json")
 LATEST_VALIDATION_RESULTS_PATH = Path("output/validation_results.json")
 LATEST_COMPLETION_AUDIT_PATH = Path("output/completion_audit.json")
@@ -172,7 +173,6 @@ def main():
     print("[PIPELINE] Stage 6: Convert KG-ready records to RDF instances")
     instance_graph = convert_json_to_rdf(kg_records)
     save_rdf(instance_graph, INSTANCE_KG_PATH)
-    save_rdf(instance_graph, f"output/{timestamp}_instance_kg.ttl")
 
     # stage 7: map Wikidata to RDF
     print("[PIPELINE] Stage 7: Map optional Wikidata enrichment to RDF")
@@ -180,7 +180,6 @@ def main():
     if wikidata_data is not None:
         wikidata_graph = convert_wikidata_to_rdf(wikidata_data)
         save_rdf(wikidata_graph, WIKIDATA_KG_PATH)
-        save_rdf(wikidata_graph, f"output/{timestamp}_wikidata_kg.ttl")
     else:
         print("[PIPELINE] No Wikidata data to map (skipped)")
 
@@ -188,31 +187,21 @@ def main():
     print("[PIPELINE] Stage 8: Merge ontology, source-derived instances, and enrichment triples")
     prototype_graph = merge_graphs(ontology_graph, instance_graph, wikidata_graph)
     save_rdf(prototype_graph, PROTOTYPE_KG_PATH)
-    save_rdf(prototype_graph, f"output/{timestamp}_prototype_kg.ttl")
 
     # stage 9: enrich/complete the KG
     print("[PIPELINE] Stage 9: Enrich the KG")
-    timestamped_completion_audit = Path("output") / f"{timestamp}_completion_audit.json"
     completed_graph = enrich_graph(
         prototype_graph,
         audit_log_path=LATEST_COMPLETION_AUDIT_PATH,
     )
     save_rdf(completed_graph, COMPLETED_KG_PATH)
-    save_rdf(completed_graph, f"output/{timestamp}_completed_kg.ttl")
-    if LATEST_COMPLETION_AUDIT_PATH.exists():
-        ensure_parent(timestamped_completion_audit)
-        timestamped_completion_audit.write_text(
-            LATEST_COMPLETION_AUDIT_PATH.read_text(encoding="utf-8"),
-            encoding="utf-8",
-        )
+    save_rdf(completed_graph, LATEST_COMPLETED_KG_PATH)
 
     # stage 10: run SPARQL competency queries
     print("[PIPELINE] Stage 10: Run competency queries")
     query_graph = load_kg(COMPLETED_KG_PATH)
     query_results = execute_queries(query_graph, load_query_definitions())
-    timestamped_results = Path("output") / f"{timestamp}_query_results.json"
     save_results(query_results, LATEST_QUERY_RESULTS_PATH)
-    save_results(query_results, timestamped_results)
 
     answered_queries = sum(1 for result in query_results if result["row_count"] > 0)
     print(
@@ -223,9 +212,7 @@ def main():
     # stage 11: run graph validation checks
     print("[PIPELINE] Stage 11: Run graph validation checks")
     validation_report = execute_validation(query_graph)
-    timestamped_validation = Path("output") / f"{timestamp}_validation_results.json"
     save_validation_report(validation_report, LATEST_VALIDATION_RESULTS_PATH)
-    save_validation_report(validation_report, timestamped_validation)
     print(
         f"[PIPELINE] Validation: {validation_report['rule_count']} rules checked, "
         f"{validation_report['failed_rule_count']} failed, "
@@ -235,9 +222,7 @@ def main():
     # Stage 12: Save headline KG summary metrics
     print("[PIPELINE] Stage 12: Save KG summary metrics")
     summary_report = build_summary(completed_graph, kg_records, validation_report)
-    timestamped_summary = Path("output") / f"{timestamp}_kg_summary.json"
     save_summary(summary_report, LATEST_KG_SUMMARY_PATH)
-    save_summary(summary_report, timestamped_summary)
 
     print("[PIPELINE] Done.")
 
