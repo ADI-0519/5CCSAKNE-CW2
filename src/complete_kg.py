@@ -540,6 +540,8 @@ def enrich_with_rag(graph, audit_index=None):
             for name in result.get("proposed_departments", []):
                 if not name or not (slug_terms(name) & context_terms):
                     continue
+                if not looks_like_official_body_name(name):
+                    continue
                 body_kind = classify_official_body_kind(name)
                 if body_kind == "parliamentary_body":
                     continue
