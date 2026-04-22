@@ -127,7 +127,7 @@ def build_ontology() -> Graph:
         )
     )
 
-    # Event layer
+    # event layer
     add_class(
         graph,
         NEWS.PolicyEvent,
@@ -164,7 +164,7 @@ def build_ontology() -> Graph:
         NEWS.GovernmentPolicyEvent,
     )
 
-    # Actor and institution layer
+    # actor and institution layer
     add_class(
         graph,
         NEWS.PoliticalActor,
@@ -208,7 +208,7 @@ def build_ontology() -> Graph:
         NEWS.OfficialBody,
     )
 
-    # Topic and place layer
+    # topic and place layer
     add_class(
         graph,
         NEWS.PolicyTopic,
@@ -224,7 +224,7 @@ def build_ontology() -> Graph:
         CORE.Place,
     )
 
-    # Reporting and provenance layer
+    # reporting and provenance layer
     add_class(
         graph,
         NEWS.NewsArticle,
@@ -275,7 +275,7 @@ def build_ontology() -> Graph:
         NEWS.OfficialSourceRecord,
     )
 
-    # Core object properties
+    # core object properties
     add_object_property(
         graph,
         NEWS.concernsPolicyTopic,
@@ -379,7 +379,7 @@ def build_ontology() -> Graph:
         NEWS.SourceRecord,
     )
 
-    # Datatype properties
+    # datatype properties
     add_datatype_property(
         graph,
         NEWS.occursOnDate,

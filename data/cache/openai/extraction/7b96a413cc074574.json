@@ -1,0 +1,51 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "David Phillips",
+    "Nigel Farage",
+    "Humza Yousaf",
+    "John Swinney",
+    "Linda Holt",
+    "Malcolm Offord",
+    "Nathan Gill",
+    "Rachael Wright",
+    "Senga Beresford",
+    "Stuart Niven",
+    "Sarah Pochin",
+    "Tommy Robinson"
+  ],
+  "organizations": [
+    "Labour",
+    "Reform UK",
+    "Institute for Fiscal Studies",
+    "BBC"
+  ],
+  "locations": [
+    "Dundee City West",
+    "Fife North East",
+    "Holyrood",
+    "Perthshire",
+    "Scotland",
+    "Galloway and West Dumfries",
+    "Stirling"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament",
+    "Taxation"
+  ],
+  "politicians": [
+    "John Swinney",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

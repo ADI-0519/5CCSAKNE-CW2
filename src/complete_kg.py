@@ -1,13 +1,21 @@
 import argparse
+import json
 import re
 from datetime import date
 from pathlib import Path
 
-from rdflib import RDF, Graph
+from rdflib import RDF, Graph, Literal
 
 from src.build_ontology import NEWS, SCHEMA
 from src.config import CONFIG
 from src.data_normalisation import normalise_name
+from src.domain_knowledge import (
+    canonicalise_government_body_name,
+    classify_official_body_kind,
+    is_known_political_party_name,
+    looks_like_official_body_name,
+)
+from src.json_to_rdf import organisation_uri, person_uri
 from src.openai_client import (
     build_cache_path,
     load_cache_payload,
@@ -17,6 +25,7 @@ from src.openai_client import (
 from src.run_queries import load_kg
 
 DEFAULT_OUTPUT_PATH = Path("kg/generated/completed_kg.ttl")
+DEFAULT_AUDIT_LOG_PATH = Path("output/completion_audit.json")
 DEFAULT_INPUT_KG_CANDIDATES = (
     Path("kg/generated/prototype_kg.ttl"),
     Path("kg/generated/new_kg.ttl"),
@@ -69,8 +78,8 @@ RAG_INSTRUCTIONS = (
     "You are completing a UK politics knowledge graph. Given a policy event and "
     "retrieved source context, propose missing property values using only the "
     "declared vocabulary. Do not invent names not supported by the context. "
-    "proposed_actors must be named individual politicians or political parties only, "
-    "not departments, roles, or generic labels such as 'UK Government'. "
+    "proposed_actors must be named individual politicians only, "
+    "not political parties, departments, roles, or generic labels such as 'UK Government'. "
     "proposed_departments must be named UK government departments or official bodies only. "
     "proposed_topics must be chosen only from this list: "
     + str(sorted(CONFIG["TOPIC_GROUPS"].keys()))
@@ -78,11 +87,11 @@ RAG_INSTRUCTIONS = (
     "Prefer specific topics over Government Policy, which should only be used "
     "when no other topic applies. "
     "Example of correct output: "
-    '{"proposed_actors": ["Keir Starmer", "Labour Party"], '
+    '{"proposed_actors": ["Keir Starmer"], '
     '"proposed_departments": ["Home Office"], '
     '"proposed_topics": ["Housing", "Government Policy"]}. '
     "Example of incorrect output: "
-    '{"proposed_actors": ["UK Government", "Secretary of State"], '
+    '{"proposed_actors": ["Labour Party", "UK Government", "Secretary of State"], '
     '"proposed_departments": [], "proposed_topics": []}. '
     "Return only JSON."
 )
@@ -154,6 +163,31 @@ def text_value(graph, subject, predicate):
     return "" if literal is None else normalized_text(str(literal))
 
 
+def ensure_actor_node(graph, actor_name):
+    actor_uri = person_uri(actor_name)
+    graph.add((actor_uri, RDF.type, NEWS.PoliticalActor))
+    graph.add((actor_uri, RDF.type, SCHEMA.Person))
+    graph.add((actor_uri, SCHEMA.name, Literal(actor_name)))
+    return actor_uri
+
+
+def ensure_government_body_node(graph, body_name):
+    canonical_name = canonicalise_government_body_name(body_name) or body_name
+    body_uri = organisation_uri(canonical_name)
+    body_kind = classify_official_body_kind(canonical_name)
+
+    graph.add((body_uri, RDF.type, NEWS.OfficialBody))
+    if body_kind == "parliamentary_body":
+        graph.add((body_uri, RDF.type, NEWS.ParliamentaryBody))
+    elif body_kind == "government_department":
+        graph.add((body_uri, RDF.type, NEWS.GovernmentDepartment))
+        graph.add((body_uri, RDF.type, NEWS.GovernmentBody))
+    else:
+        graph.add((body_uri, RDF.type, NEWS.GovernmentBody))
+    graph.add((body_uri, SCHEMA.name, Literal(canonical_name)))
+    return body_uri, body_kind
+
+
 def parse_date_literal(value):
     if value is None:
         return None
@@ -215,6 +249,36 @@ def official_article_metadata(graph, article_uri):
     }
 
 
+def build_completion_audit_index():
+    return {}
+
+
+def audit_entry(audit_index, event_uri):
+    key = str(event_uri)
+    if key not in audit_index:
+        audit_index[key] = {
+            "event_uri": key,
+            "matched_source_record_uri": None,
+            "match_score": None,
+            "matched_to_source_record_added": False,
+            "represented_in_official_source_added": False,
+            "rag_added_actors": [],
+            "rag_added_departments": [],
+            "rag_added_topics": [],
+        }
+    return audit_index[key]
+
+
+def save_completion_audit_log(audit_index, output_path=DEFAULT_AUDIT_LOG_PATH):
+    output_file = Path(output_path)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "entry_count": len(audit_index),
+        "entries": [audit_index[key] for key in sorted(audit_index)],
+    }
+    output_file.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
 def source_record_metadata(graph, record_uri):
     title = text_value(graph, record_uri, NEWS.sourceTitle) or text_value(
         graph, record_uri, SCHEMA.name
@@ -227,6 +291,8 @@ def score_event_to_official_match(event_data, official_article, source_record):
     event_terms = slug_terms(event_data["name"])
     headline_terms = slug_terms(official_article["headline"])
     shared_terms = event_terms & headline_terms
+    source_title_terms = slug_terms(source_record["title"])
+    shared_source_terms = event_terms & source_title_terms
 
     headline_score = 0
     if event_data["name"] and official_article["headline"]:
@@ -247,6 +313,8 @@ def score_event_to_official_match(event_data, official_article, source_record):
     if source_record["title"]:
         if event_data["name"] and event_data["name"].lower() == source_record["title"].lower():
             source_title_score += 5
+        elif event_data["name"] and event_data["name"].lower() in source_record["title"].lower():
+            source_title_score += 2
 
     date_score = 0
     if event_data["event_date"] and official_article["published_date"]:
@@ -263,10 +331,24 @@ def score_event_to_official_match(event_data, official_article, source_record):
         headline_lower = official_article["headline"].lower()
         topic_bonus = sum(1 for topic in event_data["topics"] if topic.lower() in headline_lower)
 
-    if not shared_terms and headline_score == 0 and source_title_score == 0:
+    exact_or_strong_lexical_match = (
+        headline_score >= 5
+        or source_title_score >= 5
+        or len(shared_terms) >= 2
+        or len(shared_source_terms) >= 2
+    )
+
+    if not exact_or_strong_lexical_match:
         return -1
 
-    return (len(shared_terms) * 2) + headline_score + source_title_score + date_score + topic_bonus
+    return (
+        (len(shared_terms) * 2)
+        + len(shared_source_terms)
+        + headline_score
+        + source_title_score
+        + date_score
+        + topic_bonus
+    )
 
 
 def build_official_indexes(graph):
@@ -294,17 +376,21 @@ def add_reports_on_inverse(graph):
     return added
 
 
-def enrich_cross_source_links(graph):
+def enrich_cross_source_links(graph, audit_index=None):
     official_articles, record_by_title = build_official_indexes(graph)
     added_matched = 0
     added_represented = 0
 
     for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
         event_data = event_metadata(graph, event_uri)
+        completion_entry = audit_entry(audit_index, event_uri) if audit_index is not None else None
         for source_record in event_data["already_represented"]:
             if (event_uri, NEWS.matchedToSourceRecord, source_record) not in graph:
                 graph.add((event_uri, NEWS.matchedToSourceRecord, source_record))
                 added_matched += 1
+                if completion_entry is not None:
+                    completion_entry["matched_source_record_uri"] = str(source_record)
+                    completion_entry["matched_to_source_record_added"] = True
 
         if not event_data["name"]:
             continue
@@ -324,9 +410,15 @@ def enrich_cross_source_links(graph):
         if best_match is None or best_score < 4:
             continue
 
+        if completion_entry is not None:
+            completion_entry["matched_source_record_uri"] = str(best_match)
+            completion_entry["match_score"] = best_score
+
         if (event_uri, NEWS.matchedToSourceRecord, best_match) not in graph:
             graph.add((event_uri, NEWS.matchedToSourceRecord, best_match))
             added_matched += 1
+            if completion_entry is not None:
+                completion_entry["matched_to_source_record_added"] = True
 
         if (
             best_score >= 8
@@ -334,11 +426,13 @@ def enrich_cross_source_links(graph):
         ):
             graph.add((event_uri, NEWS.representedInOfficialSource, best_match))
             added_represented += 1
+            if completion_entry is not None:
+                completion_entry["represented_in_official_source_added"] = True
 
     return added_matched, added_represented
 
 
-def enrich_with_rag(graph):
+def enrich_with_rag(graph, audit_index=None):
     added_actors = 0
     added_depts = 0
     added_topics = 0
@@ -347,8 +441,13 @@ def enrich_with_rag(graph):
     }
 
     for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
+        completion_entry = audit_entry(audit_index, event_uri) if audit_index is not None else None
         has_actor = next(graph.objects(event_uri, NEWS.involvesActor), None) is not None
         has_body = next(graph.objects(event_uri, NEWS.involvesGovernmentBody), None) is not None
+        has_department = any(
+            (body_uri, RDF.type, NEWS.GovernmentDepartment) in graph
+            for body_uri in graph.objects(event_uri, NEWS.involvesGovernmentBody)
+        )
         has_topic = next(graph.objects(event_uri, NEWS.concernsPolicyTopic), None) is not None
         if has_actor and has_body and has_topic:
             continue
@@ -424,22 +523,32 @@ def enrich_with_rag(graph):
         for name in result.get("proposed_actors", []):
             if not name or not (slug_terms(name) & context_terms):
                 continue
+            if is_known_political_party_name(name):
+                continue
+            if looks_like_official_body_name(name):
+                continue
             if slug_terms(name) & ACTOR_BLOCKLIST:
                 continue
-            actor_slug = re.sub(r"[^a-z0-9]+", "_", normalise_name(name).lower()).strip("_")
-            actor_uri = NEWS[actor_slug]
+            actor_uri = ensure_actor_node(graph, name)
             if (event_uri, NEWS.involvesActor, actor_uri) not in graph:
                 graph.add((event_uri, NEWS.involvesActor, actor_uri))
                 added_actors += 1
+                if completion_entry is not None:
+                    completion_entry["rag_added_actors"].append(str(actor_uri))
 
-        for name in result.get("proposed_departments", []):
-            if not name or not (slug_terms(name) & context_terms):
-                continue
-            dept_slug = re.sub(r"[^a-z0-9]+", "_", normalise_name(name).lower()).strip("_")
-            dept_uri = NEWS[dept_slug]
-            if (event_uri, NEWS.involvesGovernmentBody, dept_uri) not in graph:
-                graph.add((event_uri, NEWS.involvesGovernmentBody, dept_uri))
-                added_depts += 1
+        if not has_department:
+            for name in result.get("proposed_departments", []):
+                if not name or not (slug_terms(name) & context_terms):
+                    continue
+                body_kind = classify_official_body_kind(name)
+                if body_kind == "parliamentary_body":
+                    continue
+                dept_uri, body_kind = ensure_government_body_node(graph, name)
+                if (event_uri, NEWS.involvesGovernmentBody, dept_uri) not in graph:
+                    graph.add((event_uri, NEWS.involvesGovernmentBody, dept_uri))
+                    added_depts += 1
+                    if completion_entry is not None:
+                        completion_entry["rag_added_departments"].append(str(dept_uri))
 
         for name in result.get("proposed_topics", []):
             topic_uri = topic_index.get(name)
@@ -448,20 +557,23 @@ def enrich_with_rag(graph):
             if (event_uri, NEWS.concernsPolicyTopic, topic_uri) not in graph:
                 graph.add((event_uri, NEWS.concernsPolicyTopic, topic_uri))
                 added_topics += 1
+                if completion_entry is not None:
+                    completion_entry["rag_added_topics"].append(str(topic_uri))
 
     return added_actors, added_depts, added_topics
 
 
-def enrich_graph(graph):
+def enrich_graph(graph, audit_log_path=None):
     enriched = Graph()
     for prefix, namespace in graph.namespace_manager.namespaces():
         enriched.bind(prefix, namespace)
     for triple in graph:
         enriched.add(triple)
 
+    completion_audit = build_completion_audit_index()
     inverse_count = add_reports_on_inverse(enriched)
-    matched_count, represented_count = enrich_cross_source_links(enriched)
-    actor_count, dept_count, topic_count = enrich_with_rag(enriched)
+    matched_count, represented_count = enrich_cross_source_links(enriched, completion_audit)
+    actor_count, dept_count, topic_count = enrich_with_rag(enriched, completion_audit)
 
     if inverse_count:
         print(f"[COMPLETE] Added {inverse_count} reportsOn inverse links.")
@@ -472,6 +584,9 @@ def enrich_graph(graph):
     print(
         f"[COMPLETE] RAG: added {actor_count} actor links, {dept_count} department links, {topic_count} topic links."
     )
+
+    if audit_log_path is not None:
+        save_completion_audit_log(completion_audit, audit_log_path)
 
     return enriched
 

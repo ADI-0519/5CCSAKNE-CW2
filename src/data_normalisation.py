@@ -1,25 +1,41 @@
 import hashlib
+import html
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
 from src.config import CONFIG
+from src.domain_knowledge import (
+    canonicalise_government_body_name,
+    canonicalise_political_party_name,
+)
 from src.govuk_scope import govuk_result_is_in_scope
 
 CONTROLLED_PREDICATES = CONFIG["CONTROLLED_PREDICATES"]
 
-MOJIBAKE_MARKERS = ("\u00c3", "\u00c2", "\u00e2\u20ac")
-MOJIBAKE_REPLACEMENTS = {
-    "\u00e2\u20ac\u2122": "\u2019",
-    "\u00e2\u20ac\u2018": "\u2018",
-    "\u00e2\u20ac\u0153": "\u201c",
-    "\u00e2\u20ac\x9d": "\u201d",
-    "\u00e2\u20ac\u201c": "\u2013",
-    "\u00e2\u20ac\u201d": "\u2014",
-    "\u00e2\u20ac\u00a6": "\u2026",
-    "\u00c2\u00a0": " ",
-}
+MOJIBAKE_MARKERS = ("\u00c3", "\u00c2", "\u00e2\u20ac", "??", "??")
+MOJIBAKE_REPLACEMENTS = [
+    ("\u00e2\u20ac\u2122", "\u2019"),
+    ("\u00e2\u20ac\u2018", "\u2018"),
+    ("\u00e2\u20ac\u0153", "\u201c"),
+    ("\u00e2\u20ac\x9d", "\u201d"),
+    ("\u00e2\u20ac\u201c", "\u2013"),
+    ("\u00e2\u20ac\u201d", "\u2014"),
+    ("\u00e2\u20ac\u00a6", "\u2026"),
+    ("\u00c2\u00a0", " "),
+    ("????????", "???"),
+    ("???????", "???"),
+    ("???????", "???"),
+    ("?????\x9d", "???"),
+    ("????????", "???"),
+    ("????????", "???"),
+    ("???????", "???"),
+    ("????", "??"),
+    ("?? ", " "),
+    ("??", ""),
+]
 
 
 def mojibake_score(text):
@@ -44,10 +60,17 @@ def repair_common_mojibake(text):
         else:
             break
 
-    for broken, fixed in MOJIBAKE_REPLACEMENTS.items():
+    for broken, fixed in MOJIBAKE_REPLACEMENTS:
         best = best.replace(broken, fixed)
 
     return best
+
+
+def strip_inline_markup(text):
+    cleaned = html.unescape(str(text))
+    cleaned = re.sub(r"<br\s*/?>", " ", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"<[^>]+>", " ", cleaned)
+    return cleaned
 
 
 def build_stable_id(url, title, published_at):
@@ -58,7 +81,7 @@ def build_stable_id(url, title, published_at):
 def normalise_name(name):
     if not name:
         return ""
-    repaired = repair_common_mojibake(name)
+    repaired = repair_common_mojibake(strip_inline_markup(name))
     return " ".join(str(repaired).strip().split())
 
 
@@ -481,10 +504,18 @@ def normalise_data(extracted_data):
                 [normalise_name(p) for p in entities.get("politicians", [])]
             ),
             "political_parties": deduplicate_list(
-                [normalise_name(party) for party in entities.get("political_parties", [])]
+                [
+                    canonicalise_political_party_name(normalise_name(party))
+                    for party in entities.get("political_parties", [])
+                    if canonicalise_political_party_name(normalise_name(party))
+                ]
             ),
             "government_bodies": deduplicate_list(
-                [normalise_name(body) for body in entities.get("government_bodies", [])]
+                [
+                    canonicalise_government_body_name(normalise_name(body))
+                    for body in entities.get("government_bodies", [])
+                    if canonicalise_government_body_name(normalise_name(body))
+                ]
             ),
             "locations": deduplicate_list(
                 [normalise_name(location) for location in entities.get("locations", [])]
@@ -510,6 +541,36 @@ def normalise_data(extracted_data):
                     if event.get("location")
                     else None,
                     "source": normalise_name(event.get("source")),
+                    "policy_topics": deduplicate_list(
+                        [normalise_name(item) for item in event.get("policy_topics", []) if item]
+                    ),
+                    "political_actors": deduplicate_list(
+                        [normalise_name(item) for item in event.get("political_actors", []) if item]
+                    ),
+                    "government_bodies": deduplicate_list(
+                        [
+                            canonicalise_government_body_name(normalise_name(item))
+                            for item in event.get("government_bodies", [])
+                            if canonicalise_government_body_name(normalise_name(item))
+                        ]
+                    ),
+                    "parliamentary_body": normalise_name(event.get("parliamentary_body"))
+                    if event.get("parliamentary_body")
+                    else None,
+                    "political_parties": deduplicate_list(
+                        [
+                            canonicalise_political_party_name(normalise_name(item))
+                            for item in event.get("political_parties", [])
+                            if canonicalise_political_party_name(normalise_name(item))
+                        ]
+                    ),
+                    "evidence_spans": deduplicate_list(
+                        [normalise_name(item) for item in event.get("evidence_spans", []) if item]
+                    ),
+                    "confidence": str(event.get("confidence") or "").strip().lower() or "medium",
+                    "extraction_method": str(event.get("extraction_method") or "").strip().lower()
+                    or "heuristic",
+                    "is_generic_fallback": bool(event.get("is_generic_fallback")),
                 }
             )
 

@@ -1,0 +1,48 @@
+{
+  "people": [
+    "Rebecca Harris",
+    "Joshua Bonehill-Paine",
+    "Kemi Badenoch",
+    "Nick Timothy",
+    "Alex Barros-Curtis",
+    "Luciana Berger",
+    "Keir Starmer",
+    "Angela Rayner",
+    "Andy Burnham",
+    "Nigel Farage",
+    "Amy Winehouse",
+    "Barry Manilow",
+    "Elton John"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour"
+  ],
+  "locations": [
+    "Cardiff",
+    "Leicester"
+  ],
+  "topics": [
+    "Politics",
+    "Immigration",
+    "Hate crime",
+    "Antisemitism"
+  ],
+  "politicians": [
+    "Rebecca Harris",
+    "Kemi Badenoch",
+    "Alex Barros-Curtis",
+    "Luciana Berger",
+    "Keir Starmer",
+    "Angela Rayner",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

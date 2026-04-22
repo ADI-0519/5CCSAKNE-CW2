@@ -1,0 +1,29 @@
+{
+  "people": [
+    "Mariano delli Santi",
+    "Eleonor Duhs",
+    "Nigel Farage",
+    "Robert Jenrick"
+  ],
+  "organizations": [
+    "Open Rights Group",
+    "Reform UK",
+    "Information Commissioner\u2019s Office"
+  ],
+  "locations": [],
+  "topics": [
+    "Energy",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

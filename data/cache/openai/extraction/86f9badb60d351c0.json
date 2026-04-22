@@ -1,0 +1,45 @@
+{
+  "people": [
+    "Nick Candy",
+    "Christian Candy",
+    "Donald Trump",
+    "Donald Trump Jr.",
+    "Holly Valance",
+    "Nigel Farage",
+    "Elon Musk"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Labour"
+  ],
+  "locations": [
+    "London",
+    "Mayfair",
+    "England",
+    "Royal Chelsea Hospital"
+  ],
+  "topics": [
+    "Politics",
+    "Property",
+    "Public Spending",
+    "Taxation"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Labour"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Fundraising event for Donald Trump",
+      "type": "PolicyEvent",
+      "date": "2024-01-01",
+      "location": "Providence House"
+    }
+  ]
+}

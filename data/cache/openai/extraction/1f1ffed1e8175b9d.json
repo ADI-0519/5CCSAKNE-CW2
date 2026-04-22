@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Right Rev Arun Arora",
+    "Imam Qari Asim",
+    "Right Rev Adam Atkinson",
+    "Rabbi Rebecca Birk",
+    "Raymond Friel",
+    "Rabbi Naomi Goldman",
+    "Right Rev Dr Anderson Jeremiah",
+    "Right Rev Dr Rosemarie Mallett",
+    "Rabbi David Mason",
+    "Right Rev Mary Gregory",
+    "Right Rev Martyn Snow",
+    "Right Rev Dr Guli Francis-Dehqani"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour",
+    "Caritas Social Action Network",
+    "HIAS+JCORE"
+  ],
+  "locations": [
+    "Leeds"
+  ],
+  "topics": [
+    "Immigration"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

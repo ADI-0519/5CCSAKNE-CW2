@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Donald Trump",
+    "John Healey",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "Ministry of Defence"
+  ],
+  "locations": [
+    "Gulf",
+    "Iran",
+    "Saudi Arabia",
+    "Qatar",
+    "Bahrain",
+    "Kuwait"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy"
+  ],
+  "politicians": [
+    "John Healey",
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Ministry of Defence"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

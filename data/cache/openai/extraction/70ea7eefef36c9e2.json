@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Anand Menon",
+    "Andrius Kubilius",
+    "Donald Trump",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Rachel Reeves"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "locations": [
+    "Brussels"
+  ],
+  "topics": [
+    "Defence",
+    "Economic Policy",
+    "Government Policy",
+    "Energy"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Cabinet Office"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

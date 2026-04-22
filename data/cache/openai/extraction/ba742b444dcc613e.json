@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Andrew Bailey",
+    "Boris Johnson",
+    "Chakrit Sakunkrit",
+    "Christopher Harborne",
+    "George Cottrell",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Electoral Commission",
+    "Labour",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "locations": [
+    "Thailand"
+  ],
+  "topics": [
+    "Politics",
+    "Defence",
+    "Public Spending",
+    "Cryptocurrency"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

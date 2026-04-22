@@ -1,0 +1,45 @@
+{
+  "people": [
+    "Richard Hermer",
+    "Kemi Badenoch",
+    "Nick Timothy",
+    "Nigel Farage",
+    "Sadiq Khan"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Reform UK",
+    "No 10"
+  ],
+  "locations": [
+    "London",
+    "Northamptonshire",
+    "Trafalgar Square"
+  ],
+  "topics": [
+    "Politics",
+    "Religion"
+  ],
+  "politicians": [
+    "Kemi Badenoch",
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Open Iftar",
+      "type": "GovernmentPolicyEvent",
+      "date": null,
+      "location": "Trafalgar Square"
+    }
+  ]
+}

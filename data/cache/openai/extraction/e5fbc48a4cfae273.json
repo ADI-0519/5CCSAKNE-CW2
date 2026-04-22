@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Angela Rayner",
+    "Donald Trump",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Peter Mandelson",
+    "Peter Thiel",
+    "Victoria Atkins",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Conservative",
+    "Conservative Party",
+    "Labour",
+    "Labour Party"
+  ],
+  "locations": [],
+  "topics": [
+    "Healthcare",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Conservative",
+    "Conservative Party",
+    "Labour",
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

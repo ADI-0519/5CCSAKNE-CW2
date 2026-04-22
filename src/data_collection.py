@@ -12,6 +12,7 @@ DEFAULT_TIMEOUT_SECONDS = 30
 DEFAULT_PAGE_SIZE = 100
 DEFAULT_GOVUK_MAX_PAGES = 20
 CORE_COLLECTION_SOURCES = tuple(CONFIG["CORE_SOURCE_ORDER"])
+RETRIEVAL_CONFIG = CONFIG["RETRIEVAL_CONFIG"]
 
 
 def safe_url_for_logging(url):
@@ -124,7 +125,7 @@ def derive_govuk_search_base():
 def build_govuk_search_url(page=1):
     start = max(0, page - 1) * DEFAULT_PAGE_SIZE
     params = [
-        ("q", " OR ".join(CONFIG["GOVUK_QUERY_TERMS"])),
+        ("q", " OR ".join(RETRIEVAL_CONFIG["govuk_query_terms"])),
         ("count", str(DEFAULT_PAGE_SIZE)),
         ("start", str(start)),
         ("order", "-public_timestamp"),
@@ -133,7 +134,7 @@ def build_govuk_search_url(page=1):
             f"from:{CONFIG['date_start']},to:{CONFIG['date_end']}",
         ),
     ]
-    for document_format in CONFIG["GOVUK_DOCUMENT_FORMATS"]:
+    for document_format in RETRIEVAL_CONFIG["govuk_document_formats"]:
         params.append(("filter_format", document_format))
     return f"{derive_govuk_search_base()}?{urlencode(params)}"
 
@@ -204,7 +205,7 @@ def fetch_parliament_data(save_snapshot=True):
         _flatten_parliament_item(item) for item in (first_page.get("results") or [])
     ]
     data = {
-        "query_terms": CONFIG["PARLIAMENT_QUERY_TERMS"],
+        "query_terms": RETRIEVAL_CONFIG["parliament_query_terms"],
         "date_start": CONFIG["date_start"],
         "date_end": CONFIG["date_end"],
         "request_url": safe_url_for_logging(url),
@@ -249,8 +250,8 @@ def fetch_govuk_data(save_snapshot=True):
             break
 
     data = {
-        "query_terms": CONFIG["GOVUK_QUERY_TERMS"],
-        "document_formats": CONFIG["GOVUK_DOCUMENT_FORMATS"],
+        "query_terms": RETRIEVAL_CONFIG["govuk_query_terms"],
+        "document_formats": RETRIEVAL_CONFIG["govuk_document_formats"],
         "date_start": CONFIG["date_start"],
         "date_end": CONFIG["date_end"],
         "request_url": safe_url_for_logging(last_url or build_govuk_search_url(page=1)),

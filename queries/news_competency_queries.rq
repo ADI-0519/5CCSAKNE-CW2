@@ -291,12 +291,14 @@ WHERE {
   ?article a news:NewsArticle ;
            news:hasAuthor ?journalist ;
            schema:headline ?headline .
-  ?event a news:PolicyEvent ;
+  ?event a news:GovernmentPolicyEvent ;
          news:reportedByArticle ?article ;
          news:involvesGovernmentBody ?department ;
+         news:matchedToSourceRecord ?record ;
          news:occursOnDate ?eventDate .
   ?department a news:GovernmentDepartment ;
               schema:name ?departmentName .
+  ?record a news:SourceRecord .
   FILTER(?eventDate >= "{DATE_START}"^^xsd:date && ?eventDate <= "{DATE_END}"^^xsd:date)
 }
 ORDER BY ?journalistName ?departmentName ?headline

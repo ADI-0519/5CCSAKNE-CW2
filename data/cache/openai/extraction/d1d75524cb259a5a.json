@@ -1,0 +1,29 @@
+{
+  "people": [
+    "Nigel Farage",
+    "Donald Trump",
+    "Luke Tryl"
+  ],
+  "organizations": [
+    "Reform UK"
+  ],
+  "locations": [
+    "Iran"
+  ],
+  "topics": [
+    "Government Policy",
+    "Economic Policy",
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

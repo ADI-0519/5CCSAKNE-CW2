@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Nigel Farage",
+    "Christopher Harborne",
+    "Keir Starmer",
+    "Waheed Alli"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Black Panther Aviation",
+    "Sundance Operations"
+  ],
+  "locations": [
+    "Chagos Islands",
+    "Maldives",
+    "Sri Lanka",
+    "Thailand",
+    "Bournemouth",
+    "Guernsey",
+    "Koh Samui"
+  ],
+  "topics": [
+    "Politics",
+    "Public Spending",
+    "Defence"
+  ],
+  "politicians": [
+    "Nigel Farage",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Labour"
+  ],
+  "government_bodies": [
+    "UK government"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

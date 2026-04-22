@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Bridget Phillipson",
+    "Darren Jones",
+    "Euan Blair",
+    "Keir Starmer",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Labour",
+    "The BBC"
+  ],
+  "locations": [
+    "Ireland"
+  ],
+  "topics": [
+    "Government Policy",
+    "Education",
+    "Healthcare",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

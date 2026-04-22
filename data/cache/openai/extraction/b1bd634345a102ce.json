@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Margaret Aspinall"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Foreign, Commonwealth and Development Office",
+    "Home Office",
+    "Ministry of Defence",
+    "No 10",
+    "Parliament"
+  ],
+  "locations": [
+    "Manchester"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Politics",
+    "Defence"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "Home Office",
+    "Ministry of Defence",
+    "No 10",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

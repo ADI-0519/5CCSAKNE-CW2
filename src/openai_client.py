@@ -7,6 +7,8 @@ from pathlib import Path
 
 from src.config import CONFIG
 
+CANONICAL_LEXICONS = CONFIG["CANONICAL_LEXICONS"]
+
 VALID_SENTIMENTS = {"Positive", "Negative", "Neutral"}
 VALID_ARTICLE_TYPES = {"NewsArticle", "OpinionArticle", "BreakingNewsArticle"}
 VALID_EVENT_TYPES = {
@@ -16,6 +18,8 @@ VALID_EVENT_TYPES = {
     "ParliamentaryDebate",
     "MinisterialStatement",
 }
+VALID_CONFIDENCE_LEVELS = {"high", "medium", "low"}
+VALID_EXTRACTION_METHODS = {"heuristic", "openai", "hybrid"}
 
 EXTRACTION_RESPONSE_FORMAT = {
     "type": "json_schema",
@@ -42,8 +46,35 @@ EXTRACTION_RESPONSE_FORMAT = {
                         "type": {"type": "string", "enum": sorted(VALID_EVENT_TYPES)},
                         "date": {"type": ["string", "null"]},
                         "location": {"type": ["string", "null"]},
+                        "policy_topics": {"type": "array", "items": {"type": "string"}},
+                        "political_actors": {"type": "array", "items": {"type": "string"}},
+                        "government_bodies": {"type": "array", "items": {"type": "string"}},
+                        "parliamentary_body": {"type": ["string", "null"]},
+                        "political_parties": {"type": "array", "items": {"type": "string"}},
+                        "evidence_spans": {"type": "array", "items": {"type": "string"}},
+                        "confidence": {
+                            "type": "string",
+                            "enum": sorted(VALID_CONFIDENCE_LEVELS),
+                        },
+                        "extraction_method": {
+                            "type": "string",
+                            "enum": sorted(VALID_EXTRACTION_METHODS),
+                        },
                     },
-                    "required": ["name", "type", "date", "location"],
+                    "required": [
+                        "name",
+                        "type",
+                        "date",
+                        "location",
+                        "policy_topics",
+                        "political_actors",
+                        "government_bodies",
+                        "parliamentary_body",
+                        "political_parties",
+                        "evidence_spans",
+                        "confidence",
+                        "extraction_method",
+                    ],
                     "additionalProperties": False,
                 },
             },
@@ -72,8 +103,17 @@ def slug_text(text):
 def build_cache_path(stage, cache_key):
     cache_dir = Path(CONFIG["OPENAI_CACHE_DIR"]) / stage
     slug = slug_text(cache_key)
-    if len(slug) > 200:
-        slug = hashlib.sha256(cache_key.encode()).hexdigest()
+    digest = hashlib.sha256(cache_key.encode("utf-8")).hexdigest()
+
+    # long URIs as cache keys can exceed Windows path limits, so truncate when needed
+    path_candidate = (cache_dir / f"{slug}.json").resolve(strict=False)
+    if len(slug) > 120 or len(str(path_candidate)) > 220:
+        readable_prefix = slug[:40].rstrip("_") or "item"
+        slug = f"{readable_prefix}_{digest[:16]}"
+        path_candidate = (cache_dir / f"{slug}.json").resolve(strict=False)
+        if len(str(path_candidate)) > 220:
+            slug = digest[:8]
+
     return cache_dir / f"{slug}.json"
 
 
@@ -214,20 +254,47 @@ def validate_event_payload(event):
     event_type = str(event.get("type") or "").strip()
     date = event.get("date")
     location = event.get("location")
+    parliamentary_body = event.get("parliamentary_body")
+    confidence = str(event.get("confidence") or "").strip().lower()
+    extraction_method = str(event.get("extraction_method") or "").strip().lower()
 
     if not name or event_type not in VALID_EVENT_TYPES:
+        return None
+    if confidence and confidence not in VALID_CONFIDENCE_LEVELS:
+        return None
+    if extraction_method and extraction_method not in VALID_EXTRACTION_METHODS:
         return None
 
     if date is not None:
         date = str(date).strip() or None
     if location is not None:
         location = str(location).strip() or None
+    if parliamentary_body is not None:
+        parliamentary_body = str(parliamentary_body).strip() or None
 
     return {
         "name": name,
         "type": event_type,
         "date": date,
         "location": location,
+        "policy_topics": [
+            str(item).strip() for item in event.get("policy_topics", []) if str(item).strip()
+        ],
+        "political_actors": [
+            str(item).strip() for item in event.get("political_actors", []) if str(item).strip()
+        ],
+        "government_bodies": [
+            str(item).strip() for item in event.get("government_bodies", []) if str(item).strip()
+        ],
+        "parliamentary_body": parliamentary_body,
+        "political_parties": [
+            str(item).strip() for item in event.get("political_parties", []) if str(item).strip()
+        ],
+        "evidence_spans": [
+            str(item).strip() for item in event.get("evidence_spans", []) if str(item).strip()
+        ],
+        "confidence": confidence or "medium",
+        "extraction_method": extraction_method or "openai",
     }
 
 
@@ -307,7 +374,7 @@ def maybe_extract_article_with_openai(article, article_text, heuristic_result):
     user_input = json.dumps(
         {
             "project_scope": CONFIG["project_scope"],
-            "allowed_topics": sorted(CONFIG["TOPIC_GROUPS"].keys()),
+            "allowed_topics": sorted(CANONICAL_LEXICONS["topic_groups"].keys()),
             "article": {
                 "title": article.get("title"),
                 "summary": article.get("summary"),

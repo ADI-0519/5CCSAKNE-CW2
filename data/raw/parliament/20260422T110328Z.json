@@ -1,0 +1,523 @@
+{
+  "query_terms": [
+    "debate",
+    "statement",
+    "bill",
+    "ministerial",
+    "committee",
+    "budget",
+    "tax",
+    "spending",
+    "immigration",
+    "health"
+  ],
+  "date_start": "2026-03-06",
+  "date_end": "2026-04-06",
+  "request_url": "https://questions-statements-api.parliament.uk/api/writtenstatements/statements?madeWhenFrom=2026-03-06&madeWhenTo=2026-04-06&take=100&skip=0",
+  "pagesFetched": 1,
+  "response": {
+    "totalResults": 216,
+    "results": [
+      {
+        "id": 1896432,
+        "memberId": 4559,
+        "member": null,
+        "memberRole": "The Financial Secretary to the Treasury",
+        "uin": "HLWS1491",
+        "answeringBodyId": 14,
+        "title": "National Savings and Investment",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895312,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-27T00:00:00",
+        "body": "My honourable friend the Minister for Pensions (Torsten Bell) has made the following Written Ministerial Statement.On 18 December 2025, NS&I notified the Treasury of a failure to comprehensively trace accounts for some customers who passed away. The resul...",
+        "bodyName": "Treasury",
+        "url": "https://questions-statements.parliament.uk/Statements/213873"
+      },
+      {
+        "id": 1895360,
+        "memberId": 3972,
+        "member": null,
+        "memberRole": "Minister of State for International Development and Africa",
+        "uin": "HLWS1490",
+        "answeringBodyId": 208,
+        "title": "Six-monthly Report on Hong Kong 1 July to 31 December 2025",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": true,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895313,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [
+          {
+            "url": "https://qna.files.parliament.uk/ws-attachments/1895360/original/58th Six-monthly Report on Hong Kong.pdf",
+            "title": "58th Six-monthly Report on Hong Kong",
+            "fileType": "pdf",
+            "fileSizeBytes": 888554
+          }
+        ],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Right Honourable Friend the Secretary of State for Foreign, Commonwealth and Development Affairs (The Rt Hon Yvette Cooper MP) has today made the following statement:The latest Six-monthly Report on the implementation of the Sino-British Joint Declarat...",
+        "bodyName": "Foreign, Commonwealth and Development Office",
+        "url": "https://questions-statements.parliament.uk/Statements/213874"
+      },
+      {
+        "id": 1895359,
+        "memberId": 3972,
+        "member": null,
+        "memberRole": "Minister of State for International Development and Africa",
+        "uin": "HLWS1489",
+        "answeringBodyId": 208,
+        "title": "British Council Annual Report and Accounts 2024-25",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895285,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Honourable Friend the Parliamentary Under Secretary of State for Multilateral, Human Rights, Latin America and the Caribbean (Chris Elmore MP) has today made the following statement:The British Council is an important international organisation for cul...",
+        "bodyName": "Foreign, Commonwealth and Development Office",
+        "url": "https://questions-statements.parliament.uk/Statements/213875"
+      },
+      {
+        "id": 1895358,
+        "memberId": 360,
+        "member": null,
+        "memberRole": "Minister of State, Ministry of Defence ",
+        "uin": "HLWS1488",
+        "answeringBodyId": 11,
+        "title": "Afghan Special Forces Relocation Review",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": false,
+        "linkedStatements": null,
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My hon. Friend the Minister for Defence Readiness and Industry (Luke Pollard) has made the following Written Ministerial Statement.I am pleased today to be able to update the House on the review of Afghan relocations and assistance policy scheme applicati...",
+        "bodyName": "Ministry of Defence",
+        "url": "https://questions-statements.parliament.uk/Statements/213876"
+      },
+      {
+        "id": 1895325,
+        "memberId": 4956,
+        "member": null,
+        "memberRole": "Parliamentary Under-Secretary of State",
+        "uin": "HLWS1487",
+        "answeringBodyId": 7,
+        "title": "Correction to Written Statement HCWS1455",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1894690,
+            "linkType": "CorrectedStatement",
+            "linkDate": "2026-03-25T00:00:00"
+          },
+          {
+            "linkedStatementId": 1895322,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Right Honourable Friend the Secretary of State for Housing, Communities and Local Government (Steve Reed OBE MP) has today made the following statement:On 25 March I made a written statement on Local Government Reorganisation. There was a minor error i...",
+        "bodyName": "Ministry of Housing, Communities and Local Government",
+        "url": "https://questions-statements.parliament.uk/Statements/213877"
+      },
+      {
+        "id": 1895323,
+        "memberId": 4956,
+        "member": null,
+        "memberRole": "Parliamentary Under-Secretary of State",
+        "uin": "HLWS1486",
+        "answeringBodyId": 7,
+        "title": "Improving Building Safety Systems in Higher-Risk Buildings and Beyond",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895317,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Honourable Friend the Minister for Building Safety, Fire and Democracy (Samantha Dixon MBE MP) has today made the following statement:An effective and efficient building control system underpins the fundamental safety of homes and communities across th...",
+        "bodyName": "Ministry of Housing, Communities and Local Government",
+        "url": "https://questions-statements.parliament.uk/Statements/213878"
+      },
+      {
+        "id": 1895321,
+        "memberId": 4559,
+        "member": null,
+        "memberRole": "The Financial Secretary to the Treasury",
+        "uin": "HLWS1485",
+        "answeringBodyId": 14,
+        "title": "Annual European Union Finances Statement",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895306,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My right honourable friend the Chief Secretary to the Treasury (James Murray MP) has made the following Written Ministerial Statement:I am today laying before Parliament, “The European Union Finances Statement 2025: Statement on the implementation of the ...",
+        "bodyName": "Treasury",
+        "url": "https://questions-statements.parliament.uk/Statements/213879"
+      },
+      {
+        "id": 1895320,
+        "memberId": 4956,
+        "member": null,
+        "memberRole": "Parliamentary Under-Secretary of State",
+        "uin": "HLWS1484",
+        "answeringBodyId": 7,
+        "title": "National Scheme of Delegation",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895310,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Honourable Friend the Minister of State for Housing and Planning (Matthew Pennycook MP) has today made the following statement:Planning is principally a local activity, and the government recognise the vital role that planning committees play in ensuri...",
+        "bodyName": "Ministry of Housing, Communities and Local Government",
+        "url": "https://questions-statements.parliament.uk/Statements/213880"
+      },
+      {
+        "id": 1895319,
+        "memberId": 4956,
+        "member": null,
+        "memberRole": "Parliamentary Under-Secretary of State",
+        "uin": "HLWS1483",
+        "answeringBodyId": 7,
+        "title": "Firefighters’ Pension Scheme: Opt-out Contingent Decisions",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895308,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Honourable Friend the Minister for Building Safety, Fire and Democracy (Samantha Dixon MBE MP) has today made the following statement:In 2014 and 2015, the previous government reformed public service pension schemes. These reforms introduced ‘transitio...",
+        "bodyName": "Ministry of Housing, Communities and Local Government",
+        "url": "https://questions-statements.parliament.uk/Statements/213881"
+      },
+      {
+        "id": 1895318,
+        "memberId": 4956,
+        "member": null,
+        "memberRole": "Parliamentary Under-Secretary of State",
+        "uin": "HLWS1482",
+        "answeringBodyId": 7,
+        "title": "Fire Safety",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895309,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Honourable Friend the Minister for Building Safety, Fire and Democracy (Samantha Dixon MBE MP) has today made the following statement:Today, the Ministry for Housing, Communities and Local Government launched a public consultation on proposals to estab...",
+        "bodyName": "Ministry of Housing, Communities and Local Government",
+        "url": "https://questions-statements.parliament.uk/Statements/213882"
+      },
+      {
+        "id": 1895316,
+        "memberId": 533,
+        "member": null,
+        "memberRole": "The Minister of State, Home Office",
+        "uin": "HLWS1481",
+        "answeringBodyId": 1,
+        "title": "Events at Orgreave",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895304,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My hon Friend the Minister of State for Policing and Crime (Sarah Jones) has today made the following Written Ministerial Statement:Today I am announcing the formal launch of the Orgreave Inquiry, a statutory public inquiry established under the Inquiries...",
+        "bodyName": "Home Office",
+        "url": "https://questions-statements.parliament.uk/Statements/213883"
+      },
+      {
+        "id": 1895315,
+        "memberId": 533,
+        "member": null,
+        "memberRole": "The Minister of State, Home Office",
+        "uin": "HLWS1480",
+        "answeringBodyId": 1,
+        "title": "Police Pension Scheme: Opt-out Contingent Decisions",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895293,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My hon Friend the Minister of State for Policing and Crime (Sarah Jones) has today made the following Written Ministerial Statement:In 2014 and 2015, the previous government reformed public service pension schemes. When the reforms were introduced, they p...",
+        "bodyName": "Home Office",
+        "url": "https://questions-statements.parliament.uk/Statements/213884"
+      },
+      {
+        "id": 1895314,
+        "memberId": 533,
+        "member": null,
+        "memberRole": "The Minister of State, Home Office",
+        "uin": "HLWS1479",
+        "answeringBodyId": 1,
+        "title": "UK preparations for the EU Entry/Exit System",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895295,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My hon Friend the Minister of State for Border Security and Asylum (Alex Norris) has today made the following Written Ministerial Statement:In July 2024, this Government set out the steps we were taking to strengthen readiness for the European Union’s Ent...",
+        "bodyName": "Home Office",
+        "url": "https://questions-statements.parliament.uk/Statements/213885"
+      },
+      {
+        "id": 1895311,
+        "memberId": 4956,
+        "member": null,
+        "memberRole": "Parliamentary Under-Secretary of State",
+        "uin": "HLWS1478",
+        "answeringBodyId": 7,
+        "title": "Outcomes of the 27 February 2026 local audit backstop",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895289,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Honourable Friend the Minister of State for Local Government and Homelessness (Alison McGovern MP) has today made the following statement:When this government took office in July 2024, one of its top priorities was to fix the broken local audit system ...",
+        "bodyName": "Ministry of Housing, Communities and Local Government",
+        "url": "https://questions-statements.parliament.uk/Statements/213886"
+      },
+      {
+        "id": 1895303,
+        "memberId": 4147,
+        "member": null,
+        "memberRole": "Minister of State (Minister for Lords)",
+        "uin": "HLWS1477",
+        "answeringBodyId": 29,
+        "title": "Households Below Average Income Statistics Release ",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895277,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Right Honourable Friend, the Minister of State (Minister for Employment) (The Rt Hon Dame Diana Johnson DBE MP) has made the following Written Statement.The Department for Work and Pensions (DWP) has today published its annual statistics on incomes and...",
+        "bodyName": "Department for Work and Pensions",
+        "url": "https://questions-statements.parliament.uk/Statements/213887"
+      },
+      {
+        "id": 1895302,
+        "memberId": 5364,
+        "member": null,
+        "memberRole": "Minister of State for Justice",
+        "uin": "HLWS1476",
+        "answeringBodyId": 54,
+        "title": "Prison Workforce Update",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895276,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Right Honourable Friend the Deputy Prime Minister, Lord Chancellor and Secretary of State for Justice (Rt Hon David Lammy MP) has today made the following statement:\"I am today confirming the Government’s decision on the pay award for prison staff.Pris...",
+        "bodyName": "Ministry of Justice",
+        "url": "https://questions-statements.parliament.uk/Statements/213888"
+      },
+      {
+        "id": 1895301,
+        "memberId": 5414,
+        "member": null,
+        "memberRole": "Minister for Digital Economy",
+        "uin": "HLWS1475",
+        "answeringBodyId": 214,
+        "title": "British Steel",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895281,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My hon Friend the Minister for Industry (Chris McDonald MP) has today made the following statement.The Government committed to updating Parliament on British Steel every four sitting weeks for the duration of the period of special measures being applied u...",
+        "bodyName": "Department for Business and Trade",
+        "url": "https://questions-statements.parliament.uk/Statements/213889"
+      },
+      {
+        "id": 1895300,
+        "memberId": 4972,
+        "member": null,
+        "memberRole": "Minister of State for Transport",
+        "uin": "HLWS1474",
+        "answeringBodyId": 27,
+        "title": "Government investment in roads: Third Road Investment Strategy",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895280,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Right Honourable friend, the Secretary of State for Transport (Heidi Alexander), has made the following Ministerial Statement.I am pleased to inform the House that the Government will today publish the third Road Investment Strategy (RIS3). Backed by o...",
+        "bodyName": "Department for Transport",
+        "url": "https://questions-statements.parliament.uk/Statements/213890"
+      },
+      {
+        "id": 1895299,
+        "memberId": 4966,
+        "member": null,
+        "memberRole": "Minister for Museums, Heritage and Gambling, and DCMS Lords Minister",
+        "uin": "HLWS1473",
+        "answeringBodyId": 217,
+        "title": "Government Response to Baroness Hodge’s Review of Arts Council England",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": true,
+        "linkedStatements": [
+          {
+            "linkedStatementId": 1895278,
+            "linkType": "JointStatement",
+            "linkDate": "2026-03-26T00:00:00"
+          }
+        ],
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "I am repeating the following Written Ministerial Statement made today in the other place by my Right Honourable Friend, the Secretary of State for Culture, Media and Sport, Lisa Nandy MP:We are a nation of storytellers. Through literature, television, fil...",
+        "bodyName": "Department for Culture, Media and Sport",
+        "url": "https://questions-statements.parliament.uk/Statements/213891"
+      },
+      {
+        "id": 1895294,
+        "memberId": 5365,
+        "member": null,
+        "memberRole": "The Attorney General",
+        "uin": "HLWS1472",
+        "answeringBodyId": 88,
+        "title": "Sludgebusting: Simplifying Government Processes to Drive Delivery",
+        "house": "Lords",
+        "noticeNumber": 0,
+        "hasAttachments": false,
+        "hasLinkedStatements": false,
+        "linkedStatements": null,
+        "attachments": [],
+        "date": "2026-03-26T00:00:00",
+        "body": "My Right Honourable friend the Minister for the Cabinet Office and Paymaster General, the Rt Hon. Nick Thomas-Symonds MP, has today jointly laid this statement in the Commons. Further to the Written Ministerial Statement made by my Right Honourable Friend...",
+        "bodyName": "Attorney General",
+        "url": "https://questions-statements.parliament.uk/Statements/213892"
+      }
+    ]
+  }
+}

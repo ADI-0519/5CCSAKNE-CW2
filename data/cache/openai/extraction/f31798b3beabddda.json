@@ -1,0 +1,54 @@
+{
+  "people": [
+    "Andy Burnham",
+    "Angela Rayner",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Michael Ashcroft",
+    "Nigel Farage",
+    "Sharon Graham",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Green Party",
+    "Conservative Party",
+    "Reform UK",
+    "Parliament",
+    "HM Treasury",
+    "Unite"
+  ],
+  "locations": [
+    "Birmingham",
+    "Glasgow",
+    "Leeds",
+    "Manchester",
+    "Scotland",
+    "Wales",
+    "Westminster"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Government Policy",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Green Party",
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

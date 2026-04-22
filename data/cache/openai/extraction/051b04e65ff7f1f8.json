@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Polly Billington",
+    "Keir Starmer",
+    "Gordon Brown",
+    "Ed Davey"
+  ],
+  "organizations": [
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Reform UK",
+    "Scottish National Party",
+    "Treasury"
+  ],
+  "locations": [
+    "East Thanet",
+    "Easter"
+  ],
+  "topics": [
+    "Energy",
+    "Economic Policy",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Ed Davey"
+  ],
+  "political_parties": [
+    "Labour",
+    "Conservative",
+    "Liberal Democrats",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "government_bodies": [
+    "Parliament",
+    "Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

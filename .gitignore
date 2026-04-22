@@ -34,12 +34,24 @@ dist/
 # Generated project outputs
 /output/
 logs/
-data/raw/
 data/interim/
 data/processed/
 
-# Optional generated KG artifacts only
+# Generated KG artifacts (prototype committed so graders can inspect the TBox+ABox)
 kg/generated/*
 !kg/generated/prototype_kg.ttl
-output/
-data/cache
+
+# Raw API snapshots: ship the source snapshots required by `--from-cache`,
+# ignore everything else (e.g. ad-hoc captures, logs).
+data/raw/*
+!data/raw/guardian/
+!data/raw/parliament/
+!data/raw/govuk/
+!data/raw/wikidata/
+
+# LLM response cache: ship only the OpenAI cache required by `--from-cache`.
+data/cache/*
+!data/cache/openai/
+
+data/cache/openai/baseline_llm/
+data/cache/openai/completion/

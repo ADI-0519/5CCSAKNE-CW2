@@ -204,7 +204,7 @@ def has_minimum_wikidata_coverage(payload):
 def collect_wikidata(save_snapshot=True):
     cached_payload = load_cached_wikidata_if_available()
 
-    # Fetch with a small delay between queries to be polite to the endpoint
+    # fetch with a small delay between queries to be polite to the endpoint
     politician_bindings = run_sparql_query(POLITICIANS_QUERY, "politicians")
     time.sleep(2)
     party_bindings = run_sparql_query(POLITICAL_PARTIES_QUERY, "political parties")

@@ -1,0 +1,94 @@
+{
+  "people": [
+    "Boris Johnson",
+    "Chris Bryant",
+    "Keir Starmer",
+    "Rachel Reeves",
+    "Sadiq Khan",
+    "Stella Creasy",
+    "Liam Byrne",
+    "Nick Thomas-Symonds"
+  ],
+  "organizations": [
+    "European Commission",
+    "Labour Party",
+    "Parliament"
+  ],
+  "locations": [
+    "Brussels",
+    "London",
+    "Paris",
+    "UK-EU"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Defence",
+    "Energy"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Department for Business and Trade",
+    "HM Treasury",
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "EU-UK parliamentary partnership assembly (PPA)",
+      "type": "ParliamentaryEvent",
+      "date": "2026-03-20",
+      "location": "Brussels",
+      "policy_topics": [
+        "Trade Policy",
+        "Defence",
+        "Youth Mobility",
+        "Agriculture Trade"
+      ],
+      "political_actors": [
+        "Chris Bryant",
+        "Maro\u0161 \u0160ef\u010dovi\u010d"
+      ],
+      "government_bodies": [
+        "European Commission"
+      ],
+      "parliamentary_body": "European Parliament",
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Post-Brexit EU-UK summit",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-07-01",
+      "location": null,
+      "policy_topics": [
+        "Youth Mobility",
+        "SPS Agreement"
+      ],
+      "political_actors": [
+        "Chris Bryant"
+      ],
+      "government_bodies": [
+        "European Commission"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

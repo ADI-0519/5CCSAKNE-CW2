@@ -1,0 +1,30 @@
+{
+  "people": [
+    "Mike Tapp",
+    "Monique Hawkins",
+    "Jelena",
+    "Florence"
+  ],
+  "organizations": [
+    "the3million",
+    "Home Office"
+  ],
+  "locations": [
+    "UK",
+    "South America",
+    "France"
+  ],
+  "topics": [
+    "Immigration",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

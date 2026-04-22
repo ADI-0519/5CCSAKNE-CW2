@@ -1,0 +1,43 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Donald Trump",
+    "Emily Thornberry",
+    "Kim Darroch",
+    "Nigel Farage",
+    "Robert Jenrick",
+    "Prince William",
+    "Brigitte Macron",
+    "Emmanuel Macron"
+  ],
+  "organizations": [
+    "Labour",
+    "Conservative Party",
+    "Reform UK",
+    "Downing Street",
+    "Parliament"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Defence",
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

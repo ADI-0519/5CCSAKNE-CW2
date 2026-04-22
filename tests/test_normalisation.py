@@ -47,13 +47,17 @@ class TestUtilityFunctions:
 
     def test_normalise_name_repairs_common_mojibake(self):
         broken = "Starmer\u00e2\u20ac\u2122s plans \u00e2\u20ac\u201c update"
-        assert normalise_name(broken) == "Starmer’s plans – update"
+        assert normalise_name(broken) == "Starmer\u2019s plans \u2013 update"
 
     def test_repair_common_mojibake_prefers_cleaner_text(self):
         broken = "London\u00e2\u20ac\u2122s politics"
         repaired = repair_common_mojibake(broken)
-        assert repaired == "London’s politics"
+        assert repaired == "London\u2019s politics"
         assert mojibake_score(repaired) < mojibake_score(broken)
+
+    def test_normalise_name_strips_inline_markup_and_entities(self):
+        broken = "Department for<br/>Science, Innovation<br/>&amp; Technology"
+        assert normalise_name(broken) == "Department for Science, Innovation & Technology"
 
 
 class TestSourceNormalisation:
@@ -279,6 +283,8 @@ class TestExtractedRecordNormalisation:
                     "date": "2026-03-06",
                     "location": "London",
                     "source": "heuristic",
+                    "confidence": "high",
+                    "extraction_method": "hybrid",
                 }
             ],
             "follow_up_candidates": [],
@@ -308,8 +314,12 @@ class TestExtractedRecordNormalisation:
         assert record["section"] == "Politics"
         assert record["article_type"] == "NewsArticle"
         assert record["sentiment"] == "Negative"
-        assert record["entities"]["government_bodies"] == ["Treasury"]
+        assert record["entities"]["government_bodies"] == ["HM Treasury"]
+        assert record["entities"]["political_parties"] == ["Labour Party"]
         assert record["event_candidates"][0]["name"] == "Budget"
+        assert record["event_candidates"][0]["confidence"] == "high"
+        assert record["event_candidates"][0]["extraction_method"] == "hybrid"
+        assert record["event_candidates"][0]["is_generic_fallback"] is False
 
     def test_normalise_data_rejects_unknown_predicate(self):
         record = self.valid_record(

@@ -3,6 +3,28 @@ from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 
+from src.domain_knowledge import (
+    GOVERNMENT_BODY_NAMES as DK_GOVERNMENT_BODY_NAMES,
+)
+from src.domain_knowledge import (
+    GOVERNMENT_DEPARTMENT_KEYWORDS,
+    GOVERNMENT_DEPARTMENT_NAMES,
+    PARLIAMENTARY_BODY_KEYWORDS,
+    PARLIAMENTARY_BODY_NAMES,
+)
+from src.domain_knowledge import (
+    POLITICAL_PARTY_NAMES as DK_POLITICAL_PARTY_NAMES,
+)
+from src.domain_knowledge import (
+    POLITICIAN_NAMES as DK_POLITICIAN_NAMES,
+)
+from src.domain_knowledge import (
+    TOPIC_GROUPS as DK_TOPIC_GROUPS,
+)
+from src.domain_knowledge import (
+    UK_LOCATION_NAMES as DK_UK_LOCATION_NAMES,
+)
+
 load_dotenv()
 
 # project scope
@@ -24,6 +46,8 @@ GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 OPENAI_REQUEST_TIMEOUT_SECONDS = int(os.getenv("OPENAI_REQUEST_TIMEOUT_SECONDS", "30"))
+ENABLE_SPACY_NER = os.getenv("ENABLE_SPACY_NER", "1") == "1"
+SPACY_MODEL_NAME = os.getenv("SPACY_MODEL_NAME", "en_core_web_sm")
 PARLIAMENT_API_KEY = os.getenv("PARLIAMENT_API_KEY")
 GOVUK_API_KEY = os.getenv("GOVUK_API_KEY")
 
@@ -72,7 +96,12 @@ GENERATED_KG_DIR = "kg/generated"
 OPENAI_CACHE_DIR = "data/cache/openai"
 EXTRACTION_PROGRESS_EVERY = 25
 
-# Guardian configuration
+NLP_CONFIG = {
+    "enable_spacy_ner": ENABLE_SPACY_NER,
+    "spacy_model_name": SPACY_MODEL_NAME,
+}
+
+# Guardian retrieval
 
 GUARDIAN_PAGE_SIZE = 200
 GUARDIAN_SHOW_TAGS = ["keyword", "tone", "contributor"]
@@ -109,7 +138,7 @@ GUARDIAN_QUERY_TERMS = [
     "NHS",
 ]
 
-# Parliament / Hansard configuration
+# Parliament / Hansard retrieval
 
 PARLIAMENT_QUERY_TERMS = [
     "debate",
@@ -131,13 +160,8 @@ PARLIAMENT_EVENT_KEYWORDS = [
     "bill",
     "reading",
 ]
-PARLIAMENTARY_BODY_NAMES = [
-    "House of Commons",
-    "House of Lords",
-    "Westminster Hall",
-]
 
-# GOV.UK configuration
+# GOV.UK retrieval and filtering
 
 GOVUK_QUERY_TERMS = [
     "policy",
@@ -195,113 +219,16 @@ GOVUK_EXCLUDED_TEXT_TERMS = {
     "terms of reference",
 }
 
-# extraction dictionaries
+# canonical domain lexicons
 
-TOPIC_KEYWORDS = [
-    "parliament",
-    "policy",
-    "government",
-    "debate",
-    "statement",
-    "budget",
-    "tax",
-    "taxation",
-    "public spending",
-    "economic policy",
-    "immigration",
-    "healthcare",
-    "nhs",
-    "education",
-    "energy",
-    "housing",
-    "defence",
-    "cost of living",
-    "regulation",
-]
+POLITICIAN_NAMES = list(DK_POLITICIAN_NAMES)
+POLITICAL_PARTY_NAMES = list(DK_POLITICAL_PARTY_NAMES)
+GOVERNMENT_BODY_NAMES = list(DK_GOVERNMENT_BODY_NAMES)
+UK_LOCATION_NAMES = list(DK_UK_LOCATION_NAMES)
+TOPIC_GROUPS = dict(DK_TOPIC_GROUPS)
+TOPIC_KEYWORDS = sorted({hint for hints in TOPIC_GROUPS.values() for hint in hints})
 
-POLITICIAN_NAMES = [
-    "Keir Starmer",
-    "Rishi Sunak",
-    "Kemi Badenoch",
-    "Angela Rayner",
-    "Rachel Reeves",
-    "Wes Streeting",
-    "Yvette Cooper",
-    "David Lammy",
-    "Nigel Farage",
-    "Ed Davey",
-    "John Swinney",
-    "Eluned Morgan",
-    "Michelle O'Neill",
-]
-
-POLITICAL_PARTY_NAMES = [
-    "Labour",
-    "Labour Party",
-    "Conservative",
-    "Conservative Party",
-    "Liberal Democrats",
-    "Green Party",
-    "Reform UK",
-    "Scottish National Party",
-    "SNP",
-    "Plaid Cymru",
-    "Democratic Unionist Party",
-    "DUP",
-    "Sinn Fein",
-    "Sinn Féin",
-]
-
-GOVERNMENT_BODY_NAMES = [
-    "HM Treasury",
-    "Treasury",
-    "Home Office",
-    "Cabinet Office",
-    "Department of Health and Social Care",
-    "Department for Education",
-    "Department for Work and Pensions",
-    "Ministry of Defence",
-    "Foreign Office",
-    "Downing Street",
-    "No 10",
-    "NHS England",
-    "House of Commons",
-    "House of Lords",
-    "Parliament",
-]
-
-UK_LOCATION_NAMES = [
-    "London",
-    "Westminster",
-    "Manchester",
-    "Birmingham",
-    "Liverpool",
-    "Leeds",
-    "Bristol",
-    "Edinburgh",
-    "Glasgow",
-    "Cardiff",
-    "Belfast",
-    "England",
-    "Scotland",
-    "Wales",
-    "Northern Ireland",
-    "United Kingdom",
-]
-
-TOPIC_GROUPS = {
-    "Taxation": ["tax", "taxation", "fiscal", "levy"],
-    "Public Spending": ["public spending", "spending review", "spending cuts", "funding"],
-    "Economic Policy": ["economy", "economic policy", "growth", "inflation", "interest rates"],
-    "Immigration": ["immigration", "asylum", "migrant", "border"],
-    "Healthcare": ["nhs", "healthcare", "hospital", "waiting list"],
-    "Education": ["education", "school", "university", "teachers"],
-    "Energy": ["energy", "net zero", "oil", "gas", "renewable"],
-    "Housing": ["housing", "rent", "homes", "planning"],
-    "Defence": ["defence", "defense", "armed forces", "military"],
-    "Parliament": ["parliament", "commons", "lords", "mp", "mps", "debate"],
-    "Government Policy": ["policy", "bill", "legislation", "proposal", "white paper"],
-}
+# extraction heuristics
 
 POLITICAL_EVENT_HINTS = [
     "ministerial statement",
@@ -568,6 +495,38 @@ EXTRACTION_POLICY_ANNOUNCEMENT_SIGNAL_PHRASES = {
     "unveiled",
 }
 
+# grouped config interfaces
+
+RETRIEVAL_CONFIG = {
+    "guardian_query_terms": GUARDIAN_QUERY_TERMS,
+    "parliament_query_terms": PARLIAMENT_QUERY_TERMS,
+    "govuk_query_terms": GOVUK_QUERY_TERMS,
+    "govuk_document_formats": GOVUK_DOCUMENT_FORMATS,
+}
+
+CANONICAL_LEXICONS = {
+    "politician_names": POLITICIAN_NAMES,
+    "political_party_names": POLITICAL_PARTY_NAMES,
+    "government_body_names": GOVERNMENT_BODY_NAMES,
+    "parliamentary_body_names": list(PARLIAMENTARY_BODY_NAMES),
+    "uk_location_names": UK_LOCATION_NAMES,
+    "topic_groups": TOPIC_GROUPS,
+}
+
+BODY_CLASSIFICATION_RULES = {
+    "government_department_names": list(GOVERNMENT_DEPARTMENT_NAMES),
+    "government_department_keywords": sorted(GOVERNMENT_DEPARTMENT_KEYWORDS),
+    "parliamentary_body_keywords": sorted(PARLIAMENTARY_BODY_KEYWORDS),
+}
+
+FILTER_RULES = {
+    "govuk_scope_signal_terms": GOVUK_SCOPE_SIGNAL_TERMS,
+    "govuk_excluded_text_terms": GOVUK_EXCLUDED_TEXT_TERMS,
+    "opinion_section_names": OPINION_SECTION_NAMES,
+    "breaking_news_hints": BREAKING_NEWS_HINTS,
+    "govuk_non_event_sections": GOVUK_NON_EVENT_SECTIONS,
+}
+
 
 def build_query_string(terms):
     return " OR ".join(terms)
@@ -578,7 +537,7 @@ def build_guardian_url(page=None):
     fields = ",".join(GUARDIAN_FIELDS)
     tag_filter = "|".join(GUARDIAN_TAGS)
     show_tags = ",".join(GUARDIAN_SHOW_TAGS)
-    query = quote_plus(build_query_string(GUARDIAN_QUERY_TERMS))
+    query = quote_plus(build_query_string(RETRIEVAL_CONFIG["guardian_query_terms"]))
     base = (
         f"{GUARDIAN_API_BASE}?"
         f"q={query}&"
@@ -608,6 +567,8 @@ CONFIG = {
     "OPENAI_API_KEY": OPENAI_API_KEY,
     "OPENAI_MODEL": OPENAI_MODEL,
     "OPENAI_REQUEST_TIMEOUT_SECONDS": OPENAI_REQUEST_TIMEOUT_SECONDS,
+    "ENABLE_SPACY_NER": ENABLE_SPACY_NER,
+    "SPACY_MODEL_NAME": SPACY_MODEL_NAME,
     "PARLIAMENT_API_KEY": PARLIAMENT_API_KEY,
     "GOVUK_API_KEY": GOVUK_API_KEY,
     "SOURCE_CONFIG": SOURCE_CONFIG,
@@ -623,33 +584,38 @@ CONFIG = {
     "GENERATED_KG_DIR": GENERATED_KG_DIR,
     "OPENAI_CACHE_DIR": OPENAI_CACHE_DIR,
     "EXTRACTION_PROGRESS_EVERY": EXTRACTION_PROGRESS_EVERY,
+    "NLP_CONFIG": NLP_CONFIG,
     "GUARDIAN_PAGE_SIZE": GUARDIAN_PAGE_SIZE,
     "GUARDIAN_SHOW_TAGS": GUARDIAN_SHOW_TAGS,
     "GUARDIAN_FIELDS": GUARDIAN_FIELDS,
     "GUARDIAN_SECTIONS": GUARDIAN_SECTIONS,
     "GUARDIAN_TAGS": GUARDIAN_TAGS,
-    "GUARDIAN_QUERY_TERMS": GUARDIAN_QUERY_TERMS,
-    "PARLIAMENT_QUERY_TERMS": PARLIAMENT_QUERY_TERMS,
+    "GUARDIAN_QUERY_TERMS": RETRIEVAL_CONFIG["guardian_query_terms"],
+    "PARLIAMENT_QUERY_TERMS": RETRIEVAL_CONFIG["parliament_query_terms"],
     "PARLIAMENT_EVENT_KEYWORDS": PARLIAMENT_EVENT_KEYWORDS,
-    "PARLIAMENTARY_BODY_NAMES": PARLIAMENTARY_BODY_NAMES,
-    "GOVUK_QUERY_TERMS": GOVUK_QUERY_TERMS,
-    "GOVUK_DOCUMENT_FORMATS": GOVUK_DOCUMENT_FORMATS,
+    "PARLIAMENTARY_BODY_NAMES": CANONICAL_LEXICONS["parliamentary_body_names"],
+    "GOVUK_QUERY_TERMS": RETRIEVAL_CONFIG["govuk_query_terms"],
+    "GOVUK_DOCUMENT_FORMATS": RETRIEVAL_CONFIG["govuk_document_formats"],
     "GOVUK_ALWAYS_INCLUDE_FORMATS": GOVUK_ALWAYS_INCLUDE_FORMATS,
-    "GOVUK_SCOPE_SIGNAL_TERMS": GOVUK_SCOPE_SIGNAL_TERMS,
-    "GOVUK_EXCLUDED_TEXT_TERMS": GOVUK_EXCLUDED_TEXT_TERMS,
+    "GOVUK_SCOPE_SIGNAL_TERMS": FILTER_RULES["govuk_scope_signal_terms"],
+    "GOVUK_EXCLUDED_TEXT_TERMS": FILTER_RULES["govuk_excluded_text_terms"],
+    "RETRIEVAL_CONFIG": RETRIEVAL_CONFIG,
+    "CANONICAL_LEXICONS": CANONICAL_LEXICONS,
+    "BODY_CLASSIFICATION_RULES": BODY_CLASSIFICATION_RULES,
+    "FILTER_RULES": FILTER_RULES,
     "TOPIC_KEYWORDS": TOPIC_KEYWORDS,
-    "POLITICIAN_NAMES": POLITICIAN_NAMES,
-    "POLITICAL_PARTY_NAMES": POLITICAL_PARTY_NAMES,
-    "GOVERNMENT_BODY_NAMES": GOVERNMENT_BODY_NAMES,
-    "UK_LOCATION_NAMES": UK_LOCATION_NAMES,
-    "TOPIC_GROUPS": TOPIC_GROUPS,
+    "POLITICIAN_NAMES": CANONICAL_LEXICONS["politician_names"],
+    "POLITICAL_PARTY_NAMES": CANONICAL_LEXICONS["political_party_names"],
+    "GOVERNMENT_BODY_NAMES": CANONICAL_LEXICONS["government_body_names"],
+    "UK_LOCATION_NAMES": CANONICAL_LEXICONS["uk_location_names"],
+    "TOPIC_GROUPS": CANONICAL_LEXICONS["topic_groups"],
     "POLITICAL_EVENT_HINTS": POLITICAL_EVENT_HINTS,
     "ECONOMIC_EVENT_HINTS": ECONOMIC_EVENT_HINTS,
-    "OPINION_SECTION_NAMES": OPINION_SECTION_NAMES,
-    "BREAKING_NEWS_HINTS": BREAKING_NEWS_HINTS,
+    "OPINION_SECTION_NAMES": FILTER_RULES["opinion_section_names"],
+    "BREAKING_NEWS_HINTS": FILTER_RULES["breaking_news_hints"],
     "GOVUK_EVENT_FALLBACK_SECTIONS": GOVUK_EVENT_FALLBACK_SECTIONS,
     "GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS": GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS,
-    "GOVUK_NON_EVENT_SECTIONS": GOVUK_NON_EVENT_SECTIONS,
+    "GOVUK_NON_EVENT_SECTIONS": FILTER_RULES["govuk_non_event_sections"],
     "POSITIVE_SENTIMENT_TERMS": POSITIVE_SENTIMENT_TERMS,
     "NEGATIVE_SENTIMENT_TERMS": NEGATIVE_SENTIMENT_TERMS,
     "CONTROLLED_PREDICATES": CONTROLLED_PREDICATES,

@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Baron Botham",
+    "Baron Lebedev",
+    "Boris Johnson",
+    "Evgeny Lebedev",
+    "Ian Botham",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "House of Lords",
+    "Parliament"
+  ],
+  "locations": [
+    "North Yorkshire",
+    "China"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "House of Lords",
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

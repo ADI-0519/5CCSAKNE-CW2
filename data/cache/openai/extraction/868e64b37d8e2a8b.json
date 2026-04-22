@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Ed Davey",
+    "Donald Trump",
+    "Vladimir Putin"
+  ],
+  "organizations": [
+    "Liberal Democrats",
+    "Conservative Party"
+  ],
+  "locations": [
+    "Faslane",
+    "Glasgow",
+    "York",
+    "Ukraine"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Ed Davey"
+  ],
+  "political_parties": [
+    "Liberal Democrats",
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

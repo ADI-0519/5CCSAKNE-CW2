@@ -1,0 +1,1218 @@
+{
+  "schema_version": 1,
+  "prediction_input": "data/processed/20260422T195330Z_kg_records.json",
+  "instructions": "Edit each sample.gold block so it reflects the manually judged correct extraction. Leave prediction_snapshot untouched as the original machine output reference.",
+  "samples": [
+    {
+      "record_id": "1c376cea19b86f53",
+      "source_system": "guardian",
+      "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+          "published_at": "2026-03-06T00:01:05Z",
+          "author": "Andrew Gregory Health editor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [
+          "England",
+          "Gibraltar"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+          "published_at": "2026-03-06T00:01:05Z",
+          "author": "Andrew Gregory Health editor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Burnham",
+          "Burnham-on-Sea",
+          "England",
+          "London",
+          "Madrid",
+          "Microport",
+          "Somerset",
+          "St Bernard"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "1160d4bb9e2d2672",
+      "source_system": "guardian",
+      "title": "This is a life and death story for the UK – so why is it being brushed under the carpet? | Aditya Chakrabortty",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/06/uk-death-healthy-life-expectancy-decline-state",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "This is a life and death story for the UK – so why is it being brushed under the carpet? | Aditya Chakrabortty",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/uk-death-healthy-life-expectancy-decline-state",
+          "published_at": "2026-03-06T06:00:14Z",
+          "author": "Aditya Chakrabortty",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Healthcare",
+          "Opinion"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Rachel Reeves"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "United Kingdom"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "This is a life and death story for the UK – so why is it being brushed under the carpet? | Aditya Chakrabortty",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/uk-death-healthy-life-expectancy-decline-state",
+          "published_at": "2026-03-06T06:00:14Z",
+          "author": "Aditya Chakrabortty",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Education",
+          "Healthcare",
+          "Opinion"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Rachel Reeves"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Dubai",
+          "London",
+          "Moira",
+          "Nichole",
+          "Sweden",
+          "Westminster"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "fadcdc1f6c3ac944",
+      "source_system": "guardian",
+      "title": "In a world of lies, we need the BBC more than ever. This week could be our last chance to save it | Polly Toynbee",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/06/bbc-public-consultation-supporters-guidance",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "In a world of lies, we need the BBC more than ever. This week could be our last chance to save it | Polly Toynbee",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/bbc-public-consultation-supporters-guidance",
+          "published_at": "2026-03-06T10:00:18Z",
+          "author": "Polly Toynbee",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Opinion",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Department for Culture, Media and Sport"
+        ],
+        "locations": [
+          "United Kingdom"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "In a world of lies, we need the BBC more than ever. This week could be our last chance to save it | Polly Toynbee",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/bbc-public-consultation-supporters-guidance",
+          "published_at": "2026-03-06T10:00:18Z",
+          "author": "Polly Toynbee",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Healthcare",
+          "Opinion",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Department for Culture, Media and Sport",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Iran",
+          "Israel",
+          "Washington",
+          "the Middle East"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "091de8e51c5a227d",
+      "source_system": "guardian",
+      "title": "Home Office may forcibly remove child asylum seekers from UK in handcuffs",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/06/home-office-may-forcibly-remove-child-asylum-seekers-from-uk-in-handcuffs",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Home Office may forcibly remove child asylum seekers from UK in handcuffs",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/home-office-may-forcibly-remove-child-asylum-seekers-from-uk-in-handcuffs",
+          "published_at": "2026-03-06T10:24:22Z",
+          "author": "Diane Taylor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [
+          "United Kingdom"
+        ],
+        "events": [
+          {
+            "name": "Proposed forcible removal of child asylum seekers",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "United Kingdom",
+            "policy_topics": [
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Home Office may forcibly remove child asylum seekers from UK in handcuffs",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/home-office-may-forcibly-remove-child-asylum-seekers-from-uk-in-handcuffs",
+          "published_at": "2026-03-06T10:24:22Z",
+          "author": "Diane Taylor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "48eca17081f50d0a",
+      "source_system": "guardian",
+      "title": "Trump broke his promises to pursue this unwinnable war. Britain must not follow him into the abyss | Simon Jenkins",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/06/donald-trump-war-britain-bombing-iran-keir-starmer",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Trump broke his promises to pursue this unwinnable war. Britain must not follow him into the abyss | Simon Jenkins",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/donald-trump-war-britain-bombing-iran-keir-starmer",
+          "published_at": "2026-03-06T12:00:20Z",
+          "author": "Simon Jenkins",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Defence",
+          "Opinion"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Kemi Badenoch",
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Conservative Party",
+          "Labour Party"
+        ],
+        "government_bodies": [],
+        "locations": [
+          "Middle East",
+          "United Kingdom"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Trump broke his promises to pursue this unwinnable war. Britain must not follow him into the abyss | Simon Jenkins",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/donald-trump-war-britain-bombing-iran-keir-starmer",
+          "published_at": "2026-03-06T12:00:20Z",
+          "author": "Simon Jenkins",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Defence",
+          "Education",
+          "Opinion",
+          "Parliament"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Kemi Badenoch",
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Conservative Party",
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "Afghanistan",
+          "Gulf",
+          "Iran",
+          "Iraq",
+          "Israel",
+          "Middle East",
+          "Russia",
+          "Venezuela"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "668c34b1c59692f8",
+      "source_system": "parliament",
+      "title": "Afghan Special Forces Relocation Review",
+      "url": "https://questions-statements.parliament.uk/Statements/213876",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Afghan Special Forces Relocation Review",
+          "url": "https://questions-statements.parliament.uk/Statements/213876",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Defence"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Afghan Special Forces Relocation Review",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Defence"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Afghan Special Forces Relocation Review",
+          "url": "https://questions-statements.parliament.uk/Statements/213876",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "9b604a57ca053173",
+      "source_system": "parliament",
+      "title": "Annual European Union Finances Statement",
+      "url": "https://questions-statements.parliament.uk/Statements/213879",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Annual European Union Finances Statement",
+          "url": "https://questions-statements.parliament.uk/Statements/213879",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Treasury"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Annual European Union Finances Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-09T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "HM Treasury"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Annual European Union Finances Statement",
+          "url": "https://questions-statements.parliament.uk/Statements/213879",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Treasury",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Parliament"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "c7b2ecee4ddfa3d5",
+      "source_system": "parliament",
+      "title": "British Council Annual Report and Accounts 2024-25",
+      "url": "https://questions-statements.parliament.uk/Statements/213875",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "British Council Annual Report and Accounts 2024-25",
+          "url": "https://questions-statements.parliament.uk/Statements/213875",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Culture",
+          "Parliament",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "British Council Annual Report and Accounts 2024-25",
+            "type": "MinisterialStatement",
+            "date": "2026-03-09T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Culture",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "British Council Annual Report and Accounts 2024-25",
+          "url": "https://questions-statements.parliament.uk/Statements/213875",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Parliament"
+        ],
+        "locations": [
+          "Caribbean"
+        ],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": "Caribbean",
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Parliament"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "042e32c630ed9611",
+      "source_system": "parliament",
+      "title": "British Steel",
+      "url": "https://questions-statements.parliament.uk/Statements/213889",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "British Steel",
+          "url": "https://questions-statements.parliament.uk/Statements/213889",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Business and Trade"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "British Steel",
+            "type": "MinisterialStatement",
+            "date": "2026-03-11T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy",
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Business and Trade"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "British Steel",
+          "url": "https://questions-statements.parliament.uk/Statements/213889",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Business and Trade",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Business and Trade",
+              "Parliament"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "562a4aaad93eb08f",
+      "source_system": "parliament",
+      "title": "Correction to Written Statement HCWS1455",
+      "url": "https://questions-statements.parliament.uk/Statements/213877",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Correction to Written Statement HCWS1455",
+          "url": "https://questions-statements.parliament.uk/Statements/213877",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Housing, Communities and Local Government"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Correction to Written Statement HCWS1455",
+            "type": "MinisterialStatement",
+            "date": "2026-03-25T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Housing"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Correction to Written Statement HCWS1455",
+          "url": "https://questions-statements.parliament.uk/Statements/213877",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "low",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "391b1531e1531804",
+      "source_system": "govuk",
+      "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+      "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+          "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+          "published_at": "2026-03-06T09:43:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+          "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+          "published_at": "2026-03-06T09:43:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Wales"
+        ],
+        "events": [
+          {
+            "name": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "England",
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "2a9bf28d89716fd1",
+      "source_system": "govuk",
+      "title": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+      "url": "https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+          "url": "https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets",
+          "published_at": "2026-03-06T10:07:17Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-11T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Science, Innovation and Technology"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+          "url": "https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets",
+          "published_at": "2026-03-06T10:07:17Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Energy",
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology",
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "e2def8cece970146",
+      "source_system": "govuk",
+      "title": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+      "url": "https://www.gov.uk/government/speeches/transfer-of-the-nuclear-materials-in-the-context-of-aukus-and-its-safeguards-in-all-aspects-under-the-npt-statement-to-the-iaea-board-of-governors",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+          "url": "https://www.gov.uk/government/speeches/transfer-of-the-nuclear-materials-in-the-context-of-aukus-and-its-safeguards-in-all-aspects-under-the-npt-statement-to-the-iaea-board-of-governors",
+          "published_at": "2026-03-06T11:00:09Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-11T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+          "url": "https://www.gov.uk/government/speeches/transfer-of-the-nuclear-materials-in-the-context-of-aukus-and-its-safeguards-in-all-aspects-under-the-npt-statement-to-the-iaea-board-of-governors",
+          "published_at": "2026-03-06T11:00:09Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Westminster"
+        ],
+        "events": [
+          {
+            "name": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "Westminster",
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "ddfd9c07fa0c4687",
+      "source_system": "govuk",
+      "title": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+      "url": "https://www.gov.uk/government/news/crackdown-on-illegal-underage-sunbeds-use-to-cut-teen-cancer-risk",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+          "url": "https://www.gov.uk/government/news/crackdown-on-illegal-underage-sunbeds-use-to-cut-teen-cancer-risk",
+          "published_at": "2026-03-06T11:56:24Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department of Health and Social Care"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-11T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Healthcare"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department of Health and Social Care"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+          "url": "https://www.gov.uk/government/news/crackdown-on-illegal-underage-sunbeds-use-to-cut-teen-cancer-risk",
+          "published_at": "2026-03-06T11:56:24Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department of Health and Social Care",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England"
+        ],
+        "events": [
+          {
+            "name": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "England",
+            "policy_topics": [
+              "Education",
+              "Healthcare"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department of Health and Social Care"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "df494507a7b84685",
+      "source_system": "govuk",
+      "title": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+      "url": "https://www.gov.uk/government/news/new-permanent-secretary-appointed-at-the-department-for-energy-security-and-net-zero",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+          "url": "https://www.gov.uk/government/news/new-permanent-secretary-appointed-at-the-department-for-energy-security-and-net-zero",
+          "published_at": "2026-03-06T12:24:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Energy",
+          "Government Policy"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Cabinet Office",
+          "Department for Energy Security and Net Zero"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-11T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Energy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Energy Security and Net Zero"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+          "url": "https://www.gov.uk/government/news/new-permanent-secretary-appointed-at-the-department-for-energy-security-and-net-zero",
+          "published_at": "2026-03-06T12:24:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Energy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Cabinet Office",
+          "Department for Energy Security and Net Zero",
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": []
+      }
+    }
+  ]
+}
