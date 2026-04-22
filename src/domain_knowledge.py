@@ -62,7 +62,6 @@ PARLIAMENTARY_BODY_NAMES = [
 
 GOVERNMENT_DEPARTMENT_NAMES = [
     "HM Treasury",
-    "Treasury",
     "Home Office",
     "Cabinet Office",
     "Department of Health and Social Care",
@@ -106,6 +105,7 @@ GOVERNMENT_BODY_NAMES = GOVERNMENT_DEPARTMENT_NAMES + [
     "Charity Commission",
     "Attorney General's Office",
     "Welsh Government",
+    "Scottish Government",
     "House of Commons",
     "House of Lords",
     "Parliament",
@@ -188,6 +188,7 @@ GOVERNMENT_BODY_ALIASES = {
     "fcdo": "Foreign, Commonwealth and Development Office",
     "department for business, energy & industrial strategy": "Department for Business and Trade",
     "department for business, energy and industrial strategy": "Department for Business and Trade",
+    "department for international trade": "Department for Business and Trade",
     "dit": "Department for Business and Trade",
     "dbt": "Department for Business and Trade",
     "department for transport": "Department for Transport",
@@ -216,6 +217,7 @@ GOVERNMENT_BODY_ALIASES = {
     "charity commission": "Charity Commission",
     "attorney general's office": "Attorney General's Office",
     "prime minister's office": "Prime Minister's Office",
+    "scottish government": "Scottish Government",
     "welsh government": "Welsh Government",
 }
 
@@ -228,6 +230,7 @@ OFFICIAL_BODY_KIND_OVERRIDES = {
     "attorney general's office": "government_body",
     "prime minister's office": "government_body",
     "welsh government": "government_body",
+    "scottish government": "government_body",
 }
 
 MINISTER_ROLE_DEPARTMENT_MAP = {
