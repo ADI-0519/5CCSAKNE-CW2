@@ -1,0 +1,54 @@
+{
+  "people": [
+    "Mark Edwards",
+    "Ben Knight"
+  ],
+  "organizations": [
+    "The Guardian",
+    "HM Revenue and Customs",
+    "Tech City Labs",
+    "Sert Group",
+    "Sert Training",
+    "Sert Workforce Solutions",
+    "Meraki 6",
+    "Premier Group Recruitment"
+  ],
+  "locations": [
+    "Hampshire",
+    "England"
+  ],
+  "topics": [
+    "Taxation"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Acquisition of Sert Group and Sert Training",
+      "type": "PolicyEvent",
+      "date": null,
+      "location": "Hampshire"
+    },
+    {
+      "name": "Administration of 3R Global",
+      "type": "PolicyEvent",
+      "date": "2022-02-01",
+      "location": null
+    },
+    {
+      "name": "Administration of Sert Workforce Solutions",
+      "type": "PolicyEvent",
+      "date": "2024-10-01",
+      "location": null
+    },
+    {
+      "name": "Administration and sale of Sert Training",
+      "type": "PolicyEvent",
+      "date": null,
+      "location": null
+    }
+  ]
+}

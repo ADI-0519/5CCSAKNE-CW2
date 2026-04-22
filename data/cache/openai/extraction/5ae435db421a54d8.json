@@ -1,0 +1,53 @@
+{
+  "people": [
+    "Boris Johnson",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Conservative",
+    "Green Party",
+    "Labour",
+    "Liberal Democrats",
+    "Plaid Cymru",
+    "Reform UK",
+    "SNP",
+    "Scottish National Party",
+    "Sinn F\u00e9in"
+  ],
+  "locations": [
+    "England",
+    "Scotland",
+    "Wales",
+    "London",
+    "Northern Ireland"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative",
+    "Green Party",
+    "Labour",
+    "Liberal Democrats",
+    "Plaid Cymru",
+    "Reform UK",
+    "SNP",
+    "Scottish National Party",
+    "Sinn F\u00e9in"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

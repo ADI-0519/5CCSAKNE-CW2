@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Olivia Bailey",
+    "Danny Kruger",
+    "James Orr",
+    "Gordon Brown"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Labour Party",
+    "Department for Education",
+    "Institute for Fiscal Studies"
+  ],
+  "locations": [
+    "Camden",
+    "England",
+    "London"
+  ],
+  "topics": [
+    "Government Policy",
+    "Education",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Reform UK",
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Department for Education"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

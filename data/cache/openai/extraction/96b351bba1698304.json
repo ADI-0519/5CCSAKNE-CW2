@@ -1,0 +1,26 @@
+{
+  "people": [
+    "All Britons",
+    "Anna Turley",
+    "Gabriel Pogrund",
+    "Richard Tice"
+  ],
+  "organizations": [
+    "Labour",
+    "Reform UK",
+    "Sunday Times"
+  ],
+  "locations": [],
+  "topics": [
+    "Taxation"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

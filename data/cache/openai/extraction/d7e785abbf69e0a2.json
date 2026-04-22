@@ -1,0 +1,72 @@
+{
+  "people": [
+    "Yvette Cooper",
+    "Keir Starmer",
+    "Donald Trump",
+    "Marco Rubio",
+    "Bezalel Smotrich",
+    "Gideon Sa'ar",
+    "President Masoud Pezeshkian",
+    "John Healey",
+    "Jeremy Corbyn",
+    "Wes Streeting",
+    "Angela Rayner",
+    "Harriet Harman",
+    "Andrew Mountbatten-Windsor",
+    "Tom Fletcher",
+    "Jess Phillips",
+    "Zack Polanski",
+    "Shabana Mahmood",
+    "Gordon Brown",
+    "Ed Balls"
+  ],
+  "organizations": [
+    "Labour",
+    "Conservative Party",
+    "Foreign Office",
+    "Home Office",
+    "No 10",
+    "New York Times",
+    "United Nations",
+    "Treasury"
+  ],
+  "locations": [
+    "Iran",
+    "Gulf",
+    "Oman",
+    "Bahrain",
+    "Qatar",
+    "Kuwait",
+    "Saudi Arabia",
+    "Lebanon",
+    "Sudan",
+    "Washington",
+    "Munich",
+    "London",
+    "Gaza",
+    "Cyprus"
+  ],
+  "topics": [
+    "Government Policy",
+    "Defence"
+  ],
+  "politicians": [
+    "Yvette Cooper",
+    "Keir Starmer",
+    "Donald Trump",
+    "John Healey",
+    "Angela Rayner"
+  ],
+  "political_parties": [
+    "Labour",
+    "Conservative"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "Home Office",
+    "Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

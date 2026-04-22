@@ -1,0 +1,47 @@
+{
+  "people": [
+    "Peter Mandelson",
+    "Morgan McSweeney",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Conservative",
+    "Downing Street",
+    "Labour",
+    "No 10",
+    "Parliament",
+    "Sky News"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "political_parties": [
+    "Conservative",
+    "Labour"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "No 10",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Mandelson's ambassador appointment investigation",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-27",
+      "location": null
+    }
+  ]
+}

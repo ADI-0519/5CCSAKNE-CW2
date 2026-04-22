@@ -1,0 +1,30 @@
+{
+  "people": [],
+  "organizations": [
+    "Home Office",
+    "The Passport Office",
+    "Air India"
+  ],
+  "locations": [
+    "Canada",
+    "Denmark",
+    "Liverpool",
+    "Madrid",
+    "Mumbai",
+    "Oxfordshire",
+    "Yorkshire"
+  ],
+  "topics": [
+    "Immigration",
+    "Education",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

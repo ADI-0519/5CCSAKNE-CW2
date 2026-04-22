@@ -1,0 +1,35 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "President Trump",
+    "Priti Patel",
+    "Richard Tice"
+  ],
+  "organizations": [
+    "Downing Street"
+  ],
+  "locations": [
+    "Denmark"
+  ],
+  "topics": [
+    "Energy",
+    "Government Policy",
+    "Parliament",
+    "Taxation"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

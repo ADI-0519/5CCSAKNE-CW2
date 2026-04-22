@@ -1,0 +1,35 @@
+{
+  "people": [
+    "Andy Burnham",
+    "Angela Rayner",
+    "Keir Starmer",
+    "Nick Thomas-Symonds",
+    "Shabana Mahmood"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Labour Party",
+    "Sky News"
+  ],
+  "locations": [
+    "London",
+    "Manchester"
+  ],
+  "topics": [
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Cabinet Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

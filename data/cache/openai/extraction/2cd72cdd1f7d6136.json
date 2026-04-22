@@ -1,0 +1,28 @@
+{
+  "people": [
+    "Donald Trump",
+    "Keir Starmer",
+    "Pat McFadden"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Financial Times",
+    "Sky News"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Department for Work and Pensions",
+    "Downing Street"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

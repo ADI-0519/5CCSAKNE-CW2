@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Sharon Graham",
+    "Keir Starmer",
+    "Mothin Ali"
+  ],
+  "organizations": [
+    "Unite",
+    "Labour Party",
+    "Green Party"
+  ],
+  "locations": [
+    "Birmingham"
+  ],
+  "topics": [
+    "Public Spending",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Green Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Unite Rules Conference",
+      "type": "PolicyEvent",
+      "date": "2027-03-11",
+      "location": "Birmingham"
+    }
+  ]
+}

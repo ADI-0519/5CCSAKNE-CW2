@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Emma Best",
+    "James Cleverly",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Laura Kuenssberg",
+    "Nick Timothy",
+    "Richard Hermer"
+  ],
+  "organizations": [
+    "Conservative"
+  ],
+  "locations": [
+    "London",
+    "Trafalgar Square"
+  ],
+  "topics": [
+    "Politics",
+    "Religion"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "political_parties": [
+    "Conservative"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

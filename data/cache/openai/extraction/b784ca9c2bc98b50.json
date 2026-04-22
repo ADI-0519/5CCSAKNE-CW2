@@ -1,0 +1,47 @@
+{
+  "people": [
+    "Anna Turley",
+    "Nigel Farage",
+    "Richard Tice",
+    "Robert Jenrick",
+    "Andrea Jenkyns",
+    "Nadhim Zahawi",
+    "Donald Trump",
+    "Saddam Hussein"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Reform UK",
+    "Treasury",
+    "Conservative"
+  ],
+  "locations": [
+    "Iran",
+    "Westminster",
+    "Greater Lincolnshire"
+  ],
+  "topics": [
+    "Politics"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour",
+    "Reform UK",
+    "Conservative"
+  ],
+  "government_bodies": [
+    "Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Nigel Farage's statement on UK involvement in Iran",
+      "type": "PolicyEvent",
+      "date": "2026-03-10",
+      "location": "Westminster"
+    }
+  ]
+}

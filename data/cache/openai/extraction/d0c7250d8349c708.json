@@ -1,0 +1,32 @@
+{
+  "people": [
+    "Abimbola Johnson",
+    "Andy George",
+    "Gavin Stephens",
+    "Neil Basu"
+  ],
+  "organizations": [
+    "Home Office",
+    "National Police Chiefs Council"
+  ],
+  "locations": [
+    "England",
+    "London",
+    "Greater Manchester",
+    "Wales",
+    "West Midlands",
+    "West Yorkshire"
+  ],
+  "topics": [
+    "Government Policy",
+    "Race"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

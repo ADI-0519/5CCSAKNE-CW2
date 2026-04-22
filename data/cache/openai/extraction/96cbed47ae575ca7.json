@@ -1,0 +1,43 @@
+{
+  "people": [
+    "Ben Houchen",
+    "Keir Starmer",
+    "Sadiq Khan"
+  ],
+  "organizations": [
+    "Conservative",
+    "Downing Street",
+    "Financial Times",
+    "House of Lords",
+    "Labour",
+    "Liberal Democrats",
+    "No 10"
+  ],
+  "locations": [
+    "England",
+    "London",
+    "Scotland",
+    "Wales"
+  ],
+  "topics": [
+    "Parliament",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "House of Lords",
+    "No 10"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

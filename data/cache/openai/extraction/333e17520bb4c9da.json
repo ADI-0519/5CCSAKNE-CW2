@@ -1,0 +1,40 @@
+{
+  "people": [
+    "Ayatollah Ali Khamenei",
+    "Ayatollah Ruhollah Khomeini",
+    "Darren Osborne",
+    "Sarah Sackman",
+    "Shabana Mahmood",
+    "Sir Mark Rowley"
+  ],
+  "organizations": [
+    "Home Office",
+    "Islamic Human Rights Commission"
+  ],
+  "locations": [
+    "Gaza",
+    "London"
+  ],
+  "topics": [
+    "Protests",
+    "Public Safety",
+    "Palestinian Rights",
+    "Freedom of Assembly"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office",
+    "Metropolitan Police"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "al-Quds Day March Ban",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-11",
+      "location": "London"
+    }
+  ]
+}

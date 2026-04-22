@@ -1,0 +1,28 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Prof Philip Murphy"
+  ],
+  "organizations": [
+    "Conservative",
+    "Labour",
+    "Reform UK"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

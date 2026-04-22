@@ -1,0 +1,23 @@
+{
+  "people": [
+    "Duncan Lewis",
+    "Elizabeth Cole",
+    "Maddie Harris"
+  ],
+  "organizations": [
+    "Humans for Rights Network",
+    "Home Office"
+  ],
+  "locations": [],
+  "topics": [
+    "Immigration"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

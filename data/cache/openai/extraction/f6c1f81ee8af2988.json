@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Phil Woolas",
+    "Tony Blair",
+    "Gordon Brown",
+    "Tracey Woolas",
+    "Josh Woolas",
+    "Jed Woolas",
+    "Joanna Lumley",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Conservative Party",
+    "Parliament",
+    "Anti-Nazi League",
+    "GMB",
+    "Ace Centre"
+  ],
+  "locations": [
+    "Oldham East and Saddleworth",
+    "Westminster",
+    "Nepal"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament",
+    "Immigration"
+  ],
+  "politicians": [
+    "Phil Woolas",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Labour",
+    "Conservative"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

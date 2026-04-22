@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Angela Smith",
+    "Lady Smith",
+    "Lord Forsyth",
+    "Michael Forsyth"
+  ],
+  "organizations": [
+    "Conservative",
+    "House of Lords",
+    "Labour",
+    "Parliament",
+    "The Lords"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "House of Lords",
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

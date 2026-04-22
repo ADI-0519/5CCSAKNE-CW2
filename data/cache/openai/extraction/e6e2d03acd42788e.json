@@ -1,0 +1,27 @@
+{
+  "people": [
+    "Steve Valdez-Symonds"
+  ],
+  "organizations": [
+    "Home Office",
+    "Amnesty International UK",
+    "The Guardian"
+  ],
+  "locations": [
+    "UK",
+    "France",
+    "London",
+    "Paris"
+  ],
+  "topics": [
+    "Immigration"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

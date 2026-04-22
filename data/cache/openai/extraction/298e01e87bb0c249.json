@@ -1,0 +1,28 @@
+{
+  "people": [
+    "Shabana Mahmood",
+    "Martyn Snow",
+    "Rabbi Rebecca Birk",
+    "Qari Asim"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour"
+  ],
+  "locations": [
+    "Leeds"
+  ],
+  "topics": [
+    "Immigration"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

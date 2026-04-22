@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Peter Mandelson",
+    "Kemi Badenoch",
+    "Jonathan Powell",
+    "Jeffrey Epstein"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Labour",
+    "Conservative",
+    "No 10"
+  ],
+  "locations": [
+    "Belfast"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "political_parties": [
+    "Labour",
+    "Conservative"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "No 10"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

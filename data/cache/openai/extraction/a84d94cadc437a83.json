@@ -1,0 +1,26 @@
+{
+  "people": [
+    "D\u2019Arcy Williams",
+    "John Barber",
+    "Prof Chris Whitty"
+  ],
+  "organizations": [
+    "Nesta",
+    "Department of Health and Social Care"
+  ],
+  "locations": [
+    "England"
+  ],
+  "topics": [
+    "Government Policy",
+    "Health policy"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Department of Health and Social Care"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,28 @@
+{
+  "people": [
+    "Chris Philp",
+    "Jon Yates",
+    "Sarah Jones"
+  ],
+  "organizations": [
+    "Home Office",
+    "Youth Endowment Fund"
+  ],
+  "locations": [
+    "England"
+  ],
+  "topics": [
+    "Education",
+    "Knife crime"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Conservative"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

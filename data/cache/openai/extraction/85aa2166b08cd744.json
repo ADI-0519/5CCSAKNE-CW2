@@ -1,0 +1,55 @@
+{
+  "people": [
+    "Crispin Blunt",
+    "David Cameron",
+    "Tan Ikram",
+    "Zarah Dickinson"
+  ],
+  "organizations": [
+    "Conservative",
+    "Parliament"
+  ],
+  "locations": [
+    "Surrey",
+    "Westminster"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Crispin Blunt fined for drug possession",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-25",
+      "location": null,
+      "policy_topics": [
+        "Drugs Policy"
+      ],
+      "political_actors": [
+        "Crispin Blunt"
+      ],
+      "government_bodies": [
+        "Parliament"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Conservative Party"
+      ],
+      "evidence_spans": [
+        "Crispin Blunt has been fined \u00a31,200 for possessing illegal drugs after he told a court he entered the world of chemsex parties to help inform government policy."
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

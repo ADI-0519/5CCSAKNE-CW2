@@ -1,0 +1,40 @@
+{
+  "people": [
+    "Hamish Falconer",
+    "Jeremy Corbyn",
+    "Neve Gordon",
+    "Dr Shahd Hammouri"
+  ],
+  "organizations": [
+    "Foreign Office",
+    "Labour",
+    "Your Party",
+    "Palestine Solidarity Campaign",
+    "Global Legal Action Network",
+    "University of Kent",
+    "Queen Mary University of London"
+  ],
+  "locations": [
+    "Gaza",
+    "Israel",
+    "West Bank",
+    "London"
+  ],
+  "topics": [
+    "Government Policy",
+    "Healthcare",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour",
+    "Your Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

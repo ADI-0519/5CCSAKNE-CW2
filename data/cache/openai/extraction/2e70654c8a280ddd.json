@@ -1,0 +1,25 @@
+{
+  "people": [
+    "Alexandria Ocasio"
+  ],
+  "organizations": [
+    "Guardian News",
+    "Reform UK",
+    "The Guardian",
+    "Wall Street Journal"
+  ],
+  "locations": [
+    "Scotland"
+  ],
+  "topics": [],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Christopher Harborne",
+    "Duncan Hames",
+    "Elon Musk",
+    "Keir Starmer",
+    "Nathan Gill",
+    "Phil Brickell",
+    "Richard Tice",
+    "Sir Philip Rycroft",
+    "Steve Reed"
+  ],
+  "organizations": [
+    "Electoral Commission",
+    "GB News",
+    "Labour",
+    "Parliament",
+    "Reform UK"
+  ],
+  "locations": [
+    "Iran",
+    "Monaco",
+    "Russia",
+    "Thailand"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}
