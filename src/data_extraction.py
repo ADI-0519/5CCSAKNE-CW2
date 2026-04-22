@@ -145,7 +145,11 @@ def mark_event_candidate_flags(event):
 
 def find_named_matches(text, candidates):
     text_lower = text.lower()
-    matches = [candidate for candidate in candidates if candidate.lower() in text_lower]
+    matches = []
+    for candidate in candidates:
+        pattern = r"(?<![a-z0-9])" + re.escape(candidate.lower()) + r"(?![a-z0-9])"
+        if re.search(pattern, text_lower):
+            matches.append(candidate)
     return unique_sorted(matches)
 
 

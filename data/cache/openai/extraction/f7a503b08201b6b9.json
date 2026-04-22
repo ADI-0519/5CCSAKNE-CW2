@@ -1,0 +1,59 @@
+{
+  "people": [
+    "Liz Kendall",
+    "Chi Onwurah",
+    "John Nash",
+    "Lord Nash",
+    "Chris Sherwood",
+    "Prof Amy Orben"
+  ],
+  "organizations": [
+    "Wellcome Trust",
+    "Bradford Institute for Health Research",
+    "Conservative Party",
+    "The Commons"
+  ],
+  "locations": [
+    "Bradford"
+  ],
+  "topics": [
+    "Government Policy",
+    "Education",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Social Media Ban Pilot",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-25",
+      "location": null,
+      "policy_topics": [
+        "Social Media Restrictions",
+        "Child Protection"
+      ],
+      "political_actors": [
+        "Liz Kendall",
+        "John Nash",
+        "Lord Nash"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Conservative Party"
+      ],
+      "evidence_spans": [
+        "Pilot Program",
+        "Parental Concerns"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}
