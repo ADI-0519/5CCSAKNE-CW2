@@ -37,9 +37,13 @@ class TestUtilityFunctions:
         assert is_valid_url("http://example.com") is True
         assert is_valid_url("ftp://example.com") is False
 
-    def test_is_within_configured_window_uses_coursework_dates(self):
-        assert is_within_configured_window("2026-03-06T10:00:00Z") is True
-        assert is_within_configured_window("2026-04-20T10:00:00Z") is False
+    def test_is_within_configured_window(self):
+        from datetime import date, timedelta
+        today = date.today()
+        inside = (today - timedelta(days=15)).isoformat() + "T10:00:00Z"
+        outside = (today - timedelta(days=45)).isoformat() + "T10:00:00Z"
+        assert is_within_configured_window(inside) is True
+        assert is_within_configured_window(outside) is False
 
     def test_normalise_name_trims_and_collapses_whitespace(self):
         assert normalise_name("  hello   world  ") == "hello world"

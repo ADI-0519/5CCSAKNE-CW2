@@ -1,4 +1,5 @@
 import os
+from datetime import date, timedelta
 from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
@@ -29,8 +30,9 @@ load_dotenv()
 
 # project scope
 
-DATE_START = "2026-03-06"
-DATE_END = "2026-04-06"
+_today = date.today()
+DATE_END = _today.isoformat()
+DATE_START = (_today - timedelta(days=30)).isoformat()
 DATE_WINDOW = {"start": DATE_START, "end": DATE_END}
 
 PROJECT_SCOPE = (
