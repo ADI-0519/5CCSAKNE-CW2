@@ -248,6 +248,68 @@ class TestConvertJsonToRdf:
         assert (event, RDF.type, NEWS.PolicyEvent) in graph
         assert (event, RDF.type, NEWS.MinisterialStatement) not in graph
 
+    def test_partisan_statement_does_not_become_ministerial_from_record_level_department_noise(
+        self,
+    ):
+        record = sample_record(
+            title="Nigel Farage accused of U-turn as he says UK should keep out of Iran war",
+            summary="Farage comments on Iran and energy prices.",
+            event_candidates=[
+                {
+                    "name": "Nigel Farage's statement on UK involvement in Iran",
+                    "type": "GovernmentPolicyEvent",
+                    "date": "2026-03-10",
+                    "location": "Westminster",
+                    "source": "openai",
+                    "political_actors": ["Nigel Farage"],
+                    "political_parties": ["Reform UK"],
+                    "government_bodies": [],
+                    "policy_topics": ["Politics"],
+                }
+            ],
+            entities={
+                "organizations": ["Reform Treasury"],
+                "people": ["Nigel Farage", "Richard Tice", "Robert Jenrick"],
+                "politicians": ["Nigel Farage"],
+                "political_parties": ["Reform UK"],
+                "government_bodies": ["HM Treasury", "Office for National Statistics"],
+                "locations": ["Westminster"],
+                "technologies": [],
+                "topics": ["Politics"],
+                "events": ["Nigel Farage's statement on UK involvement in Iran"],
+            },
+        )
+
+        graph = convert_json_to_rdf([record])
+        event = NEWS[
+            "event/Nigel_Farage_s_statement_on_UK_involvement_in_Iran_2026-03-10_Westminster"
+        ]
+        treasury = NEWS["organisation/HM_Treasury"]
+
+        assert (event, RDF.type, NEWS.GovernmentPolicyEvent) in graph
+        assert (event, RDF.type, NEWS.MinisterialStatement) not in graph
+        assert (event, NEWS.issuedByDepartment, treasury) not in graph
+
+    def test_the_treasury_alias_is_canonicalised_to_hm_treasury(self):
+        record = sample_record(
+            entities={
+                "organizations": ["The Treasury"],
+                "people": [],
+                "politicians": [],
+                "political_parties": [],
+                "government_bodies": ["The Treasury"],
+                "locations": ["London"],
+                "technologies": [],
+                "topics": ["Economic Policy"],
+                "events": ["Budget"],
+            }
+        )
+
+        graph = convert_json_to_rdf([record])
+
+        assert (NEWS["organisation/HM_Treasury"], RDF.type, NEWS.GovernmentDepartment) in graph
+        assert (NEWS["organisation/The_Treasury"], None, None) not in graph
+
     def test_generic_parliament_policy_announcement_does_not_become_ministerial_without_department(
         self,
     ):
