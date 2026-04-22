@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "prediction_input": "data/processed/20260422T205841Z_kg_records.json",
+  "prediction_input": "data/processed/20260422T222815Z_kg_records.json",
   "instructions": "Edit each sample.gold block so it reflects the manually judged correct extraction. Leave prediction_snapshot untouched as the original machine output reference.",
   "samples": [
     {
@@ -38,9 +38,7 @@
           "Scottish National Party",
           "Sinn Féin"
         ],
-        "government_bodies": [
-          "Office for National Statistics"
-        ],
+        "government_bodies": [],
         "locations": [
           "England",
           "London",
@@ -80,7 +78,6 @@
           "Sinn Féin"
         ],
         "government_bodies": [
-          "Office for National Statistics",
           "Parliament"
         ],
         "locations": [
@@ -127,9 +124,7 @@
           "Reform UK",
           "Scottish National Party"
         ],
-        "government_bodies": [
-          "Office for National Statistics"
-        ],
+        "government_bodies": [],
         "locations": [
           "England",
           "Gorton",
@@ -172,8 +167,7 @@
           "Scottish National Party (SNP)"
         ],
         "government_bodies": [
-          "HM Treasury",
-          "Office for National Statistics"
+          "HM Treasury"
         ],
         "locations": [
           "England",
@@ -219,9 +213,7 @@
           "Reform",
           "Scottish National Party"
         ],
-        "government_bodies": [
-          "Office for National Statistics"
-        ],
+        "government_bodies": [],
         "locations": [
           "Caerphilly",
           "England",
@@ -257,9 +249,7 @@
           "Reform",
           "Scottish National Party"
         ],
-        "government_bodies": [
-          "Office for National Statistics"
-        ],
+        "government_bodies": [],
         "locations": [
           "Caerphilly",
           "England",
@@ -402,9 +392,7 @@
         ],
         "politicians": [],
         "political_parties": [],
-        "government_bodies": [
-          "Office for National Statistics"
-        ],
+        "government_bodies": [],
         "locations": [],
         "events": []
       }
@@ -551,8 +539,7 @@
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Department for Energy Security and Net Zero",
-          "Office for National Statistics"
+          "Department for Energy Security and Net Zero"
         ],
         "locations": [],
         "events": [
@@ -627,8 +614,7 @@
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Ministry of Housing, Communities and Local Government",
-          "Office for National Statistics"
+          "Ministry of Housing, Communities and Local Government"
         ],
         "locations": [
           "England",
@@ -680,8 +666,7 @@
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Department for Work and Pensions",
-          "Office for National Statistics"
+          "Department for Work and Pensions"
         ],
         "locations": [
           "England"

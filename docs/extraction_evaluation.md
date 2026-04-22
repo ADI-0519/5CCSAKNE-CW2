@@ -1,7 +1,7 @@
 # Extraction Evaluation
 
 - Gold standard: `data/evaluation/gold_standard_extraction.json`
-- Prediction input: `data/processed/20260422T205841Z_kg_records.json`
+- Prediction input: `data/processed/20260422T224746Z_kg_records.json`
 - Evaluated samples: `9`
 - Missing predictions: `0`
 
@@ -15,8 +15,8 @@
 - institution_links: precision `1.0`, recall `1.0`, f1 `1.0`
 - political_actors: precision `0.0`, recall `0.0`, f1 `0.0`
 - political_parties: precision `0.0`, recall `0.0`, f1 `0.0`
-- record_government_bodies: precision `0.5385`, recall `0.875`, f1 `0.6667`
-- record_locations: precision `0.95`, recall `1.0`, f1 `0.9744`
+- record_government_bodies: precision `0.7143`, recall `1.0`, f1 `0.8333`
+- record_locations: precision `1.0`, recall `1.0`, f1 `1.0`
 
 ## By Source System
 
@@ -31,7 +31,7 @@
 - institution_links: precision `1.0`, recall `1.0`, f1 `1.0`
 - political_actors: precision `0.0`, recall `0.0`, f1 `0.0`
 - political_parties: precision `0.0`, recall `0.0`, f1 `0.0`
-- record_government_bodies: precision `0.5`, recall `1.0`, f1 `0.6667`
+- record_government_bodies: precision `1.0`, recall `1.0`, f1 `1.0`
 - record_locations: precision `1.0`, recall `1.0`, f1 `1.0`
 
 ### guardian
@@ -45,8 +45,8 @@
 - institution_links: precision `0.0`, recall `0.0`, f1 `0.0`
 - political_actors: precision `0.0`, recall `0.0`, f1 `0.0`
 - political_parties: precision `0.0`, recall `0.0`, f1 `0.0`
-- record_government_bodies: precision `0.6`, recall `1.0`, f1 `0.75`
-- record_locations: precision `0.9412`, recall `1.0`, f1 `0.9697`
+- record_government_bodies: precision `0.0`, recall `0.0`, f1 `0.0`
+- record_locations: precision `1.0`, recall `1.0`, f1 `1.0`
 
 ### parliament
 
@@ -59,5 +59,5 @@
 - institution_links: precision `1.0`, recall `1.0`, f1 `1.0`
 - political_actors: precision `0.0`, recall `0.0`, f1 `0.0`
 - political_parties: precision `0.0`, recall `0.0`, f1 `0.0`
-- record_government_bodies: precision `0.5`, recall `0.5`, f1 `0.5`
+- record_government_bodies: precision `1.0`, recall `1.0`, f1 `1.0`
 - record_locations: precision `0.0`, recall `0.0`, f1 `0.0`
