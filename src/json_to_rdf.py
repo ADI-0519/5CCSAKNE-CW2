@@ -8,7 +8,6 @@ from src.domain_knowledge import (
     canonicalise_government_body_name,
     canonicalise_political_party_name,
     classify_official_body_kind,
-    has_ministerial_statement_signal,
     official_body_alias_terms,
 )
 
@@ -299,6 +298,13 @@ def classify_event(record, event):
         name: classify_official_body_kind(name) for name in government_bodies if str(name).strip()
     }
     department_evidence = any(kind == "government_department" for kind in body_kinds.values())
+    event_level_department_evidence = any(
+        classify_official_body_kind(name) == "government_department"
+        for name in event_government_bodies
+    )
+    official_source_department_evidence = (
+        source_system in OFFICIAL_SOURCE_SYSTEMS and department_evidence
+    )
     non_parliamentary_body_evidence = any(
         kind in {"government_department", "government_body"} for kind in body_kinds.values()
     )
@@ -306,13 +312,6 @@ def classify_event(record, event):
         classify_official_body_kind(name) in {"government_department", "government_body"}
         for name in event_government_bodies
     )
-    ministerial_signal = has_ministerial_statement_signal(
-        raw_name,
-        record.get("title"),
-        record.get("summary"),
-        " ".join(government_bodies),
-    )
-
     specific_type_map = {
         "PolicyEvent": NEWS.PolicyEvent,
         "ParliamentaryEvent": NEWS.ParliamentaryEvent,
@@ -325,14 +324,16 @@ def classify_event(record, event):
         return specific_type_map[raw_type]
     generic_event_name = raw_name in GENERIC_EVENT_NAMES or raw_name in {"", "Event", "News Event"}
     if raw_type == "MinisterialStatement" and (
-        department_evidence
-        or (ministerial_signal and not generic_event_name)
-        or ("ministerial statement" in lowered_name and department_evidence)
+        event_level_department_evidence
+        or official_source_department_evidence
+        or ("ministerial statement" in lowered_name and official_source_department_evidence)
     ):
         return NEWS.MinisterialStatement
 
     event_class = specific_type_map.get(raw_type, NEWS.PolicyEvent)
-    if raw_type == "MinisterialStatement" and not department_evidence:
+    if raw_type == "MinisterialStatement" and not (
+        event_level_department_evidence or official_source_department_evidence
+    ):
         if source_system in {"hansard", "parliament"}:
             event_class = NEWS.ParliamentaryEvent
         else:
@@ -383,9 +384,13 @@ def classify_event(record, event):
         return NEWS.ParliamentaryDebate
     if (
         "statement" in label_keywords
-        and (department_evidence or ministerial_signal or "ministerial" in label_keywords)
+        and (
+            event_level_department_evidence
+            or official_source_department_evidence
+            or ("ministerial" in label_keywords and official_source_department_evidence)
+        )
         and not generic_event_name
-    ) or ("ministerial statement" in lowered_name and department_evidence):
+    ) or ("ministerial statement" in lowered_name and official_source_department_evidence):
         return NEWS.MinisterialStatement
 
     return event_class

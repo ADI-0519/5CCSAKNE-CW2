@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "prediction_input": "data\\processed\\20260421T232429Z_kg_records.json",
+  "instructions": "Edit each sample.gold block so it reflects the manually judged correct extraction. Leave prediction_snapshot untouched as the original machine output reference.",
+  "samples": [
+    {
+      "record_id": "391b1531e1531804",
+      "source_system": "govuk",
+      "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+      "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+          "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+          "published_at": "2026-03-06T09:43:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Wales"
+        ],
+        "events": [
+          {
+            "name": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "England",
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+          "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+          "published_at": "2026-03-06T09:43:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Wales"
+        ],
+        "events": [
+          {
+            "name": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "England",
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "1c376cea19b86f53",
+      "source_system": "guardian",
+      "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+          "published_at": "2026-03-06T00:01:05Z",
+          "author": "Andrew Gregory Health editor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Burnham",
+          "Burnham-on-Sea",
+          "England",
+          "London",
+          "Madrid",
+          "Microport",
+          "Somerset",
+          "St Bernard",
+          "St Bernard's"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+          "published_at": "2026-03-06T00:01:05Z",
+          "author": "Andrew Gregory Health editor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Burnham",
+          "Burnham-on-Sea",
+          "England",
+          "London",
+          "Madrid",
+          "Microport",
+          "Somerset",
+          "St Bernard",
+          "St Bernard's"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "768fb94a807db1c6",
+      "source_system": "parliament",
+      "title": "Afghan Special Forces Relocation Review",
+      "url": "https://questions-statements.parliament.uk/Statements/201532",
+      "notes": "",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Afghan Special Forces Relocation Review",
+          "url": "https://questions-statements.parliament.uk/Statements/201532",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Afghan Special Forces Relocation Review",
+          "url": "https://questions-statements.parliament.uk/Statements/201532",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -177,6 +177,7 @@ GOVERNMENT_DEPARTMENT_KEYWORDS = frozenset(
 
 GOVERNMENT_BODY_ALIASES = {
     "treasury": "HM Treasury",
+    "the treasury": "HM Treasury",
     "dfe": "Department for Education",
     "dhsc": "Department of Health and Social Care",
     "dwp": "Department for Work and Pensions",
