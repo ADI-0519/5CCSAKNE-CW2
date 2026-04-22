@@ -1,0 +1,42 @@
+{
+  "people": [
+    "Ailsa Henderson",
+    "George Preston",
+    "Malcolm Offord",
+    "Humza Yousaf",
+    "Omowunmi Ola-Edagbami",
+    "Talat Yaqoob"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Scottish National Party",
+    "Women Against the Far Right Scotland",
+    "Black Scottish Stories"
+  ],
+  "locations": [
+    "Aberdeen",
+    "Dumfries",
+    "Glasgow",
+    "Scotland",
+    "Southport"
+  ],
+  "topics": [
+    "Immigration",
+    "Housing"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "government_bodies": [
+    "Office for National Statistics"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

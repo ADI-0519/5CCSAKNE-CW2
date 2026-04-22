@@ -1,0 +1,50 @@
+{
+  "people": [
+    "Darren Jones",
+    "David Lammy",
+    "Emily Thornberry",
+    "Ian Collard",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Matthew Doyle",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Philip Barton"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Conservative",
+    "Downing Street",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "No 10"
+  ],
+  "locations": [
+    "America",
+    "Washington"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "No 10",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

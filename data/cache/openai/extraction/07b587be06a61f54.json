@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Yvette Cooper",
+    "Ed Miliband",
+    "Matthew Doyle",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Morgan McSweeney",
+    "Jeffrey Epstein",
+    "Pat McFadden"
+  ],
+  "organizations": [
+    "Labour",
+    "Cabinet Office",
+    "No 10"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

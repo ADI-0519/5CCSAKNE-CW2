@@ -1,0 +1,40 @@
+{
+  "people": [
+    "George Robertson",
+    "Keir Starmer",
+    "Tony Blair",
+    "Lord Robertson",
+    "Richard Norton-Taylor"
+  ],
+  "organizations": [
+    "Ministry of Defence",
+    "Labour Party",
+    "National Audit Office",
+    "Lockheed Martin"
+  ],
+  "locations": [
+    "Akrotiri",
+    "Cyprus",
+    "Portsmouth",
+    "Wales",
+    "Westminster",
+    "Whitehall"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Ministry of Defence"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

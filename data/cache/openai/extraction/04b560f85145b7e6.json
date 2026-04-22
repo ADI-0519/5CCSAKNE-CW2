@@ -1,0 +1,87 @@
+{
+  "people": [
+    "David Lammy",
+    "Ed Davey",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Lord Mandelson",
+    "Peter Mandelson",
+    "Sir Olly Robbins",
+    "Yvette Cooper"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Conservative",
+    "Development Office",
+    "Downing Street",
+    "FCDO",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "House of Commons",
+    "Labour",
+    "Liberal Democrats",
+    "No 10",
+    "Parliament",
+    "The Guardian"
+  ],
+  "locations": [
+    "Hastings",
+    "Washington"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Ed Davey",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "House of Commons",
+    "No 10",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Mandelson's Appointment Controversy",
+      "type": "PolicyEvent",
+      "date": null,
+      "location": null,
+      "policy_topics": [
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Keir Starmer",
+        "Yvette Cooper",
+        "David Lammy"
+      ],
+      "government_bodies": [
+        "FCDO"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Conservative Party"
+      ],
+      "evidence_spans": [
+        "Decision to appoint and vet Mandelson"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

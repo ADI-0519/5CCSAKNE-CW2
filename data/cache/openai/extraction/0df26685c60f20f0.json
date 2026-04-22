@@ -1,0 +1,58 @@
+{
+  "people": [
+    "Ian Collard",
+    "Olly Robbins",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign Office"
+  ],
+  "locations": [
+    "Afghanistan",
+    "London",
+    "Panama",
+    "Washington",
+    "Whitehall"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Evidence to the foreign affairs committee",
+      "type": "ParliamentaryEvent",
+      "date": "2026-04-22",
+      "location": "London",
+      "policy_topics": [
+        "Security Clearance"
+      ],
+      "political_actors": [
+        "Ian Collard",
+        "Olly Robbins"
+      ],
+      "government_bodies": [
+        "Foreign Office"
+      ],
+      "parliamentary_body": "foreign affairs committee",
+      "political_parties": [],
+      "evidence_spans": [
+        "Robbins's evidence to the foreign affairs committee",
+        "Collard summoned to explain discrepancy"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

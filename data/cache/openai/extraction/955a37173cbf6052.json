@@ -1,0 +1,46 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "Malcolm Offord",
+    "John Swinney",
+    "Nigel Farage",
+    "Thomas Kerr"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Scottish National Party",
+    "Labour",
+    "Liberal Democrats",
+    "Scottish Conservatives"
+  ],
+  "locations": [
+    "Scotland",
+    "Glasgow",
+    "Paisley",
+    "Aberdeen",
+    "Holyrood"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Anas Sarwar",
+    "John Swinney",
+    "Malcolm Offord",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party",
+    "Liberal Democrats",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

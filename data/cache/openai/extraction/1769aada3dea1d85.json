@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Alan Gemmell",
+    "Antonia Romeo",
+    "Cat Little",
+    "Darren Jones",
+    "Keir Starmer",
+    "Lord Beamish",
+    "Oliver Robbins",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "Parliament"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "Parliament"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

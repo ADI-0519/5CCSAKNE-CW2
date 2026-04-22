@@ -1,0 +1,44 @@
+{
+  "people": [
+    "David Frost",
+    "Ferenc Kumin",
+    "Frank Furedi",
+    "James Orr",
+    "Matt Goodwin",
+    "Michael Gove",
+    "Nigel Farage",
+    "John O\u2019Sullivan"
+  ],
+  "organizations": [
+    "Fidesz",
+    "MCC Brussels",
+    "Roger Scruton Legacy Foundation",
+    "Reform UK",
+    "Danube Institute",
+    "Mathias Corvinus Collegium",
+    "Remix News"
+  ],
+  "locations": [
+    "Budapest",
+    "Hungary",
+    "Europe",
+    "Russia"
+  ],
+  "topics": [
+    "Public Spending",
+    "Energy",
+    "Politics",
+    "Economic Policy"
+  ],
+  "politicians": [
+    "P\u00e9ter Magyar"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,33 @@
+{
+  "people": [
+    "James Kyle Ealing",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Office for National Statistics"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Government Policy",
+    "Politics",
+    "Taxation"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Office for National Statistics"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

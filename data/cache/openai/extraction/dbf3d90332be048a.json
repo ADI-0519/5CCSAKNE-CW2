@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Natasha Cochrane de la Rosa",
+    "Catherine West",
+    "Nick (Natasha's father)",
+    "Mike Tapp"
+  ],
+  "organizations": [
+    "Home Office",
+    "easyJet",
+    "British embassy"
+  ],
+  "locations": [
+    "Spain",
+    "London",
+    "Luton",
+    "Netherlands",
+    "Australia",
+    "Canada",
+    "Lake District",
+    "US"
+  ],
+  "topics": [
+    "Immigration",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Mike Tapp"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office",
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

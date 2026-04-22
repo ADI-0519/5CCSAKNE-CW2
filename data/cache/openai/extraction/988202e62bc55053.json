@@ -1,0 +1,69 @@
+{
+  "people": [
+    "Alan West",
+    "Chris Ward",
+    "Derek Twigg",
+    "Gordon Brown",
+    "Jeffrey Epstein",
+    "Jeremy Wright",
+    "Keir Starmer",
+    "Lord Beamish",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Development Office",
+    "Downing Street",
+    "FCDO",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "Parliament",
+    "The Guardian"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Parliamentary vote on humble address",
+      "type": "ParliamentaryEvent",
+      "date": "2026-02-01",
+      "location": null,
+      "policy_topics": [
+        "Politics"
+      ],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "Parliament"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "Vote on the motion for all papers regarding Mandelson's appointment"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

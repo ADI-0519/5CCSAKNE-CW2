@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Judy O\u2019Shea",
+    "Hannah Devenney",
+    "Tim Pullen",
+    "Michael Solomon Williams",
+    "Richard Stevens",
+    "Thalia Marrington",
+    "Roger French"
+  ],
+  "organizations": [
+    "Go-Ahead",
+    "First Bus",
+    "Campaign for Better Transport",
+    "Labour Party"
+  ],
+  "locations": [
+    "Mousehole, Cornwall",
+    "England",
+    "Penzance",
+    "London",
+    "Iran"
+  ],
+  "topics": [
+    "Public Spending",
+    "Economic Policy",
+    "Transport"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Liberal Democrat",
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

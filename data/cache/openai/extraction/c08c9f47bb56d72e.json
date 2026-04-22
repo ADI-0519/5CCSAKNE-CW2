@@ -1,0 +1,35 @@
+{
+  "people": [
+    "David Galan",
+    "Jai Patel",
+    "Kwasi Kwarteng",
+    "Nigel Farage",
+    "Paul Withers",
+    "Ian Taylor",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Stack BTC",
+    "Kasei Investment Holdings",
+    "Direct Bullion",
+    "GB News",
+    "CryptoUK",
+    "Reform UK"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Nigel Farage",
+    "Kwasi Kwarteng"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

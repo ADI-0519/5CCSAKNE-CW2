@@ -1,0 +1,59 @@
+{
+  "people": [
+    "Rhun ap Iorwerth",
+    "Nigel Farage",
+    "Prof Gerry Holtham"
+  ],
+  "organizations": [
+    "Plaid Cymru",
+    "Labour",
+    "Reform UK",
+    "Green Party"
+  ],
+  "locations": [
+    "Wales",
+    "Westminster",
+    "Wrexham"
+  ],
+  "topics": [
+    "Politics",
+    "Healthcare",
+    "Taxation"
+  ],
+  "politicians": [
+    "Rhun ap Iorwerth",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Plaid Cymru",
+    "Labour",
+    "Reform UK",
+    "Green Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Plaid Cymru manifesto launch",
+      "type": "PolicyEvent",
+      "date": "2026-04-09",
+      "location": "Wrexham",
+      "policy_topics": [
+        "Healthcare",
+        "Taxation"
+      ],
+      "political_actors": [
+        "Rhun ap Iorwerth"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Plaid Cymru"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Peter Mandelson",
+    "Sir Olly Robbins",
+    "David Blunkett"
+  ],
+  "organizations": [
+    "Foreign Office",
+    "House of Lords",
+    "Labour"
+  ],
+  "locations": [
+    "Washington"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "House of Lords"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

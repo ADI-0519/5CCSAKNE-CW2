@@ -1,0 +1,48 @@
+{
+  "people": [
+    "Zia Yusuf",
+    "John Dramani Mahama",
+    "Prof Sir Hilary Beckles"
+  ],
+  "organizations": [
+    "Reform UK",
+    "African Union",
+    "Caribbean Community",
+    "Caricom Reparations Commission"
+  ],
+  "locations": [
+    "London",
+    "Westminster"
+  ],
+  "topics": [
+    "Immigration",
+    "Reparations and reparative justice"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "UN vote on transatlantic slave trade",
+      "type": "PolicyEvent",
+      "date": null,
+      "location": null,
+      "policy_topics": [
+        "Reparations and reparative justice"
+      ],
+      "political_actors": [],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

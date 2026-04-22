@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Darren Jones",
+    "David Lammy",
+    "Emily Thornberry",
+    "Fleur Anderson",
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Sir Chris Wormald",
+    "Yvette Cooper"
+  ],
+  "organizations": [
+    "Downing Street",
+    "FCDO",
+    "Foreign Office",
+    "Labour",
+    "No 10",
+    "Parliament",
+    "The Guardian"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "No 10",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

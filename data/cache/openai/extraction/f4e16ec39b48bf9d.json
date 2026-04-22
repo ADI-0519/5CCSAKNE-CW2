@@ -1,0 +1,72 @@
+{
+  "people": [
+    "Donald Trump",
+    "Jeremy Corbyn",
+    "Keir Starmer",
+    "Nigel Farage",
+    "Steve Reed",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "locations": [
+    "Clacton",
+    "Essex",
+    "London",
+    "Wales",
+    "Congress",
+    "England",
+    "Washington"
+  ],
+  "topics": [
+    "Housing",
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Local elections",
+      "type": "PolicyEvent",
+      "date": "2026-05-07",
+      "location": "Clacton",
+      "policy_topics": [
+        "Housing"
+      ],
+      "political_actors": [
+        "Keir Starmer",
+        "Nigel Farage",
+        "Steve Reed",
+        "Zack Polanski"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Green Party",
+        "Reform UK"
+      ],
+      "evidence_spans": [
+        "Labour is forecast to lose considerable ground to both the Greens and Reform UK in the elections for English councils."
+      ],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

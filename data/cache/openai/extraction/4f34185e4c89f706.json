@@ -1,0 +1,68 @@
+{
+  "people": [
+    "George Robertson",
+    "John Healey",
+    "Keir Starmer",
+    "Lord Robertson",
+    "Pete Hegseth",
+    "Rachel Reeves",
+    "Richard Barrons",
+    "Royal Air Force",
+    "Royal Navy"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Financial Times",
+    "Labour",
+    "Labour Party",
+    "Ministry of Defence"
+  ],
+  "locations": [
+    "Salisbury"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Public Spending",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "HM Treasury",
+    "Ministry of Defence",
+    "Parliament"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Lecture in Salisbury",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-14",
+      "location": "Salisbury",
+      "policy_topics": [
+        "Defence"
+      ],
+      "political_actors": [
+        "George Robertson"
+      ],
+      "government_bodies": [
+        "Ministry of Defence"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

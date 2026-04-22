@@ -1,0 +1,40 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Boris Johnson",
+    "Emmanuel Macron",
+    "Peter Mandelson",
+    "Jeffrey Epstein",
+    "Yvette Cooper",
+    "Olly Robbins"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Foreign Office",
+    "Labour Party",
+    "No 10",
+    "Parliament"
+  ],
+  "locations": [
+    "Paris"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign Office",
+    "Parliament"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

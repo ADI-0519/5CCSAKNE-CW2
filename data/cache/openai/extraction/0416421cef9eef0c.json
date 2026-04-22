@@ -1,0 +1,54 @@
+{
+  "people": [
+    "David Lammy",
+    "Emily Thornberry",
+    "Emmanuel Macron",
+    "Hamish Falconer",
+    "Howard Lutnick",
+    "John Healey",
+    "Jonathan Powell",
+    "Keir Starmer",
+    "Marco Rubio",
+    "Nick Thomas",
+    "Yvette Cooper",
+    "JD Vance"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign Office",
+    "Labour Party",
+    "Ministry of Justice"
+  ],
+  "locations": [
+    "Berlin",
+    "Europe",
+    "Iran",
+    "Islamabad",
+    "Washington",
+    "Whitehall",
+    "Gulf"
+  ],
+  "topics": [
+    "Government Policy",
+    "Politics",
+    "Defence"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "Home Office",
+    "Ministry of Defence",
+    "Ministry of Justice"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

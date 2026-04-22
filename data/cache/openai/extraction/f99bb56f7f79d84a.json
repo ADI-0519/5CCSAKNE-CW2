@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Electoral Reform Society"
+  ],
+  "locations": [
+    "Birmingham",
+    "Warwickshire",
+    "London",
+    "Tameside",
+    "West Midlands",
+    "England"
+  ],
+  "topics": [
+    "Politics",
+    "Local elections"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

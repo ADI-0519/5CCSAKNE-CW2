@@ -1,0 +1,48 @@
+{
+  "people": [
+    "Adm Lord West",
+    "Andy Burnham",
+    "Donald Trump",
+    "Emily Thornberry",
+    "Goldman Sachs",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Matthew Savill",
+    "Nigel Farage",
+    "Rachel Reeves",
+    "Winston Churchill"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Conservative Party",
+    "Reform UK",
+    "Royal United Services Institute"
+  ],
+  "locations": [
+    "Iran"
+  ],
+  "topics": [
+    "Defence",
+    "Energy",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour",
+    "Conservative",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Parliament"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

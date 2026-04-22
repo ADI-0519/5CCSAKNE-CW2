@@ -1,0 +1,45 @@
+{
+  "people": [
+    "Ali Khamenei",
+    "Chatham House",
+    "Donald Trump",
+    "George Robertson",
+    "Keir Starmer",
+    "Kim Darroch",
+    "Lord Robertson",
+    "Neville Chamberlain",
+    "Peter Mandelson",
+    "Royal Navy",
+    "Warren Stephens",
+    "White House"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Ministry of Defence",
+    "HM Treasury"
+  ],
+  "locations": [
+    "Denmark",
+    "Washington",
+    "Westminster"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Ministry of Defence",
+    "HM Treasury"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

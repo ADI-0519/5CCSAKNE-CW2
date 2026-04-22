@@ -1,0 +1,49 @@
+{
+  "people": [
+    "Ben Goldsborough",
+    "Dawn Butler",
+    "Ed Davey",
+    "Emily Thornberry",
+    "Keir Starmer",
+    "Nigel Farage",
+    "Stella Creasy",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "locations": [
+    "Gloucestershire",
+    "Iran",
+    "Wales",
+    "Warwickshire",
+    "Indian Ocean",
+    "England"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Ed Davey",
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Downing Street"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

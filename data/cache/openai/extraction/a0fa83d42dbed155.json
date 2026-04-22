@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Yvette Cooper",
+    "John Healey",
+    "Donald Trump",
+    "JD Vance"
+  ],
+  "organizations": [],
+  "locations": [
+    "Bahrain",
+    "Saudi Arabia",
+    "United Arab Emirates",
+    "Lebanon",
+    "Iran",
+    "London",
+    "Westminster"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Foreign Policy"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Yvette Cooper",
+    "John Healey"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "Ministry of Defence"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}
