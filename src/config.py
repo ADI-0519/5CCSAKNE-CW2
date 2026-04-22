@@ -29,8 +29,8 @@ load_dotenv()
 
 # project scope
 
-DATE_START = "2026-03-06"
-DATE_END = "2026-04-06"
+DATE_START = "2026-03-22"
+DATE_END = "2026-04-22"
 DATE_WINDOW = {"start": DATE_START, "end": DATE_END}
 
 PROJECT_SCOPE = (
