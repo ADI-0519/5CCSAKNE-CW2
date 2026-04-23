@@ -5192,18 +5192,17 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/d643a32952e9973c> ;
     schema:name "Defence Secretary No9 speech - 09 April 2026" .
 
-<http://example.org/news#event/Discussion_with_Defence_Secretary_2026-04-14_Salisbury> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Discussion_with_Defence_Secretary_2026-04-14> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence> ;
     news:involvesActor <http://example.org/news#person/George_Robertson>,
         <http://example.org/news#person/John_Healey> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence> ;
-    news:occursInLocation <http://example.org/news#location/Salisbury> ;
     news:occursOnDate "2026-04-14"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e361d8b2533da725> ;
     schema:name "Discussion with Defence Secretary" .
 
-<http://example.org/news#event/Economic_Fallout_from_US-Iran_Conflict_2026-04-15_Washington> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Economic_Fallout_from_US-Iran_Conflict_2026-04-15> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Foreign_Policy> ;
@@ -5211,7 +5210,6 @@
         <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Rachel_Reeves> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury> ;
-    news:occursInLocation <http://example.org/news#location/Washington> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/ac8c498204dc0f3c> ;
     schema:name "Economic Fallout from US-Iran Conflict" .
@@ -5226,10 +5224,10 @@
     news:reportedByArticle <http://example.org/news#article/db8e86d23fa55986> ;
     schema:name "Election" .
 
-<http://example.org/news#event/Election_2026-04-10_Bolton_bc727d25> a news:PolicyEvent ;
+<http://example.org/news#event/Election_2026-04-10_Manchester_bc727d25> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Nigel_Farage> ;
-    news:occursInLocation <http://example.org/news#location/Bolton> ;
+    news:occursInLocation <http://example.org/news#location/Manchester> ;
     news:occursOnDate "2026-04-10"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/bc727d25d9898c4b> ;
     schema:name "Election" .
@@ -5520,14 +5518,13 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/7b25aab0b1710f6c> ;
     schema:name "Iconic golden eagles to make comeback in England" .
 
-<http://example.org/news#event/Introduction_of_annual_cap_on_overseas_donations_and_moratorium_on_crypto_donations_2026-03-25_Iran> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Introduction_of_annual_cap_on_overseas_donations_and_moratorium_on_crypto_donations_2026-03-25> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Public_Spending> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Sir_Philip_Rycroft> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury> ;
-    news:occursInLocation <http://example.org/news#location/Iran> ;
     news:occursOnDate "2026-03-25"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/eb5aa45bab40e684> ;
     schema:name "Introduction of annual cap on overseas donations and moratorium on crypto donations" .
@@ -5554,12 +5551,12 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/b0c2ccadfd1ff08a> ;
     schema:name "Israel’s decision to expand its ground operations further into Lebanon undermines work to disarm Hizballah and threatens Lebanon’s sovereignty: UK statement at the UN Security Council" .
 
-<http://example.org/news#event/Japan-UK_Foreign_Ministers__Strategic_Dialogue_2026___Joint_Statement_2026-04-20_Tokyo> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Japan-UK_Foreign_Ministers__Strategic_Dialogue_2026___Joint_Statement_2026-04-20_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
         news:PolicyEvent ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/Tokyo> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-20"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/9907b70c569d58b2> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/9907b70c569d58b2> ;
@@ -5591,13 +5588,13 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/4ef8e517947a16f0> ;
     schema:name "Joint Fisheries Statement (JFS)" .
 
-<http://example.org/news#event/Joint_Statement_at_the_Aurora_Forum__26_March_2026_2026-03-26_Denmark> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Joint_Statement_at_the_Aurora_Forum__26_March_2026_2026-03-26_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/Denmark> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/b3af6f0e71be6a14> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/b3af6f0e71be6a14> ;
@@ -5614,22 +5611,21 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/7643a527c4a08c35> ;
     schema:name "Joint Statement from Finance Ministers on the Middle East: 15 April 2026" .
 
-<http://example.org/news#event/Joint_Statement_from_the_leaders_of_the_Joint_Expeditionary_Force__26_March_2026_2026-03-26_Helsinki> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Joint_Statement_from_the_leaders_of_the_Joint_Expeditionary_Force__26_March_2026_2026-03-26> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Downing_Street>,
         <http://example.org/news#organisation/Prime_Minister_s_Office> ;
-    news:occursInLocation <http://example.org/news#location/Helsinki> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/6bd524084093b580> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/6bd524084093b580> ;
     schema:name "Joint Statement from the leaders of the Joint Expeditionary Force: 26 March 2026" .
 
-<http://example.org/news#event/Joint_Statement_of_G7_Foreign_Ministers_on_Iran_2026-03-27_Vaux-de-Cernay> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Joint_Statement_of_G7_Foreign_Ministers_on_Iran_2026-03-27_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
         news:PolicyEvent ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/Vaux-de-Cernay> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-03-27"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/add968ebc1784c70> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/add968ebc1784c70> ;
@@ -6114,13 +6110,12 @@
     news:reportedByArticle <http://example.org/news#article/452f62bbd02a883b> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-03-24_Germany_f349e806> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Policy_Announcement_2026-03-24_f349e806> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Public_Spending> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence> ;
-    news:occursInLocation <http://example.org/news#location/Germany> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/f349e8065760290c> ;
     schema:name "Policy Announcement" .
@@ -6177,12 +6172,11 @@
     news:reportedByArticle <http://example.org/news#article/ca9dfd5f6bfa0303> ;
     schema:name "Policy Announcement" .
 
-<http://example.org/news#event/Policy_Announcement_2026-04-12_Iran_e193d7e1> a news:PolicyEvent ;
+<http://example.org/news#event/Policy_Announcement_2026-04-12_e193d7e1> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Politics> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Wes_Streeting> ;
-    news:occursInLocation <http://example.org/news#location/Iran> ;
     news:occursOnDate "2026-04-12"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e193d7e12fb0b57e> ;
     schema:name "Policy Announcement" .
@@ -6417,12 +6411,12 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/83b9022890bb4b37> ;
     schema:name "Repression in Russia: UK and others express concern at Russian court’s decision to classify Memorial as an “extremist organization”: Joint Statement to the OSCE" .
 
-<http://example.org/news#event/Response_to_the_Independent_Review_into_Releases_in_Error_2026-04-15_Error> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Response_to_the_Independent_Review_into_Releases_in_Error_2026-04-15_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Immigration> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Justice> ;
-    news:occursInLocation <http://example.org/news#location/Error> ;
+    news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/3efaec54a8fe5c8d> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/3efaec54a8fe5c8d> ;
@@ -6438,13 +6432,12 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/3405b0887a557751> ;
     schema:name "Road Investment Strategy 3 (RIS3): 2026 to 2031" .
 
-<http://example.org/news#event/Robbins__testimony_to_foreign_affairs_select_committee_2026-04-21_UKSV> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Robbins__testimony_to_foreign_affairs_select_committee_2026-04-21> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Olly_Robbins> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/UKSV> ;
     news:occursOnDate "2026-04-21"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/55bd2cfdfed06ec0> ;
     schema:name "Robbins' testimony to foreign affairs select committee" .
@@ -6723,13 +6716,13 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/b46cb2a23436931d> ;
     schema:name "The only solution to the current crisis in South Sudan is through the immediate cessation of hostilities: UK statement at the UN Security Council" .
 
-<http://example.org/news#event/Third_International_Sudan_Conference__April_2026__co-hosts__statement_2026-04-16_Berlin> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/Third_International_Sudan_Conference__April_2026__co-hosts__statement_2026-04-16_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/Berlin> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-16"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e2f05ba69096c538> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/e2f05ba69096c538> ;
@@ -6810,11 +6803,11 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/c8a9b3547c67d5c7> ;
     schema:name "UK and EU finalise agreement to bring UK into Erasmus+ in 2027" .
 
-<http://example.org/news#event/UK_boosts_funding_to_local_responders_to_help_more_than_1_8_million_people_in_Sudan_s_humanitarian_crisis_2026-04-14_Berlin> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/UK_boosts_funding_to_local_responders_to_help_more_than_1_8_million_people_in_Sudan_s_humanitarian_crisis_2026-04-14_Westminster> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Public_Spending> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/Berlin> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-14"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/4139676d9dd71329> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/4139676d9dd71329> ;
@@ -6831,12 +6824,11 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/b2fb29ffc93e704e> ;
     schema:name "UK crackdown on vile scam centres steps up with sanctions on illicit crypto network" .
 
-<http://example.org/news#event/UK_operation_against_Russian_submarines_2026-04-09_Nato> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/UK_operation_against_Russian_submarines_2026-04-09> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Defence> ;
     news:involvesActor <http://example.org/news#person/John_Healey> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence> ;
-    news:occursInLocation <http://example.org/news#location/Nato> ;
     news:occursOnDate "2026-04-09"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/88cdb395bfc42162> ;
     schema:name "UK operation against Russian submarines" .
@@ -6885,14 +6877,13 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/4bc009bbcbfc78fb> ;
     schema:name "UN Human Rights Council 61: UK Statement on the Appointment of Mandate Holders" .
 
-<http://example.org/news#event/US-Israel_war_on_Iran_2026-03-26_Chingford> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/US-Israel_war_on_Iran_2026-03-26> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Energy> ;
     news:involvesActor <http://example.org/news#person/Keir_Starmer>,
         <http://example.org/news#person/Rachel_Reeves> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Competition_and_Markets_Authority> ;
-    news:occursInLocation <http://example.org/news#location/Chingford> ;
     news:occursOnDate "2026-03-26"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/4cb6320d947c0459> ;
     schema:name "US-Israel war on Iran" .
@@ -6921,11 +6912,10 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/d01b1138958d33e9> ;
     schema:name "Unlocking private investment to drive UK defence as an engine for growth" .
 
-<http://example.org/news#event/Unveiling_New_Party_Pledge_2026-03-31_Iran> a news:PolicyEvent ;
+<http://example.org/news#event/Unveiling_New_Party_Pledge_2026-03-31> a news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Government_Policy> ;
     news:involvesActor <http://example.org/news#person/Nigel_Farage> ;
-    news:occursInLocation <http://example.org/news#location/Iran> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/d1d75524cb259a5a> ;
     schema:name "Unveiling New Party Pledge" .
@@ -6952,12 +6942,12 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/62293833926f1586> ;
     schema:name "Victims of workplace abuse will no longer be silenced" .
 
-<http://example.org/news#event/WTO_General_Council_March_2026__UK_Statement_Day_1_and_Day_2_2026-04-14_Geneva> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/WTO_General_Council_March_2026__UK_Statement_Day_1_and_Day_2_2026-04-14_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
         news:PolicyEvent ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/Geneva> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-14"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/b443cc2c2813728b> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/b443cc2c2813728b> ;
@@ -6974,12 +6964,12 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/62668be8544e2494> ;
     schema:name "We call for greater efforts to protect women and girls, and Indigenous and Afro-Colombian communities in Colombia: UK statement at the UN Security Council" .
 
-<http://example.org/news#event/We_can_shape_a_world_where_every_human_being_can_live_with_dignity__safety__and_choice__UK_National_Statement_at_the_59th_session_of_the_Commission_on_Population_and_Development_2026-04-15_CPD> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/We_can_shape_a_world_where_every_human_being_can_live_with_dignity__safety__and_choice__UK_National_Statement_at_the_59th_session_of_the_Commission_on_Population_and_Development_2026-04-15_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
         news:PolicyEvent ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
     news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
-    news:occursInLocation <http://example.org/news#location/CPD> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
     news:occursOnDate "2026-04-15"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/1e49a5f8a7a16bc4> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/1e49a5f8a7a16bc4> ;
@@ -7158,6 +7148,9 @@
 <http://example.org/news#location/Belfast> a news:Location ;
     schema:name "Belfast" .
 
+<http://example.org/news#location/Berlin> a news:Location ;
+    schema:name "Berlin" .
+
 <http://example.org/news#location/Bernie> a news:Location ;
     schema:name "Bernie" .
 
@@ -7166,6 +7159,9 @@
 
 <http://example.org/news#location/Bletchley> a news:Location ;
     schema:name "Bletchley" .
+
+<http://example.org/news#location/Bolton> a news:Location ;
+    schema:name "Bolton" .
 
 <http://example.org/news#location/Brexit> a news:Location ;
     schema:name "Brexit" .
@@ -7178,6 +7174,9 @@
 
 <http://example.org/news#location/Budapest> a news:Location ;
     schema:name "Budapest" .
+
+<http://example.org/news#location/CPD> a news:Location ;
+    schema:name "CPD" .
 
 <http://example.org/news#location/Caerphilly> a news:Location ;
     schema:name "Caerphilly" .
@@ -7212,6 +7211,9 @@
 <http://example.org/news#location/Chinese> a news:Location ;
     schema:name "Chinese" .
 
+<http://example.org/news#location/Chingford> a news:Location ;
+    schema:name "Chingford" .
+
 <http://example.org/news#location/Clacton> a news:Location ;
     schema:name "Clacton" .
 
@@ -7232,6 +7234,9 @@
 
 <http://example.org/news#location/Denbigh_Hall> a news:Location ;
     schema:name "Denbigh Hall" .
+
+<http://example.org/news#location/Denmark> a news:Location ;
+    schema:name "Denmark" .
 
 <http://example.org/news#location/Dentons> a news:Location ;
     schema:name "Dentons" .
@@ -7296,6 +7301,12 @@
 <http://example.org/news#location/Gaza> a news:Location ;
     schema:name "Gaza" .
 
+<http://example.org/news#location/Geneva> a news:Location ;
+    schema:name "Geneva" .
+
+<http://example.org/news#location/Germany> a news:Location ;
+    schema:name "Germany" .
+
 <http://example.org/news#location/Glasgow> a news:Location ;
     schema:name "Glasgow" .
 
@@ -7329,6 +7340,9 @@
 <http://example.org/news#location/Heathrow> a news:Location ;
     schema:name "Heathrow" .
 
+<http://example.org/news#location/Helsinki> a news:Location ;
+    schema:name "Helsinki" .
+
 <http://example.org/news#location/Holyrood> a news:Location ;
     schema:name "Holyrood" .
 
@@ -7346,6 +7360,9 @@
 
 <http://example.org/news#location/Ipswich> a news:Location ;
     schema:name "Ipswich" .
+
+<http://example.org/news#location/Iran> a news:Location ;
+    schema:name "Iran" .
 
 <http://example.org/news#location/Iraq> a news:Location ;
     schema:name "Iraq" .
@@ -7433,6 +7450,9 @@
 
 <http://example.org/news#location/National_Education> a news:Location ;
     schema:name "National Education" .
+
+<http://example.org/news#location/Nato> a news:Location ;
+    schema:name "Nato" .
 
 <http://example.org/news#location/Newhaven> a news:Location ;
     schema:name "Newhaven" .
@@ -7527,6 +7547,9 @@
 <http://example.org/news#location/Russia-linked> a news:Location ;
     schema:name "Russia-linked" .
 
+<http://example.org/news#location/Salisbury> a news:Location ;
+    schema:name "Salisbury" .
+
 <http://example.org/news#location/Scots> a news:Location ;
     schema:name "Scots" .
 
@@ -7593,6 +7616,9 @@
 <http://example.org/news#location/Thurrock> a news:Location ;
     schema:name "Thurrock" .
 
+<http://example.org/news#location/Tokyo> a news:Location ;
+    schema:name "Tokyo" .
+
 <http://example.org/news#location/Tory> a news:Location ;
     schema:name "Tory" .
 
@@ -7601,6 +7627,9 @@
 
 <http://example.org/news#location/UKHSA> a news:Location ;
     schema:name "UKHSA" .
+
+<http://example.org/news#location/UKSV> a news:Location ;
+    schema:name "UKSV" .
 
 <http://example.org/news#location/UK_Security> a news:Location ;
     schema:name "UK Security" .
@@ -7614,6 +7643,9 @@
 <http://example.org/news#location/Ukraine> a news:Location ;
     schema:name "Ukraine" .
 
+<http://example.org/news#location/Vaux-de-Cernay> a news:Location ;
+    schema:name "Vaux-de-Cernay" .
+
 <http://example.org/news#location/Vietnam> a news:Location ;
     schema:name "Vietnam" .
 
@@ -7622,6 +7654,9 @@
 
 <http://example.org/news#location/Warwickshire> a news:Location ;
     schema:name "Warwickshire" .
+
+<http://example.org/news#location/Washington> a news:Location ;
+    schema:name "Washington" .
 
 <http://example.org/news#location/Washington_DC> a news:Location ;
     schema:name "Washington DC" .
@@ -13565,20 +13600,11 @@
 <http://example.org/news#location/Birmingham> a news:Location ;
     schema:name "Birmingham" .
 
-<http://example.org/news#location/Bolton> a news:Location ;
-    schema:name "Bolton" .
-
 <http://example.org/news#location/Bristol> a news:Location ;
     schema:name "Bristol" .
 
-<http://example.org/news#location/CPD> a news:Location ;
-    schema:name "CPD" .
-
 <http://example.org/news#location/CYBERUK> a news:Location ;
     schema:name "CYBERUK" .
-
-<http://example.org/news#location/Chingford> a news:Location ;
-    schema:name "Chingford" .
 
 <http://example.org/news#location/Colombia> a news:Location ;
     schema:name "Colombia" .
@@ -13586,23 +13612,8 @@
 <http://example.org/news#location/DPRTE> a news:Location ;
     schema:name "DPRTE" .
 
-<http://example.org/news#location/Denmark> a news:Location ;
-    schema:name "Denmark" .
-
 <http://example.org/news#location/Edinburgh> a news:Location ;
     schema:name "Edinburgh" .
-
-<http://example.org/news#location/Error> a news:Location ;
-    schema:name "Error" .
-
-<http://example.org/news#location/Geneva> a news:Location ;
-    schema:name "Geneva" .
-
-<http://example.org/news#location/Germany> a news:Location ;
-    schema:name "Germany" .
-
-<http://example.org/news#location/Helsinki> a news:Location ;
-    schema:name "Helsinki" .
 
 <http://example.org/news#location/Kosovo> a news:Location ;
     schema:name "Kosovo" .
@@ -13610,32 +13621,11 @@
 <http://example.org/news#location/Lebanon> a news:Location ;
     schema:name "Lebanon" .
 
-<http://example.org/news#location/Manchester> a news:Location ;
-    schema:name "Manchester" .
-
 <http://example.org/news#location/Maritime> a news:Location ;
     schema:name "Maritime" .
 
-<http://example.org/news#location/Nato> a news:Location ;
-    schema:name "Nato" .
-
-<http://example.org/news#location/Salisbury> a news:Location ;
-    schema:name "Salisbury" .
-
 <http://example.org/news#location/Syria> a news:Location ;
     schema:name "Syria" .
-
-<http://example.org/news#location/Tokyo> a news:Location ;
-    schema:name "Tokyo" .
-
-<http://example.org/news#location/UKSV> a news:Location ;
-    schema:name "UKSV" .
-
-<http://example.org/news#location/Vaux-de-Cernay> a news:Location ;
-    schema:name "Vaux-de-Cernay" .
-
-<http://example.org/news#location/Washington> a news:Location ;
-    schema:name "Washington" .
 
 <http://example.org/news#organisation/Charity_Commission> a news:GovernmentBody,
         news:OfficialBody ;
@@ -14947,8 +14937,8 @@
 <http://example.org/news#topic/Workers__rights> a news:PolicyTopic ;
     schema:name "Workers' rights" .
 
-<http://example.org/news#location/Berlin> a news:Location ;
-    schema:name "Berlin" .
+<http://example.org/news#location/Manchester> a news:Location ;
+    schema:name "Manchester" .
 
 <http://example.org/news#location/Northern_Ireland> a news:Location ;
     schema:name "Northern Ireland" .
@@ -15225,9 +15215,6 @@
 
 <http://example.org/news#person/Will_Parman> a news:Journalist ;
     schema:name "Will Parman" .
-
-<http://example.org/news#location/Iran> a news:Location ;
-    schema:name "Iran" .
 
 <http://example.org/news#organisation/Attorney_General_s_Office> a news:GovernmentBody,
         news:OfficialBody ;
