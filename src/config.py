@@ -29,6 +29,8 @@ from src.domain_knowledge import (
 load_dotenv()
 
 # project scope
+# Live collection uses a rolling 30-day window.
+# For coursework submission and evaluation, the shipped cached snapshot is fixed to 2026-03-23 through 2026-04-22, and all reported results refer to that cache.
 
 _today = date.today()
 DATE_END = _today.isoformat()
