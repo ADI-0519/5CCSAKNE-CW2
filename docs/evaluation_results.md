@@ -49,7 +49,7 @@ Generated graph counts:
 Completion additions:
 
 - `194` `news:reportsOn` inverse links
-- `157` `news:matchedToSourceRecord` links
+- `155` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
 - RAG additions: `7` actor links, `6` department links, `112` topic links
 - Total delta from prototype to completed KG: `503` triples
@@ -111,7 +111,7 @@ Summary metrics:
 - Ministerial statements: `55`
 - Events with dates: `194` (`100%`)
 - Events with topics: `194` (`100%`)
-- Events with a government body: `179` (`92.27%`)
+- Events with a government body: `181` (`93.3%`)
 - Events linked to official source records: `153` (`78.87%`)
 
 Extraction summary:
@@ -122,8 +122,8 @@ Extraction summary:
   - `Policy Announcement`: `19`
   - `Ministerial Statement`: `3`
 - Confidence counts:
-  - `high`: `136`
-  - `medium`: `58`
+  - `high`: `138`
+  - `medium`: `56`
 - Extraction methods:
   - `heuristic`: `193`
   - `openai`: `1`
