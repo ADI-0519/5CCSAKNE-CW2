@@ -4,13 +4,13 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260423T022716Z`
+- `20260423T040948Z`
 
 Primary artefacts:
 
-- `data/processed/20260423T022716Z_normalised_articles.json`
-- `data/processed/20260423T022716Z_extracted_articles.json`
-- `data/processed/20260423T022716Z_kg_records.json`
+- `data/processed/20260423T040948Z_normalised_articles.json`
+- `data/processed/20260423T040948Z_extracted_articles.json`
+- `data/processed/20260423T040948Z_kg_records.json`
 - `kg/generated/new_kg.ttl`
 - `kg/generated/wikidata_kg.ttl`
 - `kg/generated/prototype_kg.ttl`
@@ -27,10 +27,10 @@ The pipeline completed all stages successfully.
 
 Source records:
 
-- Guardian records: `259`
+- Guardian records: `270`
 - Parliament records: `20`
-- GOV.UK records: `394`
-- Combined normalised records: `673`
+- GOV.UK records: `410`
+- Combined normalised records: `700`
 
 Wikidata enrichment:
 
@@ -40,19 +40,19 @@ Wikidata enrichment:
 
 Generated graph counts:
 
-- Ontology graph: `188` triples
-- Source-derived instance KG: `12978` triples
+- Ontology graph: `192` triples
+- Source-derived instance KG: `13445` triples
 - Wikidata KG: `25115` triples
-- Prototype KG: `38112` triples
-- Completed KG: `38602` triples
+- Prototype KG: `38583` triples
+- Completed KG: `39086` triples
 
 Completion additions:
 
-- `188` `news:reportsOn` inverse links
-- `149` `news:matchedToSourceRecord` links
+- `194` `news:reportsOn` inverse links
+- `155` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
-- RAG additions: `7` actor links, `6` department links, `111` topic links
-- Total delta from prototype to completed KG: `490` triples
+- RAG additions: `7` actor links, `6` department links, `112` topic links
+- Total delta from prototype to completed KG: `503` triples
 
 Structural judgment:
 
@@ -81,7 +81,7 @@ All `20/20` competency queries returned at least one row when the current query 
 | CQ12 | 11 |
 | CQ13 | 35 |
 | CQ14 | 16 |
-| CQ15 | 7 |
+| CQ15 | 6 |
 | CQ16 | 7 |
 | CQ17 | 5 |
 | CQ18 | 18 |
@@ -92,7 +92,7 @@ Important judgments:
 
 - `CQ04` confirms that reported policy events can also be represented in official Parliament or GOV.UK source records.
 - `CQ11` and `CQ12` confirm that official source records support institution and topic queries over the completed graph.
-- `CQ09` intentionally exposes missing links; its count of 28 reflects the smaller dataset in this run producing proportionally more events without complete institution grounding.
+- `CQ09` intentionally exposes missing links; its count of `25` reflects the smaller dataset in this run producing proportionally more events without complete institution grounding.
 
 ## 3. Validation and Summary Metrics
 
@@ -104,28 +104,28 @@ Validation:
 
 Summary metrics:
 
-- Policy events: `188`
-- Government policy events: `165`
+- Policy events: `194`
+- Government policy events: `171`
 - Parliamentary events: `12`
 - Parliamentary debates: `7`
-- Ministerial statements: `52`
-- Events with dates: `188` (`100%`)
-- Events with topics: `188` (`100%`)
-- Events with a government body: `167` (`88.83%`)
-- Events linked to official source records: `147` (`78.19%`)
+- Ministerial statements: `55`
+- Events with dates: `194` (`100%`)
+- Events with topics: `194` (`100%`)
+- Events with a government body: `173` (`89.18%`)
+- Events linked to official source records: `153` (`78.87%`)
 
 Extraction summary:
 
-- Extracted events: `188`
+- Extracted events: `194`
 - Generic fallback events: `22`
 - Generic fallback names:
   - `Policy Announcement`: `19`
   - `Ministerial Statement`: `3`
 - Confidence counts:
   - `high`: `136`
-  - `medium`: `52`
+  - `medium`: `58`
 - Extraction methods:
-  - `heuristic`: `187`
+  - `heuristic`: `193`
   - `openai`: `1`
 
 ## 4. Baseline Comparison
@@ -138,26 +138,27 @@ Reference file:
 
 Headline results:
 
-- `CQ04`: prototype `125`, completed `125`, delta `+0`
-- `CQ11`: prototype `109`, completed `115`, delta `+6`
+- `CQ04`: prototype `144`, completed `147`, delta `+3`
+- `CQ11`: prototype `133`, completed `140`, delta `+7`
 - `CQ12`: prototype `11`, completed `11`, delta `+0`
 - `CQ16`: prototype `7`, completed `7`, delta `+0`
-- `CQ18`: prototype `11`, completed `12`, delta `+1`
+- `CQ18`: prototype `16`, completed `18`, delta `+2`
 
 Interpretation:
 
-- `CQ11` shows the clearest completion benefit, with 6 additional rows from `matchedToSourceRecord` and `representedInOfficialSource` links enabling cross-source traversal that the prototype graph cannot support.
+- `CQ04` shows completion benefit, with 3 additional rows from `matchedToSourceRecord` links enabling cross-source traversal that the prototype graph cannot support.
+- `CQ11` shows the clearest completion benefit, with 7 additional rows from `matchedToSourceRecord` and `representedInOfficialSource` links enabling cross-source traversal that the prototype graph cannot support.
 - `CQ18` also shows completion benefit from additional actor links.
-- `CQ04`, `CQ12`, and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
+- `CQ12` and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
 - A direct LLM answer cannot ground any of these results in the actual dataset.
 
 ## 5. Performance Benchmark
 
 The benchmark times a full `--from-cache` pipeline run without any data collection or API calls.
 
-- Elapsed time: `21.05` seconds
-- Records processed: `673`
-- Throughput: `31.97` records/second
+- Elapsed time: `22.03` seconds
+- Records processed: `700`
+- Throughput: `31.77` records/second
 - Platform: Linux (WSL2 6.6.87.2-microsoft-standard-WSL2), Python 3.12.3
 - Peak memory: not available (WSL2 reports `null` for working set; measurement is Windows-only)
 
@@ -195,6 +196,7 @@ The final report should frame the system as a working automated KG pipeline with
 
 It should explicitly state that:
 
-- heuristics act as weak supervision, canonicalisation support, and fallback extraction
+- heuristics act as primary extraction; OpenAI extraction is a targeted fallback that fires only when the heuristic result lacks both structured events and an institution or actor. . 193 of 194 events had enough structure for the gate to skip the LLM call entirely.
+- the primary LLM contribution in the pipeline is the RAG completion step, which processed `95` events and accepted `125` triples
 - OpenAI is used critically for structured extraction support, completion support, and evaluation baselines
 - validation, query coverage, completion audit logs, and summary metrics provide the strongest evidence for the current final pipeline
