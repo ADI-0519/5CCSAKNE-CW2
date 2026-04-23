@@ -4,7 +4,9 @@ This document describes the current completion/enrichment stage in the pipeline 
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 23 March 2026 to 22 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news over a rolling 30-day collection window, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+
+The submitted cached snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 ## Current Pipeline State
 
@@ -29,29 +31,29 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260423T022716Z`
-- normalised source records: `673`
-- Guardian articles: `259`
+- timestamp: `20260423T032541Z`
+- normalised source records: `700`
+- Guardian articles: `270`
 - Parliament source records: `20`
-- GOV.UK source records: `394`
+- GOV.UK source records: `410`
 - Wikidata entities: `1724` politicians, `968` parties, `489` government bodies
 - ontology graph: `192` triples
-- source-derived instance KG: `12978` triples
+- source-derived instance KG: `13457` triples
 - Wikidata KG: `25115` triples
-- prototype KG: `38116` triples
-- completed KG: `38606` triples
+- prototype KG: `38595` triples
+- completed KG: `39101` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
-- `188` `news:reportsOn` inverse links
-- `149` `news:matchedToSourceRecord` cross-source links
+- `194` `news:reportsOn` inverse links
+- `157` `news:matchedToSourceRecord` cross-source links
 - `5` `news:representedInOfficialSource` links
 - `7` `news:involvesActor` links (RAG)
 - `6` `news:involvesGovernmentBody` links (RAG)
-- `111` `news:concernsPolicyTopic` links (RAG)
+- `115` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `490` triples.
+The completed KG is therefore larger than the prototype KG by `506` triples.
 
 ## What Is Covered Well
 
@@ -148,7 +150,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
-- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 111 topic links were not present in the prototype KG.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 115 topic links were not present in the prototype KG.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 
