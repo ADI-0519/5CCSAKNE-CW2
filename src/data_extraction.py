@@ -8,6 +8,7 @@ from src.config import CONFIG
 from src.data_normalisation import normalise_collected_sources, normalise_name
 from src.domain_knowledge import (
     GOVERNMENT_BODY_NAME_SET,
+    INTERNATIONAL_BODY_LOCATIONS,
     POLITICAL_PARTY_NAME_SET,
     POLITICIAN_NAME_SET,
     TOPIC_NAME_SET,
@@ -44,7 +45,7 @@ LOCATION_PATTERN = re.compile(
     r"([A-Z][a-zA-Z'\-]+(?:\s+[A-Z][a-zA-Z'\-]+)?)\b"
 )
 
-CANONICAL_LOCATION_NAMES = UK_LOCATION_NAME_SET
+CANONICAL_LOCATION_NAMES = UK_LOCATION_NAME_SET | frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
 KNOWN_GOVERNMENT_BODY_NAMES = GOVERNMENT_BODY_NAME_SET
 KNOWN_POLITICAL_PARTY_NAMES = POLITICAL_PARTY_NAME_SET
 KNOWN_POLITICIAN_NAMES = POLITICIAN_NAME_SET
@@ -763,26 +764,31 @@ def infer_event_type(event_name):
 
 
 def preferred_event_location(locations, text_lower, topics):
-    # parliamentary events almost always happen in London so prefer it when signal is clear
     if not locations:
         return None
-    if (
-        "Parliament" in topics
-        or "parliament" in text_lower
-        or "westminster" in text_lower
-        or "house of commons" in text_lower
-    ):
+    if "Parliament" in topics or "house of commons" in text_lower:
         if "Westminster" in locations:
             return "Westminster"
         if "London" in locations:
             return "London"
-    return locations[0]
+    non_westminster = [loc for loc in locations if loc not in {"Westminster", "Westminster Hall"}]
+    if non_westminster:
+        return non_westminster[0]
+    return None
+
+
+def international_body_location(event_name):
+    name_lower = event_name.lower()
+    for fragment, city in INTERNATIONAL_BODY_LOCATIONS.items():
+        if fragment.lower() in name_lower:
+            return city
+    return None
 
 
 def choose_event_location(event_name, event_type, locations, text_lower, topics):
     candidates = sanitize_locations(locations)
     if not candidates:
-        return None
+        return international_body_location(event_name)
 
     event_lower = event_name.lower()
     parliamentary_like = (
@@ -816,12 +822,16 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
         candidate
         for candidate in candidates
         if candidate not in CONFIG["EXTRACTION_BROAD_EVENT_LOCATIONS"]
+        and candidate not in {"Westminster", "Westminster Hall"}
         and (candidate in CANONICAL_LOCATION_NAMES or candidate.lower() in event_lower)
     ]
     if filtered:
         return filtered[0]
 
-    return candidates[0] if candidates[0] in CANONICAL_LOCATION_NAMES else None
+    first = candidates[0]
+    if first in CANONICAL_LOCATION_NAMES and first not in {"Westminster", "Westminster Hall"}:
+        return first
+    return international_body_location(event_name)
 
 
 def generic_event_fallback_blocked(article, article_type=None):
