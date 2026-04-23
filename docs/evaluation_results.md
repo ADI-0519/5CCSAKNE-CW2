@@ -4,13 +4,13 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260423T073344Z`
+- `20260423T110354Z`
 
 Primary artefacts:
 
-- `data/processed/20260423T073344Z_normalised_articles.json`
-- `data/processed/20260423T073344Z_extracted_articles.json`
-- `data/processed/20260423T073344Z_kg_records.json`
+- `data/processed/20260423T110354Z_normalised_articles.json`
+- `data/processed/20260423T110354Z_extracted_articles.json`
+- `data/processed/20260423T110354Z_kg_records.json`
 - `kg/generated/new_kg.ttl`
 - `kg/generated/wikidata_kg.ttl`
 - `kg/generated/prototype_kg.ttl`
@@ -41,18 +41,18 @@ Wikidata enrichment:
 Generated graph counts:
 
 - Ontology graph: `192` triples
-- Source-derived instance KG: `13470` triples
+- Source-derived instance KG: `13438` triples
 - Wikidata KG: `25115` triples
-- Prototype KG: `38608` triples
-- Completed KG: `39111` triples
+- Prototype KG: `38576` triples
+- Completed KG: `39086` triples
 
 Completion additions:
 
 - `194` `news:reportsOn` inverse links
-- `155` `news:matchedToSourceRecord` links
+- `157` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
-- RAG additions: `7` actor links, `6` department links, `112` topic links
-- Total delta from prototype to completed KG: `503` triples
+- RAG additions: `7` actor links, `6` department links, `119` topic links
+- Total delta from prototype to completed KG: `510` triples
 
 Structural judgment:
 
@@ -81,11 +81,11 @@ All `20/20` competency queries returned at least one row when the current query 
 | CQ12 | 11 |
 | CQ13 | 35 |
 | CQ14 | 16 |
-| CQ15 | 6 |
+| CQ15 | 7 |
 | CQ16 | 7 |
 | CQ17 | 5 |
 | CQ18 | 18 |
-| CQ19 | 4 |
+| CQ19 | 5 |
 | CQ20 | 17 |
 
 Important judgments:
@@ -130,7 +130,7 @@ Extraction summary:
 
 ## 4. Baseline Comparison
 
-The direct LLM baseline comparison was refreshed against the latest prototype and completed graphs.
+The direct LLM baseline is an illustrative contrast, not a controlled evaluation. The LLM answers from training knowledge without being constrained to the same 700 collected records or the same date window, so differences in counts are not straightforwardly interpretable as KG completeness gaps. The comparison is included to show that SPARQL answers are dataset-grounded and auditable in a way that direct LLM answers are not.
 
 Reference file:
 
@@ -150,17 +150,17 @@ Interpretation:
 - `CQ11` shows the clearest completion benefit, with 7 additional rows from `matchedToSourceRecord` and `representedInOfficialSource` links enabling cross-source traversal that the prototype graph cannot support.
 - `CQ18` also shows completion benefit from additional actor links.
 - `CQ12` and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
-- A direct LLM answer cannot ground any of these results in the actual dataset.
+- A direct LLM answer cannot ground any of these results in the actual dataset; each SPARQL result is traceable to specific triples and source records.
 
 ## 5. Performance Benchmark
 
 The benchmark times a full `--from-cache` pipeline run without any data collection or API calls.
 
-- Elapsed time: `23.53` seconds
+- Elapsed time: `24.01` seconds
 - Records processed: `700`
-- Throughput: `29.75` records/second
+- Throughput: `29.15` records/second
 - Platform: Linux (WSL2 6.6.87.2-microsoft-standard-WSL2), Python 3.12.3
-- Peak memory: `231.54 MB` (RSS, sampled via /proc on WSL2)
+- Peak memory: `232.2 MB` (RSS, sampled via /proc on WSL2)
 
 The benchmark confirms the pipeline is fast enough for repeated iteration from cache without any meaningful wait cost.
 
@@ -197,6 +197,6 @@ The final report should frame the system as a working automated KG pipeline with
 It should explicitly state that:
 
 - heuristics act as primary extraction; OpenAI extraction is a targeted fallback that fires only when the heuristic result lacks both structured events and an institution or actor. . 193 of 194 events had enough structure for the gate to skip the LLM call entirely.
-- the primary LLM contribution in the pipeline is the RAG completion step, which processed `95` events and accepted `125` triples
+- the primary LLM contribution in the pipeline is the RAG completion step, which processed `95` events and accepted `132` triples
 - OpenAI is used critically for structured extraction support, completion support, and evaluation baselines
 - validation, query coverage, completion audit logs, and summary metrics provide the strongest evidence for the current final pipeline
