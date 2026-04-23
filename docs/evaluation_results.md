@@ -52,6 +52,7 @@ Completion additions:
 - `157` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
 - RAG additions: `7` actor links, `6` department links, `114` topic links
+- RAG precision (manual annotation, all 127 accepted): `96.8%` (`91/94` events fully correct, `3` incorrect additions)
 - Total delta from prototype to completed KG: `505` triples
 
 Structural judgment:
