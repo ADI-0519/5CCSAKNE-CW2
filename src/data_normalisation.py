@@ -234,7 +234,7 @@ def _extract_text_fragments(value):
     return []
 
 
-def normalise_parliament_records(raw_data):
+def normalise_parliament_records(raw_data, enforce_date_window=True):
     response = raw_data.get("response") or {}
     candidates = []
 
@@ -274,7 +274,7 @@ def normalise_parliament_records(raw_data):
             continue
         if not is_valid_url(url):
             continue
-        if not is_within_configured_window(published_at):
+        if enforce_date_window and not is_within_configured_window(published_at):
             continue
 
         tags = deduplicate_list(
@@ -323,7 +323,7 @@ def normalise_parliament_records(raw_data):
     return normalised
 
 
-def normalise_govuk_records(raw_data):
+def normalise_govuk_records(raw_data, enforce_date_window=True):
     response = raw_data.get("response") or {}
     results = response.get("results", []) if isinstance(response, dict) else []
     normalised = []
@@ -340,7 +340,7 @@ def normalise_govuk_records(raw_data):
             continue
         if not is_valid_url(url):
             continue
-        if not is_within_configured_window(published_at):
+        if enforce_date_window and not is_within_configured_window(published_at):
             continue
         if not govuk_result_is_in_scope(item):
             continue
@@ -381,7 +381,7 @@ def normalise_govuk_records(raw_data):
     return normalised
 
 
-def normalise_guardian_articles(raw_data):
+def normalise_guardian_articles(raw_data, enforce_date_window=True):
     response = raw_data.get("response") or {}
     articles = response.get("results", [])
     normalised = []
@@ -396,7 +396,7 @@ def normalise_guardian_articles(raw_data):
             continue
         if not is_valid_url(url):
             continue
-        if not is_within_configured_window(published_at):
+        if enforce_date_window and not is_within_configured_window(published_at):
             continue
 
         fields = article.get("fields") or {}
@@ -440,11 +440,11 @@ def normalise_guardian_articles(raw_data):
     return normalised
 
 
-def normalise_collected_sources(collected_data):
+def normalise_collected_sources(collected_data, enforce_date_window=True):
     sources = collected_data.get("sources", {})
-    guardian_records = normalise_guardian_articles(sources.get("guardian") or {})
-    parliament_records = normalise_parliament_records(sources.get("parliament") or {})
-    govuk_records = normalise_govuk_records(sources.get("govuk") or {})
+    guardian_records = normalise_guardian_articles(sources.get("guardian") or {}, enforce_date_window)
+    parliament_records = normalise_parliament_records(sources.get("parliament") or {}, enforce_date_window)
+    govuk_records = normalise_govuk_records(sources.get("govuk") or {}, enforce_date_window)
     combined = guardian_records + parliament_records + govuk_records
 
     seen_ids = set()
