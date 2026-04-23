@@ -44591,4 +44591,3 @@ news:PoliticalActor a owl:Class ;
     rdfs:label "Political Actor" ;
     rdfs:comment "A person participating in a policy event in a political capacity." ;
     rdfs:subClassOf schema:Person .
-

@@ -772,7 +772,11 @@ def preferred_event_location(locations, text_lower, topics):
         if "London" in locations:
             return "London"
     intl_cities = frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
-    non_westminster = [loc for loc in locations if loc not in {"Westminster", "Westminster Hall"} and loc not in intl_cities]
+    non_westminster = [
+        loc
+        for loc in locations
+        if loc not in {"Westminster", "Westminster Hall"} and loc not in intl_cities
+    ]
     if non_westminster:
         return non_westminster[0]
     return None

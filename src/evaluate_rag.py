@@ -192,8 +192,6 @@ def build_markdown(report):
             f"| {label} | {actors} | {depts} | {topics} | {e['n_proposed']} | {e['n_accepted']} |"
         )
 
-
-
     return "\n".join(lines) + "\n"
 
 
