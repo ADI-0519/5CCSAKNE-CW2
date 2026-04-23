@@ -746,7 +746,7 @@ def infer_event_type(event_name):
         "debate" in event_lower
         or "prime minister's questions" in event_lower
         or "pmqs" in event_lower
-    ):
+    ) and not international_body_location(event_name):
         return "ParliamentaryDebate"
     if has_ministerial_statement_signal(event_name):
         return "MinisterialStatement"
@@ -771,7 +771,8 @@ def preferred_event_location(locations, text_lower, topics):
             return "Westminster"
         if "London" in locations:
             return "London"
-    non_westminster = [loc for loc in locations if loc not in {"Westminster", "Westminster Hall"}]
+    intl_cities = frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
+    non_westminster = [loc for loc in locations if loc not in {"Westminster", "Westminster Hall"} and loc not in intl_cities]
     if non_westminster:
         return non_westminster[0]
     return None
@@ -786,9 +787,13 @@ def international_body_location(event_name):
 
 
 def choose_event_location(event_name, event_type, locations, text_lower, topics):
+    intl = international_body_location(event_name)
+    if intl:
+        return intl
+
     candidates = sanitize_locations(locations)
     if not candidates:
-        return international_body_location(event_name)
+        return None
 
     event_lower = event_name.lower()
     parliamentary_like = (
@@ -805,10 +810,12 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
             return "Westminster"
         if "London" in candidates:
             return "London"
+        intl_cities = frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
         filtered = [
             candidate
             for candidate in candidates
             if candidate not in CONFIG["EXTRACTION_BROAD_EVENT_LOCATIONS"]
+            and candidate not in intl_cities
             and (candidate in CANONICAL_LOCATION_NAMES or candidate.lower() in event_lower)
         ]
         if filtered:
@@ -831,7 +838,7 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
     first = candidates[0]
     if first in CANONICAL_LOCATION_NAMES and first not in {"Westminster", "Westminster Hall"}:
         return first
-    return international_body_location(event_name)
+    return None
 
 
 def generic_event_fallback_blocked(article, article_type=None):
@@ -965,7 +972,7 @@ def sanitize_event_candidates(article, text, entities, topics, locations, events
         event_type = coerce_event_type_for_source(article, name, event_type, signals)
         location = normalise_label(event.get("location"))
         if location and location not in valid_locations:
-            location = preferred_event_location(
+            location = international_body_location(name) or preferred_event_location(
                 sorted(valid_locations), signals["text_lower"], topics
             )
         if (
