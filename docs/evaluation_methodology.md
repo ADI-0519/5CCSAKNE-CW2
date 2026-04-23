@@ -4,7 +4,7 @@ This document defines how the current UK parliamentary and government policy eve
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 6 March 2026 to 6 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news during 23 March 2026 to 22 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
 
 The pipeline produces these artefacts:
 
@@ -69,7 +69,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260422T172612Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260423T022716Z`
 
 ## 3. Extraction And Mapping Quality
 
