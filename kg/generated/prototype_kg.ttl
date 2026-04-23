@@ -195,6 +195,15 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/politics/2026/apr/02/reform-uk-simon-dudley-grenfell-families-everyone-dies"^^xsd:anyURI .
 
+<http://example.org/news#article/0841f519f793b069> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/publications/streamlining-infrastructure-planning-implementation-plan"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T10:00:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T10:00:00+00:00"^^xsd:dateTime ;
+    schema:headline "Streamlining infrastructure planning: implementation plan" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/publications/streamlining-infrastructure-planning-implementation-plan"^^xsd:anyURI .
+
 <http://example.org/news#article/08b7fae0685598cd> a news:NewsArticle ;
     news:articleURL "https://www.theguardian.com/commentisfree/2026/apr/15/the-guardian-view-on-the-looming-energy-shock-ministers-need-to-show-they-have-a-plan"^^xsd:anyURI ;
     news:hasAuthor <http://example.org/news#person/Editorial> ;
@@ -888,6 +897,15 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/politics/2026/apr/14/war-gulf-british-defence"^^xsd:anyURI .
 
+<http://example.org/news#article/2f5707acb768f79c> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/independent-assurance-reviewer-sought-to-examine-dwps-activities-relating-to-post-office-staff-prosecutions"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T10:20:32+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T10:20:32+00:00"^^xsd:dateTime ;
+    schema:headline "Independent Assurance Reviewer sought to examine DWP’s activities relating to Post Office staff prosecutions" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/independent-assurance-reviewer-sought-to-examine-dwps-activities-relating-to-post-office-staff-prosecutions"^^xsd:anyURI .
+
 <http://example.org/news#article/30a2e480bb907910> a news:NewsArticle ;
     news:articleURL "https://questions-statements.parliament.uk/Statements/275697"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/UK_Parliament> ;
@@ -1109,6 +1127,17 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/faster-approvals-for-clean-energy-projects-to-protect-families-from-rising-bills"^^xsd:anyURI .
 
+<http://example.org/news#article/39ef3a5993c2e0ba> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/uk-news/2026/mar/23/six-students-challenge-home-office-visa-ban-sudan-afghanistan"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Diane_Taylor> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T18:00:56+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Diane_Taylor> ;
+    schema:datePublished "2026-03-23T18:00:56+00:00"^^xsd:dateTime ;
+    schema:headline "Six students challenge Home Office visa ban on four countries" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/uk-news/2026/mar/23/six-students-challenge-home-office-visa-ban-sudan-afghanistan"^^xsd:anyURI .
+
 <http://example.org/news#article/3a45a9a6451a6692> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/work-begins-on-severn-stoke-flood-scheme"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -1270,6 +1299,17 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/farming-and-food-leaders-unite-to-drive-growth-in-british-agriculture"^^xsd:anyURI .
 
+<http://example.org/news#article/433413b606d2c8db> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/reform-mayoral-candidate-likens-jewish-community-group-to-islamists-on-horseback"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Ben_Quinn_Political_correspondent> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T17:32:25+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Ben_Quinn_Political_correspondent> ;
+    schema:datePublished "2026-03-23T17:32:25+00:00"^^xsd:dateTime ;
+    schema:headline "Reform mayoral candidate likens Jewish community group to ‘Islamists on horseback’" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/reform-mayoral-candidate-likens-jewish-community-group-to-islamists-on-horseback"^^xsd:anyURI .
+
 <http://example.org/news#article/43b44f421cb8e65a> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/kinship-zones-programme-specification"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -1371,6 +1411,15 @@ news: a owl:Ontology ;
     schema:headline "New practical advice for families to get children school ready" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/new-practical-advice-for-families-to-get-children-school-ready"^^xsd:anyURI .
+
+<http://example.org/news#article/49769130ff7efe8d> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/welsh-steel-industry-backed-with-new-trade-measure-and-strategy"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T16:29:25+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T16:29:25+00:00"^^xsd:dateTime ;
+    schema:headline "Welsh steel industry backed with new trade measure and strategy" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/welsh-steel-industry-backed-with-new-trade-measure-and-strategy"^^xsd:anyURI .
 
 <http://example.org/news#article/4ad0f029cbf5cf4a> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/communiques-from-the-interministerial-group-for-safety-security-and-migration"^^xsd:anyURI ;
@@ -1595,6 +1644,15 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/UK_Parliament> ;
     schema:url "https://questions-statements.parliament.uk/Statements/275705"^^xsd:anyURI .
 
+<http://example.org/news#article/595ea67342f089a5> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/publications/local-growth-fund-scotland-prospectus"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T14:01:58+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T14:01:58+00:00"^^xsd:dateTime ;
+    schema:headline "Local Growth Fund (Scotland) Prospectus" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/publications/local-growth-fund-scotland-prospectus"^^xsd:anyURI .
+
 <http://example.org/news#article/59ad88a2709c0138> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/early-years-register-providers-inspection-requirements-for-ofsted"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -1634,6 +1692,17 @@ news: a owl:Ontology ;
     schema:headline "The Guardian view on blaming the civil service: the predictable refuge of failing governments | Editorial" ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/commentisfree/2026/apr/22/the-guardian-view-on-blaming-the-civil-service-the-predictable-refuge-of-failing-governments"^^xsd:anyURI .
+
+<http://example.org/news#article/5ae435db421a54d8> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/uk-local-elections-key-takeaways"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Peter_Walker_Senior_political_correspondent> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T07:00:43+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Peter_Walker_Senior_political_correspondent> ;
+    schema:datePublished "2026-03-23T07:00:43+00:00"^^xsd:dateTime ;
+    schema:headline "What’s at stake for UK in May’s elections: six key questions" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/uk-local-elections-key-takeaways"^^xsd:anyURI .
 
 <http://example.org/news#article/5b83f2d2af70946a> a news:NewsArticle ;
     news:articleURL "https://www.theguardian.com/politics/2026/apr/07/starmer-legally-defensive-uk-trump-iran"^^xsd:anyURI ;
@@ -1854,6 +1923,15 @@ news: a owl:Ontology ;
     schema:headline "UK REACH restriction on lead in ammunition: outdoor shooting ranges" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/publications/uk-reach-restriction-on-lead-in-ammunition-outdoor-shooting-ranges"^^xsd:anyURI .
+
+<http://example.org/news#article/632b75ce5d87cdee> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/publications/uk-anti-corruption-strategy-2025"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T12:55:56+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T12:55:56+00:00"^^xsd:dateTime ;
+    schema:headline "UK anti-corruption strategy 2025" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/publications/uk-anti-corruption-strategy-2025"^^xsd:anyURI .
 
 <http://example.org/news#article/63a2ff9e3499d372> a news:NewsArticle ;
     news:articleURL "https://www.theguardian.com/commentisfree/2026/apr/01/inflationary-shock-pay-the-price-uk-energy-crisis-us-iran-war"^^xsd:anyURI ;
@@ -2409,6 +2487,15 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/global-fusion-sector-scaling-up-creating-uk-sme-opportunities"^^xsd:anyURI .
 
+<http://example.org/news#article/866b20c17f9e3924> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/stronger-protections-to-help-protect-threatened-wild-birds"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T15:36:27+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T15:36:27+00:00"^^xsd:dateTime ;
+    schema:headline "Stronger protections to help protect threatened wild birds" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/stronger-protections-to-help-protect-threatened-wild-birds"^^xsd:anyURI .
+
 <http://example.org/news#article/87f794a278dee9f1> a news:NewsArticle ;
     news:articleURL "https://www.theguardian.com/uk-news/2026/apr/12/richard-tice-reform-uk-quidnet-reit-tax-dividends"^^xsd:anyURI ;
     news:hasAuthor <http://example.org/news#person/Caroline_Davies_and_Alexandra_Topping> ;
@@ -2528,6 +2615,17 @@ news: a owl:Ontology ;
     schema:headline "Assessed and supported year in employment (ASYE)" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/publications/assessed-and-supported-year-in-employment-asye"^^xsd:anyURI .
+
+<http://example.org/news#article/8f5b51894b287c05> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/starmer-support-household-bills-next-winter-energy-price-shock"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Pippa_Crerar_Political_editor> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T18:29:29+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Pippa_Crerar_Political_editor> ;
+    schema:datePublished "2026-03-23T18:29:29+00:00"^^xsd:dateTime ;
+    schema:headline "Keir Starmer signals winter support for household bills amid energy price shock" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/starmer-support-household-bills-next-winter-energy-price-shock"^^xsd:anyURI .
 
 <http://example.org/news#article/8f78b45d215946a1> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/speeches/todays-resolution-strengthens-measures-to-counter-illicit-oil-exports-in-libya-uk-explanation-of-vote-at-the-un-security-council"^^xsd:anyURI ;
@@ -3022,6 +3120,17 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/uk-news/2026/apr/10/power-sharing-northern-ireland-28-years-good-friday-agreement"^^xsd:anyURI .
 
+<http://example.org/news#article/aa013f13b6271aa6> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/commentisfree/2026/mar/23/war-unprecedented-depression-trump-mania-iran"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Polly_Toynbee> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T17:32:06+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Polly_Toynbee> ;
+    schema:datePublished "2026-03-23T17:32:06+00:00"^^xsd:dateTime ;
+    schema:headline "A war and maybe an unprecedented depression: it’s Trump’s mania, but now all of us will pay the price | Polly Toynbee" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/commentisfree/2026/mar/23/war-unprecedented-depression-trump-mania-iran"^^xsd:anyURI .
+
 <http://example.org/news#article/ab3bf01c41fa86dc> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/sentence-increase-for-predatory-paedophile"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -3039,6 +3148,15 @@ news: a owl:Ontology ;
     schema:headline "William Blake House Northants enters administration as investigation continues" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/william-blake-house-northants-enters-administration-as-investigation-continues"^^xsd:anyURI .
+
+<http://example.org/news#article/ac4a99772764a986> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/england-recovered-from-drought-as-weather-whiplash-sees-floods"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T17:01:21+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T17:01:21+00:00"^^xsd:dateTime ;
+    schema:headline "England recovered from drought as weather whiplash sees floods" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/england-recovered-from-drought-as-weather-whiplash-sees-floods"^^xsd:anyURI .
 
 <http://example.org/news#article/ac52ca80c2b5f2b3> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/directions-under-regulations-33-to-36-and-53-of-the-income-and-corporation-taxes-electronic-communications-regulations-2003"^^xsd:anyURI ;
@@ -3091,6 +3209,15 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/commentisfree/2026/apr/09/iran-war-britain-allies-europe-energy-social-policies"^^xsd:anyURI .
 
+<http://example.org/news#article/ae81f879e314856a> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/advice-accepted-on-autumn-2026-covid-19-vaccination-programme"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T14:30:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T14:30:00+00:00"^^xsd:dateTime ;
+    schema:headline "Advice accepted on autumn 2026 COVID-19 vaccination programme" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/advice-accepted-on-autumn-2026-covid-19-vaccination-programme"^^xsd:anyURI .
+
 <http://example.org/news#article/aef3b9a89e11b3f7> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/2026-to-2027-financial-directions-to-nhs-england"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -3139,6 +3266,17 @@ news: a owl:Ontology ;
     schema:headline "Government safeguards critical UK CO2 supplies with restart of plant" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/government-safeguards-critical-uk-co2-supplies-with-restart-of-plant"^^xsd:anyURI .
+
+<http://example.org/news#article/b1bd634345a102ce> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/hillsborough-campaigners-accuse-starmer-insult-failing-introduce-law"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/David_Conn_and_Jessica_Elgot> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T17:07:12+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/David_Conn_and_Jessica_Elgot> ;
+    schema:datePublished "2026-03-23T17:07:12+00:00"^^xsd:dateTime ;
+    schema:headline "Hillsborough campaigners accuse Starmer of ‘insult’ after failing to introduce promised law" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/hillsborough-campaigners-accuse-starmer-insult-failing-introduce-law"^^xsd:anyURI .
 
 <http://example.org/news#article/b1c6169dbf7bd11b> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/new-visits-to-report-on-the-local-offer-for-young-people-with-special-educational-needs-andor-disabilities-send"^^xsd:anyURI ;
@@ -3365,6 +3503,17 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/politics/2026/apr/09/birmingham-focus-group-shift-from-labour-support"^^xsd:anyURI .
 
+<http://example.org/news#article/bb6b751676ef629d> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/anyone-but-labour-or-anyone-but-reform-clash-of-animosities-likely-to-define-may-local-elections"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Pippa_Crerar_Political_editor> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T07:00:43+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Pippa_Crerar_Political_editor> ;
+    schema:datePublished "2026-03-23T07:00:43+00:00"^^xsd:dateTime ;
+    schema:headline "‘Anyone but Labour’ or ‘anyone but Reform’? Clash of animosities likely to define May local elections" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/anyone-but-labour-or-anyone-but-reform-clash-of-animosities-likely-to-define-may-local-elections"^^xsd:anyURI .
+
 <http://example.org/news#article/bbdb4cba15bcd717> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/new-2m-backed-pilots-to-put-more-power-in-the-hands-of-tenants"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -3509,6 +3658,15 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/commentisfree/2026/mar/31/uk-pioneer-pornography-regulation-child-sexual-abuse-crime-bill"^^xsd:anyURI .
 
+<http://example.org/news#article/c0152c0df1b1f127> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/transport-secretary-tasks-hs2-with-reducing-construction-time-and-cost-to-taxpayers"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T16:21:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T16:21:00+00:00"^^xsd:dateTime ;
+    schema:headline "Transport Secretary tasks HS2 with reducing construction time and cost to taxpayers" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/transport-secretary-tasks-hs2-with-reducing-construction-time-and-cost-to-taxpayers"^^xsd:anyURI .
+
 <http://example.org/news#article/c0252efa3101e6f4> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/new-boost-to-defence-victim-support-and-prevention-to-raise-standards-across-the-armed-forces"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -3588,6 +3746,17 @@ news: a owl:Ontology ;
     schema:headline "Fake and misleading reviews: 5 businesses under CMA investigation" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/fake-and-misleading-reviews-5-businesses-under-cma-investigation"^^xsd:anyURI .
+
+<http://example.org/news#article/c60a8c855965bcfc> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/uk-news/2026/mar/23/scotland-first-part-of-uk-to-screen-newborn-babies-spinal-muscular-atrophy"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Libby_Brooks_Scotland_correspondent> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T11:22:04+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Libby_Brooks_Scotland_correspondent> ;
+    schema:datePublished "2026-03-23T11:22:04+00:00"^^xsd:dateTime ;
+    schema:headline "Scotland becomes first part of UK to screen newborns for spinal muscular atrophy" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/uk-news/2026/mar/23/scotland-first-part-of-uk-to-screen-newborn-babies-spinal-muscular-atrophy"^^xsd:anyURI .
 
 <http://example.org/news#article/c6223e17566ec336> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/cma-appoints-new-non-executive-directors"^^xsd:anyURI ;
@@ -4064,6 +4233,17 @@ news: a owl:Ontology ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/uk-news/2026/apr/14/uk-woman-fears-being-stranded-spain-new-home-office-border-rules"^^xsd:anyURI .
 
+<http://example.org/news#article/dcef2be7103ed0f7> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/uk-polls-less-volatile-than-they-seem-charts"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Ashley_Kirk> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T07:00:43+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Ashley_Kirk> ;
+    schema:datePublished "2026-03-23T07:00:43+00:00"^^xsd:dateTime ;
+    schema:headline "‘Unprecedented territory’: are UK polls as volatile as they seem? – in charts" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/uk-polls-less-volatile-than-they-seem-charts"^^xsd:anyURI .
+
 <http://example.org/news#article/decb5e4750ce5a37> a news:NewsArticle ;
     news:articleURL "https://www.theguardian.com/society/2026/apr/13/man-took-own-life-after-turkish-dental-visit-left-him-toothless-uk-inquest-hears"^^xsd:anyURI ;
     news:hasAuthor <http://example.org/news#person/Raphael_Boyd> ;
@@ -4123,6 +4303,17 @@ news: a owl:Ontology ;
     schema:headline "Pandemic Preparedness Strategy: building our capabilities" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/publications/pandemic-preparedness-strategy-building-our-capabilities"^^xsd:anyURI .
+
+<http://example.org/news#article/e298986d05165930> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/live/2026/mar/23/keir-starmer-donald-trump-strait-of-hormuz-shabana-mahood-john-healey-labour-conservatives-kemi-badenoch-cobra-uk-politics-latest-updates-news"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/Andrew_Sparrow> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T17:56:05+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/Andrew_Sparrow> ;
+    schema:datePublished "2026-03-23T17:56:05+00:00"^^xsd:dateTime ;
+    schema:headline "Starmer says he is ‘unapologetic’ about his focus on national interest when asked how he deals with ‘rude’ Trump – as it happened" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/live/2026/mar/23/keir-starmer-donald-trump-strait-of-hormuz-shabana-mahood-john-healey-labour-conservatives-kemi-badenoch-cobra-uk-politics-latest-updates-news"^^xsd:anyURI .
 
 <http://example.org/news#article/e2ae67e550b52d2f> a news:NewsArticle ;
     news:articleURL "https://www.theguardian.com/commentisfree/2026/mar/30/kent-meningitis-britain-post-covid-britain-young-people"^^xsd:anyURI ;
@@ -4212,6 +4403,17 @@ news: a owl:Ontology ;
     schema:headline "How will we know Labour is really cleaning up party funding? When Reform and the Tories fight like hell to stop it | Polly Toynbee" ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/commentisfree/2026/mar/26/labour-clean-up-party-funding-reform-tories-crypto-donations-keir-starmer"^^xsd:anyURI .
+
+<http://example.org/news#article/e55190f3f4756593> a news:NewsArticle ;
+    news:articleURL "https://www.theguardian.com/politics/2026/mar/23/starmers-liaison-committee-jaunt-was-largely-soporific-just-as-hed-wanted"^^xsd:anyURI ;
+    news:hasAuthor <http://example.org/news#person/John_Crace> ;
+    news:publishedBy <http://example.org/news#organisation/The_Guardian> ;
+    news:publishedDate "2026-03-23T18:47:46+00:00"^^xsd:dateTime ;
+    schema:author <http://example.org/news#person/John_Crace> ;
+    schema:datePublished "2026-03-23T18:47:46+00:00"^^xsd:dateTime ;
+    schema:headline "Starmer’s liaison committee jaunt was largely soporific – just as he’d wanted | John Crace" ;
+    schema:publisher <http://example.org/news#organisation/The_Guardian> ;
+    schema:url "https://www.theguardian.com/politics/2026/mar/23/starmers-liaison-committee-jaunt-was-largely-soporific-just-as-hed-wanted"^^xsd:anyURI .
 
 <http://example.org/news#article/e57bd30caf1e6369> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/investigation-into-charities-run-by-designated-person-results-in-over-13m-redistributed-to-good-causes"^^xsd:anyURI ;
@@ -4359,6 +4561,15 @@ news: a owl:Ontology ;
     schema:headline "Pensioners urged to be alert to Winter Fuel Payment scams" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/pensioners-urged-to-be-alert-to-winter-fuel-payment-scams"^^xsd:anyURI .
+
+<http://example.org/news#article/eea38271d4bd1ffc> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/precautionary-recall-of-hibiwash-due-to-microbial-contamination"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T16:48:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T16:48:00+00:00"^^xsd:dateTime ;
+    schema:headline "Precautionary recall of Hibiwash due to microbial contamination" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/precautionary-recall-of-hibiwash-due-to-microbial-contamination"^^xsd:anyURI .
 
 <http://example.org/news#article/ef1992e3b50fb5d4> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/news/douglas-wilson-appointed-as-new-treasury-solicitor-hm-procurator-general-and-permanent-secretary-government-legal-department"^^xsd:anyURI ;
@@ -4903,6 +5114,15 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/0a7c500b90dd7f13> ;
     schema:name "Changes to infected blood compensation scheme will improve support for victims" .
 
+<http://example.org/news#event/Charity_Commission_responds_to_attacks_in_North_London_2026-03-23_London> a news:GovernmentPolicyEvent,
+        news:PolicyEvent ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Charity_Commission> ;
+    news:occursInLocation <http://example.org/news#location/London> ;
+    news:occursOnDate "2026-03-23"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/33e93ba9dc47f3a4> ;
+    news:representedInOfficialSource <http://example.org/news#source-record/govuk/33e93ba9dc47f3a4> ;
+    schema:name "Charity Commission responds to attacks in North London" .
+
 <http://example.org/news#event/Competition_and_scaling__Tech_eu_Summit_London_2026_2026-04-22_London> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:occursInLocation <http://example.org/news#location/London> ;
@@ -5063,6 +5283,16 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:occursOnDate "2026-04-18"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/bb3b5158207f98f8> ;
     schema:name "Election" .
+
+<http://example.org/news#event/Energy_digitalisation_framework__a_vision_for_a_coordinated_and_connected_energy_system_2026-03-23> a news:GovernmentPolicyEvent,
+        news:PolicyEvent ;
+    news:concernsPolicyTopic <http://example.org/news#topic/Energy>,
+        <http://example.org/news#topic/Government_Policy> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Energy_Security_and_Net_Zero> ;
+    news:occursOnDate "2026-03-23"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/e486f2596affefb6> ;
+    news:representedInOfficialSource <http://example.org/news#source-record/govuk/e486f2596affefb6> ;
+    schema:name "Energy digitalisation framework: a vision for a coordinated and connected energy system" .
 
 <http://example.org/news#event/European_Union_Finances_Statement_2025__Statement_on_the_implementation_of_the_Withdrawal_Agreement_2026-03-26> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
@@ -5434,6 +5664,18 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:reportedByArticle <http://example.org/news#article/9d577685c6658315> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/9d577685c6658315> ;
     schema:name "Joint Statement on the conflict in the Middle East: 8 April 2026" .
+
+<http://example.org/news#event/Joint_statement_from_Tallinn_Mechanism_member_states__10_March_2026_2026-03-23_London> a news:GovernmentPolicyEvent,
+        news:MinisterialStatement,
+        news:PolicyEvent ;
+    news:concernsPolicyTopic <http://example.org/news#topic/Defence> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
+    news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
+    news:occursInLocation <http://example.org/news#location/London> ;
+    news:occursOnDate "2026-03-23"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/01e649ac679bfca0> ;
+    news:representedInOfficialSource <http://example.org/news#source-record/govuk/01e649ac679bfca0> ;
+    schema:name "Joint statement from Tallinn Mechanism member states: 10 March 2026" .
 
 <http://example.org/news#event/Joint_statement_from_the_leaders_of_the_United_Kingdom__France__Germany__Italy__the_Netherlands__Japan__Canada_and_others_on_the_Strait_of_Hormuz__19_March_2026_2026-04-03> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
@@ -6335,6 +6577,17 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/63cf1f207c7bc7f8> ;
     schema:name "Summer boost for HM Coastguard Search and Rescue helicopters" .
 
+<http://example.org/news#event/Summoning_of_the_Iranian_Ambassador_to_the_United_Kingdom__FCDO_statement_2026-03-23_Westminster> a news:GovernmentPolicyEvent,
+        news:MinisterialStatement,
+        news:PolicyEvent ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
+    news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
+    news:occursOnDate "2026-03-23"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/ff9f61f363ca47fe> ;
+    news:representedInOfficialSource <http://example.org/news#source-record/govuk/ff9f61f363ca47fe> ;
+    schema:name "Summoning of the Iranian Ambassador to the United Kingdom: FCDO statement" .
+
 <http://example.org/news#event/Support_for_housebuilding_in_London__package_of_support_2026-03-25_London> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
@@ -6415,6 +6668,17 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:reportedByArticle <http://example.org/news#article/ae4a31d0f8973ce8> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/ae4a31d0f8973ce8> ;
     schema:name "The UK will continue to champion coordination between the League of Arab States and the United Nations: UK statement at the UN Security Council" .
+
+<http://example.org/news#event/The_UK_will_not_cease_in_our_support_for_Ukraine_and_its_people__UK_statement_at_the_UN_Security_Council_2026-03-23_Westminster> a news:GovernmentPolicyEvent,
+        news:MinisterialStatement,
+        news:PolicyEvent ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
+    news:issuedByDepartment <http://example.org/news#organisation/Foreign__Commonwealth_and_Development_Office> ;
+    news:occursInLocation <http://example.org/news#location/Westminster> ;
+    news:occursOnDate "2026-03-23"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/1236fec09df6b60d> ;
+    news:representedInOfficialSource <http://example.org/news#source-record/govuk/1236fec09df6b60d> ;
+    schema:name "The UK will not cease in our support for Ukraine and its people: UK statement at the UN Security Council" .
 
 <http://example.org/news#event/The_United_Kingdom_condemns_violence_against_UN_peacekeepers_who_work_tirelessly_to_protect_international_peace_and_security__UK_statement_at_the_UN_Security_Council_2026-04-15_Westminster> a news:GovernmentPolicyEvent,
         news:MinisterialStatement,
@@ -6542,6 +6806,18 @@ news:concernsPolicyTopic a owl:ObjectProperty ;
     news:reportedByArticle <http://example.org/news#article/c583185041eff8c0> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/c583185041eff8c0> ;
     schema:name "UK Government Response to the Covid-19 Inquiry Module 2 Report" .
+
+<http://example.org/news#event/UK_Government_commits_up_to__9m_to_support_Mossmorran_s_future_2026-03-23_Scotland> a news:GovernmentPolicyEvent,
+        news:PolicyEvent ;
+    news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
+        <http://example.org/news#topic/Public_Spending>,
+        <http://example.org/news#topic/Taxation> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/HM_Treasury> ;
+    news:occursInLocation <http://example.org/news#location/Scotland> ;
+    news:occursOnDate "2026-03-23"^^xsd:date ;
+    news:reportedByArticle <http://example.org/news#article/8e8e97199c9163a2> ;
+    news:representedInOfficialSource <http://example.org/news#source-record/govuk/8e8e97199c9163a2> ;
+    schema:name "UK Government commits up to £9m to support Mossmorran's future" .
 
 <http://example.org/news#event/UK_and_EU_finalise_agreement_to_bring_UK_into_Erasmus__in_2027_2026-04-15> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
@@ -6918,6 +7194,9 @@ news:issuedByDepartment a owl:ObjectProperty ;
 <http://example.org/news#location/Beijing> a news:Location ;
     schema:name "Beijing" .
 
+<http://example.org/news#location/Bernie> a news:Location ;
+    schema:name "Bernie" .
+
 <http://example.org/news#location/Best> a news:Location ;
     schema:name "Best" .
 
@@ -6962,6 +7241,9 @@ news:issuedByDepartment a owl:ObjectProperty ;
 
 <http://example.org/news#location/Cliftonville> a news:Location ;
     schema:name "Cliftonville" .
+
+<http://example.org/news#location/Cobra> a news:Location ;
+    schema:name "Cobra" .
 
 <http://example.org/news#location/Crowborough> a news:Location ;
     schema:name "Crowborough" .
@@ -7086,6 +7368,9 @@ news:issuedByDepartment a owl:ObjectProperty ;
 <http://example.org/news#location/Italy> a news:Location ;
     schema:name "Italy" .
 
+<http://example.org/news#location/JCVI> a news:Location ;
+    schema:name "JCVI" .
+
 <http://example.org/news#location/Japan> a news:Location ;
     schema:name "Japan" .
 
@@ -7106,6 +7391,9 @@ news:issuedByDepartment a owl:ObjectProperty ;
 
 <http://example.org/news#location/LBC> a news:Location ;
     schema:name "LBC" .
+
+<http://example.org/news#location/Lambeth> a news:Location ;
+    schema:name "Lambeth" .
 
 <http://example.org/news#location/Lancashire> a news:Location ;
     schema:name "Lancashire" .
@@ -8747,10 +9035,6 @@ news:occursOnDate a owl:DatatypeProperty,
     schema:description "British public-service television broadcaster; TV channel" ;
     schema:location <http://example.org/news#location/London> ;
     schema:name "Channel 4" .
-
-<http://example.org/news#organisation/Charity_Commission> a news:GovernmentBody,
-        news:OfficialBody ;
-    schema:name "Charity Commission" .
 
 <http://example.org/news#organisation/Chase_Community_Independents_Group> a news:PoliticalParty,
         schema:Organization ;
@@ -20475,6 +20759,10 @@ news:occursOnDate a owl:DatatypeProperty,
     schema:gender "male" ;
     schema:memberOf <http://example.org/news#organisation/Labour_Party> ;
     schema:name "Chris Leslie" .
+
+<http://example.org/news#person/Chris_Parry> a news:PoliticalActor,
+        schema:Person ;
+    schema:name "Chris Parry" .
 
 <http://example.org/news#person/Chris_Patten> a news:PoliticalActor,
         schema:Person ;
@@ -34694,6 +34982,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "The Customs (Northern Ireland) (EU Exit) (Amendment) Regulations 2026"^^xsd:string ;
     schema:name "The Customs (Northern Ireland) (EU Exit) (Amendment) Regulations 2026" .
 
+<http://example.org/news#source-record/govuk/0841f519f793b069> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "0841f519f793b069"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Streamlining infrastructure planning: implementation plan"^^xsd:string ;
+    schema:name "Streamlining infrastructure planning: implementation plan" .
+
 <http://example.org/news#source-record/govuk/09e4de90fd7fefef> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -34990,6 +35286,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "Firefighters to benefit from bespoke health support"^^xsd:string ;
     schema:name "Firefighters to benefit from bespoke health support" .
 
+<http://example.org/news#source-record/govuk/2f5707acb768f79c> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "2f5707acb768f79c"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Independent Assurance Reviewer sought to examine DWP’s activities relating to Post Office staff prosecutions"^^xsd:string ;
+    schema:name "Independent Assurance Reviewer sought to examine DWP’s activities relating to Post Office staff prosecutions" .
+
 <http://example.org/news#source-record/govuk/31211a144cb9f6a6> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -35222,6 +35526,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "New practical advice for families to get children school ready"^^xsd:string ;
     schema:name "New practical advice for families to get children school ready" .
 
+<http://example.org/news#source-record/govuk/49769130ff7efe8d> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "49769130ff7efe8d"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Welsh steel industry backed with new trade measure and strategy"^^xsd:string ;
+    schema:name "Welsh steel industry backed with new trade measure and strategy" .
+
 <http://example.org/news#source-record/govuk/4ad0f029cbf5cf4a> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -35334,6 +35646,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "New military diplomacy training to upskill specialists in negotiation and languages, as part of new Defence Diplomacy Strategy"^^xsd:string ;
     schema:name "New military diplomacy training to upskill specialists in negotiation and languages, as part of new Defence Diplomacy Strategy" .
 
+<http://example.org/news#source-record/govuk/595ea67342f089a5> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "595ea67342f089a5"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Local Growth Fund (Scotland) Prospectus"^^xsd:string ;
+    schema:name "Local Growth Fund (Scotland) Prospectus" .
+
 <http://example.org/news#source-record/govuk/59ad88a2709c0138> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -35437,6 +35757,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "UK REACH restriction on lead in ammunition: outdoor shooting ranges"^^xsd:string ;
     schema:name "UK REACH restriction on lead in ammunition: outdoor shooting ranges" .
+
+<http://example.org/news#source-record/govuk/632b75ce5d87cdee> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "632b75ce5d87cdee"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "UK anti-corruption strategy 2025"^^xsd:string ;
+    schema:name "UK anti-corruption strategy 2025" .
 
 <http://example.org/news#source-record/govuk/63ad178594a08cf7> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -35653,6 +35981,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "Global fusion sector scaling up, creating UK SME opportunities"^^xsd:string ;
     schema:name "Global fusion sector scaling up, creating UK SME opportunities" .
+
+<http://example.org/news#source-record/govuk/866b20c17f9e3924> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "866b20c17f9e3924"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Stronger protections to help protect threatened wild birds"^^xsd:string ;
+    schema:name "Stronger protections to help protect threatened wild birds" .
 
 <http://example.org/news#source-record/govuk/88ca0fc7c16b4595> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -35886,6 +36222,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "William Blake House Northants enters administration as investigation continues"^^xsd:string ;
     schema:name "William Blake House Northants enters administration as investigation continues" .
 
+<http://example.org/news#source-record/govuk/ac4a99772764a986> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "ac4a99772764a986"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "England recovered from drought as weather whiplash sees floods"^^xsd:string ;
+    schema:name "England recovered from drought as weather whiplash sees floods" .
+
 <http://example.org/news#source-record/govuk/ac52ca80c2b5f2b3> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -35901,6 +36245,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "Enflonsia (clesrovimab-cfor) approved to prevent RSV in newborns and infants"^^xsd:string ;
     schema:name "Enflonsia (clesrovimab-cfor) approved to prevent RSV in newborns and infants" .
+
+<http://example.org/news#source-record/govuk/ae81f879e314856a> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "ae81f879e314856a"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Advice accepted on autumn 2026 COVID-19 vaccination programme"^^xsd:string ;
+    schema:name "Advice accepted on autumn 2026 COVID-19 vaccination programme" .
 
 <http://example.org/news#source-record/govuk/aef3b9a89e11b3f7> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -36077,6 +36429,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "Ofqual’s action plan for the prevention of qualification fraud"^^xsd:string ;
     schema:name "Ofqual’s action plan for the prevention of qualification fraud" .
+
+<http://example.org/news#source-record/govuk/c0152c0df1b1f127> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "c0152c0df1b1f127"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Transport Secretary tasks HS2 with reducing construction time and cost to taxpayers"^^xsd:string ;
+    schema:name "Transport Secretary tasks HS2 with reducing construction time and cost to taxpayers" .
 
 <http://example.org/news#source-record/govuk/c0252efa3101e6f4> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -36493,6 +36853,14 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "Pensioners urged to be alert to Winter Fuel Payment scams"^^xsd:string ;
     schema:name "Pensioners urged to be alert to Winter Fuel Payment scams" .
+
+<http://example.org/news#source-record/govuk/eea38271d4bd1ffc> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "eea38271d4bd1ffc"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Precautionary recall of Hibiwash due to microbial contamination"^^xsd:string ;
+    schema:name "Precautionary recall of Hibiwash due to microbial contamination" .
 
 <http://example.org/news#source-record/govuk/ef1992e3b50fb5d4> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -37002,6 +37370,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "The Guardian view on Starmer and Mandelson: when process follows power | Editorial"^^xsd:string ;
     schema:name "The Guardian view on Starmer and Mandelson: when process follows power | Editorial" .
 
+<http://example.org/news#source-record/guardian/39ef3a5993c2e0ba> a news:SourceRecord ;
+    news:sourceIdentifier "39ef3a5993c2e0ba"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Six students challenge Home Office visa ban on four countries"^^xsd:string ;
+    schema:name "Six students challenge Home Office visa ban on four countries" .
+
 <http://example.org/news#source-record/guardian/3ce383bc9c07ec86> a news:SourceRecord ;
     news:sourceIdentifier "3ce383bc9c07ec86"^^xsd:string ;
     news:sourceSystem "guardian"^^xsd:string ;
@@ -37025,6 +37399,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "guardian"^^xsd:string ;
     news:sourceTitle "The Guardian view on Starmer and Mandelson: a story that doesn’t add up | Editorial"^^xsd:string ;
     schema:name "The Guardian view on Starmer and Mandelson: a story that doesn’t add up | Editorial" .
+
+<http://example.org/news#source-record/guardian/433413b606d2c8db> a news:SourceRecord ;
+    news:sourceIdentifier "433413b606d2c8db"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Reform mayoral candidate likens Jewish community group to ‘Islamists on horseback’"^^xsd:string ;
+    schema:name "Reform mayoral candidate likens Jewish community group to ‘Islamists on horseback’" .
 
 <http://example.org/news#source-record/guardian/44341d88041b390e> a news:SourceRecord ;
     news:sourceIdentifier "44341d88041b390e"^^xsd:string ;
@@ -37157,6 +37537,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "guardian"^^xsd:string ;
     news:sourceTitle "The Guardian view on blaming the civil service: the predictable refuge of failing governments | Editorial"^^xsd:string ;
     schema:name "The Guardian view on blaming the civil service: the predictable refuge of failing governments | Editorial" .
+
+<http://example.org/news#source-record/guardian/5ae435db421a54d8> a news:SourceRecord ;
+    news:sourceIdentifier "5ae435db421a54d8"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "What’s at stake for UK in May’s elections: six key questions"^^xsd:string ;
+    schema:name "What’s at stake for UK in May’s elections: six key questions" .
 
 <http://example.org/news#source-record/guardian/5b83f2d2af70946a> a news:SourceRecord ;
     news:sourceIdentifier "5b83f2d2af70946a"^^xsd:string ;
@@ -37476,6 +37862,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "UK agriculture deal with EU will not remove all red tape, peers told"^^xsd:string ;
     schema:name "UK agriculture deal with EU will not remove all red tape, peers told" .
 
+<http://example.org/news#source-record/guardian/8f5b51894b287c05> a news:SourceRecord ;
+    news:sourceIdentifier "8f5b51894b287c05"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Keir Starmer signals winter support for household bills amid energy price shock"^^xsd:string ;
+    schema:name "Keir Starmer signals winter support for household bills amid energy price shock" .
+
 <http://example.org/news#source-record/guardian/8fcfe956bc0b0557> a news:SourceRecord ;
     news:sourceIdentifier "8fcfe956bc0b0557"^^xsd:string ;
     news:sourceSystem "guardian"^^xsd:string ;
@@ -37656,6 +38048,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "‘Nobody’s in charge’: is power sharing still working in Northern Ireland?"^^xsd:string ;
     schema:name "‘Nobody’s in charge’: is power sharing still working in Northern Ireland?" .
 
+<http://example.org/news#source-record/guardian/aa013f13b6271aa6> a news:SourceRecord ;
+    news:sourceIdentifier "aa013f13b6271aa6"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "A war and maybe an unprecedented depression: it’s Trump’s mania, but now all of us will pay the price | Polly Toynbee"^^xsd:string ;
+    schema:name "A war and maybe an unprecedented depression: it’s Trump’s mania, but now all of us will pay the price | Polly Toynbee" .
+
 <http://example.org/news#source-record/guardian/ac393f5dfc4d492c> a news:SourceRecord ;
     news:sourceIdentifier "ac393f5dfc4d492c"^^xsd:string ;
     news:sourceSystem "guardian"^^xsd:string ;
@@ -37697,6 +38095,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "guardian"^^xsd:string ;
     news:sourceTitle "Reform insiders fear links to extreme figures such as Andrew Tate will scare off voters"^^xsd:string ;
     schema:name "Reform insiders fear links to extreme figures such as Andrew Tate will scare off voters" .
+
+<http://example.org/news#source-record/guardian/b1bd634345a102ce> a news:SourceRecord ;
+    news:sourceIdentifier "b1bd634345a102ce"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Hillsborough campaigners accuse Starmer of ‘insult’ after failing to introduce promised law"^^xsd:string ;
+    schema:name "Hillsborough campaigners accuse Starmer of ‘insult’ after failing to introduce promised law" .
 
 <http://example.org/news#source-record/guardian/b375a9340d515a51> a news:SourceRecord ;
     news:sourceIdentifier "b375a9340d515a51"^^xsd:string ;
@@ -37757,6 +38161,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "guardian"^^xsd:string ;
     news:sourceTitle "Two more Reform local election candidates accused of offensive posts"^^xsd:string ;
     schema:name "Two more Reform local election candidates accused of offensive posts" .
+
+<http://example.org/news#source-record/guardian/bb6b751676ef629d> a news:SourceRecord ;
+    news:sourceIdentifier "bb6b751676ef629d"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "‘Anyone but Labour’ or ‘anyone but Reform’? Clash of animosities likely to define May local elections"^^xsd:string ;
+    schema:name "‘Anyone but Labour’ or ‘anyone but Reform’? Clash of animosities likely to define May local elections" .
 
 <http://example.org/news#source-record/guardian/bc727d25d9898c4b> a news:SourceRecord ;
     news:sourceIdentifier "bc727d25d9898c4b"^^xsd:string ;
@@ -37841,6 +38251,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "guardian"^^xsd:string ;
     news:sourceTitle "Starmer still faces more questions than answers after Olly Robbins’ quietly damning defence | John Crace"^^xsd:string ;
     schema:name "Starmer still faces more questions than answers after Olly Robbins’ quietly damning defence | John Crace" .
+
+<http://example.org/news#source-record/guardian/c60a8c855965bcfc> a news:SourceRecord ;
+    news:sourceIdentifier "c60a8c855965bcfc"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Scotland becomes first part of UK to screen newborns for spinal muscular atrophy"^^xsd:string ;
+    schema:name "Scotland becomes first part of UK to screen newborns for spinal muscular atrophy" .
 
 <http://example.org/news#source-record/guardian/c6631cda935bee01> a news:SourceRecord ;
     news:sourceIdentifier "c6631cda935bee01"^^xsd:string ;
@@ -37968,6 +38384,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "UK woman fears being stranded in Spain over new Home Office border rules"^^xsd:string ;
     schema:name "UK woman fears being stranded in Spain over new Home Office border rules" .
 
+<http://example.org/news#source-record/guardian/dcef2be7103ed0f7> a news:SourceRecord ;
+    news:sourceIdentifier "dcef2be7103ed0f7"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "‘Unprecedented territory’: are UK polls as volatile as they seem? – in charts"^^xsd:string ;
+    schema:name "‘Unprecedented territory’: are UK polls as volatile as they seem? – in charts" .
+
 <http://example.org/news#source-record/guardian/decb5e4750ce5a37> a news:SourceRecord ;
     news:sourceIdentifier "decb5e4750ce5a37"^^xsd:string ;
     news:sourceSystem "guardian"^^xsd:string ;
@@ -38010,6 +38432,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceTitle "I saw Rachel Reeves while out shopping with my teenager. Apparently I completely humiliated myself | Zoe Williams"^^xsd:string ;
     schema:name "I saw Rachel Reeves while out shopping with my teenager. Apparently I completely humiliated myself | Zoe Williams" .
 
+<http://example.org/news#source-record/guardian/e298986d05165930> a news:SourceRecord ;
+    news:sourceIdentifier "e298986d05165930"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Starmer says he is ‘unapologetic’ about his focus on national interest when asked how he deals with ‘rude’ Trump – as it happened"^^xsd:string ;
+    schema:name "Starmer says he is ‘unapologetic’ about his focus on national interest when asked how he deals with ‘rude’ Trump – as it happened" .
+
 <http://example.org/news#source-record/guardian/e2ae67e550b52d2f> a news:SourceRecord ;
     news:sourceIdentifier "e2ae67e550b52d2f"^^xsd:string ;
     news:sourceSystem "guardian"^^xsd:string ;
@@ -38039,6 +38467,12 @@ news:representedInOfficialSource a owl:ObjectProperty ;
     news:sourceSystem "guardian"^^xsd:string ;
     news:sourceTitle "How will we know Labour is really cleaning up party funding? When Reform and the Tories fight like hell to stop it | Polly Toynbee"^^xsd:string ;
     schema:name "How will we know Labour is really cleaning up party funding? When Reform and the Tories fight like hell to stop it | Polly Toynbee" .
+
+<http://example.org/news#source-record/guardian/e55190f3f4756593> a news:SourceRecord ;
+    news:sourceIdentifier "e55190f3f4756593"^^xsd:string ;
+    news:sourceSystem "guardian"^^xsd:string ;
+    news:sourceTitle "Starmer’s liaison committee jaunt was largely soporific – just as he’d wanted | John Crace"^^xsd:string ;
+    schema:name "Starmer’s liaison committee jaunt was largely soporific – just as he’d wanted | John Crace" .
 
 <http://example.org/news#source-record/guardian/e5fbc48a4cfae273> a news:SourceRecord ;
     news:sourceIdentifier "e5fbc48a4cfae273"^^xsd:string ;
@@ -38401,6 +38835,15 @@ news:sourceTitle a owl:DatatypeProperty ;
 <http://example.org/news#topic/Opinion> a news:PolicyTopic ;
     schema:name "Opinion" .
 
+<http://example.org/news#article/01e649ac679bfca0> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/joint-statement-from-tallinn-mechanism-member-states-10-march-2026"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T14:42:13+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T14:42:13+00:00"^^xsd:dateTime ;
+    schema:headline "Joint statement from Tallinn Mechanism member states: 10 March 2026" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/joint-statement-from-tallinn-mechanism-member-states-10-march-2026"^^xsd:anyURI .
+
 <http://example.org/news#article/035bf0716d3db075> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/speeches/attacks-on-international-shipping-in-the-gulf-have-been-deeply-damaging-for-the-world-uk-statement-at-the-un-general-assembly"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -38550,6 +38993,15 @@ news:sourceTitle a owl:DatatypeProperty ;
     schema:headline "Largest ever Government investment in threatened species recovery" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/largest-ever-government-investment-in-threatened-species-recovery"^^xsd:anyURI .
+
+<http://example.org/news#article/1236fec09df6b60d> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/speeches/the-uk-will-not-cease-in-our-support-for-ukraine-and-its-people-uk-statement-at-the-un-security-council"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T20:02:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T20:02:00+00:00"^^xsd:dateTime ;
+    schema:headline "The UK will not cease in our support for Ukraine and its people: UK statement at the UN Security Council" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/speeches/the-uk-will-not-cease-in-our-support-for-ukraine-and-its-people-uk-statement-at-the-un-security-council"^^xsd:anyURI .
 
 <http://example.org/news#article/1603412e6ba91195> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/speeches/27th-anniversary-of-the-nato-response-to-the-humanitarian-crisis-in-kosovo-uk-statement-to-the-osce-march-2026"^^xsd:anyURI ;
@@ -38716,6 +39168,15 @@ news:sourceTitle a owl:DatatypeProperty ;
     schema:headline "Government to unlock philanthropic investment into England's most disadvantaged communities" ;
     schema:publisher <http://example.org/news#organisation/GOV_UK> ;
     schema:url "https://www.gov.uk/government/news/government-to-unlock-philanthropic-investment-into-englands-most-disadvantaged-communities"^^xsd:anyURI .
+
+<http://example.org/news#article/33e93ba9dc47f3a4> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/charity-commission-responds-to-attacks-in-north-london"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T13:21:38+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T13:21:38+00:00"^^xsd:dateTime ;
+    schema:headline "Charity Commission responds to attacks in North London" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/charity-commission-responds-to-attacks-in-north-london"^^xsd:anyURI .
 
 <http://example.org/news#article/3405b0887a557751> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/road-investment-strategy-3-ris3-2026-to-2031"^^xsd:anyURI ;
@@ -39397,6 +39858,15 @@ news:sourceTitle a owl:DatatypeProperty ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/politics/live/2026/apr/22/keir-starmer-kemi-badenoch-pmqs-olly-robbins-peter-mandelson-uk-politics-latest-news-updates"^^xsd:anyURI .
 
+<http://example.org/news#article/8e8e97199c9163a2> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/uk-government-commits-up-to-9-million-to-support-mossmorrans-future"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T16:38:40+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T16:38:40+00:00"^^xsd:dateTime ;
+    schema:headline "UK Government commits up to £9m to support Mossmorran's future" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/uk-government-commits-up-to-9-million-to-support-mossmorrans-future"^^xsd:anyURI .
+
 <http://example.org/news#article/9287127fe065c543> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/speeches/russias-illegal-occupation-of-crimea-and-continued-aggression-against-ukraine-uk-statement-to-the-osce"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -40005,6 +40475,15 @@ news:sourceTitle a owl:DatatypeProperty ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/politics/2026/apr/14/uk-war-footing-defence-review-fiona-hill"^^xsd:anyURI .
 
+<http://example.org/news#article/e486f2596affefb6> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/publications/energy-digitalisation-framework-a-vision-for-a-coordinated-and-connected-energy-system"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T09:00:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T09:00:00+00:00"^^xsd:dateTime ;
+    schema:headline "Energy digitalisation framework: a vision for a coordinated and connected energy system" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/publications/energy-digitalisation-framework-a-vision-for-a-coordinated-and-connected-energy-system"^^xsd:anyURI .
+
 <http://example.org/news#article/e572e1a91430f190> a news:NewsArticle ;
     news:articleURL "https://www.gov.uk/government/publications/overseas-territories-attorneys-general-conference-april-2026-closing-statement"^^xsd:anyURI ;
     news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
@@ -40180,6 +40659,15 @@ news:sourceTitle a owl:DatatypeProperty ;
     schema:headline "How safe is Starmer’s premiership after his Mandelson vetting statement to MPs?" ;
     schema:publisher <http://example.org/news#organisation/The_Guardian> ;
     schema:url "https://www.theguardian.com/politics/2026/apr/20/how-safe-is-starmers-premiership-after-his-mandelson-vetting-statement-to-mps"^^xsd:anyURI .
+
+<http://example.org/news#article/ff9f61f363ca47fe> a news:NewsArticle ;
+    news:articleURL "https://www.gov.uk/government/news/summoning-of-the-iranian-ambassador-to-the-united-kingdom-fcdo-statement--3"^^xsd:anyURI ;
+    news:publishedBy <http://example.org/news#organisation/GOV_UK> ;
+    news:publishedDate "2026-03-23T17:09:00+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-03-23T17:09:00+00:00"^^xsd:dateTime ;
+    schema:headline "Summoning of the Iranian Ambassador to the United Kingdom: FCDO statement" ;
+    schema:publisher <http://example.org/news#organisation/GOV_UK> ;
+    schema:url "https://www.gov.uk/government/news/summoning-of-the-iranian-ambassador-to-the-united-kingdom-fcdo-statement--3"^^xsd:anyURI .
 
 news:involvesGovernmentBody a owl:ObjectProperty ;
     rdfs:label "involves government body" ;
@@ -40656,9 +41144,6 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
         schema:Place ;
     schema:name "Sand Hutton" .
 
-<http://example.org/news#location/Scotland> a news:Location ;
-    schema:name "Scotland" .
-
 <http://example.org/news#location/Sheffield> a news:Location,
         schema:Place ;
     schema:name "Sheffield" .
@@ -40773,6 +41258,10 @@ news:involvesGovernmentBody a owl:ObjectProperty ;
 <http://example.org/news#location/Wootton_Bridge> a news:Location,
         schema:Place ;
     schema:name "Wootton Bridge" .
+
+<http://example.org/news#organisation/Charity_Commission> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Charity Commission" .
 
 <http://example.org/news#organisation/Competition_and_Markets_Authority> a news:GovernmentBody,
         news:OfficialBody ;
@@ -40904,6 +41393,14 @@ news:reportedByArticle a owl:ObjectProperty ;
     rdfs:domain news:PolicyEvent ;
     rdfs:range news:NewsArticle .
 
+<http://example.org/news#source-record/govuk/01e649ac679bfca0> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "01e649ac679bfca0"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Joint statement from Tallinn Mechanism member states: 10 March 2026"^^xsd:string ;
+    schema:name "Joint statement from Tallinn Mechanism member states: 10 March 2026" .
+
 <http://example.org/news#source-record/govuk/035bf0716d3db075> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -40999,6 +41496,14 @@ news:reportedByArticle a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "Largest ever Government investment in threatened species recovery"^^xsd:string ;
     schema:name "Largest ever Government investment in threatened species recovery" .
+
+<http://example.org/news#source-record/govuk/1236fec09df6b60d> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "1236fec09df6b60d"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "The UK will not cease in our support for Ukraine and its people: UK statement at the UN Security Council"^^xsd:string ;
+    schema:name "The UK will not cease in our support for Ukraine and its people: UK statement at the UN Security Council" .
 
 <http://example.org/news#source-record/govuk/1603412e6ba91195> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -41127,6 +41632,14 @@ news:reportedByArticle a owl:ObjectProperty ;
     news:sourceSystem "govuk"^^xsd:string ;
     news:sourceTitle "Government to unlock philanthropic investment into England's most disadvantaged communities"^^xsd:string ;
     schema:name "Government to unlock philanthropic investment into England's most disadvantaged communities" .
+
+<http://example.org/news#source-record/govuk/33e93ba9dc47f3a4> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "33e93ba9dc47f3a4"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Charity Commission responds to attacks in North London"^^xsd:string ;
+    schema:name "Charity Commission responds to attacks in North London" .
 
 <http://example.org/news#source-record/govuk/3405b0887a557751> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
@@ -41568,6 +42081,14 @@ news:reportedByArticle a owl:ObjectProperty ;
     news:sourceTitle "Defence Diplomacy Strategy"^^xsd:string ;
     schema:name "Defence Diplomacy Strategy" .
 
+<http://example.org/news#source-record/govuk/8e8e97199c9163a2> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "8e8e97199c9163a2"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "UK Government commits up to £9m to support Mossmorran's future"^^xsd:string ;
+    schema:name "UK Government commits up to £9m to support Mossmorran's future" .
+
 <http://example.org/news#source-record/govuk/9287127fe065c543> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -41944,6 +42465,14 @@ news:reportedByArticle a owl:ObjectProperty ;
     news:sourceTitle "UN Human Rights Council 61: UK Statement for the Urgent Debate on Iran"^^xsd:string ;
     schema:name "UN Human Rights Council 61: UK Statement for the Urgent Debate on Iran" .
 
+<http://example.org/news#source-record/govuk/e486f2596affefb6> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "e486f2596affefb6"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Energy digitalisation framework: a vision for a coordinated and connected energy system"^^xsd:string ;
+    schema:name "Energy digitalisation framework: a vision for a coordinated and connected energy system" .
+
 <http://example.org/news#source-record/govuk/e572e1a91430f190> a news:GovernmentSourceRecord,
         news:OfficialSourceRecord,
         news:SourceRecord ;
@@ -42032,6 +42561,14 @@ news:reportedByArticle a owl:ObjectProperty ;
     news:sourceTitle "Government response to the report ‘The First 1000 Days: a renewed focus’"^^xsd:string ;
     schema:name "Government response to the report ‘The First 1000 Days: a renewed focus’" .
 
+<http://example.org/news#source-record/govuk/ff9f61f363ca47fe> a news:GovernmentSourceRecord,
+        news:OfficialSourceRecord,
+        news:SourceRecord ;
+    news:sourceIdentifier "ff9f61f363ca47fe"^^xsd:string ;
+    news:sourceSystem "govuk"^^xsd:string ;
+    news:sourceTitle "Summoning of the Iranian Ambassador to the United Kingdom: FCDO statement"^^xsd:string ;
+    schema:name "Summoning of the Iranian Ambassador to the United Kingdom: FCDO statement" .
+
 <http://example.org/news#source-record/parliament/08124cd753879368> a news:OfficialSourceRecord,
         news:ParliamentSourceRecord,
         news:SourceRecord ;
@@ -42115,6 +42652,9 @@ news:reportedByArticle a owl:ObjectProperty ;
 <http://example.org/news#location/Reading> a news:Location,
         schema:Place ;
     schema:name "Reading" .
+
+<http://example.org/news#location/Scotland> a news:Location ;
+    schema:name "Scotland" .
 
 <http://example.org/news#location/Slough> a news:Location,
         schema:Place ;
@@ -42487,6 +43027,9 @@ news:reportedByArticle a owl:ObjectProperty ;
 <http://example.org/news#person/Anne_Perkins> a news:Journalist ;
     schema:name "Anne Perkins" .
 
+<http://example.org/news#person/Ashley_Kirk> a news:Journalist ;
+    schema:name "Ashley Kirk" .
+
 <http://example.org/news#person/Ben_Quinn_Political_Correspondent> a news:Journalist ;
     schema:name "Ben Quinn Political Correspondent" .
 
@@ -42525,6 +43068,9 @@ news:reportedByArticle a owl:ObjectProperty ;
 
 <http://example.org/news#person/Dan_Sabbagh_Defence_and_security_editor> a news:Journalist ;
     schema:name "Dan Sabbagh Defence and security editor" .
+
+<http://example.org/news#person/David_Conn_and_Jessica_Elgot> a news:Journalist ;
+    schema:name "David Conn and Jessica Elgot" .
 
 <http://example.org/news#person/Devi_Sridhar> a news:Journalist ;
     schema:name "Devi Sridhar" .
@@ -42835,11 +43381,6 @@ news:NewsOrganisation a owl:Class ;
     schema:description "United Kingdom government ministerial department" ;
     schema:name "Department for Culture, Media and Sport" .
 
-<http://example.org/news#organisation/Department_for_Energy_Security_and_Net_Zero> a news:GovernmentBody,
-        news:GovernmentDepartment,
-        news:OfficialBody ;
-    schema:name "Department for Energy Security and Net Zero" .
-
 <http://example.org/news#organisation/Department_for_Science__Innovation_and_Technology> a news:GovernmentBody,
         news:GovernmentDepartment,
         news:OfficialBody ;
@@ -42942,9 +43483,6 @@ news:NewsOrganisation a owl:Class ;
 <http://example.org/news#person/Jessica_Elgot_and_Rowena_Mason> a news:Journalist ;
     schema:name "Jessica Elgot and Rowena Mason" .
 
-<http://example.org/news#person/Libby_Brooks_Scotland_correspondent> a news:Journalist ;
-    schema:name "Libby Brooks Scotland correspondent" .
-
 <http://example.org/news#person/Marina_Hyde> a news:Journalist ;
     schema:name "Marina Hyde" .
 
@@ -42963,6 +43501,11 @@ news:NewsOrganisation a owl:Class ;
 <http://example.org/news#location/Bristol> a news:Location,
         schema:Place ;
     schema:name "Bristol" .
+
+<http://example.org/news#organisation/Department_for_Energy_Security_and_Net_Zero> a news:GovernmentBody,
+        news:GovernmentDepartment,
+        news:OfficialBody ;
+    schema:name "Department for Energy Security and Net Zero" .
 
 <http://example.org/news#person/Wes_Streeting> a news:PoliticalActor,
         schema:Person ;
@@ -43026,11 +43569,11 @@ news:NewsOrganisation a owl:Class ;
 <http://example.org/news#person/Bethan_McKernan_Wales_correspondent> a news:Journalist ;
     schema:name "Bethan McKernan Wales correspondent" .
 
-<http://example.org/news#person/Diane_Taylor> a news:Journalist ;
-    schema:name "Diane Taylor" .
-
 <http://example.org/news#person/Kiran_Stacey_Policy_editor> a news:Journalist ;
     schema:name "Kiran Stacey Policy editor" .
+
+<http://example.org/news#person/Libby_Brooks_Scotland_correspondent> a news:Journalist ;
+    schema:name "Libby Brooks Scotland correspondent" .
 
 <http://example.org/news#person/Paul_Lewis__Pippa_Crerar_and_Henry_Dyer> a news:Journalist ;
     schema:name "Paul Lewis, Pippa Crerar and Henry Dyer" .
@@ -43112,6 +43655,9 @@ news:ParliamentaryDebate a owl:Class ;
         schema:Organization ;
     schema:name "independent politician" .
 
+<http://example.org/news#person/Diane_Taylor> a news:Journalist ;
+    schema:name "Diane Taylor" .
+
 <http://example.org/news#person/Helena_Horton> a news:Journalist ;
     schema:name "Helena Horton" .
 
@@ -43185,9 +43731,6 @@ news:ParliamentaryBody a owl:Class ;
 <http://example.org/news#person/Lisa_O_Carroll> a news:Journalist ;
     schema:name "Lisa O’Carroll" .
 
-<http://example.org/news#person/Polly_Toynbee> a news:Journalist ;
-    schema:name "Polly Toynbee" .
-
 <http://example.org/news#organisation/Communist_Party_of_Great_Britain> a news:PoliticalParty,
         schema:Organization ;
     rdfs:seeAlso <http://www.wikidata.org/entity/Q592068> ;
@@ -43227,6 +43770,9 @@ news:ParliamentaryBody a owl:Class ;
 <http://example.org/news#person/Alexandra_Topping_Political_correspondent> a news:Journalist ;
     schema:name "Alexandra Topping Political correspondent" .
 
+<http://example.org/news#person/Polly_Toynbee> a news:Journalist ;
+    schema:name "Polly Toynbee" .
+
 <http://example.org/news#person/Rajeev_Syal_Home_affairs_editor> a news:Journalist ;
     schema:name "Rajeev Syal Home affairs editor" .
 
@@ -43245,9 +43791,6 @@ news:ParliamentaryBody a owl:Class ;
     schema:location <http://example.org/news#location/Smith_Square> ;
     schema:name "Department for Environment, Food and Rural Affairs" .
 
-<http://example.org/news#topic/Taxation> a news:PolicyTopic ;
-    schema:name "Taxation" .
-
 news:ParliamentaryEvent a owl:Class ;
     rdfs:label "Parliamentary Event" ;
     rdfs:comment "A policy event taking place within a parliamentary setting or linked to a parliamentary body." ;
@@ -43263,6 +43806,9 @@ news:ParliamentaryEvent a owl:Class ;
 <http://example.org/news#topic/Politics> a news:PolicyTopic ;
     schema:name "Politics" .
 
+<http://example.org/news#topic/Taxation> a news:PolicyTopic ;
+    schema:name "Taxation" .
+
 <http://example.org/news#organisation/Scottish_Conservative_Party> a news:PoliticalParty,
         schema:Organization ;
     rdfs:seeAlso <http://www.wikidata.org/entity/Q3243587> ;
@@ -43270,9 +43816,6 @@ news:ParliamentaryEvent a owl:Class ;
     schema:foundingDate "1965-01-01"^^xsd:date ;
     schema:location <http://example.org/news#location/Edinburgh> ;
     schema:name "Scottish Conservative Party" .
-
-<http://example.org/news#person/Pippa_Crerar_Political_editor> a news:Journalist ;
-    schema:name "Pippa Crerar Political editor" .
 
 <http://example.org/news#organisation/Plaid_Cymru> a news:PoliticalParty,
         schema:Organization ;
@@ -43290,25 +43833,10 @@ news:ParliamentaryEvent a owl:Class ;
     schema:location <http://example.org/news#location/Parnell_Square> ;
     schema:name "Sinn Féin" .
 
-<http://example.org/news#person/John_Crace> a news:Journalist ;
-    schema:name "John Crace" .
-
-<http://example.org/news#topic/Economic_Policy> a news:PolicyTopic ;
-    schema:name "Economic Policy" .
-
 news:ParliamentSourceRecord a owl:Class ;
     rdfs:label "Parliament Source Record" ;
     rdfs:comment "A source record derived from a parliamentary source." ;
     rdfs:subClassOf news:OfficialSourceRecord .
-
-<http://example.org/news#organisation/HM_Treasury> a news:GovernmentBody,
-        news:GovernmentDepartment,
-        news:OfficialBody,
-        schema:Organization ;
-    rdfs:seeAlso <http://www.wikidata.org/entity/Q578269> ;
-    schema:description "United Kingdom government department" ;
-    schema:location <http://example.org/news#location/Government_Offices_Great_George_Street> ;
-    schema:name "HM Treasury" .
 
 <http://example.org/news#organisation/Scottish_Labour_Party> a news:PoliticalParty,
         schema:Organization ;
@@ -43318,11 +43846,26 @@ news:ParliamentSourceRecord a owl:Class ;
     schema:location <http://example.org/news#location/Glasgow> ;
     schema:name "Scottish Labour Party" .
 
+<http://example.org/news#person/John_Crace> a news:Journalist ;
+    schema:name "John Crace" .
+
+<http://example.org/news#person/Pippa_Crerar_Political_editor> a news:Journalist ;
+    schema:name "Pippa Crerar Political editor" .
+
 <http://example.org/news#person/Rowena_Mason_Whitehall_editor> a news:Journalist ;
     schema:name "Rowena Mason Whitehall editor" .
 
-<http://example.org/news#person/Ben_Quinn_Political_correspondent> a news:Journalist ;
-    schema:name "Ben Quinn Political correspondent" .
+<http://example.org/news#topic/Economic_Policy> a news:PolicyTopic ;
+    schema:name "Economic Policy" .
+
+<http://example.org/news#organisation/HM_Treasury> a news:GovernmentBody,
+        news:GovernmentDepartment,
+        news:OfficialBody,
+        schema:Organization ;
+    rdfs:seeAlso <http://www.wikidata.org/entity/Q578269> ;
+    schema:description "United Kingdom government department" ;
+    schema:location <http://example.org/news#location/Government_Offices_Great_George_Street> ;
+    schema:name "HM Treasury" .
 
 <http://example.org/news#topic/Defence> a news:PolicyTopic ;
     schema:name "Defence" .
@@ -43339,6 +43882,9 @@ news:PolicyTopic a owl:Class ;
     schema:foundingDate "1971-09-30"^^xsd:date ;
     schema:location <http://example.org/news#location/Belfast> ;
     schema:name "Democratic Unionist Party" .
+
+<http://example.org/news#person/Ben_Quinn_Political_correspondent> a news:Journalist ;
+    schema:name "Ben Quinn Political correspondent" .
 
 <http://example.org/news#person/Editorial> a news:Journalist ;
     schema:name "Editorial" .
@@ -43422,11 +43968,6 @@ news:GovernmentDepartment a owl:Class ;
         schema:Place ;
     schema:name "London" .
 
-news:Journalist a owl:Class ;
-    rdfs:label "Journalist" ;
-    rdfs:comment "A journalist who authors a news article reporting on a policy event." ;
-    rdfs:subClassOf schema:Person .
-
 <http://example.org/news#organisation/Scottish_National_Party> a news:PoliticalParty,
         schema:Organization ;
     rdfs:seeAlso <http://www.wikidata.org/entity/Q10658> ;
@@ -43434,6 +43975,11 @@ news:Journalist a owl:Class ;
     schema:foundingDate "1934-04-07"^^xsd:date ;
     schema:location <http://example.org/news#location/Edinburgh> ;
     schema:name "Scottish National Party" .
+
+news:Journalist a owl:Class ;
+    rdfs:label "Journalist" ;
+    rdfs:comment "A journalist who authors a news article reporting on a policy event." ;
+    rdfs:subClassOf schema:Person .
 
 <http://example.org/news#organisation/Liberal_Party> a news:PoliticalParty,
         schema:Organization ;
