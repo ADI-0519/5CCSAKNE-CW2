@@ -74,6 +74,22 @@ Generated artefacts land in `output/` (non-timestamped, always reflecting the mo
 python -m pytest
 ```
 
+## Running Evaluations
+
+After reproducing the submitted run with `python -m src.main --from-cache`, the evaluation scripts can be run with their default artefacts:
+
+```bash
+python -m src.evaluate_extraction evaluate
+python -m src.evaluate_rag
+python -m src.evaluate_completion
+```
+
+These commands align with the evaluator defaults in `src/`:
+
+- `src.evaluate_extraction evaluate` scores the latest `data/processed/*_kg_records.json` predictions against `data/evaluation/gold_standard_extraction.json`, writing `output/extraction_evaluation.json` and `docs/extraction_evaluation.md`.
+- `src.evaluate_rag` reads `output/completion_audit.json` and cached RAG completion payloads, writing `output/rag_evaluation.json` and `docs/rag_evaluation.md`.
+- `src.evaluate_completion` compares `kg/generated/prototype_kg.ttl` with `kg/generated/completed_kg.ttl` for the selected competency questions, includes cached direct-LLM baseline answers when available, and writes `docs/baseline_comparison.md`.
+
 ## Live-API Mode (not required for marking)
 
 To re-collect data from live APIs instead of using the shipped cache:
