@@ -1,0 +1,40 @@
+{
+  "people": [
+    "Alan Gemmell",
+    "Antonia Romeo",
+    "Cat Little",
+    "Darren Jones",
+    "Keir Starmer",
+    "Lord Beamish",
+    "Oliver Robbins",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Security Vetting"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Development Office",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "The Cabinet Office"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

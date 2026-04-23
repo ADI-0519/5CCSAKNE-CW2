@@ -1,0 +1,57 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Philip Barton"
+  ],
+  "organizations": [
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "No 10"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Robbins' testimony to foreign affairs select committee",
+      "type": "ParliamentaryEvent",
+      "date": "2026-04-21",
+      "location": null,
+      "policy_topics": [
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Olly Robbins",
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "Foreign, Commonwealth and Development Office"
+      ],
+      "parliamentary_body": "foreign affairs select committee",
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "people": [
+    "Duncan Lewis",
+    "Elizabeth Cole",
+    "Maddie Harris"
+  ],
+  "organizations": [
+    "Home Office",
+    "Humans for Rights Network"
+  ],
+  "locations": [],
+  "topics": [
+    "Immigration"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Detention of age-disputed children",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-05",
+      "location": null,
+      "policy_topics": [
+        "Immigration",
+        "Child Protection"
+      ],
+      "political_actors": [],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

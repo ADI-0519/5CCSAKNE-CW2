@@ -1,0 +1,30 @@
+{
+  "people": [
+    "Gideon Rabinowitz"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour",
+    "Bond",
+    "Red Cross"
+  ],
+  "locations": [
+    "Rotherham",
+    "Syria",
+    "Africa"
+  ],
+  "topics": [
+    "Immigration",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

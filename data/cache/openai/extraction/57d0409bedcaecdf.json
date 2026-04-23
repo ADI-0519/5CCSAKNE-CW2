@@ -1,0 +1,66 @@
+{
+  "people": [
+    "Angus Robertson",
+    "Gillian Mackay",
+    "Lorna Slater",
+    "David Phillips",
+    "Ross Greer",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour",
+    "Reform UK",
+    "Scottish National Party",
+    "Institute for Fiscal Studies"
+  ],
+  "locations": [
+    "Edinburgh",
+    "Glasgow",
+    "Holyrood",
+    "Manchester",
+    "Scotland"
+  ],
+  "topics": [
+    "Taxation",
+    "Education",
+    "Housing",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Policy Announcement",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-14",
+      "location": "Edinburgh",
+      "policy_topics": [
+        "Taxation",
+        "Education",
+        "Housing"
+      ],
+      "political_actors": [
+        "Scottish Greens",
+        "Angus Robertson"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": "Holyrood",
+      "political_parties": [
+        "Green Party",
+        "Scottish National Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

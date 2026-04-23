@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Chris Parry",
+    "Steve Wright",
+    "Simon Dudley",
+    "Keir Starmer",
+    "Nigel Farage",
+    "Richard Tice"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Grenfell United",
+    "Fire Brigades Union",
+    "Inside Housing",
+    "Homes England"
+  ],
+  "locations": [
+    "England"
+  ],
+  "topics": [
+    "Housing",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

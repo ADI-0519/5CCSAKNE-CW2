@@ -1,0 +1,51 @@
+{
+  "people": [
+    "John Healey",
+    "President Putin",
+    "Donald Trump",
+    "Pete Hegseth"
+  ],
+  "organizations": [
+    "Ministry of Defence",
+    "Downing Street"
+  ],
+  "locations": [
+    "North Sea",
+    "North Atlantic",
+    "UK territorial waters"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Ministry of Defence",
+    "Downing Street"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "UK operation against Russian submarines",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-09",
+      "location": "Exclusive economic zone near the UK coastline",
+      "policy_topics": [
+        "Defence"
+      ],
+      "political_actors": [
+        "John Healey"
+      ],
+      "government_bodies": [
+        "Ministry of Defence"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

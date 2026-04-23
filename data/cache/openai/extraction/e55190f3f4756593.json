@@ -1,0 +1,31 @@
+{
+  "people": [
+    "Bernard Jenkin",
+    "Donald Trump",
+    "Keir Starmer",
+    "Meg Hillier",
+    "Peter Mandelson",
+    "Tan Singh Dhesi"
+  ],
+  "organizations": [
+    "Labour"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Defence",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

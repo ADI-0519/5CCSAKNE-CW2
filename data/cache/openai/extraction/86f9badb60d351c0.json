@@ -1,0 +1,54 @@
+{
+  "people": [
+    "Nick Candy",
+    "Christian Candy",
+    "Donald Trump",
+    "Donald Trump Jr.",
+    "Holly Valance",
+    "Nigel Farage",
+    "Elon Musk"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Labour"
+  ],
+  "locations": [
+    "London",
+    "Mayfair",
+    "England"
+  ],
+  "topics": [
+    "Politics",
+    "Public Spending",
+    "Property",
+    "Taxation"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Labour"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Sale of Providence House",
+      "type": "PolicyEvent",
+      "date": "2026-04-02",
+      "location": "London",
+      "policy_topics": [],
+      "political_actors": [
+        "Nick Candy"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

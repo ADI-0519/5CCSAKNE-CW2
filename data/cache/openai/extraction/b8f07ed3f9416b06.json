@@ -1,0 +1,53 @@
+{
+  "people": [
+    "Pete Hegseth",
+    "Donald Trump",
+    "Keir Starmer",
+    "Gen Sir Gwyn Jenkins",
+    "Richard Barrons"
+  ],
+  "organizations": [
+    "Labour",
+    "Ministry of Defence",
+    "Center for European Policy Analysis"
+  ],
+  "locations": [
+    "Bahrain",
+    "Cyprus"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Ministry of Defence"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "House of Commons defence committee meeting",
+      "type": "ParliamentaryEvent",
+      "date": "2026-03-10",
+      "location": "House of Commons",
+      "policy_topics": [
+        "Defence",
+        "Military Readiness"
+      ],
+      "political_actors": [],
+      "government_bodies": [],
+      "parliamentary_body": "House of Commons",
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

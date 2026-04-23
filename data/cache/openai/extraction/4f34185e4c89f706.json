@@ -1,0 +1,43 @@
+{
+  "people": [
+    "George Robertson",
+    "John Healey",
+    "Keir Starmer",
+    "Lord Robertson",
+    "Pete Hegseth",
+    "Rachel Reeves",
+    "Richard Barrons",
+    "Royal Air Force",
+    "Royal Navy"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Financial Times",
+    "Labour Party",
+    "Ministry of Defence"
+  ],
+  "locations": [
+    "Salisbury"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Public Spending",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "HM Treasury",
+    "Ministry of Defence"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

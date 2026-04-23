@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Calvin Bailey",
+    "Catherine Blaiklock",
+    "Chris Parry",
+    "David Lammy",
+    "Max Wilkinson",
+    "Nigel Farage",
+    "Rabbi Herschel Gluck"
+  ],
+  "organizations": [
+    "Labour",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "locations": [
+    "Hampshire",
+    "London",
+    "England"
+  ],
+  "topics": [
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Labour",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

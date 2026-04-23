@@ -1,0 +1,32 @@
+{
+  "people": [
+    "Ella Smith",
+    "Hannah Nicholls-Harrison",
+    "James Taylor",
+    "Samuel Thomas",
+    "Tom Pollard"
+  ],
+  "organizations": [
+    "Mencap",
+    "Mind",
+    "Scope",
+    "Labour"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Healthcare",
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Department for Work and Pensions"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

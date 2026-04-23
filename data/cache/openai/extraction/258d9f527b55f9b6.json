@@ -1,0 +1,34 @@
+{
+  "people": [
+    "Donald Trump",
+    "Keir Starmer"
+  ],
+  "organizations": [
+    "No 10",
+    "Joint Expeditionary Force"
+  ],
+  "locations": [
+    "Cyprus",
+    "Helsinki",
+    "Iran",
+    "Chagos Islands",
+    "Diego Garcia",
+    "Lebanon"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Politics",
+    "Energy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "No 10"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

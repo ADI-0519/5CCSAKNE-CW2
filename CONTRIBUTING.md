@@ -4,7 +4,7 @@
 
 - All changes/merges should go through the Pull Requests.
 - Do not push directly to `main` or `dev` branches.
-- Ensure CI checks pass before requesting review/pushing code. 
+- Ensure CI checks pass before requesting review/pushing code.
 
 ## Branch Naming
 

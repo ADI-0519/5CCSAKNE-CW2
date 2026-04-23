@@ -1,0 +1,80 @@
+{
+  "sources": {
+    "guardian": {
+      "response": {
+        "results": [
+          {
+            "webTitle": "Opinion: Parliament needs a clearer immigration policy",
+            "webUrl": "https://example.com/guardian-opinion",
+            "webPublicationDate": "2026-03-22T08:30:00Z",
+            "sectionName": "Comment is Free",
+            "tags": [
+              {
+                "type": "keyword",
+                "webTitle": "Immigration and asylum"
+              }
+            ],
+            "fields": {
+              "byline": "Polly Toynbee",
+              "trailText": "An opinion piece on Westminster and immigration.",
+              "bodyText": "The Home Office and Labour Party are under scrutiny over immigration policy in London.",
+              "lastModified": "2026-03-22T09:00:00Z",
+              "wordcount": "650"
+            }
+          },
+          {
+            "webTitle": "Treasury faces questions over spring statement in Commons",
+            "webUrl": "https://example.com/guardian-budget",
+            "webPublicationDate": "2026-03-20T11:15:00Z",
+            "sectionName": "Politics",
+            "tags": [
+              {
+                "type": "keyword",
+                "webTitle": "Budget"
+              },
+              {
+                "type": "keyword",
+                "webTitle": "Politics"
+              }
+            ],
+            "fields": {
+              "byline": "Jessica Elgot",
+              "trailText": "MPs challenge ministers over public spending.",
+              "bodyText": "The Treasury defended the spring statement in the House of Commons as Labour demanded changes to public spending plans.",
+              "lastModified": "2026-03-20T12:00:00Z",
+              "wordcount": "720"
+            }
+          }
+        ]
+      }
+    },
+    "parliament": {
+      "response": {
+        "results": [
+          {
+            "title": "Health statement",
+            "url": "https://example.com/parliament-health-statement",
+            "date": "2026-03-19T10:30:00Z",
+            "house": "House of Commons",
+            "description": "A statement on NHS performance.",
+            "topics": ["NHS", "Healthcare"]
+          }
+        ]
+      }
+    },
+    "govuk": {
+      "response": {
+        "results": [
+          {
+            "title": "New immigration policy paper",
+            "link": "/government/publications/new-immigration-policy-paper",
+            "public_timestamp": "2026-03-23T12:00:00Z",
+            "description": "A new policy paper from the Home Office.",
+            "format": "policy_paper",
+            "organisations": ["Home Office"]
+          }
+        ]
+      }
+    }
+  }
+}

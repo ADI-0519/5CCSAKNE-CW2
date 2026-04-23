@@ -1,0 +1,34 @@
+{
+  "people": [
+    "David Cameron",
+    "Keir Starmer",
+    "Madeleine Sumption",
+    "Nigel Farage",
+    "Rishi Sunak"
+  ],
+  "organizations": [
+    "Conservative",
+    "Downing Street",
+    "University of Oxford",
+    "Migration Observatory"
+  ],
+  "locations": [],
+  "topics": [
+    "Immigration",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage",
+    "Rishi Sunak"
+  ],
+  "political_parties": [
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Downing Street"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

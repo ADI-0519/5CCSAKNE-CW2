@@ -1,0 +1,51 @@
+{
+  "people": [
+    "Natasha Cochrane de la Rosa",
+    "Nick Cochrane",
+    "Catherine West",
+    "Mike Tapp"
+  ],
+  "organizations": [
+    "Home Office"
+  ],
+  "locations": [
+    "Spain",
+    "London",
+    "Luton",
+    "Australia",
+    "Canada"
+  ],
+  "topics": [
+    "Immigration",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Change in Home Office border rules",
+      "type": "PolicyEvent",
+      "date": "2026-02-26",
+      "location": null,
+      "policy_topics": [
+        "Immigration"
+      ],
+      "political_actors": [
+        "Mike Tapp"
+      ],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

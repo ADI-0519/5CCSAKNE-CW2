@@ -1,0 +1,32 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "UK Security Vetting"
+  ],
+  "locations": [
+    "Washington"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Calais Food Collective",
+    "Emmanuel Macron",
+    "Lachlan Macrae",
+    "Lavanya Pallapi",
+    "Martin Hewitt",
+    "Rishi Sunak",
+    "Shabana Mahmood",
+    "Xavier Ducept"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Home Office",
+    "Joint Council",
+    "No 10"
+  ],
+  "locations": [
+    "French"
+  ],
+  "topics": [
+    "Immigration",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Rishi Sunak"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Downing Street",
+    "Home Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

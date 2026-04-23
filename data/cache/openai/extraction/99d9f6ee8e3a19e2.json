@@ -1,0 +1,51 @@
+{
+  "people": [
+    "Alex Cole-Hamilton",
+    "Alex Salmond",
+    "Anas Sarwar",
+    "John Swinney",
+    "Keir Starmer",
+    "Malcolm Offord",
+    "Nigel Farage",
+    "Russell Findlay",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "locations": [
+    "Edinburgh",
+    "Glasgow",
+    "Holyrood",
+    "Newhaven",
+    "Scotland"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics",
+    "Healthcare",
+    "Housing"
+  ],
+  "politicians": [
+    "John Swinney",
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

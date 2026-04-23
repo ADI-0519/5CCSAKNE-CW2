@@ -1,0 +1,34 @@
+{
+  "people": [
+    "David Miliband",
+    "Donald Trump",
+    "Keir Starmer",
+    "United Nations"
+  ],
+  "organizations": [
+    "International Rescue Committee",
+    "Organisation for Economic Co-operation and Development",
+    "Labour Party"
+  ],
+  "locations": [
+    "Washington"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Politics",
+    "Defence",
+    "Energy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

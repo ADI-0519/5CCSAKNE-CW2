@@ -1,0 +1,27 @@
+{
+  "people": [
+    "Crispin Blunt",
+    "David Cameron",
+    "Tan Ikram",
+    "Zarah Dickinson"
+  ],
+  "organizations": [
+    "Conservative Party"
+  ],
+  "locations": [
+    "Surrey",
+    "Westminster"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

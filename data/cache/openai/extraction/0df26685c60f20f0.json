@@ -1,0 +1,71 @@
+{
+  "people": [
+    "Ian Collard",
+    "Olly Robbins",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign Office",
+    "UK Security Vetting"
+  ],
+  "locations": [
+    "Afghanistan",
+    "London",
+    "Panama",
+    "Washington",
+    "Whitehall"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Meeting between Ian Collard and Olly Robbins",
+      "type": "PolicyEvent",
+      "date": "2025-01-29",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Ian Collard",
+        "Olly Robbins"
+      ],
+      "government_bodies": [
+        "Foreign Office",
+        "Cabinet Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "UKSV decision on Peter Mandelson",
+      "type": "GovernmentPolicyEvent",
+      "date": "2025-01-28",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [],
+      "government_bodies": [
+        "Cabinet Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

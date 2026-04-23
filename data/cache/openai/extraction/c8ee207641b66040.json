@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Antonia Romeo",
+    "Catherine Little",
+    "Keir Starmer",
+    "Oliver Robbins",
+    "Olly Robbins",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "The Guardian"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Defence",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

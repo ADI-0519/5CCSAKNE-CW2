@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "David Mundell",
+    "John Swinney",
+    "Kemi Badenoch",
+    "Malcolm Offord",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "locations": [
+    "Edinburgh",
+    "Holyrood",
+    "Scotland",
+    "Westminster"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "John Swinney",
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Scottish National Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

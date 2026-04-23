@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Claire Coutinho",
+    "Greg Jackson",
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Tessa Khan"
+  ],
+  "organizations": [
+    "Conservative",
+    "Labour",
+    "Reform UK",
+    "The Guardian"
+  ],
+  "locations": [
+    "Aberdeen",
+    "Iran"
+  ],
+  "topics": [
+    "Energy",
+    "Politics",
+    "Taxation",
+    "Economic Policy"
+  ],
+  "politicians": [
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

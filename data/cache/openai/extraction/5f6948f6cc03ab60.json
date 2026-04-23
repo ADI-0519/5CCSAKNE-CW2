@@ -1,0 +1,42 @@
+{
+  "people": [
+    "Eluned Morgan",
+    "Keir Starmer",
+    "Henry Tufnell",
+    "Anas Sarwar",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Plaid Cymru",
+    "Reform UK",
+    "Downing Street",
+    "Parc Against Darc"
+  ],
+  "locations": [
+    "Wales",
+    "Pembrokeshire",
+    "Westminster",
+    "Cawdor Barracks",
+    "Windsor"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Eluned Morgan",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Plaid Cymru",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Downing Street"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

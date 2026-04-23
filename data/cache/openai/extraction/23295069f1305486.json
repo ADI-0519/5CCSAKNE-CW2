@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Boris Johnson",
+    "Keir Starmer",
+    "David Cameron",
+    "Rishi Sunak",
+    "Theresa May",
+    "Tony Blair"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Labour",
+    "Network Rail",
+    "Nuclear Decommissioning Authority"
+  ],
+  "locations": [
+    "Brazil",
+    "Dubai",
+    "Egypt",
+    "Johannesburg"
+  ],
+  "topics": [
+    "Government Policy",
+    "Foreign policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rishi Sunak"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

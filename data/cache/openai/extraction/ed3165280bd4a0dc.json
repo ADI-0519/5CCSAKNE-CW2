@@ -1,0 +1,56 @@
+{
+  "people": [
+    "Adolf Hitler",
+    "Basil Fawlty",
+    "Corey Edwards",
+    "Nigel Farage",
+    "Laura Anne Jones",
+    "Wayne Hennessey",
+    "Humza Yousaf",
+    "Stuart Niven",
+    "Tommy Robinson"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "locations": [
+    "Wales",
+    "Scotland"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Senedd elections",
+      "type": "PolicyEvent",
+      "date": "2026-05-07",
+      "location": "Wales",
+      "policy_topics": [],
+      "political_actors": [
+        "Corey Edwards",
+        "Laura Anne Jones"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Reform UK"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

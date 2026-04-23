@@ -1,0 +1,378 @@
+{
+    "http://example.org/news#event/130_cultural_venues__museums__and_libraries_to_receive_funding_boost_that_will_improve_access_to_arts_and_culture_across_the_country_2026-04-13_Liverpool": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/27th_Anniversary_of_the_NATO_Response_to_the_Humanitarian_Crisis_in_Kosovo__UK_statement_to_the_OSCE__March_2026_2026-04-09_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Attacks_on_international_shipping_in_the_Gulf_have_been_deeply_damaging_for_the_world__UK_Statement_at_the_UN_General_Assembly_2026-04-17_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Attorney_General_s_Harry_Street_Lecture_speech_2026-03-24": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Better_journeys_ahead__agreement_secured_to_benefit_Welsh_passengers_under_Great_British_Railways_2026-03-25_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Carbon_border_adjustment_mechanism__CBAM___Policy_summary_2026-04-09": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Changes_to_infected_blood_compensation_scheme_will_improve_support_for_victims_2026-04-14": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Charity_Commission_responds_to_attacks_in_North_London_2026-03-23_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Competition_and_scaling__Tech_eu_Summit_London_2026_2026-04-22_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Competition_to_launch_national_forest_in_Ox-Cam_Growth_Corridor_2026-03-25_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Consumers_to_save_around__400_million_every_year_from_government_crackdown_on_costly_subscription_traps_2026-04-01": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Crackdown_on_water_companies_delivers_record_funding_to_restore_harm_done_to_waterways_2026-04-13_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Election_2026-03-24_db8e86d2": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Election_2026-04-10_Manchester_bc727d25": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Election_2026-04-17_Birmingham_706e35cc": {
+        "manual_correct": false,
+        "manual_notes": "topic 'Parliament' does not apply to this event"
+    },
+    "http://example.org/news#event/Election_2026-04-18_London_bb3b5158": {
+        "manual_correct": false,
+        "manual_notes": "topic 'Parliament' does not apply to this event"
+    },
+    "http://example.org/news#event/FCDO_statement_on_DPRK_ballistic_missile_launches__19_April_2026-04-19": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Fixing_the_foundations__government_fund_to_fix_England_s_bridges__flyovers_and_tunnels_now_open_2026-04-15_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Foreign_Secretary_s_statement__ceasefire_in_the_Middle_East__8_April_2026_2026-04-08": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Free_travel_and_new_routes__government_s_bus_revolution_hits_another_gear_2026-04-13_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Government_launches_new_consultation_as_part_of_commitment_to_introduce_mandatory_certification_for_fire_risk_assessors_2026-03-26_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Government_outlines_proposed_reforms_of_Industry_Training_Boards_to_boost_skills_2026-03-30_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Government_to_unlock_philanthropic_investment_into_England_s_most_disadvantaged_communities_2026-04-12_Liverpool": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Homes_England_investment_roadmap_December_2025_2026-03-31_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Homes_England_marks_National_Housing_Bank_launch_as_part_of_a_once-in-a-generation_investment_offer_to_accelerate_delivery_of_new_homes_and_mixed-use_schemes_2026-03-31_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Hydrogen_investment_fuels_South_Yorkshire_s_next_industrial_era_2026-04-09": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Israel_s_decision_to_expand_its_ground_operations_further_into_Lebanon_undermines_work_to_disarm_Hizballah_and_threatens_Lebanon_s_sovereignty__UK_statement_at_the_UN_Security_Council_2026-03-31_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Japan-UK_Foreign_Ministers__Strategic_Dialogue_2026___Joint_Statement_2026-04-20": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Jobs__energy_security_and_investment_boost_for_Scotland_2026-03-25_Scotland": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Joint_Statement_from_the_leaders_of_the_Joint_Expeditionary_Force__26_March_2026_2026-03-26": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Joint_Statement_of_G7_Foreign_Ministers_on_Iran_2026-03-27": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Joint_Statement_on_the_conflict_in_the_Middle_East__8_April_2026_2026-04-09": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Joint_statement_from_the_leaders_of_the_United_Kingdom__France__Germany__Italy__the_Netherlands__Japan__Canada_and_others_on_the_Strait_of_Hormuz__19_March_2026_2026-04-03": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/King_s_Counsel_appointments_ceremony_2026__Lord_Chancellor_speech_2026-03-26_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Leadership_Contest_2026-03-30": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Local_museums_receive__4_million_to_improve_accessibility_to_arts_and_culture_2026-04-09_Liverpool": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Major_boost_for_young_people_in_Wales_with_12_new_Youth_Hubs_and_devolved_employment_support_funding_announced_2026-03-25_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Major_renewal_of_ageing_English_roads_delivered_with__27_billion_investment_2026-03-26_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Mann_recommendations_agreed_in_consultation_on_GMC_overhaul_2026-03-24_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Minister_for_Defence_Readiness_and_Industry__Luke_Pollard_MP__Keynote_Speech_at_DPRTE_2026_2026-03-25_DPRTE": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Minister_for_Europe_speech_at_the_Aurora_Forum_2026-03-26_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Ministerial_Statement_2026-04-22_83a31463": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Ministerial_Statement_2026-04-22_ad2e911a": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/NHS_patients_and_British_businesses_to_benefit_from_historic_changes_to_medicines_access_following_pharmaceutical_partnership_with_USA_2026-04-02_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/New_UK_Aid_for_displaced_people_in_Lebanon_as_Minister_visits_Beirut_2026-04-16_Lebanon": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/New_powers_to_protect_vital_free_speech_at_universities_2026-04-20_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Northern_Ireland_start-up_boost_with_new__50_million_defence_growth_deal_2026-04-22_Northern_Ireland": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/On_Russian_submarine_activity_in_the_Atlantic__Joint_statement_to_the_OSCE_2026-04-16_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Parliamentary_Debate_2026-03-26_0de59430": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Policy_Announcement_2026-04-08_Westminster_24972cfc": {
+        "manual_correct": false,
+        "manual_notes": "actor 'Ben Delo' not linked to this event in source data"
+    },
+    "http://example.org/news#event/Powering_the_farms_of_the_future_with__50_million_tech_investment_2026-04-14_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Recent_Houthi_attacks_against_Israel_threaten_to_further_destabilise_the_region_and_undermine_Yemen_s_security__UK_statement_at_the_UN_Security_Council_2026-04-14_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Reformed_Arts_Council_to_better_ensure_the_arts_are_no_longer_the_preserve_of_the_privileged_few_2026-03-26_Liverpool": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Reforms_to_make_it_easier_for_overseas_companies_to_move_to_the_UK_2026-03-25": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Report_by_the_Head_of_OSCE_Mission_to_Bosnia_and_Herzegovina__UK_statement__March_2026_2026-03-26_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Repression_in_Russia__UK_and_others_express_concern_at_Russian_court_s_decision_to_classify_Memorial_as_an__extremist_organization___Joint_Statement_to_the_OSCE_2026-04-20_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Russia_is_the_one_that_must_de-escalate_and_engage_in_meaningful_dialogue__UK_statement_at_the_UN_Security_Council_2026-04-20_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Russia_s_approach_to_the_Easter_ceasefire_demonstrates_its_contempt_for_peace__UK_statement_to_the_OSCE_2026-04-16_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Russia_s_illegal_occupation_of_Crimea_and_continued_aggression_against_Ukraine__UK_statement_to_the_OSCE_2026-03-26_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Russia_s_record-breaking_attacks_show_it_has_no_intention_of_pursuing_peace__UK_statement_to_the_OSCE_2026-03-26_Vienna": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/SFO_launch_appeal_into_suspected_home_heating___insulation_fraud_2026-04-22": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Security_Minister_s_speech_to_CYBERUK_2026_2026-04-22_CYBERUK": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Simpler_household_recycling_rules_come_into_force_across_England_2026-03-30_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Sir_Martyn_Oliver_s_speech_at_the_Early_Years_Alliance_Connect_Roadshow_2026-04-17_London": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Social_Media_Ban_Pilot_2026-03-25": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Summer_boost_for_HM_Coastguard_Search_and_Rescue_helicopters_2026-04-07": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Summoning_of_the_Iranian_Ambassador_to_the_United_Kingdom__FCDO_statement_2026-03-23": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Tay_Cities_Region_backed_by_up_to__20_million_from_UK_government_to_grow_its_thriving_creative_tech_sector_2026-03-25_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_UK_remains_committed_to_working_with_the_GCC__the_United_Nations__and_all_Council_members__UK_statement_at_the_UN_Security_Council_2026-04-02_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_UK_stands_ready_to_engage_constructively_with_all_parties_and_expects_COP31_to_be_a_moment_of_delivery__UK_statement_at_the_briefing_by_the_COP31_Presidency_2026-03-30": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_UK_supports_EU-UN_coordination_in_maintaining_international_peace_and_security__UK_statement_at_the_UN_Security_Council_2026-04-13_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_UK_will_continue_to_champion_coordination_between_the_League_of_Arab_States_and_the_United_Nations__UK_statement_at_the_UN_Security_Council_2026-04-02_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_UK_will_not_cease_in_our_support_for_Ukraine_and_its_people__UK_statement_at_the_UN_Security_Council_2026-03-23_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_United_Kingdom_condemns_violence_against_UN_peacekeepers_who_work_tirelessly_to_protect_international_peace_and_security__UK_statement_at_the_UN_Security_Council_2026-04-15_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_United_Kingdom_remains_concerned_by_the_deteriorating_humanitarian_situation_in_the_Great_Lakes_region__UK_statement_at_the_UN_Security_Council_2026-04-15_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_Universal_Credit__Personal_Independence_Payment_and_Employment_and_Support_Allowance__Amendment__Regulations_2026__unnumbered_act_paper_2026-04-13_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/The_only_solution_to_the_current_crisis_in_South_Sudan_is_through_the_immediate_cessation_of_hostilities__UK_statement_at_the_UN_Security_Council_2026-04-17_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Time_to_Pay_Up__Government_unveils_toughest_crackdown_on_late_payments_in_over_25_years_2026-03-24": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/UK_Explanation_of_Vote_on_the_Declaration_of_the_trafficking_of_enslaved_Africans_and_racialised_chattel_enslavement_of_Africans_as_the_gravest_Crime_Against_Humanity_2026-03-25": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/UN_Human_Rights_Council_61__UK_Introductory_Statement_on_the_draft_resolution_on_Syria_2026-03-27_Geneva": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/UN_Human_Rights_Council_61__UK_Statement_for_the_Interactive_Dialogue_on_Ukraine_2026-03-26_Geneva": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/UN_Human_Rights_Council_61__UK_Statement_for_the_resolution_on_South_Sudan_2026-03-27_Geneva": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/UN_Human_Rights_Council_61__UK_Statement_on_the_Appointment_of_Mandate_Holders_2026-04-01_Geneva": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/Update_following_negotiations_on_an_enhanced_FTA_with_Switzerland_2026-03-24": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/WTO_General_Council_March_2026__UK_Statement_Day_1_and_Day_2_2026-04-14_Geneva": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_call_for_greater_efforts_to_protect_women_and_girls__and_Indigenous_and_Afro-Colombian_communities_in_Colombia__UK_statement_at_the_UN_Security_Council_2026-04-21_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_can_shape_a_world_where_every_human_being_can_live_with_dignity__safety__and_choice__UK_National_Statement_at_the_59th_session_of_the_Commission_on_Population_and_Development_2026-04-15": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_condemn_increasing_drone_strikes_on_civilians_and_humanitarian_workers_in_eastern_Democratic_Republic_of_Congo__UK_statement_at_the_UN_Security_Council_2026-03-26_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_continue_to_call_on_Kosovo_and_Serbia_to_resolve_outstanding_disagreements_through_the_EU-facilitated_Dialogue__UK_statement_at_the_UN_Security_Council_2026-04-09_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_must_honour_the_dedication_of_humanitarian_and_UN_personnel_on_the_front_lines_through_action_to_protect_them__UK_statement_at_the_UN_Security_Council_2026-04-08_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_must_preserve_the_land_and_the_people_of_Palestine_so_that_a_two-state_solution_remains_viable__UK_statement_at_the_UN_Security_Council_2026-03-24_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/We_reiterate_our_commitment_to_an_inclusive_political_process_which_safeguards_Libya_s_unity_and_stability__UK_statement_at_the_UN_Security_Council_2026-04-22_New_York": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/_1_billion_invested_in_health_protection_as_new_Pandemic_Strategy_published_2026-03-25": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    },
+    "http://example.org/news#event/_Wainwright_way__becomes_England_s_newest_National_Trail_2026-03-26_England": {
+        "manual_correct": true,
+        "manual_notes": "correct"
+    }
+}

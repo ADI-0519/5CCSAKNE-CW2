@@ -1,0 +1,46 @@
+{
+  "people": [
+    "Giles Lomax",
+    "Jesy Nelson"
+  ],
+  "organizations": [
+    "Scottish Government",
+    "NHS",
+    "SMA UK",
+    "Novartis"
+  ],
+  "locations": [
+    "Scotland"
+  ],
+  "topics": [
+    "Healthcare",
+    "Government Policy"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Scottish Government"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Approval for SMA screening pilot",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-23",
+      "location": "Scotland",
+      "policy_topics": [
+        "Healthcare"
+      ],
+      "political_actors": [],
+      "government_bodies": [
+        "Scottish Government"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

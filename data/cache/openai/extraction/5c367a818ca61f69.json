@@ -1,0 +1,24 @@
+{
+  "people": [
+    "Doctors Industrial"
+  ],
+  "organizations": [
+    "British Medical Association",
+    "GMB",
+    "Unison"
+  ],
+  "locations": [
+    "England"
+  ],
+  "topics": [
+    "Healthcare",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

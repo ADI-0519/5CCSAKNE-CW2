@@ -1,0 +1,35 @@
+{
+  "people": [
+    "Boris Johnson",
+    "Cindy Gallop",
+    "Kemi Badenoch",
+    "Lucy Powell",
+    "Neil Parish",
+    "Nigel Farage",
+    "Samantha Niblett",
+    "Tom Hayes"
+  ],
+  "organizations": [
+    "Labour"
+  ],
+  "locations": [
+    "Vietnam",
+    "Westminster"
+  ],
+  "topics": [
+    "Parliament",
+    "Education",
+    "Politics"
+  ],
+  "politicians": [
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

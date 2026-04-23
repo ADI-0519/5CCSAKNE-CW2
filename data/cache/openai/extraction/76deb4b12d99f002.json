@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Nigel Farage",
+    "Liz Truss",
+    "Jacob Rees-Mogg",
+    "Kemi Badenoch",
+    "Tim Montgomerie",
+    "Matt Schlapp",
+    "Lois Perry",
+    "Donald Trump",
+    "Ron DeSantis",
+    "Tulsi Gabbard",
+    "Viktor Orb\u00e1n"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Conservative Party",
+    "Heartland Institute"
+  ],
+  "locations": [
+    "London",
+    "Texas",
+    "England"
+  ],
+  "topics": [
+    "Politics",
+    "Economic Policy"
+  ],
+  "politicians": [
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

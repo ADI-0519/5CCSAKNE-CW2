@@ -1,0 +1,353 @@
+"""Unit tests for the current normalisation layer."""
+
+import pytest
+
+from src.data_normalisation import (
+    build_stable_id,
+    canonicalise_date,
+    is_valid_url,
+    is_within_configured_window,
+    mojibake_score,
+    normalise_collected_sources,
+    normalise_data,
+    normalise_govuk_records,
+    normalise_name,
+    normalise_parliament_records,
+    repair_common_mojibake,
+)
+
+
+class TestUtilityFunctions:
+    def test_build_stable_id_prefers_url(self):
+        first = build_stable_id("https://example.com/a", "Title", "2026-03-06")
+        second = build_stable_id("https://example.com/a", "Different", "2026-04-01")
+        assert first == second
+        assert len(first) == 16
+
+    def test_canonicalise_date_accepts_supported_formats(self):
+        assert canonicalise_date("2026-03-24T10:00:00Z") == "2026-03-24T10:00:00Z"
+        assert canonicalise_date("2026-03-06").startswith("2026-03-06")
+
+    def test_canonicalise_date_rejects_invalid_input(self):
+        with pytest.raises(ValueError, match="Cannot parse date"):
+            canonicalise_date("not-a-date")
+
+    def test_is_valid_url_accepts_http_and_https(self):
+        assert is_valid_url("https://example.com") is True
+        assert is_valid_url("http://example.com") is True
+        assert is_valid_url("ftp://example.com") is False
+
+    def test_is_within_configured_window(self):
+        from datetime import date, timedelta
+
+        today = date.today()
+        inside = (today - timedelta(days=15)).isoformat() + "T10:00:00Z"
+        outside = (today - timedelta(days=45)).isoformat() + "T10:00:00Z"
+        assert is_within_configured_window(inside) is True
+        assert is_within_configured_window(outside) is False
+
+    def test_normalise_name_trims_and_collapses_whitespace(self):
+        assert normalise_name("  hello   world  ") == "hello world"
+        assert normalise_name(None) == ""
+
+    def test_normalise_name_repairs_common_mojibake(self):
+        broken = "Starmer\u00e2\u20ac\u2122s plans \u00e2\u20ac\u201c update"
+        assert normalise_name(broken) == "Starmer\u2019s plans \u2013 update"
+
+    def test_repair_common_mojibake_prefers_cleaner_text(self):
+        broken = "London\u00e2\u20ac\u2122s politics"
+        repaired = repair_common_mojibake(broken)
+        assert repaired == "London\u2019s politics"
+        assert mojibake_score(repaired) < mojibake_score(broken)
+
+    def test_normalise_name_strips_inline_markup_and_entities(self):
+        broken = "Department for<br/>Science, Innovation<br/>&amp; Technology"
+        assert normalise_name(broken) == "Department for Science, Innovation & Technology"
+
+
+class TestSourceNormalisation:
+    def test_normalise_collected_sources_preserves_core_sources(self):
+        collected = {
+            "sources": {
+                "guardian": {
+                    "response": {
+                        "results": [
+                            {
+                                "webTitle": "Opinion: Immigration policy needs reform",
+                                "webUrl": "https://example.com/guardian-1",
+                                "webPublicationDate": "2026-03-24T09:00:00Z",
+                                "sectionName": "Comment is Free",
+                                "tags": [{"webTitle": "Immigration and asylum"}],
+                                "fields": {
+                                    "byline": "Polly Toynbee",
+                                    "trailText": "An opinion column on immigration.",
+                                    "bodyText": "The Home Office is under pressure over immigration policy.",
+                                    "lastModified": "2026-03-24T10:00:00Z",
+                                    "wordcount": "500",
+                                },
+                            }
+                        ]
+                    }
+                },
+                "parliament": {
+                    "response": {
+                        "results": [
+                            {
+                                "title": "Budget debate",
+                                "url": "https://api.parliament.uk/event/1",
+                                "date": "2026-03-24T11:00:00Z",
+                                "house": "House of Commons",
+                                "description": "Members debated the Spring Budget.",
+                                "topics": ["Budget", "Taxation"],
+                            }
+                        ]
+                    }
+                },
+                "govuk": {
+                    "response": {
+                        "results": [
+                            {
+                                "title": "New immigration policy paper",
+                                "link": "/government/publications/new-immigration-policy-paper",
+                                "public_timestamp": "2026-03-24T12:00:00Z",
+                                "description": "A new policy paper from the Home Office.",
+                                "format": "policy_paper",
+                                "organisations": ["Home Office"],
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+
+        result = normalise_collected_sources(collected)
+        assert len(result) == 3
+        assert {record["source_system"] for record in result} == {
+            "guardian",
+            "parliament",
+            "govuk",
+        }
+
+    def test_guardian_contributor_tags_are_not_kept_as_topics(self):
+        collected = {
+            "sources": {
+                "guardian": {
+                    "response": {
+                        "results": [
+                            {
+                                "webTitle": "Politics article",
+                                "webUrl": "https://example.com/guardian-2",
+                                "webPublicationDate": "2026-03-24T09:00:00Z",
+                                "sectionName": "Politics",
+                                "tags": [
+                                    {"type": "contributor", "webTitle": "John Harris"},
+                                    {"type": "keyword", "webTitle": "Labour"},
+                                ],
+                                "fields": {
+                                    "byline": "John Harris",
+                                    "trailText": "Politics update.",
+                                    "bodyText": "Labour responds in Parliament.",
+                                    "lastModified": "2026-03-24T10:00:00Z",
+                                    "wordcount": "400",
+                                },
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+
+        result = normalise_collected_sources(collected)
+        assert result[0]["tags"] == ["Labour"]
+
+    def test_normalise_parliament_records_maps_source_fields_to_shared_schema(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Health statement",
+                        "url": "https://api.parliament.uk/event/health-statement",
+                        "date": "2026-03-25T10:30:00Z",
+                        "house": "House of Commons",
+                        "description": "A statement on NHS performance.",
+                        "topics": ["NHS", "Healthcare"],
+                    }
+                ]
+            }
+        }
+
+        record = normalise_parliament_records(raw_data)[0]
+
+        assert record["source_system"] == "parliament"
+        assert record["source_name"] == "UK Parliament"
+        assert record["section"] == "House of Commons"
+        assert "Healthcare" in record["tags"]
+        assert record["published_at"] == "2026-03-25T10:30:00Z"
+
+    def test_normalise_govuk_records_maps_search_results_to_shared_schema(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Treasury growth plan",
+                        "link": "/government/publications/treasury-growth-plan",
+                        "public_timestamp": "2026-03-26T09:15:00Z",
+                        "description": "A policy paper about growth and investment.",
+                        "format": "policy_paper",
+                        "organisations": ["HM Treasury"],
+                    }
+                ]
+            }
+        }
+
+        record = normalise_govuk_records(raw_data)[0]
+
+        assert record["source_system"] == "govuk"
+        assert record["source_name"] == "GOV.UK"
+        assert record["section"] == "policy_paper"
+        assert record["url"] == "https://www.gov.uk/government/publications/treasury-growth-plan"
+        assert "HM Treasury" in record["tags"]
+
+    def test_normalise_govuk_records_filters_out_of_window_results(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Out-of-window policy paper",
+                        "link": "/government/publications/out-of-window-policy-paper",
+                        "public_timestamp": "2026-04-20T09:15:00Z",
+                        "description": "A policy paper outside the fixed coursework window.",
+                        "format": "policy_paper",
+                        "organisations": ["Cabinet Office"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+    def test_normalise_govuk_records_filters_reference_like_guidance_material(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Rates and allowances: Inheritance Tax thresholds and interest rates",
+                        "link": "/government/publications/inheritance-tax-thresholds",
+                        "public_timestamp": "2026-04-01T09:15:00Z",
+                        "description": "Reference rates and allowances material.",
+                        "format": "guidance",
+                        "organisations": ["HM Revenue and Customs"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+    def test_normalise_govuk_records_filters_admin_news_items_without_scope_signal(self):
+        raw_data = {
+            "response": {
+                "results": [
+                    {
+                        "title": "Appointment of new private sector partner",
+                        "link": "/government/news/appointment-of-new-private-sector-partner",
+                        "public_timestamp": "2026-04-01T09:15:00Z",
+                        "description": "Administrative update from government.",
+                        "format": "news_story",
+                        "organisations": ["Cabinet Office"],
+                    }
+                ]
+            }
+        }
+
+        assert normalise_govuk_records(raw_data) == []
+
+
+class TestExtractedRecordNormalisation:
+    def valid_record(self, **overrides):
+        record = {
+            "id": "abc123",
+            "source_system": "guardian",
+            "source_name": "The Guardian",
+            "title": "Keir Starmer faces pressure over budget plans",
+            "url": "https://example.com/test",
+            "published_at": "2026-03-24T10:00:00Z",
+            "updated_at": None,
+            "author": "Jane Doe",
+            "section": "Politics",
+            "summary": "A budget update.",
+            "content": "The Treasury and Labour clashed in Parliament.",
+            "tags": ["Politics", "Budget"],
+            "word_count": 120,
+            "article_type": "NewsArticle",
+            "sentiment": "Negative",
+            "event_candidates": [
+                {
+                    "name": "Budget",
+                    "type": "EconomicEvent",
+                    "date": "2026-03-24",
+                    "location": "London",
+                    "source": "heuristic",
+                    "confidence": "high",
+                    "extraction_method": "hybrid",
+                }
+            ],
+            "follow_up_candidates": [],
+            "entities": {
+                "organizations": ["Treasury", "Labour"],
+                "people": ["Jane Doe"],
+                "politicians": [],
+                "political_parties": ["Labour"],
+                "government_bodies": ["Treasury"],
+                "locations": ["London"],
+                "technologies": [],
+                "topics": ["Politics", "Economic Policy"],
+                "events": ["Budget"],
+            },
+            "relations": [
+                {"subject": "abc123", "predicate": "published_by", "object": "The Guardian"},
+                {"subject": "abc123", "predicate": "authored_by", "object": "Jane Doe"},
+            ],
+        }
+        record.update(overrides)
+        return record
+
+    def test_normalise_data_preserves_richer_fields(self):
+        result = normalise_data([self.valid_record()])
+        record = result[0]
+        assert record["source_system"] == "guardian"
+        assert record["section"] == "Politics"
+        assert record["article_type"] == "NewsArticle"
+        assert record["sentiment"] == "Negative"
+        assert record["entities"]["government_bodies"] == ["HM Treasury"]
+        assert record["entities"]["political_parties"] == ["Labour Party"]
+        assert record["event_candidates"][0]["name"] == "Budget"
+        assert record["event_candidates"][0]["confidence"] == "high"
+        assert record["event_candidates"][0]["extraction_method"] == "hybrid"
+        assert record["event_candidates"][0]["is_generic_fallback"] is False
+
+    def test_normalise_data_rejects_unknown_predicate(self):
+        record = self.valid_record(
+            relations=[{"subject": "abc123", "predicate": "invented_by", "object": "Budget"}]
+        )
+        with pytest.raises(ValueError, match="unknown predicate"):
+            normalise_data([record])
+
+    def test_normalise_data_deduplicates_entity_lists(self):
+        record = self.valid_record(
+            entities={
+                "organizations": ["Treasury", "Treasury"],
+                "people": ["Jane Doe", "Jane Doe"],
+                "politicians": [],
+                "political_parties": ["Labour", "Labour"],
+                "government_bodies": ["Treasury", "Treasury"],
+                "locations": ["London", "London"],
+                "technologies": [],
+                "topics": ["Politics", "Politics"],
+                "events": ["Budget", "Budget"],
+            }
+        )
+        result = normalise_data([record])[0]
+        assert result["entities"]["organizations"] == ["Treasury"]
+        assert result["entities"]["people"] == ["Jane Doe"]
+        assert result["entities"]["topics"] == ["Politics"]

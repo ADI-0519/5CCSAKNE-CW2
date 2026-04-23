@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Diane Abbott",
+    "George Robertson",
+    "James Murray",
+    "John Healey",
+    "Keir Starmer",
+    "Lord Robertson",
+    "Rachel Reeves",
+    "Times Radio"
+  ],
+  "organizations": [
+    "Labour"
+  ],
+  "locations": [
+    "Germany"
+  ],
+  "topics": [
+    "Defence",
+    "Economic Policy",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Ministry of Defence"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

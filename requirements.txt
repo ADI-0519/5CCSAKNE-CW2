@@ -2,6 +2,9 @@ requests
 python-dotenv
 rdflib
 pyyaml
+openai
+oxrdflib
+spaCy
 
 # Test dependencies
 pytest

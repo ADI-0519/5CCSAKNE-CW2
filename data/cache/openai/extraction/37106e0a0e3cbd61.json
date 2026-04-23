@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Donald Trump",
+    "Keir Starmer",
+    "Liz Truss",
+    "Rachel Reeves",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Conservative",
+    "Labour"
+  ],
+  "locations": [
+    "Iran",
+    "Nato",
+    "Ukraine",
+    "Washington"
+  ],
+  "topics": [
+    "Defence",
+    "Economic Policy",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Department of Health and Social Care",
+    "HM Treasury"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,47 @@
+{
+  "people": [],
+  "organizations": [
+    "Welsh Government"
+  ],
+  "locations": [
+    "Bristol",
+    "Cardiff",
+    "Wales"
+  ],
+  "topics": [
+    "Government Policy"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Welsh Government"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Legal challenge decision",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-08",
+      "location": null,
+      "policy_topics": [
+        "Subsidy Control Act"
+      ],
+      "political_actors": [
+        "Bristol Airport",
+        "Cardiff Airport",
+        "Welsh Government"
+      ],
+      "government_bodies": [
+        "Welsh Government"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "court ruling on subsidy package"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}
