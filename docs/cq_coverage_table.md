@@ -29,7 +29,7 @@ This table records which sources and pipeline steps support each competency ques
 
 ## Query results
 
-Counts come from running the current query set against the latest validated completed KG from `20260423T022716Z`, where all `20/20` queries returned at least one row and `16` of `17` validation rules passed. The single failing rule (V15) has warning severity only and `0` errors.
+Counts come from running the current query set against the latest validated completed KG from `20260423T110354Z`, where all `20/20` queries returned at least one row and all `17` of `17` validation rules passed with `0` violations.
 
 Classification legend:
 
@@ -53,18 +53,18 @@ Classification legend:
 | CQ12 | Answered | 11 | Topic aggregation over officially evidenced events; concernsPolicyTopic links from the RAG step extend the result set. |
 | CQ13 | Answered | 35 | Topic co-occurrence query exercises event-topic self-joins. |
 | CQ14 | Answered | 16 | Comparative parliamentary-versus-government topic coverage query. |
-| CQ15 | Answered | 6 | Location aggregation over events with populated occursInLocation links. |
+| CQ15 | Answered | 7 | Location aggregation over events with populated occursInLocation links. |
 | CQ16 | Answered | 7 | Actor-party-topic aggregation benefits from RAG-added actor links. |
 | CQ17 | Answered | 5 | Journalist-to-article-to-event-to-department retrieval over source-grounded government policy events. |
 | CQ18 | Answered | 18 | Finds topics on events involving both actors and government bodies; both involvesActor and involvesGovernmentBody are partly completion-supported. |
-| CQ19 | Answered (soft) | 4 | Date-and-topic overlap between parliamentary events and ministerial statements works, but still relies on some generic parliamentary-event labels. |
-| CQ20 | Answered | 16 | Ranks departments by distinct policy-topic breadth across linked events. |
+| CQ19 | Answered (soft) | 5 | Date-and-topic overlap between parliamentary events and ministerial statements works, but still relies on some generic parliamentary-event labels. |
+| CQ20 | Answered | 17 | Ranks departments by distinct policy-topic breadth across linked events. |
 
 ## Summary
 
 - Query coverage: `20/20`
-- Validation status: `16/17` rules passed, `1` failure (V15, warning severity), `0` errors, `8` warnings
+- Validation status: `17/17` rules passed, `0` failures, `0` violations
 - Most populated areas: official source records, event-topic links, event-institution links, article-event reporting links.
 - Main residual risk: extraction precision and event canonicalisation, not ontology/query alignment.
 - CQ06 now requires the explicit intermediate type assertion fix in `json_to_rdf.py`: `ParliamentaryDebate` instances must also be asserted as `ParliamentaryEvent` for the SPARQL type check to match.
-- CQ11 shows the strongest completion benefit with 6 additional rows over the prototype.
+- CQ11 shows the strongest completion benefit with 7 additional rows over the prototype.
