@@ -53,3 +53,4 @@ data/cache/*
 data/cache/openai/*
 !data/cache/openai/extraction/
 !data/cache/openai/rag_completion/
+!data/cache/openai/baseline_llm/
