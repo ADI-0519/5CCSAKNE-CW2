@@ -174,14 +174,24 @@ Checks:
 - processed JSON files are saved under `data/processed/`
 - generated KGs are saved under `kg/generated/`
 - final evaluation outputs are saved in `output/query_results.json`, `output/validation_results.json`, `output/completion_audit.json`, and `output/kg_summary.json`
+- a benchmark run can be executed with `python -m src.benchmark_pipeline --output output/performance_benchmark.json`
 
 Metrics:
 
 - end-to-end runtime
+- records processed per second during a cached run
+- benchmark exit code
+- output volume after the benchmark run (records, events, triples, CQ coverage, validation totals)
 - total records processed
 - total triples generated
 - query coverage
 - test pass count
+
+Recommended measurement mode:
+
+- use the shipped cached artefacts and run `python -m src.benchmark_pipeline --output output/performance_benchmark.json`
+- treat the cached benchmark as the primary reproducibility measurement because it holds the dataset constant while exercising the full pipeline
+- treat live runs as supplementary because network latency and upstream API response time introduce noise
 
 ## 7. LLM Baseline Comparison
 

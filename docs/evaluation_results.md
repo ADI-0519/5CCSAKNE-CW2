@@ -129,7 +129,36 @@ Extraction summary:
   - `heuristic`: `263`
   - `openai`: `11`
 
-## 4. Baseline Comparison
+## 4. Performance And Reproducibility
+
+Reference file:
+
+- `output/performance_benchmark.json`
+
+Measured cached benchmark:
+
+- command: `python -m src.benchmark_pipeline --output output/performance_benchmark.json`
+- platform: `Windows 10`
+- Python: `3.11.5`
+- end-to-end cached runtime: `131.16` seconds
+- throughput: `5.58` source records per second over `732` records
+- benchmark exit code: `0`
+
+Benchmark-confirmed outputs:
+
+- triples in completed KG: `40836`
+- policy events: `273`
+- events with a government body: `265`
+- query coverage: `20/20`
+- validation: `17` rules checked, `0` failed, `0` violations
+
+Interpretation:
+
+- the submitted cached pipeline is reproducible as a full end-to-end run rather than only as a collection of pre-generated artefacts
+- the runtime is comfortably practical for coursework marking and reruns
+- the benchmark confirms that the final reported CQ and validation numbers are generated from the same cached evidence stack used for submission
+
+## 5. Baseline Comparison
 
 The direct LLM baseline comparison was refreshed against the current `kg/generated/prototype_kg.ttl` and `kg/generated/completed_kg.ttl` graphs.
 
@@ -150,7 +179,7 @@ Interpretation:
 - The completed KG improves several query families in ways that a direct LLM answer cannot reliably ground in the actual dataset.
 - `CQ16` shows that some actor-party-topic structure was already present before completion, while other target queries measurably benefit from completion and enrichment.
 
-## 5. Evaluation Position
+## 6. Evaluation Position
 
 The strongest defensible evaluation claim is:
 
@@ -176,7 +205,7 @@ The graph is also strong for:
 - conservative fallback event handling that preserves coverage while remaining auditable
 - a focused direct LLM baseline that illustrates the benefits of KG-backed querying on representative CQs
 
-## 6. Recommended Final Framing
+## 7. Recommended Final Framing
 
 The final report should frame the system as a working automated KG pipeline with an event-centred ontology, auditable domain knowledge, conservative semantic projection, and ontology-aware QA.
 
