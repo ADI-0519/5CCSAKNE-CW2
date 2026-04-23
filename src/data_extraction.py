@@ -800,6 +800,7 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
             candidate
             for candidate in candidates
             if candidate not in CONFIG["EXTRACTION_BROAD_EVENT_LOCATIONS"]
+            and (candidate in CANONICAL_LOCATION_NAMES or candidate.lower() in event_lower)
         ]
         if filtered:
             return filtered[0]
@@ -812,11 +813,12 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
         candidate
         for candidate in candidates
         if candidate not in CONFIG["EXTRACTION_BROAD_EVENT_LOCATIONS"]
+        and (candidate in CANONICAL_LOCATION_NAMES or candidate.lower() in event_lower)
     ]
     if filtered:
         return filtered[0]
 
-    return candidates[0]
+    return candidates[0] if candidates[0] in CANONICAL_LOCATION_NAMES else None
 
 
 def generic_event_fallback_blocked(article, article_type=None):
@@ -953,6 +955,8 @@ def sanitize_event_candidates(article, text, entities, topics, locations, events
             location = preferred_event_location(
                 sorted(valid_locations), signals["text_lower"], topics
             )
+        if location and location not in CANONICAL_LOCATION_NAMES and location.lower() not in name.lower():
+            location = None
 
         key = (name, event_type, event_date, location or None)
         if key in seen:
