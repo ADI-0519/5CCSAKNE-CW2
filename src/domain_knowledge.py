@@ -149,6 +149,21 @@ GOVERNMENT_BODY_NAME_SET = frozenset(GOVERNMENT_BODY_NAMES)
 UK_LOCATION_NAME_SET = frozenset(UK_LOCATION_NAMES)
 TOPIC_NAME_SET = frozenset(TOPIC_GROUPS)
 
+INTERNATIONAL_BODY_LOCATIONS = {
+    "UN Security Council": "New York",
+    "UN General Assembly": "New York",
+    "UN Human Rights Council": "Geneva",
+    "WTO General Council": "Geneva",
+    "OSCE": "Vienna",
+    "NATO": "Brussels",
+    "European Council": "Brussels",
+    "EU Council": "Brussels",
+    "IMF": "Washington",
+    "World Bank": "Washington",
+    "ICC": "The Hague",
+    "ICJ": "The Hague",
+}
+
 PARLIAMENTARY_BODY_KEYWORDS = frozenset(
     {
         "commons",
