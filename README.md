@@ -1,6 +1,6 @@
 # 5CCSAKNE Coursework 2
 
-Knowledge Engineering coursework: a knowledge graph of UK parliamentary and government policy events reported in UK news between 6 March 2026 and 6 April 2026, built from structured and unstructured sources.
+Knowledge Engineering coursework: a knowledge graph of UK parliamentary and government policy events reported in UK news between 23 March 2026 and 22 April 2026, built from structured and unstructured sources.
 
 ## Reproducing the Submitted Run (examiners start here)
 
@@ -26,15 +26,13 @@ If either directory is shipped as a separate archive, unpack it at the repo root
 
 ### What to look for after the run
 
-Generated artefacts land in `output/` with a UTC timestamp prefix:
+Generated artefacts land in `output/` (non-timestamped, always reflecting the most recent run) and `data/processed/` (timestamped JSON stage outputs):
 
-- `output/<ts>_completed_kg.ttl` — the final knowledge graph.
-- `output/<ts>_query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
-- `output/<ts>_validation_results.json` — SPARQL-based graph validation report (expected: `0` violations).
-- `output/<ts>_completion_audit.json` — per-event summary of links added during Stage 9 completion.
-- `output/<ts>_kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
-
-The non-timestamped copies in `output/` always reflect the most recent run.
+- `output/completed_kg.ttl` — the final knowledge graph.
+- `output/query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
+- `output/validation_results.json` — SPARQL-based graph validation report (expected: `0` errors; 1 warning-severity rule, V15, may report violations for GOV.UK records where no department could be identified).
+- `output/completion_audit.json` — per-event summary of links added during Stage 9 completion.
+- `output/kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
 
 ## Data Sources
 
