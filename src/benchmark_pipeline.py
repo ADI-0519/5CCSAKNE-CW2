@@ -5,7 +5,6 @@ import platform
 import subprocess
 import sys
 import time
-from ctypes import Structure, byref, c_size_t, sizeof, wintypes
 from pathlib import Path
 
 DEFAULT_OUTPUT_PATH = Path("output/performance_benchmark.json")
@@ -65,6 +64,7 @@ def _extract_output_summary():
 
 def _windows_peak_memory_bytes(pid):
     import ctypes
+    from ctypes import Structure, byref, c_size_t, sizeof, wintypes
 
     PROCESS_QUERY_INFORMATION = 0x0400
     PROCESS_VM_READ = 0x0010
@@ -111,11 +111,22 @@ def _windows_peak_memory_bytes(pid):
         kernel32.CloseHandle(handle)
 
 
+def _linux_rss_bytes(pid):
+    try:
+        status = Path(f"/proc/{pid}/status").read_text()
+    except OSError:
+        return None
+    for line in status.splitlines():
+        if line.startswith("VmRSS:"):
+            kb = int(line.split()[1])
+            return kb * 1024
+    return None
+
+
 def _peak_memory_bytes(pid):
     if os.name == "nt":
         return _windows_peak_memory_bytes(pid)
-    else:
-        return None
+    return _linux_rss_bytes(pid)
 
 
 def run_benchmark(command):
