@@ -707,7 +707,7 @@ class TestExtractRelevantInformation:
             in record["entities"]["government_bodies"]
         )
 
-    def test_generic_parliament_policy_announcement_without_department_demotes_from_ministerial(
+    def test_generic_fallback_event_is_suppressed_for_parliament_records(
         self,
     ):
         article = make_article(
@@ -726,9 +726,7 @@ class TestExtractRelevantInformation:
 
         record = extract_relevant_information([article])[0]
 
-        assert record["event_candidates"]
-        assert record["event_candidates"][0]["name"] == "Policy Announcement"
-        assert record["event_candidates"][0]["type"] == "ParliamentaryEvent"
+        assert record["event_candidates"] == []
 
     def test_govuk_policy_paper_without_explicit_event_signal_does_not_get_fallback_event(self):
         article = make_article(
