@@ -1,50 +1,32 @@
 {
   "schema_version": 1,
-  "prediction_input": "data/processed/20260422T222815Z_kg_records.json",
+  "prediction_input": "data/processed/20260422T202216Z_kg_records.json",
   "instructions": "Edit each sample.gold block so it reflects the manually judged correct extraction. Leave prediction_snapshot untouched as the original machine output reference.",
   "samples": [
     {
-      "record_id": "5ae435db421a54d8",
+      "record_id": "1c376cea19b86f53",
       "source_system": "guardian",
-      "title": "What's at stake for UK in May's elections: six key questions",
-      "url": "https://www.theguardian.com/politics/2026/mar/23/uk-local-elections-key-takeaways",
-      "notes": "",
+      "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+      "notes": "Healthcare news story about remote surgery, not a parliamentary or government policy event. Removed ONS and noisy place list; retained only the main article topic and the most central place.",
       "gold": {
         "metadata": {
           "source_system": "guardian",
           "source_name": "The Guardian",
-          "title": "What's at stake for UK in May's elections: six key questions",
-          "url": "https://www.theguardian.com/politics/2026/mar/23/uk-local-elections-key-takeaways",
-          "published_at": "2026-03-23T07:00:43Z",
-          "author": "Peter Walker Senior political correspondent",
+          "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+          "published_at": "2026-03-06T00:01:05Z",
+          "author": "Andrew Gregory Health editor",
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Parliament",
-          "Politics"
+          "Healthcare"
         ],
-        "politicians": [
-          "Keir Starmer",
-          "Kemi Badenoch",
-          "Nigel Farage"
-        ],
-        "political_parties": [
-          "Conservative Party",
-          "Green Party",
-          "Labour Party",
-          "Liberal Democrats",
-          "Plaid Cymru",
-          "Reform UK",
-          "Scottish National Party",
-          "Sinn Féin"
-        ],
+        "politicians": [],
+        "political_parties": [],
         "government_bodies": [],
         "locations": [
-          "England",
-          "London",
-          "Northern Ireland",
-          "Scotland",
-          "Wales"
+          "Gibraltar"
         ],
         "events": []
       },
@@ -52,109 +34,357 @@
         "metadata": {
           "source_system": "guardian",
           "source_name": "The Guardian",
-          "title": "What's at stake for UK in May's elections: six key questions",
-          "url": "https://www.theguardian.com/politics/2026/mar/23/uk-local-elections-key-takeaways",
-          "published_at": "2026-03-23T07:00:43Z",
-          "author": "Peter Walker Senior political correspondent",
+          "title": "Sci-fi surgery as doctor in UK directs robot to remove a prostate in Gibraltar",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/sci-fi-surgery-as-doctor-in-uk-directs-robot-to-remove-a-prostate-in-gibraltar",
+          "published_at": "2026-03-06T00:01:05Z",
+          "author": "Andrew Gregory Health editor",
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Parliament",
-          "Politics"
+          "Healthcare"
         ],
-        "politicians": [
-          "Keir Starmer",
-          "Kemi Badenoch",
-          "Nigel Farage"
-        ],
-        "political_parties": [
-          "Conservative Party",
-          "Green Party",
-          "Labour Party",
-          "Liberal Democrats",
-          "Plaid Cymru",
-          "Reform UK",
-          "Scottish National Party",
-          "Sinn Féin"
-        ],
+        "politicians": [],
+        "political_parties": [],
         "government_bodies": [
-          "Parliament"
+          "Office for National Statistics"
         ],
         "locations": [
+          "Burnham",
+          "Burnham-on-Sea",
           "England",
-          "English",
           "London",
-          "Northern Ireland",
-          "Scotland",
-          "Wales"
+          "Madrid",
+          "Microport",
+          "Somerset",
+          "St Bernard"
         ],
         "events": []
       }
     },
     {
-      "record_id": "bb6b751676ef629d",
+      "record_id": "1160d4bb9e2d2672",
       "source_system": "guardian",
-      "title": "'Anyone but Labour' or 'anyone but Reform'? Clash of animosities likely to define May local elections",
-      "url": "https://www.theguardian.com/politics/2026/mar/23/anyone-but-labour-or-anyone-but-reform-clash-of-animosities-likely-to-define-may-local-elections",
-      "notes": "",
+      "title": "This is a life and death story for the UK – so why is it being brushed under the carpet? | Aditya Chakrabortty",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/06/uk-death-healthy-life-expectancy-decline-state",
+      "notes": "Commentary article. Retained health, economic-policy, and opinion framing only. Removed ONS because it is cited as evidence rather than the responsible institution, and removed incidental politicians and locations.",
       "gold": {
         "metadata": {
           "source_system": "guardian",
           "source_name": "The Guardian",
-          "title": "'Anyone but Labour' or 'anyone but Reform'? Clash of animosities likely to define May local elections",
-          "url": "https://www.theguardian.com/politics/2026/mar/23/anyone-but-labour-or-anyone-but-reform-clash-of-animosities-likely-to-define-may-local-elections",
-          "published_at": "2026-03-23T07:00:43Z",
-          "author": "Pippa Crerar Political editor",
-          "article_type": "NewsArticle"
+          "title": "This is a life and death story for the UK – so why is it being brushed under the carpet? | Aditya Chakrabortty",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/uk-death-healthy-life-expectancy-decline-state",
+          "published_at": "2026-03-06T06:00:14Z",
+          "author": "Aditya Chakrabortty",
+          "article_type": "OpinionArticle"
         },
         "topics": [
-          "Parliament",
-          "Politics"
+          "Economic Policy",
+          "Healthcare",
+          "Opinion"
         ],
-        "politicians": [
-          "Keir Starmer",
-          "Nigel Farage"
-        ],
-        "political_parties": [
-          "Conservative Party",
-          "Green Party",
-          "Labour Party",
-          "Liberal Democrats",
-          "Plaid Cymru",
-          "Reform UK",
-          "Scottish National Party"
-        ],
+        "politicians": [],
+        "political_parties": [],
         "government_bodies": [],
-        "locations": [
-          "England",
-          "Gorton",
-          "London",
-          "Manchester",
-          "Scotland",
-          "Wales",
-          "Westminster"
-        ],
+        "locations": [],
         "events": []
       },
       "prediction_snapshot": {
         "metadata": {
           "source_system": "guardian",
           "source_name": "The Guardian",
-          "title": "'Anyone but Labour' or 'anyone but Reform'? Clash of animosities likely to define May local elections",
-          "url": "https://www.theguardian.com/politics/2026/mar/23/anyone-but-labour-or-anyone-but-reform-clash-of-animosities-likely-to-define-may-local-elections",
-          "published_at": "2026-03-23T07:00:43Z",
-          "author": "Pippa Crerar Political editor",
-          "article_type": "NewsArticle"
+          "title": "This is a life and death story for the UK – so why is it being brushed under the carpet? | Aditya Chakrabortty",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/uk-death-healthy-life-expectancy-decline-state",
+          "published_at": "2026-03-06T06:00:14Z",
+          "author": "Aditya Chakrabortty",
+          "article_type": "OpinionArticle"
         },
         "topics": [
+          "Economic Policy",
           "Education",
           "Healthcare",
-          "Parliament",
-          "Politics"
+          "Opinion"
         ],
         "politicians": [
           "Keir Starmer",
+          "Rachel Reeves"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Dubai",
+          "London",
+          "Moira",
+          "Nichole",
+          "Sweden",
+          "Westminster"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "fadcdc1f6c3ac944",
+      "source_system": "guardian",
+      "title": "In a world of lies, we need the BBC more than ever. This week could be our last chance to save it | Polly Toynbee",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/06/bbc-public-consultation-supporters-guidance",
+      "notes": "Commentary article about the BBC charter-renewal consultation. Kept only central topics and the responsible department. No event, because this is advocacy/commentary rather than one cleanly extractable policy event.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "In a world of lies, we need the BBC more than ever. This week could be our last chance to save it | Polly Toynbee",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/bbc-public-consultation-supporters-guidance",
+          "published_at": "2026-03-06T10:00:18Z",
+          "author": "Polly Toynbee",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Opinion",
+          "Politics",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Culture, Media and Sport"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "In a world of lies, we need the BBC more than ever. This week could be our last chance to save it | Polly Toynbee",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/bbc-public-consultation-supporters-guidance",
+          "published_at": "2026-03-06T10:00:18Z",
+          "author": "Polly Toynbee",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Healthcare",
+          "Opinion",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Department for Culture, Media and Sport",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Iran",
+          "Israel",
+          "Washington",
+          "the Middle East"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "091de8e51c5a227d",
+      "source_system": "guardian",
+      "title": "Home Office may forcibly remove child asylum seekers from UK in handcuffs",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/06/home-office-may-forcibly-remove-child-asylum-seekers-from-uk-in-handcuffs",
+      "notes": "Clear immigration policy/removals story centred on a Home Office pilot scheme and consultation proposals. Removed party inference and ONS noise.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Home Office may forcibly remove child asylum seekers from UK in handcuffs",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/home-office-may-forcibly-remove-child-asylum-seekers-from-uk-in-handcuffs",
+          "published_at": "2026-03-06T10:24:22Z",
+          "author": "Diane Taylor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [
+          "United Kingdom"
+        ],
+        "events": [
+          {
+            "name": "Home Office family removals pilot and consultation proposals",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "United Kingdom",
+            "policy_topics": [
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Home Office may forcibly remove child asylum seekers from UK in handcuffs",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/06/home-office-may-forcibly-remove-child-asylum-seekers-from-uk-in-handcuffs",
+          "published_at": "2026-03-06T10:24:22Z",
+          "author": "Diane Taylor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "48eca17081f50d0a",
+      "source_system": "guardian",
+      "title": "Trump broke his promises to pursue this unwinnable war. Britain must not follow him into the abyss | Simon Jenkins",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/06/donald-trump-war-britain-bombing-iran-keir-starmer",
+      "notes": "Commentary article about Britain’s response to the Iran war. Kept only central politicians and themes. No event because this is opinion/argument rather than one formal UK policy event.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Trump broke his promises to pursue this unwinnable war. Britain must not follow him into the abyss | Simon Jenkins",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/donald-trump-war-britain-bombing-iran-keir-starmer",
+          "published_at": "2026-03-06T12:00:20Z",
+          "author": "Simon Jenkins",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Defence",
+          "Opinion"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Kemi Badenoch"
+        ],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [
+          "Iran",
+          "United Kingdom"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Trump broke his promises to pursue this unwinnable war. Britain must not follow him into the abyss | Simon Jenkins",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/06/donald-trump-war-britain-bombing-iran-keir-starmer",
+          "published_at": "2026-03-06T12:00:20Z",
+          "author": "Simon Jenkins",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Defence",
+          "Education",
+          "Opinion",
+          "Parliament"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Kemi Badenoch",
           "Nigel Farage"
+        ],
+        "political_parties": [
+          "Conservative Party",
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "Afghanistan",
+          "Gulf",
+          "Iran",
+          "Iraq",
+          "Israel",
+          "Middle East",
+          "Russia",
+          "Venezuela"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "9bd6f6286a8a0d34",
+      "source_system": "guardian",
+      "title": "Nigel Farage to discuss Chagos Islands deal at Mar-a-Lago dinner with Donald Trump tonight – as it happened",
+      "url": "https://www.theguardian.com/politics/live/2026/mar/06/david-lammy-raf-jets-cyprus-iran-middle-east-labour-keir-starmer-uk-politics-live-news-updates",
+      "notes": "Live blog with multiple unrelated updates. Treated as diffuse political reporting rather than one extractable event. Retained only the most central headline-linked entities.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Nigel Farage to discuss Chagos Islands deal at Mar-a-Lago dinner with Donald Trump tonight – as it happened",
+          "url": "https://www.theguardian.com/politics/live/2026/mar/06/david-lammy-raf-jets-cyprus-iran-middle-east-labour-keir-starmer-uk-politics-live-news-updates",
+          "published_at": "2026-03-06T16:02:30Z",
+          "author": "Tom Ambrose (now) and Fran Singh (earlier)",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Politics"
+        ],
+        "politicians": [
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Reform UK"
+        ],
+        "government_bodies": [],
+        "locations": [],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Nigel Farage to discuss Chagos Islands deal at Mar-a-Lago dinner with Donald Trump tonight – as it happened",
+          "url": "https://www.theguardian.com/politics/live/2026/mar/06/david-lammy-raf-jets-cyprus-iran-middle-east-labour-keir-starmer-uk-politics-live-news-updates",
+          "published_at": "2026-03-06T16:02:30Z",
+          "author": "Tom Ambrose (now) and Fran Singh (earlier)",
+          "article_type": "BreakingNewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Government Policy",
+          "Immigration",
+          "Parliament"
+        ],
+        "politicians": [
+          "David Lammy",
+          "Keir Starmer",
+          "Kemi Badenoch",
+          "Nigel Farage",
+          "Rachel Reeves",
+          "Yvette Cooper"
         ],
         "political_parties": [
           "Conservative Party",
@@ -163,61 +393,402 @@
           "Liberal Democrats",
           "Plaid Cymru",
           "Reform UK",
-          "Scottish National Party",
-          "Scottish National Party (SNP)"
+          "Scottish National Party"
         ],
         "government_bodies": [
-          "HM Treasury"
+          "Downing Street",
+          "Foreign, Commonwealth and Development Office",
+          "Home Office",
+          "House of Lords",
+          "Intellectual Property Office",
+          "Ministry of Defence",
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "America",
+          "Bahrain",
+          "British Virgin Islands",
+          "China",
+          "Cyrpus",
+          "Denmark",
+          "England",
+          "Europe",
+          "Ferguson",
+          "Florida",
+          "France",
+          "Germany",
+          "Glasgow",
+          "Gorton",
+          "Gulf",
+          "Inverclyde",
+          "Iran",
+          "Iranian",
+          "Israel",
+          "Italy",
+          "Lebanon",
+          "London",
+          "Mar-a-Lago",
+          "Mediterranean",
+          "Muscat",
+          "Newport",
+          "Number",
+          "Oman",
+          "Qatar",
+          "Scotland",
+          "Tehran",
+          "Typhoon",
+          "Ukraine",
+          "Wales",
+          "Westminster",
+          "the Middle East",
+          "the Strait of Hormuz"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "ba742b444dcc613e",
+      "source_system": "guardian",
+      "title": "Crypto billionaire Christopher Harborne no longer interested in Reform-Tory pact",
+      "url": "https://www.theguardian.com/politics/2026/mar/06/crypto-billionaire-christopher-harborne-reform-tory-election-pact",
+      "notes": "Party-donor politics story, not a government/parliamentary policy event. Retained only clearly central party-political content.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Crypto billionaire Christopher Harborne no longer interested in Reform-Tory pact",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/crypto-billionaire-christopher-harborne-reform-tory-election-pact",
+          "published_at": "2026-03-06T16:08:22Z",
+          "author": "Anna Isaac",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Politics"
+        ],
+        "politicians": [
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Conservative Party",
+          "Reform UK"
+        ],
+        "government_bodies": [],
+        "locations": [],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Crypto billionaire Christopher Harborne no longer interested in Reform-Tory pact",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/crypto-billionaire-christopher-harborne-reform-tory-election-pact",
+          "published_at": "2026-03-06T16:08:22Z",
+          "author": "Anna Isaac",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament",
+          "Politics",
+          "Public Spending"
+        ],
+        "politicians": [
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Conservative Party",
+          "Labour Party",
+          "Liberal Democrats",
+          "Reform UK"
+        ],
+        "government_bodies": [
+          "Office for National Statistics"
         ],
         "locations": [
           "England",
-          "Gorton",
+          "QinetiQ",
+          "Reform-Tory",
+          "Thailand"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "9a6673fa106570eb",
+      "source_system": "guardian",
+      "title": "Senior Labour figures warn government amid fears of ‘political earthquake’ in London",
+      "url": "https://www.theguardian.com/politics/2026/mar/06/labour-urged-listen-progressive-voters-or-face-political-earthquake-london",
+      "notes": "Party-political reporting about election risk in London, not one formal parliamentary/government policy event. Retained central party/topic/location only.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Senior Labour figures warn government amid fears of ‘political earthquake’ in London",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/labour-urged-listen-progressive-voters-or-face-political-earthquake-london",
+          "published_at": "2026-03-06T17:27:13Z",
+          "author": "Pippa Crerar Political editor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Politics"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Green Party",
+          "Labour Party"
+        ],
+        "government_bodies": [],
+        "locations": [
+          "London"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Senior Labour figures warn government amid fears of ‘political earthquake’ in London",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/labour-urged-listen-progressive-voters-or-face-political-earthquake-london",
+          "published_at": "2026-03-06T17:27:13Z",
+          "author": "Pippa Crerar Political editor",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Government Policy",
+          "Housing",
+          "Parliament",
+          "Politics",
+          "Public Spending"
+        ],
+        "politicians": [
+          "Angela Rayner",
+          "David Lammy",
+          "Keir Starmer",
+          "Nigel Farage",
+          "Wes Streeting"
+        ],
+        "political_parties": [
+          "Green Party",
+          "Labour Party",
+          "Liberal Democrats",
+          "Reform UK"
+        ],
+        "government_bodies": [
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "Barking and Dagenham",
+          "Barnet",
+          "Bombe",
+          "Camden",
+          "Gaza",
+          "Greenwich",
+          "Havering",
+          "Lambeth",
+          "Lewisham",
           "London",
-          "Manchester",
+          "London Exclusive",
+          "May Senior",
+          "Redbridge",
           "Scotland",
-          "Wales",
+          "Southwark",
+          "Wandsworth",
           "Westminster"
         ],
         "events": []
       }
     },
     {
-      "record_id": "dcef2be7103ed0f7",
+      "record_id": "768103b3df1aa361",
       "source_system": "guardian",
-      "title": "'Unprecedented territory': are UK polls as volatile as they seem? – in charts",
-      "url": "https://www.theguardian.com/politics/2026/mar/23/uk-polls-less-volatile-than-they-seem-charts",
-      "notes": "",
+      "title": "Proportional representation is true rule by the people | Letters",
+      "url": "https://www.theguardian.com/politics/2026/mar/06/proportional-representation-is-true-rule-by-the-people",
+      "notes": "Letters page, not a concrete policy/parliamentary event. Treated as opinion/letters content about electoral reform.",
       "gold": {
         "metadata": {
           "source_system": "guardian",
           "source_name": "The Guardian",
-          "title": "'Unprecedented territory': are UK polls as volatile as they seem? – in charts",
-          "url": "https://www.theguardian.com/politics/2026/mar/23/uk-polls-less-volatile-than-they-seem-charts",
-          "published_at": "2026-03-23T07:00:43Z",
-          "author": "Ashley Kirk",
+          "title": "Proportional representation is true rule by the people | Letters",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/proportional-representation-is-true-rule-by-the-people",
+          "published_at": "2026-03-06T17:31:39Z",
+          "author": null,
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Opinion",
+          "Politics"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Proportional representation is true rule by the people | Letters",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/proportional-representation-is-true-rule-by-the-people",
+          "published_at": "2026-03-06T17:31:39Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament",
+          "Politics"
+        ],
+        "politicians": [
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Democratic Unionist Party",
+          "Green Party",
+          "Labour Party",
+          "Liberal Democrats",
+          "Reform UK"
+        ],
+        "government_bodies": [
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "Denton",
+          "Germany",
+          "Gorton",
+          "Manchester"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "eee195237a465051",
+      "source_system": "guardian",
+      "title": "Police search home of former Labour MP’s husband amid China spying investigation",
+      "url": "https://www.theguardian.com/politics/2026/mar/06/gloria-de-piero-james-robinson-police-search-labour-mp-china-spying",
+      "notes": "Police/investigation reporting, not a parliamentary or government policy event. Removed duplicated and over-specific event structure. Retained only the clearly central party-political context.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Police search home of former Labour MP’s husband amid China spying investigation",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/gloria-de-piero-james-robinson-police-search-labour-mp-china-spying",
+          "published_at": "2026-03-06T19:36:08Z",
+          "author": "Alexandra Topping Political correspondent",
           "article_type": "NewsArticle"
         },
         "topics": [
           "Politics"
         ],
-        "politicians": [
-          "Keir Starmer",
-          "Nigel Farage"
-        ],
+        "politicians": [],
         "political_parties": [
-          "Conservative Party",
-          "Greens",
+          "Labour Party"
+        ],
+        "government_bodies": [],
+        "locations": [],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Police search home of former Labour MP’s husband amid China spying investigation",
+          "url": "https://www.theguardian.com/politics/2026/mar/06/gloria-de-piero-james-robinson-police-search-labour-mp-china-spying",
+          "published_at": "2026-03-06T19:36:08Z",
+          "author": "Alexandra Topping Political correspondent",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament",
+          "Politics"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "Cardiff",
+          "Wales"
+        ],
+        "events": [
+          {
+            "name": "Arrests related to Chinese spying investigation",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "Wales",
+            "policy_topics": [
+              "Parliament",
+              "Politics"
+            ],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [
+              "Labour Party"
+            ],
+            "confidence": "medium",
+            "extraction_method": "openai",
+            "is_generic_fallback": false
+          },
+          {
+            "name": "Police search of James Robinson's home",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "Cardiff",
+            "policy_topics": [
+              "Parliament",
+              "Politics"
+            ],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [
+              "Labour Party"
+            ],
+            "confidence": "medium",
+            "extraction_method": "openai",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "ad58ad9d6e146981",
+      "source_system": "guardian",
+      "title": "I predict a Green wave in the local elections. Anyone who thinks our byelection win was an outlier is mistaken | Zack Polanski",
+      "url": "https://www.theguardian.com/commentisfree/2026/mar/07/predict-green-party-wave-zack-polanski-local-elections-byelection-win",
+      "notes": "Opinion article by Zack Polanski about Green electoral momentum after Gorton and Denton. Not a single extractable government or parliamentary policy event. Kept only central opinion/politics framing, key parties, and broad electoral locations.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "I predict a Green wave in the local elections. Anyone who thinks our byelection win was an outlier is mistaken | Zack Polanski",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/07/predict-green-party-wave-zack-polanski-local-elections-byelection-win",
+          "published_at": "2026-03-07T12:00:50Z",
+          "author": "Zack Polanski",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Opinion",
+          "Politics"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Green Party",
           "Labour Party",
-          "Lib Dems",
-          "Plaid Cymru",
-          "Reform",
-          "Scottish National Party"
+          "Reform UK"
         ],
         "government_bodies": [],
         "locations": [
-          "Caerphilly",
           "England",
-          "Scotland",
           "Wales"
         ],
         "events": []
@@ -226,77 +797,406 @@
         "metadata": {
           "source_system": "guardian",
           "source_name": "The Guardian",
-          "title": "'Unprecedented territory': are UK polls as volatile as they seem? – in charts",
-          "url": "https://www.theguardian.com/politics/2026/mar/23/uk-polls-less-volatile-than-they-seem-charts",
-          "published_at": "2026-03-23T07:00:43Z",
-          "author": "Ashley Kirk",
+          "title": "I predict a Green wave in the local elections. Anyone who thinks our byelection win was an outlier is mistaken | Zack Polanski",
+          "url": "https://www.theguardian.com/commentisfree/2026/mar/07/predict-green-party-wave-zack-polanski-local-elections-byelection-win",
+          "published_at": "2026-03-07T12:00:50Z",
+          "author": "Zack Polanski",
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Energy",
+          "Immigration",
+          "Parliament"
+        ],
+        "politicians": [
+          "Keir Starmer"
+        ],
+        "political_parties": [
+          "Green Party",
+          "Labour Party",
+          "Reform UK"
+        ],
+        "government_bodies": [
+          "House of Commons",
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [
+          "England",
+          "Europe",
+          "Gorton",
+          "Wales"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "ee4e313268ede73c",
+      "source_system": "guardian",
+      "title": "UK recruiter emerges from insolvency for third time, avoiding millions owed in tax",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/07/uk-recruiter-emerges-from-insolvency-for-third-time",
+      "notes": "Investigative/business reporting about phoenixism and unpaid tax, not a government or parliamentary policy event. HMRC is contextual, not the central issuing institution of an event here.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "UK recruiter emerges from insolvency for third time, avoiding millions owed in tax",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/07/uk-recruiter-emerges-from-insolvency-for-third-time",
+          "published_at": "2026-03-07T13:00:51Z",
+          "author": "Simon Goodley",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Taxation"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [
+          "Hampshire"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "UK recruiter emerges from insolvency for third time, avoiding millions owed in tax",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/07/uk-recruiter-emerges-from-insolvency-for-third-time",
+          "published_at": "2026-03-07T13:00:51Z",
+          "author": "Simon Goodley",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Taxation"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Revenue and Customs",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "d5f04f8c21f15f1b",
+      "source_system": "guardian",
+      "title": "Starmer speaks with Trump after president criticises lack of UK support for Iran strikes",
+      "url": "https://www.theguardian.com/politics/2026/mar/08/starmer-speaks-with-trump-after-president-criticises-lack-of-uk-support-for-iran-strikes",
+      "notes": "This article contains a concrete current UK foreign-policy event: Starmer speaking with Trump about the Iran strikes and UK-US military cooperation. Kept only central bodies, topics, and political actors.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Starmer speaks with Trump after president criticises lack of UK support for Iran strikes",
+          "url": "https://www.theguardian.com/politics/2026/mar/08/starmer-speaks-with-trump-after-president-criticises-lack-of-uk-support-for-iran-strikes",
+          "published_at": "2026-03-08T16:41:15Z",
+          "author": "Alexandra Topping Political correspondent",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Government Policy"
+        ],
+        "politicians": [
+          "Keir Starmer"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Downing Street"
+        ],
+        "locations": [
+          "Iran",
+          "United Kingdom",
+          "United States"
+        ],
+        "events": [
+          {
+            "name": "Starmer speaks with Trump on Iran strikes",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-08T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence",
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Keir Starmer"
+            ],
+            "government_bodies": [
+              "Downing Street"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Starmer speaks with Trump after president criticises lack of UK support for Iran strikes",
+          "url": "https://www.theguardian.com/politics/2026/mar/08/starmer-speaks-with-trump-after-president-criticises-lack-of-uk-support-for-iran-strikes",
+          "published_at": "2026-03-08T16:41:15Z",
+          "author": "Alexandra Topping Political correspondent",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Government Policy",
+          "Parliament",
+          "Politics"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Kemi Badenoch",
+          "Yvette Cooper"
+        ],
+        "political_parties": [
+          "Conservative Party",
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Downing Street",
+          "Foreign, Commonwealth and Development Office",
+          "Home Office",
+          "Ministry of Defence",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "America",
+          "Gloucestershire",
+          "Iran",
+          "Iraq",
+          "Israel",
+          "Portsmouth",
+          "Ukraine",
+          "Wales",
+          "the Middle East"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "7198fd761ce9a77c",
+      "source_system": "guardian",
+      "title": "Private jet used for Nigel Farage Chagos stunt linked to Reform mega-donor",
+      "url": "https://www.theguardian.com/politics/2026/mar/08/private-jet-used-for-nigel-farage-chagos-stunt-linked-to-reform-mega-donor",
+      "notes": "Party-political reporting about Nigel Farage's Chagos trip and donor links, not a government or parliamentary policy event. Kept only clearly central entities and places.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Private jet used for Nigel Farage Chagos stunt linked to Reform mega-donor",
+          "url": "https://www.theguardian.com/politics/2026/mar/08/private-jet-used-for-nigel-farage-chagos-stunt-linked-to-reform-mega-donor",
+          "published_at": "2026-03-08T17:00:15Z",
+          "author": "Rowena Mason and Jessica Elgot",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Politics"
+        ],
+        "politicians": [
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Reform UK"
+        ],
+        "government_bodies": [],
+        "locations": [
+          "Chagos Islands",
+          "Maldives"
+        ],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Private jet used for Nigel Farage Chagos stunt linked to Reform mega-donor",
+          "url": "https://www.theguardian.com/politics/2026/mar/08/private-jet-used-for-nigel-farage-chagos-stunt-linked-to-reform-mega-donor",
+          "published_at": "2026-03-08T17:00:15Z",
+          "author": "Rowena Mason and Jessica Elgot",
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Politics",
+          "Public Spending"
+        ],
+        "politicians": [
+          "Keir Starmer",
+          "Nigel Farage"
+        ],
+        "political_parties": [
+          "Labour Party",
+          "Reform UK"
+        ],
+        "government_bodies": [
+          "Downing Street",
+          "Office for National Statistics",
+          "UK government"
+        ],
+        "locations": [
+          "Bangkok",
+          "Bournemouth",
+          "British Virgin Islands",
+          "Guernsey",
+          "Thailand",
+          "Ukraine"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "0ee6dc4dfd3195d6",
+      "source_system": "guardian",
+      "title": "Mahmood’s new rules will leave refugees in cruel state of uncertainty | Letters",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/08/mahmoods-new-rules-will-leave-refugees-in-cruel-state-of-uncertainty",
+      "notes": "Letters page responding to the Home Secretary's asylum changes. Treated as commentary rather than as an event record. Kept the central immigration topic and Home Office as the responsible institution being discussed.",
+      "gold": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Mahmood’s new rules will leave refugees in cruel state of uncertainty | Letters",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/08/mahmoods-new-rules-will-leave-refugees-in-cruel-state-of-uncertainty",
+          "published_at": "2026-03-08T17:12:30Z",
+          "author": null,
+          "article_type": "OpinionArticle"
+        },
+        "topics": [
+          "Immigration",
+          "Opinion"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [],
+        "events": []
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "guardian",
+          "source_name": "The Guardian",
+          "title": "Mahmood’s new rules will leave refugees in cruel state of uncertainty | Letters",
+          "url": "https://www.theguardian.com/uk-news/2026/mar/08/mahmoods-new-rules-will-leave-refugees-in-cruel-state-of-uncertainty",
+          "published_at": "2026-03-08T17:12:30Z",
+          "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
           "Education",
-          "Politics"
+          "Government Policy",
+          "Housing",
+          "Immigration"
         ],
-        "politicians": [
-          "Keir Starmer",
-          "Nigel Farage"
-        ],
+        "politicians": [],
         "political_parties": [
-          "Conservative Party",
-          "Greens",
           "Labour Party",
-          "Lib Dems",
-          "Plaid Cymru",
-          "Reform",
-          "Scottish National Party"
+          "Reform UK"
         ],
-        "government_bodies": [],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
         "locations": [
-          "Caerphilly",
-          "England",
-          "Scotland",
-          "Wales"
+          "Kindertransport",
+          "Newcastle",
+          "Perth",
+          "Ukraine"
         ],
         "events": []
       }
     },
     {
-      "record_id": "08124cd753879368",
+      "record_id": "668c34b1c59692f8",
       "source_system": "parliament",
-      "title": "Electricity Generator Levy",
-      "url": "https://questions-statements.parliament.uk/Statements/275704",
-      "notes": "",
+      "title": "Afghan Special Forces Relocation Review",
+      "url": "https://questions-statements.parliament.uk/Statements/213876",
+      "notes": "Written ministerial statement. Used the exact statement title, defence topic, and Ministry of Defence as the central responsible institution. Commons chamber is explicitly shown on the statement record.",
       "gold": {
         "metadata": {
           "source_system": "parliament",
           "source_name": "UK Parliament",
-          "title": "Electricity Generator Levy",
-          "url": "https://questions-statements.parliament.uk/Statements/275704",
-          "published_at": "2026-04-21T00:00:00Z",
+          "title": "Afghan Special Forces Relocation Review",
+          "url": "https://questions-statements.parliament.uk/Statements/213876",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Parliament",
-          "Taxation"
+          "Defence",
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "HM Treasury"
+          "Ministry of Defence"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Afghan Special Forces Relocation Review",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Defence"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Defence"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Afghan Special Forces Relocation Review",
+          "url": "https://questions-statements.parliament.uk/Statements/213876",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
         ],
         "locations": [],
         "events": [
           {
             "name": "Ministerial Statement",
             "type": "MinisterialStatement",
-            "date": "2026-04-21T00:00:00Z",
+            "date": "2026-03-26T00:00:00Z",
             "location": null,
             "policy_topics": [
-              "Taxation"
+              "Defence"
             ],
             "political_actors": [],
             "government_bodies": [
-              "HM Treasury"
+              "Office for National Statistics"
             ],
             "parliamentary_body": null,
             "political_parties": [],
@@ -305,20 +1205,27 @@
             "is_generic_fallback": true
           }
         ]
-      },
-      "prediction_snapshot": {
+      }
+    },
+    {
+      "record_id": "9b604a57ca053173",
+      "source_system": "parliament",
+      "title": "Annual European Union Finances Statement",
+      "url": "https://questions-statements.parliament.uk/Statements/213879",
+      "notes": "Written ministerial statement from Treasury. Exact title and Treasury issuer are explicit. Commons chamber is explicitly shown on the statement page.",
+      "gold": {
         "metadata": {
           "source_system": "parliament",
           "source_name": "UK Parliament",
-          "title": "Electricity Generator Levy",
-          "url": "https://questions-statements.parliament.uk/Statements/275704",
-          "published_at": "2026-04-21T00:00:00Z",
+          "title": "Annual European Union Finances Statement",
+          "url": "https://questions-statements.parliament.uk/Statements/213879",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Parliament",
-          "Taxation"
+          "Economic Policy",
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
@@ -328,16 +1235,57 @@
         "locations": [],
         "events": [
           {
-            "name": "Ministerial Statement",
+            "name": "Annual European Union Finances Statement",
             "type": "MinisterialStatement",
-            "date": "2026-04-21T00:00:00Z",
+            "date": "2026-03-26T00:00:00Z",
             "location": null,
             "policy_topics": [
-              "Taxation"
+              "Economic Policy"
             ],
             "political_actors": [],
             "government_bodies": [
               "HM Treasury"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Annual European Union Finances Statement",
+          "url": "https://questions-statements.parliament.uk/Statements/213879",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Treasury",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Parliament"
             ],
             "parliamentary_body": null,
             "political_parties": [],
@@ -349,92 +1297,51 @@
       }
     },
     {
-      "record_id": "22b155a4a55bb90d",
+      "record_id": "c7b2ecee4ddfa3d5",
       "source_system": "parliament",
-      "title": "Electricity Generator Levy",
-      "url": "https://questions-statements.parliament.uk/Statements/275710",
-      "notes": "",
+      "title": "British Council Annual Report and Accounts 2024-25",
+      "url": "https://questions-statements.parliament.uk/Statements/213875",
+      "notes": "Written ministerial statement. Exact title and Foreign, Commonwealth and Development Office issuer are explicit. Commons chamber is explicitly shown on the statement page.",
       "gold": {
         "metadata": {
           "source_system": "parliament",
           "source_name": "UK Parliament",
-          "title": "Electricity Generator Levy",
-          "url": "https://questions-statements.parliament.uk/Statements/275710",
-          "published_at": "2026-04-21T00:00:00Z",
+          "title": "British Council Annual Report and Accounts 2024-25",
+          "url": "https://questions-statements.parliament.uk/Statements/213875",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Parliament",
-          "Taxation"
-        ],
-        "politicians": [],
-        "political_parties": [],
-        "government_bodies": [
-          "HM Treasury"
-        ],
-        "locations": [],
-        "events": []
-      },
-      "prediction_snapshot": {
-        "metadata": {
-          "source_system": "parliament",
-          "source_name": "UK Parliament",
-          "title": "Electricity Generator Levy",
-          "url": "https://questions-statements.parliament.uk/Statements/275710",
-          "published_at": "2026-04-21T00:00:00Z",
-          "author": null,
-          "article_type": "NewsArticle"
-        },
-        "topics": [
-          "Parliament",
-          "Taxation"
-        ],
-        "politicians": [],
-        "political_parties": [],
-        "government_bodies": [],
-        "locations": [],
-        "events": []
-      }
-    },
-    {
-      "record_id": "117eb90b32ab933e",
-      "source_system": "parliament",
-      "title": "Further and Faster on Clean Power",
-      "url": "https://questions-statements.parliament.uk/Statements/275702",
-      "notes": "",
-      "gold": {
-        "metadata": {
-          "source_system": "parliament",
-          "source_name": "UK Parliament",
-          "title": "Further and Faster on Clean Power",
-          "url": "https://questions-statements.parliament.uk/Statements/275702",
-          "published_at": "2026-04-21T00:00:00Z",
-          "author": null,
-          "article_type": "NewsArticle"
-        },
-        "topics": [
-          "Energy",
+          "Education",
+          "Public Spending",
           "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
-        "government_bodies": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office"
+        ],
         "locations": [],
         "events": [
           {
-            "name": "Policy Announcement",
-            "type": "ParliamentaryEvent",
-            "date": "2026-04-21T00:00:00Z",
+            "name": "British Council Annual Report and Accounts 2024-25",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
             "location": null,
-            "policy_topics": [],
+            "policy_topics": [
+              "Education",
+              "Public Spending"
+            ],
             "political_actors": [],
-            "government_bodies": [],
-            "parliamentary_body": null,
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": "House of Commons",
             "political_parties": [],
-            "confidence": "low",
-            "extraction_method": "heuristic",
-            "is_generic_fallback": true
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
           }
         ]
       },
@@ -442,32 +1349,39 @@
         "metadata": {
           "source_system": "parliament",
           "source_name": "UK Parliament",
-          "title": "Further and Faster on Clean Power",
-          "url": "https://questions-statements.parliament.uk/Statements/275702",
-          "published_at": "2026-04-21T00:00:00Z",
+          "title": "British Council Annual Report and Accounts 2024-25",
+          "url": "https://questions-statements.parliament.uk/Statements/213875",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Energy",
           "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
-        "government_bodies": [],
-        "locations": [],
+        "government_bodies": [
+          "Parliament"
+        ],
+        "locations": [
+          "Caribbean"
+        ],
         "events": [
           {
             "name": "Policy Announcement",
-            "type": "ParliamentaryEvent",
-            "date": "2026-04-21T00:00:00Z",
-            "location": null,
-            "policy_topics": [],
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": "Caribbean",
+            "policy_topics": [
+              "Parliament"
+            ],
             "political_actors": [],
-            "government_bodies": [],
+            "government_bodies": [
+              "Parliament"
+            ],
             "parliamentary_body": null,
             "political_parties": [],
-            "confidence": "low",
+            "confidence": "medium",
             "extraction_method": "heuristic",
             "is_generic_fallback": true
           }
@@ -475,141 +1389,824 @@
       }
     },
     {
-      "record_id": "e486f2596affefb6",
-      "source_system": "govuk",
-      "title": "Energy digitalisation framework: a vision for a coordinated and connected energy system",
-      "url": "https://www.gov.uk/government/publications/energy-digitalisation-framework-a-vision-for-a-coordinated-and-connected-energy-system",
-      "notes": "",
+      "record_id": "042e32c630ed9611",
+      "source_system": "parliament",
+      "title": "British Steel",
+      "url": "https://questions-statements.parliament.uk/Statements/213889",
+      "notes": "Written ministerial statement from the Department for Business and Trade. Used the exact title and central department. The statement text mentions government support in Scunthorpe, but the core extractable event is the statement/update itself.",
       "gold": {
         "metadata": {
-          "source_system": "govuk",
-          "source_name": "GOV.UK",
-          "title": "Energy digitalisation framework: a vision for a coordinated and connected energy system",
-          "url": "https://www.gov.uk/government/publications/energy-digitalisation-framework-a-vision-for-a-coordinated-and-connected-energy-system",
-          "published_at": "2026-03-23T09:00:00Z",
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "British Steel",
+          "url": "https://questions-statements.parliament.uk/Statements/213889",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Energy",
-          "Government Policy"
+          "Economic Policy",
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Department for Energy Security and Net Zero"
+          "Department for Business and Trade"
         ],
-        "locations": [],
+        "locations": [
+          "Scunthorpe"
+        ],
         "events": [
           {
-            "name": "Energy digitalisation framework: a vision for a coordinated and connected energy system",
-            "type": "GovernmentPolicyEvent",
-            "date": "2026-03-23T00:00:00Z",
+            "name": "British Steel",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
             "location": null,
             "policy_topics": [
-              "Energy",
-              "Government Policy"
+              "Economic Policy"
             ],
             "political_actors": [],
             "government_bodies": [
-              "Department for Energy Security and Net Zero"
+              "Department for Business and Trade"
             ],
-            "parliamentary_body": null,
+            "parliamentary_body": "House of Commons",
             "political_parties": [],
             "confidence": "high",
-            "extraction_method": "heuristic",
+            "extraction_method": "manual_gold",
             "is_generic_fallback": false
           }
         ]
       },
       "prediction_snapshot": {
         "metadata": {
-          "source_system": "govuk",
-          "source_name": "GOV.UK",
-          "title": "Energy digitalisation framework: a vision for a coordinated and connected energy system",
-          "url": "https://www.gov.uk/government/publications/energy-digitalisation-framework-a-vision-for-a-coordinated-and-connected-energy-system",
-          "published_at": "2026-03-23T09:00:00Z",
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "British Steel",
+          "url": "https://questions-statements.parliament.uk/Statements/213889",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Energy",
-          "Government Policy"
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Department for Energy Security and Net Zero"
+          "Department for Business and Trade",
+          "Parliament"
         ],
         "locations": [],
         "events": [
           {
-            "name": "Energy digitalisation framework: a vision for a coordinated and connected energy system",
-            "type": "GovernmentPolicyEvent",
-            "date": "2026-03-23T00:00:00Z",
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
             "location": null,
             "policy_topics": [
-              "Energy",
-              "Government Policy"
+              "Parliament"
             ],
             "political_actors": [],
             "government_bodies": [
-              "Department for Energy Security and Net Zero"
+              "Department for Business and Trade",
+              "Parliament"
             ],
             "parliamentary_body": null,
             "political_parties": [],
-            "confidence": "high",
+            "confidence": "medium",
             "extraction_method": "heuristic",
-            "is_generic_fallback": false
+            "is_generic_fallback": true
           }
         ]
       }
     },
     {
-      "record_id": "0841f519f793b069",
-      "source_system": "govuk",
-      "title": "Streamlining infrastructure planning: implementation plan",
-      "url": "https://www.gov.uk/government/publications/streamlining-infrastructure-planning-implementation-plan",
-      "notes": "",
+      "record_id": "562a4aaad93eb08f",
+      "source_system": "parliament",
+      "title": "Correction to Written Statement HCWS1455",
+      "url": "https://questions-statements.parliament.uk/Statements/213877",
+      "notes": "Correction written ministerial statement linked to Local Government Reorganisation. The correction page explicitly links the previous statement and the responsible department. Kept the correction title rather than a generic placeholder.",
       "gold": {
         "metadata": {
-          "source_system": "govuk",
-          "source_name": "GOV.UK",
-          "title": "Streamlining infrastructure planning: implementation plan",
-          "url": "https://www.gov.uk/government/publications/streamlining-infrastructure-planning-implementation-plan",
-          "published_at": "2026-03-23T10:00:00Z",
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Correction to Written Statement HCWS1455",
+          "url": "https://questions-statements.parliament.uk/Statements/213877",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
           "Government Policy",
-          "Housing"
+          "Housing",
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
           "Ministry of Housing, Communities and Local Government"
         ],
-        "locations": [
-          "England",
-          "Wales"
-        ],
-        "events": []
+        "locations": [],
+        "events": [
+          {
+            "name": "Correction to Written Statement HCWS1455",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Housing"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
       },
       "prediction_snapshot": {
         "metadata": {
-          "source_system": "govuk",
-          "source_name": "GOV.UK",
-          "title": "Streamlining infrastructure planning: implementation plan",
-          "url": "https://www.gov.uk/government/publications/streamlining-infrastructure-planning-implementation-plan",
-          "published_at": "2026-03-23T10:00:00Z",
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Correction to Written Statement HCWS1455",
+          "url": "https://questions-statements.parliament.uk/Statements/213877",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "low",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "1d0fe9ead4395fee",
+      "source_system": "parliament",
+      "title": "Events at Orgreave",
+      "url": "https://questions-statements.parliament.uk/Statements/213883",
+      "notes": "Written ministerial statement from the Home Office announcing the formal launch of the Orgreave Inquiry. Exact title, issuer, and Home Office ownership are explicit. Lords chamber is shown on the statement page.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Events at Orgreave",
+          "url": "https://questions-statements.parliament.uk/Statements/213883",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [
+          "South Yorkshire"
+        ],
+        "events": [
+          {
+            "name": "Events at Orgreave",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Events at Orgreave",
+          "url": "https://questions-statements.parliament.uk/Statements/213883",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "low",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "fe48e0de02fc5050",
+      "source_system": "parliament",
+      "title": "Fire Safety",
+      "url": "https://questions-statements.parliament.uk/Statements/213882",
+      "notes": "Written ministerial statement announcing a public consultation on proposals to establish a fire risk assessor profession. Exact title, MHCLG issuer, and Commons chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Fire Safety",
+          "url": "https://questions-statements.parliament.uk/Statements/213882",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Housing, Communities and Local Government"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Fire Safety",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Housing"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Fire Safety",
+          "url": "https://questions-statements.parliament.uk/Statements/213882",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "550de1098a4f8fa7",
+      "source_system": "parliament",
+      "title": "Firefighters’ Pension Scheme: Opt-out Contingent Decisions",
+      "url": "https://questions-statements.parliament.uk/Statements/213881",
+      "notes": "Written ministerial statement on pension-remedy changes for firefighters. Exact title, MHCLG issuer, and Commons chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Firefighters’ Pension Scheme: Opt-out Contingent Decisions",
+          "url": "https://questions-statements.parliament.uk/Statements/213881",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Housing, Communities and Local Government"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Firefighters’ Pension Scheme: Opt-out Contingent Decisions",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Firefighters’ Pension Scheme: Opt-out Contingent Decisions",
+          "url": "https://questions-statements.parliament.uk/Statements/213881",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "2cf89498eb5d3a53",
+      "source_system": "parliament",
+      "title": "Government Response to Baroness Hodge’s Review of Arts Council England",
+      "url": "https://questions-statements.parliament.uk/Statements/213891",
+      "notes": "Written ministerial statement from DCMS responding to Baroness Hodge’s review. Exact title, DCMS issuer, and Commons chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Government Response to Baroness Hodge’s Review of Arts Council England",
+          "url": "https://questions-statements.parliament.uk/Statements/213891",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Public Spending",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Culture, Media and Sport"
+        ],
+        "locations": [
+          "England"
+        ],
+        "events": [
+          {
+            "name": "Government Response to Baroness Hodge’s Review of Arts Council England",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Culture, Media and Sport"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Government Response to Baroness Hodge’s Review of Arts Council England",
+          "url": "https://questions-statements.parliament.uk/Statements/213891",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Culture, Media and Sport",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England"
+        ],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Culture, Media and Sport"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "359658dd6c798970",
+      "source_system": "parliament",
+      "title": "Government investment in roads: Third Road Investment Strategy",
+      "url": "https://questions-statements.parliament.uk/Statements/213890",
+      "notes": "Written ministerial statement from the Department for Transport publishing RIS3. Exact title, DfT issuer, and Lords chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Government investment in roads: Third Road Investment Strategy",
+          "url": "https://questions-statements.parliament.uk/Statements/213890",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
           "Economic Policy",
           "Government Policy",
-          "Housing"
+          "Parliament",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Transport"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Government investment in roads: Third Road Investment Strategy",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy",
+              "Government Policy",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Transport"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Government investment in roads: Third Road Investment Strategy",
+          "url": "https://questions-statements.parliament.uk/Statements/213890",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "low",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "168e6138d9f0b325",
+      "source_system": "parliament",
+      "title": "Households Below Average Income Statistics Release",
+      "url": "https://questions-statements.parliament.uk/Statements/213887",
+      "notes": "Written ministerial statement from DWP publishing annual income and poverty statistics. Exact title, DWP issuer, and Lords chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Households Below Average Income Statistics Release",
+          "url": "https://questions-statements.parliament.uk/Statements/213887",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Parliament",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Work and Pensions"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Households Below Average Income Statistics Release",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Work and Pensions"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Households Below Average Income Statistics Release",
+          "url": "https://questions-statements.parliament.uk/Statements/213887",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Work and Pensions",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Work and Pensions"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "f190ecfaddf6219f",
+      "source_system": "parliament",
+      "title": "Improving Building Safety Systems in Higher-Risk Buildings and Beyond",
+      "url": "https://questions-statements.parliament.uk/Statements/213878",
+      "notes": "Written ministerial statement from MHCLG launching a consultation on higher-risk building control reform. Exact title, issuer, and Lords chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Improving Building Safety Systems in Higher-Risk Buildings and Beyond",
+          "url": "https://questions-statements.parliament.uk/Statements/213878",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Housing, Communities and Local Government"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Improving Building Safety Systems in Higher-Risk Buildings and Beyond",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Housing"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Improving Building Safety Systems in Higher-Risk Buildings and Beyond",
+          "url": "https://questions-statements.parliament.uk/Statements/213878",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Housing",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "low",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "da947d754bbf6f0b",
+      "source_system": "parliament",
+      "title": "National Scheme of Delegation",
+      "url": "https://questions-statements.parliament.uk/Statements/213880",
+      "notes": "Written ministerial statement publishing consultation on draft planning regulations for the national scheme of delegation. Central issuer is MHCLG. Conservative topic choice kept to housing/government policy.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "National Scheme of Delegation",
+          "url": "https://questions-statements.parliament.uk/Statements/213880",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Housing",
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
@@ -617,48 +2214,930 @@
           "Ministry of Housing, Communities and Local Government"
         ],
         "locations": [
-          "England",
-          "Wales"
+          "England"
         ],
-        "events": []
-      }
-    },
-    {
-      "record_id": "2f5707acb768f79c",
-      "source_system": "govuk",
-      "title": "Independent Assurance Reviewer sought to examine DWP's activities relating to Post Office staff prosecutions",
-      "url": "https://www.gov.uk/government/news/independent-assurance-reviewer-sought-to-examine-dwps-activities-relating-to-post-office-staff-prosecutions",
-      "notes": "",
-      "gold": {
+        "events": [
+          {
+            "name": "National Scheme of Delegation",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Housing"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
         "metadata": {
-          "source_system": "govuk",
-          "source_name": "GOV.UK",
-          "title": "Independent Assurance Reviewer sought to examine DWP's activities relating to Post Office staff prosecutions",
-          "url": "https://www.gov.uk/government/news/independent-assurance-reviewer-sought-to-examine-dwps-activities-relating-to-post-office-staff-prosecutions",
-          "published_at": "2026-03-23T10:20:32Z",
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "National Scheme of Delegation",
+          "url": "https://questions-statements.parliament.uk/Statements/213880",
+          "published_at": "2026-03-26T00:00:00Z",
           "author": null,
           "article_type": "NewsArticle"
         },
         "topics": [
-          "Government Policy"
+          "Housing",
+          "Parliament"
         ],
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Department for Work and Pensions"
+          "Ministry of Housing, Communities and Local Government"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "bdd8502810d833c1",
+      "source_system": "parliament",
+      "title": "Outcomes of the 27 February 2026 local audit backstop",
+      "url": "https://questions-statements.parliament.uk/Statements/213886",
+      "notes": "Written ministerial statement on local audit-system progress and backstop outcomes. Exact title, MHCLG issuer, and Commons chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Outcomes of the 27 February 2026 local audit backstop",
+          "url": "https://questions-statements.parliament.uk/Statements/213886",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Housing, Communities and Local Government"
         ],
         "locations": [
           "England"
         ],
-        "events": []
+        "events": [
+          {
+            "name": "Outcomes of the 27 February 2026 local audit backstop",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy",
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Housing, Communities and Local Government"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Outcomes of the 27 February 2026 local audit backstop",
+          "url": "https://questions-statements.parliament.uk/Statements/213886",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "low",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "1ef2187b978635d2",
+      "source_system": "parliament",
+      "title": "Police Pension Scheme: Opt-out Contingent Decisions",
+      "url": "https://questions-statements.parliament.uk/Statements/213884",
+      "notes": "Written ministerial statement from the Home Office on pension-remedy changes for police officers. Exact title, Home Office issuer, and Lords chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Police Pension Scheme: Opt-out Contingent Decisions",
+          "url": "https://questions-statements.parliament.uk/Statements/213884",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Police Pension Scheme: Opt-out Contingent Decisions",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Police Pension Scheme: Opt-out Contingent Decisions",
+          "url": "https://questions-statements.parliament.uk/Statements/213884",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "23b07c4a490ed931",
+      "source_system": "parliament",
+      "title": "Prison Workforce Update",
+      "url": "https://questions-statements.parliament.uk/Statements/213888",
+      "notes": "Written ministerial statement from the Ministry of Justice on the 2026/27 Prison Service pay award. Exact title, issuer, and Commons chamber are explicit on the statement page.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Prison Workforce Update",
+          "url": "https://questions-statements.parliament.uk/Statements/213888",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Justice"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Prison Workforce Update",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Ministry of Justice"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Prison Workforce Update",
+          "url": "https://questions-statements.parliament.uk/Statements/213888",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [
+          "David Lammy"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Treasury"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [
+              "David Lammy"
+            ],
+            "government_bodies": [
+              "HM Treasury"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "acea071003a78173",
+      "source_system": "parliament",
+      "title": "Six-monthly Report on Hong Kong 1 July to 31 December 2025",
+      "url": "https://questions-statements.parliament.uk/Statements/213874",
+      "notes": "Written ministerial statement from the Foreign, Commonwealth and Development Office publishing the Hong Kong report. Exact title, issuer, and Lords chamber are explicit. Hong Kong is central to the statement.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Six-monthly Report on Hong Kong 1 July to 31 December 2025",
+          "url": "https://questions-statements.parliament.uk/Statements/213874",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [
+          "Yvette Cooper"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office"
+        ],
+        "locations": [
+          "Hong Kong"
+        ],
+        "events": [
+          {
+            "name": "Six-monthly Report on Hong Kong 1 July to 31 December 2025",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Yvette Cooper"
+            ],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Six-monthly Report on Hong Kong 1 July to 31 December 2025",
+          "url": "https://questions-statements.parliament.uk/Statements/213874",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [
+          "Yvette Cooper"
+        ],
+        "political_parties": [],
+        "government_bodies": [],
+        "locations": [],
+        "events": [
+          {
+            "name": "Policy Announcement",
+            "type": "ParliamentaryEvent",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [
+              "Yvette Cooper"
+            ],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "7575c89cb454dfdd",
+      "source_system": "parliament",
+      "title": "Sludgebusting: Simplifying Government Processes to Drive Delivery",
+      "url": "https://questions-statements.parliament.uk/Statements/213892",
+      "notes": "Lords written ministerial statement on simplifying government processes. The page explicitly shows the statement title, Lords chamber, and Attorney General's Office as the statement source, while the text makes clear it is jointly laid with the Minister for the Cabinet Office. Kept Cabinet Office as the central delivery body.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Sludgebusting: Simplifying Government Processes to Drive Delivery",
+          "url": "https://questions-statements.parliament.uk/Statements/213892",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Cabinet Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Sludgebusting: Simplifying Government Processes to Drive Delivery",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Cabinet Office"
+            ],
+            "parliamentary_body": "House of Lords",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "Sludgebusting: Simplifying Government Processes to Drive Delivery",
+          "url": "https://questions-statements.parliament.uk/Statements/213892",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Cabinet Office",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Cabinet Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "fbeb144fddab68e5",
+      "source_system": "parliament",
+      "title": "UK preparations for the EU Entry/Exit System",
+      "url": "https://questions-statements.parliament.uk/Statements/213885",
+      "notes": "Written ministerial statement from the Home Office on UK readiness for the EU Entry/Exit System. Exact title, issuer, and Commons chamber are explicit.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "UK preparations for the EU Entry/Exit System",
+          "url": "https://questions-statements.parliament.uk/Statements/213885",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [
+          "United Kingdom"
+        ],
+        "events": [
+          {
+            "name": "UK preparations for the EU Entry/Exit System",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "UK preparations for the EU Entry/Exit System",
+          "url": "https://questions-statements.parliament.uk/Statements/213885",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Immigration",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Office for National Statistics"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "9b2465eaee75d64d",
+      "source_system": "parliament",
+      "title": "National Savings and Investment",
+      "url": "https://questions-statements.parliament.uk/Statements/213873",
+      "notes": "Written ministerial statement from Treasury about NS&I tracing failures and remediation. Exact title, Treasury issuer, and Commons chamber are explicit. The event is the statement/update itself, not a generic policy announcement.",
+      "gold": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "National Savings and Investment",
+          "url": "https://questions-statements.parliament.uk/Statements/213873",
+          "published_at": "2026-03-26T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Treasury"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "National Savings and Investment",
+            "type": "MinisterialStatement",
+            "date": "2026-03-26T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy",
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "HM Treasury"
+            ],
+            "parliamentary_body": "House of Commons",
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "parliament",
+          "source_name": "UK Parliament",
+          "title": "National Savings and Investment",
+          "url": "https://questions-statements.parliament.uk/Statements/213873",
+          "published_at": "2026-03-27T00:00:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "HM Treasury",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Ministerial Statement",
+            "type": "MinisterialStatement",
+            "date": "2026-03-27T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "HM Treasury"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": true
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "391b1531e1531804",
+      "source_system": "govuk",
+      "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+      "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+      "notes": "Official Home Office policy paper. Exact title, Home Office issuer, and publication date are explicit. Removed party inference and over-strong location claims.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+          "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+          "published_at": "2026-03-06T09:43:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
       },
       "prediction_snapshot": {
         "metadata": {
           "source_system": "govuk",
           "source_name": "GOV.UK",
-          "title": "Independent Assurance Reviewer sought to examine DWP's activities relating to Post Office staff prosecutions",
-          "url": "https://www.gov.uk/government/news/independent-assurance-reviewer-sought-to-examine-dwps-activities-relating-to-post-office-staff-prosecutions",
-          "published_at": "2026-03-23T10:20:32Z",
+          "title": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+          "url": "https://www.gov.uk/government/publications/statement-of-changes-to-the-immigration-rules-hc-1619-5-march-2026",
+          "published_at": "2026-03-06T09:43:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Wales"
+        ],
+        "events": [
+          {
+            "name": "Statement of changes to the Immigration Rules: HC 1691, 5 March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "England",
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "2a9bf28d89716fd1",
+      "source_system": "govuk",
+      "title": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+      "url": "https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets",
+      "notes": "Official DSIT publication page for factsheets relating to the Bill. The page was published on 12 November 2025 and updated on 6 March 2026. Kept DSIT as the central issuer and retained the parliamentary relevance from the Bill context without forcing a location.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+          "url": "https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets",
+          "published_at": "2026-03-06T10:07:17Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+            "type": "GovernmentPolicyEvent",
+            "date": "2025-11-12T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Parliament"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Science, Innovation and Technology"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Cyber Security and Resilience (Network and Information Systems) Bill: factsheets",
+          "url": "https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets",
+          "published_at": "2026-03-06T10:07:17Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Energy",
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology",
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "e2def8cece970146",
+      "source_system": "govuk",
+      "title": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+      "url": "https://www.gov.uk/government/speeches/transfer-of-the-nuclear-materials-in-the-context-of-aukus-and-its-safeguards-in-all-aspects-under-the-npt-statement-to-the-iaea-board-of-governors",
+      "notes": "Official FCDO speech page. Exact title, FCDO issuer, delivered date, and explicit location at the IAEA in Vienna are shown on the page. Westminster was prediction noise.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+          "url": "https://www.gov.uk/government/speeches/transfer-of-the-nuclear-materials-in-the-context-of-aukus-and-its-safeguards-in-all-aspects-under-the-npt-statement-to-the-iaea-board-of-governors",
+          "published_at": "2026-03-06T11:00:09Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Government Policy"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office"
+        ],
+        "locations": [
+          "Vienna"
+        ],
+        "events": [
+          {
+            "name": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-05T00:00:00Z",
+            "location": "Vienna",
+            "policy_topics": [
+              "Defence",
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+          "url": "https://www.gov.uk/government/speeches/transfer-of-the-nuclear-materials-in-the-context-of-aukus-and-its-safeguards-in-all-aspects-under-the-npt-statement-to-the-iaea-board-of-governors",
+          "published_at": "2026-03-06T11:00:09Z",
           "author": null,
           "article_type": "NewsArticle"
         },
@@ -666,12 +3145,1014 @@
         "politicians": [],
         "political_parties": [],
         "government_bodies": [
-          "Department for Work and Pensions"
+          "Foreign, Commonwealth and Development Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Westminster"
+        ],
+        "events": [
+          {
+            "name": "Transfer of the nuclear materials in the context of AUKUS and its safeguards in all aspects under the NPT - Statement to the IAEA Board of Governors, March 2026",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "Westminster",
+            "policy_topics": [],
+            "political_actors": [],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "ddfd9c07fa0c4687",
+      "source_system": "govuk",
+      "title": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+      "url": "https://www.gov.uk/government/news/crackdown-on-illegal-underage-sunbeds-use-to-cut-teen-cancer-risk",
+      "notes": "Official health news story. The page explicitly frames this as a planned ban and consultation under the National Cancer Plan. Kept DHSC as the central institution and did not force England as an event location because the page is not explicit enough for that.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+          "url": "https://www.gov.uk/government/news/crackdown-on-illegal-underage-sunbeds-use-to-cut-teen-cancer-risk",
+          "published_at": "2026-03-06T11:56:24Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department of Health and Social Care"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Healthcare"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department of Health and Social Care"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+          "url": "https://www.gov.uk/government/news/crackdown-on-illegal-underage-sunbeds-use-to-cut-teen-cancer-risk",
+          "published_at": "2026-03-06T11:56:24Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department of Health and Social Care",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England"
+        ],
+        "events": [
+          {
+            "name": "Crackdown on illegal underage sunbed use to cut teen cancer risk",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "England",
+            "policy_topics": [
+              "Education",
+              "Healthcare"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department of Health and Social Care"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "df494507a7b84685",
+      "source_system": "govuk",
+      "title": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+      "url": "https://www.gov.uk/government/news/new-permanent-secretary-appointed-at-the-department-for-energy-security-and-net-zero",
+      "notes": "Official appointment news story. Exact title, Cabinet Office and DESNZ issuers, and the fact of the appointment are explicit. This clearly supports one official government event rather than no event.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+          "url": "https://www.gov.uk/government/news/new-permanent-secretary-appointed-at-the-department-for-energy-security-and-net-zero",
+          "published_at": "2026-03-06T12:24:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Energy",
+          "Government Policy"
+        ],
+        "politicians": [
+          "Ed Miliband"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Cabinet Office",
+          "Department for Energy Security and Net Zero"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Energy",
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Ed Miliband"
+            ],
+            "government_bodies": [
+              "Cabinet Office",
+              "Department for Energy Security and Net Zero"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "New Permanent Secretary appointed at the Department for Energy Security and Net Zero",
+          "url": "https://www.gov.uk/government/news/new-permanent-secretary-appointed-at-the-department-for-energy-security-and-net-zero",
+          "published_at": "2026-03-06T12:24:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Energy",
+          "Parliament"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Cabinet Office",
+          "Department for Energy Security and Net Zero",
+          "Office for National Statistics",
+          "Parliament"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "ff3014461619dea3",
+      "source_system": "govuk",
+      "title": "UK reaffirms commitment to peace, protection and development in the DRC",
+      "url": "https://www.gov.uk/government/news/uk-reaffirms-commitment-to-peace-protection-and-development-in-the-drc",
+      "notes": "Official FCDO press release on Jenny Chapman?s DRC visit and associated UK funding and development announcements. Kept FCDO as the central institution, DRC as the central location, and one government event rather than multiple sub-events.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "UK reaffirms commitment to peace, protection and development in the DRC",
+          "url": "https://www.gov.uk/government/news/uk-reaffirms-commitment-to-peace-protection-and-development-in-the-drc",
+          "published_at": "2026-03-06T14:42:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Energy",
+          "Government Policy"
+        ],
+        "politicians": [
+          "Jenny Chapman"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office"
+        ],
+        "locations": [
+          "Democratic Republic of the Congo"
+        ],
+        "events": [
+          {
+            "name": "UK reaffirms commitment to peace, protection and development in the DRC",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": "Democratic Republic of the Congo",
+            "policy_topics": [
+              "Economic Policy",
+              "Energy",
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Jenny Chapman"
+            ],
+            "government_bodies": [
+              "Foreign, Commonwealth and Development Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "UK reaffirms commitment to peace, protection and development in the DRC",
+          "url": "https://www.gov.uk/government/news/uk-reaffirms-commitment-to-peace-protection-and-development-in-the-drc",
+          "published_at": "2026-03-06T14:42:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Energy"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Foreign, Commonwealth and Development Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Westminster"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "a9979d7fb2e11aa2",
+      "source_system": "govuk",
+      "title": "Precautionary recall of blood pressure medication after packaging error",
+      "url": "https://www.gov.uk/government/news/precautionary-recall-of-blood-pressure-medication-after-packaging-error",
+      "notes": "Official MHRA recall notice. This clearly supports one healthcare-related government event. Kept MHRA as the central body and did not add a location.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Precautionary recall of blood pressure medication after packaging error",
+          "url": "https://www.gov.uk/government/news/precautionary-recall-of-blood-pressure-medication-after-packaging-error",
+          "published_at": "2026-03-06T16:06:14Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Medicines and Healthcare products Regulatory Agency"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Precautionary recall of blood pressure medication after packaging error",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-06T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Healthcare"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Medicines and Healthcare products Regulatory Agency"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Precautionary recall of blood pressure medication after packaging error",
+          "url": "https://www.gov.uk/government/news/precautionary-recall-of-blood-pressure-medication-after-packaging-error",
+          "published_at": "2026-03-06T16:06:14Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Healthcare"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "4db02587c7fba6c8",
+      "source_system": "govuk",
+      "title": "Cutting-edge timing technology to protect vital services",
+      "url": "https://www.gov.uk/government/news/cutting-edge-timing-technology-to-protect-vital-services",
+      "notes": "Official DSIT/NPL press release announcing a new terrestrial timing signal to reduce reliance on GNSS. Kept DSIT as the central government body and one clean official event.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Cutting-edge timing technology to protect vital services",
+          "url": "https://www.gov.uk/government/news/cutting-edge-timing-technology-to-protect-vital-services",
+          "published_at": "2026-03-07T00:01:04Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy"
+        ],
+        "politicians": [
+          "Lord Vallance"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Cutting-edge timing technology to protect vital services",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-07T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Lord Vallance"
+            ],
+            "government_bodies": [
+              "Department for Science, Innovation and Technology"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Cutting-edge timing technology to protect vital services",
+          "url": "https://www.gov.uk/government/news/cutting-edge-timing-technology-to-protect-vital-services",
+          "published_at": "2026-03-07T00:01:04Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Energy"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": []
+      }
+    },
+    {
+      "record_id": "12568e98e51531f5",
+      "source_system": "govuk",
+      "title": "?100,000 fund to boost women?s involvement in public decision-making forums",
+      "url": "https://www.gov.uk/government/news/100000-fund-to-boost-womens-involvement-in-public-decision-making-forums",
+      "notes": "Official Northern Ireland Office announcement of the Engagement for Change Fund. Kept Northern Ireland Office as the central body and Northern Ireland as the relevant location.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "?100,000 fund to boost women?s involvement in public decision-making forums",
+          "url": "https://www.gov.uk/government/news/100000-fund-to-boost-womens-involvement-in-public-decision-making-forums",
+          "published_at": "2026-03-07T00:01:04Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy"
+        ],
+        "politicians": [
+          "Baroness Anderson of Stoke-on-Trent"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Northern Ireland Office"
+        ],
+        "locations": [
+          "Northern Ireland"
+        ],
+        "events": [
+          {
+            "name": "?100,000 fund to boost women?s involvement in public decision-making forums",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-07T00:00:00Z",
+            "location": "Northern Ireland",
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Baroness Anderson of Stoke-on-Trent"
+            ],
+            "government_bodies": [
+              "Northern Ireland Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "£100,000 fund to boost women’s involvement in public decision-making forums",
+          "url": "https://www.gov.uk/government/news/100000-fund-to-boost-womens-involvement-in-public-decision-making-forums",
+          "published_at": "2026-03-07T00:01:04Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "Northern Ireland"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "984077851ad39b73",
+      "source_system": "govuk",
+      "title": "Government moves to protect children from abusive parents through new Courts and Tribunals Bill",
+      "url": "https://www.gov.uk/government/news/government-moves-to-protect-children-from-abusive-parents-through-new-courts-and-tribunals-bill",
+      "notes": "Official MoJ press release on measures in the new Courts and Tribunals Bill. This clearly supports one government policy event. Removed incorrect immigration/location noise.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Government moves to protect children from abusive parents through new Courts and Tribunals Bill",
+          "url": "https://www.gov.uk/government/news/government-moves-to-protect-children-from-abusive-parents-through-new-courts-and-tribunals-bill",
+          "published_at": "2026-03-07T22:30:07Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Parliament"
+        ],
+        "politicians": [
+          "David Lammy"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Justice"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Government moves to protect children from abusive parents through new Courts and Tribunals Bill",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-07T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Parliament"
+            ],
+            "political_actors": [
+              "David Lammy"
+            ],
+            "government_bodies": [
+              "Ministry of Justice"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Government moves to protect children from abusive parents through new Courts and Tribunals Bill",
+          "url": "https://www.gov.uk/government/news/government-moves-to-protect-children-from-abusive-parents-through-new-courts-and-tribunals-bill",
+          "published_at": "2026-03-07T22:30:07Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Ministry of Justice",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Wales"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "ee42eb25fff5742b",
+      "source_system": "govuk",
+      "title": "COVID-19 Day of Reflection to bring the nation together to remember the loss and sacrifices of pandemic",
+      "url": "https://www.gov.uk/government/news/covid-19-day-of-reflection-to-bring-the-nation-together-to-remember-the-loss-and-sacrifices-of-pandemic",
+      "notes": "Official DCMS press release about the national Day of Reflection and related commemorative programme. Kept one event with broad UK location and healthcare/government-policy framing; removed Liverpool and taxation noise.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "COVID-19 Day of Reflection to bring the nation together to remember the loss and sacrifices of pandemic",
+          "url": "https://www.gov.uk/government/news/covid-19-day-of-reflection-to-bring-the-nation-together-to-remember-the-loss-and-sacrifices-of-pandemic",
+          "published_at": "2026-03-08T00:01:02Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Healthcare"
+        ],
+        "politicians": [
+          "Baroness Twycross"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Culture, Media and Sport"
+        ],
+        "locations": [
+          "United Kingdom"
+        ],
+        "events": [
+          {
+            "name": "COVID-19 Day of Reflection to bring the nation together to remember the loss and sacrifices of pandemic",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-08T00:00:00Z",
+            "location": "United Kingdom",
+            "policy_topics": [
+              "Government Policy",
+              "Healthcare"
+            ],
+            "political_actors": [
+              "Baroness Twycross"
+            ],
+            "government_bodies": [
+              "Department for Culture, Media and Sport"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "medium",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "COVID-19 Day of Reflection to bring the nation together to remember the loss and sacrifices of pandemic",
+          "url": "https://www.gov.uk/government/news/covid-19-day-of-reflection-to-bring-the-nation-together-to-remember-the-loss-and-sacrifices-of-pandemic",
+          "published_at": "2026-03-08T00:01:02Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Taxation"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Culture, Media and Sport",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Liverpool"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "9543bb50167d6b31",
+      "source_system": "govuk",
+      "title": "Students given stronger protections against extremism on campus",
+      "url": "https://www.gov.uk/government/news/students-given-stronger-protections-against-extremism-on-campus",
+      "notes": "Official DfE press release announcing new measures and stronger Prevent monitoring. Kept one clean government policy event and removed unsupported England/public-spending noise.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Students given stronger protections against extremism on campus",
+          "url": "https://www.gov.uk/government/news/students-given-stronger-protections-against-extremism-on-campus",
+          "published_at": "2026-03-08T11:23:12Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Government Policy"
+        ],
+        "politicians": [
+          "Bridget Phillipson"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Education"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Students given stronger protections against extremism on campus",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-08T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Education",
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Bridget Phillipson"
+            ],
+            "government_bodies": [
+              "Department for Education"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Students given stronger protections against extremism on campus",
+          "url": "https://www.gov.uk/government/news/students-given-stronger-protections-against-extremism-on-campus",
+          "published_at": "2026-03-08T11:23:12Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Education",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Education",
+          "Office for National Statistics"
         ],
         "locations": [
           "England"
         ],
         "events": []
+      }
+    },
+    {
+      "record_id": "1895da3dea4255a3",
+      "source_system": "govuk",
+      "title": "Businesses urged to take simple steps for smoother trade with the EU",
+      "url": "https://www.gov.uk/government/news/businesses-urged-to-take-simple-steps-for-smoother-trade-with-the-eu",
+      "notes": "Official DEFRA/DBT press release about the new SPS agreement and trade preparations. This clearly supports one government policy/trade event. Removed defence and England noise.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Businesses urged to take simple steps for smoother trade with the EU",
+          "url": "https://www.gov.uk/government/news/businesses-urged-to-take-simple-steps-for-smoother-trade-with-the-eu",
+          "published_at": "2026-03-09T00:01:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Economic Policy",
+          "Government Policy"
+        ],
+        "politicians": [
+          "Emma Reynolds"
+        ],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Business and Trade",
+          "Department for Environment, Food and Rural Affairs"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Businesses urged to take simple steps for smoother trade with the EU",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-09T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Economic Policy",
+              "Government Policy"
+            ],
+            "political_actors": [
+              "Emma Reynolds"
+            ],
+            "government_bodies": [
+              "Department for Business and Trade",
+              "Department for Environment, Food and Rural Affairs"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Businesses urged to take simple steps for smoother trade with the EU",
+          "url": "https://www.gov.uk/government/news/businesses-urged-to-take-simple-steps-for-smoother-trade-with-the-eu",
+          "published_at": "2026-03-09T00:01:00Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Defence",
+          "Energy",
+          "Government Policy"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Business and Trade",
+          "Department for Environment, Food and Rural Affairs",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England"
+        ],
+        "events": []
+      }
+    },
+    {
+      "record_id": "902a24d4ac9e1512",
+      "source_system": "govuk",
+      "title": "Fraud Strategy 2026 to 2029",
+      "url": "https://www.gov.uk/government/publications/fraud-strategy-2026-to-2029",
+      "notes": "Official Home Office policy paper. Exact title, Home Office issuer, and publication date are explicit. Removed party/location noise and kept one clean strategy event.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Fraud Strategy 2026 to 2029",
+          "url": "https://www.gov.uk/government/publications/fraud-strategy-2026-to-2029",
+          "published_at": "2026-03-09T10:46:42Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Home Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "Fraud Strategy 2026 to 2029",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-09T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "Fraud Strategy 2026 to 2029",
+          "url": "https://www.gov.uk/government/publications/fraud-strategy-2026-to-2029",
+          "published_at": "2026-03-09T10:46:42Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Immigration"
+        ],
+        "politicians": [],
+        "political_parties": [
+          "Labour Party"
+        ],
+        "government_bodies": [
+          "Home Office",
+          "Office for National Statistics"
+        ],
+        "locations": [
+          "England",
+          "Wales"
+        ],
+        "events": [
+          {
+            "name": "Fraud Strategy 2026 to 2029",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-09T00:00:00Z",
+            "location": "England",
+            "policy_topics": [
+              "Government Policy",
+              "Immigration"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Home Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [
+              "Labour Party"
+            ],
+            "confidence": "high",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "388e10c1b7281ee8",
+      "source_system": "govuk",
+      "title": "IPO confirms continued funding for specialist IP crime unit",
+      "url": "https://www.gov.uk/government/news/ipo-confirms-continued-funding-for-specialist-ip-crime-unit",
+      "notes": "Official IPO/DSIT press release confirming a further three years of baseline funding for PIPCU. Kept IPO and DSIT as the central government bodies and one official event.",
+      "gold": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "IPO confirms continued funding for specialist IP crime unit",
+          "url": "https://www.gov.uk/government/news/ipo-confirms-continued-funding-for-specialist-ip-crime-unit",
+          "published_at": "2026-03-09T11:00:06Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Government Policy",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology",
+          "Intellectual Property Office"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "IPO confirms continued funding for specialist IP crime unit",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-09T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Government Policy",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Science, Innovation and Technology",
+              "Intellectual Property Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "manual_gold",
+            "is_generic_fallback": false
+          }
+        ]
+      },
+      "prediction_snapshot": {
+        "metadata": {
+          "source_system": "govuk",
+          "source_name": "GOV.UK",
+          "title": "IPO confirms continued funding for specialist IP crime unit",
+          "url": "https://www.gov.uk/government/news/ipo-confirms-continued-funding-for-specialist-ip-crime-unit",
+          "published_at": "2026-03-09T11:00:06Z",
+          "author": null,
+          "article_type": "NewsArticle"
+        },
+        "topics": [
+          "Energy",
+          "Public Spending"
+        ],
+        "politicians": [],
+        "political_parties": [],
+        "government_bodies": [
+          "Department for Science, Innovation and Technology",
+          "Intellectual Property Office",
+          "Office for National Statistics"
+        ],
+        "locations": [],
+        "events": [
+          {
+            "name": "IPO confirms continued funding for specialist IP crime unit",
+            "type": "GovernmentPolicyEvent",
+            "date": "2026-03-09T00:00:00Z",
+            "location": null,
+            "policy_topics": [
+              "Energy",
+              "Public Spending"
+            ],
+            "political_actors": [],
+            "government_bodies": [
+              "Department for Science, Innovation and Technology",
+              "Intellectual Property Office"
+            ],
+            "parliamentary_body": null,
+            "political_parties": [],
+            "confidence": "high",
+            "extraction_method": "heuristic",
+            "is_generic_fallback": false
+          }
+        ]
       }
     }
   ]
