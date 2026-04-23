@@ -2,16 +2,17 @@
   "people": [
     "Chris Parry",
     "Steve Wright",
+    "Simon Dudley",
     "Keir Starmer",
     "Nigel Farage",
-    "Richard Tice",
-    "Simon Dudley"
+    "Richard Tice"
   ],
   "organizations": [
     "Reform UK",
-    "Inside Housing",
     "Grenfell United",
-    "Fire Brigades Union"
+    "Fire Brigades Union",
+    "Inside Housing",
+    "Homes England"
   ],
   "locations": [
     "England"
@@ -31,29 +32,5 @@
   "government_bodies": [],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Simon Dudley sacked from Reform UK",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-04-02",
-      "location": "England",
-      "policy_topics": [
-        "Housing",
-        "Government Policy"
-      ],
-      "political_actors": [
-        "Simon Dudley",
-        "Nigel Farage",
-        "Keir Starmer"
-      ],
-      "government_bodies": [],
-      "parliamentary_body": null,
-      "political_parties": [
-        "Reform UK"
-      ],
-      "evidence_spans": [],
-      "confidence": "high",
-      "extraction_method": "heuristic"
-    }
-  ]
+  "events": []
 }

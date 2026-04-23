@@ -8,6 +8,7 @@ from src.config import CONFIG
 from src.data_normalisation import normalise_collected_sources, normalise_name
 from src.domain_knowledge import (
     GOVERNMENT_BODY_NAME_SET,
+    INTERNATIONAL_BODY_LOCATIONS,
     POLITICAL_PARTY_NAME_SET,
     POLITICIAN_NAME_SET,
     TOPIC_NAME_SET,
@@ -44,7 +45,7 @@ LOCATION_PATTERN = re.compile(
     r"([A-Z][a-zA-Z'\-]+(?:\s+[A-Z][a-zA-Z'\-]+)?)\b"
 )
 
-CANONICAL_LOCATION_NAMES = UK_LOCATION_NAME_SET
+CANONICAL_LOCATION_NAMES = UK_LOCATION_NAME_SET | frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
 KNOWN_GOVERNMENT_BODY_NAMES = GOVERNMENT_BODY_NAME_SET
 KNOWN_POLITICAL_PARTY_NAMES = POLITICAL_PARTY_NAME_SET
 KNOWN_POLITICIAN_NAMES = POLITICIAN_NAME_SET
@@ -145,11 +146,15 @@ def mark_event_candidate_flags(event):
 
 def find_named_matches(text, candidates):
     text_lower = text.lower()
-    matches = [candidate for candidate in candidates if candidate.lower() in text_lower]
+    matches = []
+    for candidate in candidates:
+        pattern = r"(?<![a-z0-9])" + re.escape(candidate.lower()) + r"(?![a-z0-9])"
+        if re.search(pattern, text_lower):
+            matches.append(candidate)
     return unique_sorted(matches)
 
 
-def extract_topics(text, tags=None, section=None):
+def extract_topics(text, tags=None, section=None, source_system=None):
     text_lower = text.lower()
     topic_scores = defaultdict(int)
 
@@ -178,14 +183,13 @@ def extract_topics(text, tags=None, section=None):
         return []
 
     ranked = sorted(topic_scores.items(), key=lambda item: (-item[1], item[0]))
+    min_score = 1 if source_system in {"parliament", "govuk"} else 2
     selected = []
     for topic_name, score in ranked:
-        if score <= 0:
-            continue
-        if topic_name in {"Government Policy", "Politics"} and score < 2:
+        if score < min_score:
             continue
         selected.append(topic_name)
-        if len(selected) == 4:
+        if len(selected) == 3:
             break
 
     return selected
@@ -270,13 +274,20 @@ def extract_people(text, spacy_candidates=None):
 
 
 def extract_locations(text, spacy_candidates=None):
+    text_lower = text.lower()
     found = set(find_named_matches(text, CANONICAL_LOCATION_NAMES))
     found.update(spacy_candidates or [])
 
     for match in LOCATION_PATTERN.finditer(text):
         location = normalise_label(match.group(1))
-        if is_location_candidate_valid(location):
-            found.add(location)
+        if not is_location_candidate_valid(location):
+            continue
+        if (
+            location not in CANONICAL_LOCATION_NAMES
+            and phrase_match_count(text_lower, location.lower()) < 2
+        ):
+            continue
+        found.add(location)
 
     return sanitize_locations(found)
 
@@ -735,7 +746,7 @@ def infer_event_type(event_name):
         "debate" in event_lower
         or "prime minister's questions" in event_lower
         or "pmqs" in event_lower
-    ):
+    ) and not international_body_location(event_name):
         return "ParliamentaryDebate"
     if has_ministerial_statement_signal(event_name):
         return "MinisterialStatement"
@@ -753,23 +764,37 @@ def infer_event_type(event_name):
 
 
 def preferred_event_location(locations, text_lower, topics):
-    # parliamentary events almost always happen in London so prefer it when signal is clear
     if not locations:
         return None
-    if (
-        "Parliament" in topics
-        or "parliament" in text_lower
-        or "westminster" in text_lower
-        or "house of commons" in text_lower
-    ):
+    if "Parliament" in topics or "house of commons" in text_lower:
         if "Westminster" in locations:
             return "Westminster"
         if "London" in locations:
             return "London"
-    return locations[0]
+    intl_cities = frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
+    non_westminster = [
+        loc
+        for loc in locations
+        if loc not in {"Westminster", "Westminster Hall"} and loc not in intl_cities
+    ]
+    if non_westminster:
+        return non_westminster[0]
+    return None
+
+
+def international_body_location(event_name):
+    name_lower = event_name.lower()
+    for fragment, city in INTERNATIONAL_BODY_LOCATIONS.items():
+        if fragment.lower() in name_lower:
+            return city
+    return None
 
 
 def choose_event_location(event_name, event_type, locations, text_lower, topics):
+    intl = international_body_location(event_name)
+    if intl:
+        return intl
+
     candidates = sanitize_locations(locations)
     if not candidates:
         return None
@@ -789,10 +814,13 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
             return "Westminster"
         if "London" in candidates:
             return "London"
+        intl_cities = frozenset(INTERNATIONAL_BODY_LOCATIONS.values())
         filtered = [
             candidate
             for candidate in candidates
             if candidate not in CONFIG["EXTRACTION_BROAD_EVENT_LOCATIONS"]
+            and candidate not in intl_cities
+            and (candidate in CANONICAL_LOCATION_NAMES or candidate.lower() in event_lower)
         ]
         if filtered:
             return filtered[0]
@@ -805,14 +833,23 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
         candidate
         for candidate in candidates
         if candidate not in CONFIG["EXTRACTION_BROAD_EVENT_LOCATIONS"]
+        and candidate not in {"Westminster", "Westminster Hall"}
+        and (candidate in CANONICAL_LOCATION_NAMES or candidate.lower() in event_lower)
     ]
     if filtered:
         return filtered[0]
 
-    return candidates[0]
+    first = candidates[0]
+    if first in CANONICAL_LOCATION_NAMES and first not in {"Westminster", "Westminster Hall"}:
+        return first
+    return None
 
 
 def generic_event_fallback_blocked(article, article_type=None):
+    # generic fallback tends to adds noise, not value for this source
+    if article.get("source_system") == "parliament":
+        return True
+
     title_lower = normalise_label(article.get("title")).lower()
     url_lower = str(article.get("url") or "").lower()
     section_lower = normalise_label(article.get("section")).lower()
@@ -939,9 +976,15 @@ def sanitize_event_candidates(article, text, entities, topics, locations, events
         event_type = coerce_event_type_for_source(article, name, event_type, signals)
         location = normalise_label(event.get("location"))
         if location and location not in valid_locations:
-            location = preferred_event_location(
+            location = international_body_location(name) or preferred_event_location(
                 sorted(valid_locations), signals["text_lower"], topics
             )
+        if (
+            location
+            and location not in CANONICAL_LOCATION_NAMES
+            and location.lower() not in name.lower()
+        ):
+            location = None
 
         key = (name, event_type, event_date, location or None)
         if key in seen:
@@ -1643,11 +1686,19 @@ def extract_article_record(article):
     people = extract_people(text, spacy_candidates=spacy_entities["people"])
     organisations = extract_organisations(text, spacy_candidates=spacy_entities["organizations"])
     locations = extract_locations(text, spacy_candidates=spacy_entities["locations"])
-    topics = extract_topics(text, tags=article.get("tags"), section=article.get("section"))
+    topics = extract_topics(
+        text,
+        tags=article.get("tags"),
+        section=article.get("section"),
+        source_system=article.get("source_system"),
+    )
     politicians = classify_politicians(people)
     political_parties = classify_political_parties(organisations)
     government_bodies = unique_sorted(
-        classify_government_bodies(organisations) + infer_government_bodies_from_text(text)
+        classify_government_bodies(organisations)
+        + infer_government_bodies_from_text(
+            " ".join(p for p in [article.get("title"), article.get("summary")] if p)
+        )
     )
     blocked_people = set(organisations) | set(political_parties) | set(government_bodies)
     organisations = sanitize_organizations(organisations)

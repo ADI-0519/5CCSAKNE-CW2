@@ -4,7 +4,9 @@ This document records the implemented target ontology for the current coursework
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 6 March 2026 to 6 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news over a rolling 30-day collection window, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+
+The submitted cached snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 The ontology is event-centred. It is not a general all-news ontology and does not treat article analytics such as sentiment or follow-up chains as part of the defended core TBox.
 
@@ -143,6 +145,7 @@ Subproperty examples:
 - `news:concernsPolicyTopic rdfs:subPropertyOf schema:about`
 - `news:issuedByDepartment rdfs:subPropertyOf news:involvesGovernmentBody`
 - `news:occursInLocation rdfs:subPropertyOf core:eventPlace`
+- `news:occursOnDate rdfs:subPropertyOf core:startDate`
 - `news:memberOfParty rdfs:subPropertyOf schema:memberOf`
 - `news:publishedBy rdfs:subPropertyOf schema:publisher`
 - `news:hasAuthor rdfs:subPropertyOf schema:author`
@@ -166,7 +169,6 @@ Future work may add:
 
 - richer provenance for completion links
 - confidence scores or evidence spans
-- RAG-based source retrieval for proposed matches
 - stronger entity resolution between article-extracted actors and Wikidata entities
 - a separate article-analytics module if sentiment, follow-up chains, or article subtypes become required again
 

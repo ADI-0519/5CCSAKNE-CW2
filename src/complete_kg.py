@@ -353,13 +353,13 @@ def score_event_to_official_match(event_data, official_article, source_record):
 
 def build_official_indexes(graph):
     record_by_title = {}
-    for record_uri in graph.subjects(RDF.type, NEWS.SourceRecord):
+    for record_uri in sorted(graph.subjects(RDF.type, NEWS.SourceRecord)):
         record_data = source_record_metadata(graph, record_uri)
         if record_data["title"]:
             record_by_title.setdefault(record_data["title"].lower(), []).append(record_data)
 
     official_articles = []
-    for article_uri in graph.subjects(RDF.type, NEWS.NewsArticle):
+    for article_uri in sorted(graph.subjects(RDF.type, NEWS.NewsArticle)):
         article_data = official_article_metadata(graph, article_uri)
         if article_data["publisher"] in OFFICIAL_PUBLISHERS:
             official_articles.append(article_data)
@@ -369,7 +369,7 @@ def build_official_indexes(graph):
 
 def add_reports_on_inverse(graph):
     added = 0
-    for event_uri, _, article_uri in graph.triples((None, NEWS.reportedByArticle, None)):
+    for event_uri, _, article_uri in sorted(graph.triples((None, NEWS.reportedByArticle, None))):
         if (article_uri, NEWS.reportsOn, event_uri) not in graph:
             graph.add((article_uri, NEWS.reportsOn, event_uri))
             added += 1
@@ -381,7 +381,7 @@ def enrich_cross_source_links(graph, audit_index=None):
     added_matched = 0
     added_represented = 0
 
-    for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
+    for event_uri in sorted(graph.subjects(RDF.type, NEWS.PolicyEvent)):
         event_data = event_metadata(graph, event_uri)
         completion_entry = audit_entry(audit_index, event_uri) if audit_index is not None else None
         for source_record in event_data["already_represented"]:
@@ -440,7 +440,7 @@ def enrich_with_rag(graph, audit_index=None):
         text_value(graph, t, SCHEMA.name): t for t in graph.subjects(RDF.type, NEWS.PolicyTopic)
     }
 
-    for event_uri in graph.subjects(RDF.type, NEWS.PolicyEvent):
+    for event_uri in sorted(graph.subjects(RDF.type, NEWS.PolicyEvent)):
         completion_entry = audit_entry(audit_index, event_uri) if audit_index is not None else None
         has_actor = next(graph.objects(event_uri, NEWS.involvesActor), None) is not None
         has_body = next(graph.objects(event_uri, NEWS.involvesGovernmentBody), None) is not None
@@ -539,6 +539,8 @@ def enrich_with_rag(graph, audit_index=None):
         if not has_department:
             for name in result.get("proposed_departments", []):
                 if not name or not (slug_terms(name) & context_terms):
+                    continue
+                if not looks_like_official_body_name(name):
                     continue
                 body_kind = classify_official_body_kind(name)
                 if body_kind == "parliamentary_body":

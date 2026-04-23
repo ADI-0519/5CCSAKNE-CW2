@@ -4,12 +4,11 @@
     "Margaret Aspinall"
   ],
   "organizations": [
-    "Labour Party",
     "Foreign, Commonwealth and Development Office",
     "Home Office",
+    "Labour Party",
     "Ministry of Defence",
-    "No 10",
-    "Parliament"
+    "No 10"
   ],
   "locations": [
     "Manchester"
@@ -17,8 +16,7 @@
   "topics": [
     "Government Policy",
     "Parliament",
-    "Politics",
-    "Defence"
+    "Politics"
   ],
   "politicians": [
     "Keir Starmer"
@@ -30,8 +28,7 @@
     "Foreign, Commonwealth and Development Office",
     "Home Office",
     "Ministry of Defence",
-    "No 10",
-    "Parliament"
+    "No 10"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

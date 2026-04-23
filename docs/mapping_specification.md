@@ -4,7 +4,9 @@ This document records how the current pipeline maps source data into the local U
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 6 March 2026 to 6 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news over a rolling 30-day collection window, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+
+The submitted cached snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 ## Mapping Overview
 
@@ -52,8 +54,8 @@ Mapped role:
 - `news:SourceRecord`
 - `news:OfficialSourceRecord`
 - `news:ParliamentSourceRecord`
-- `news:ParliamentaryEvent`
-- `news:ParliamentaryDebate`
+- `news:GovernmentPolicyEvent`
+- `news:MinisterialStatement`
 - `news:representedInOfficialSource`
 
 ### Official Structured Source: GOV.UK
@@ -204,6 +206,7 @@ Implemented completion mappings:
 - for each event already linked through `news:representedInOfficialSource`, add the corresponding `news:matchedToSourceRecord` link
 - for strong title/date/topic matches between events and official-source records, add `news:matchedToSourceRecord`
 - for very strong official matches, add `news:representedInOfficialSource`
+- for events missing actor, department, or topic links, retrieve the event's KG neighbourhood via SPARQL, verbalise it, and prompt OpenAI to propose `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` values constrained to the ontology vocabulary; accepted proposals are validated by slug-term overlap with the retrieved context before writing
 
 Current completion does not populate article sentiment, article follow-up chains, or article topic links. Those are outside the defended core ontology.
 
@@ -221,6 +224,7 @@ Current completion does not populate article sentiment, article follow-up chains
 | `news:SourceRecord` | `rdfs:subClassOf schema:CreativeWork` |
 | `news:concernsPolicyTopic` | `rdfs:subPropertyOf schema:about` |
 | `news:occursInLocation` | `rdfs:subPropertyOf core:eventPlace` |
+| `news:occursOnDate` | `rdfs:subPropertyOf core:startDate` |
 | `news:memberOfParty` | `rdfs:subPropertyOf schema:memberOf` |
 | `news:publishedBy` | `rdfs:subPropertyOf schema:publisher` |
 | `news:hasAuthor` | `rdfs:subPropertyOf schema:author` |
@@ -234,4 +238,4 @@ Current completion does not populate article sentiment, article follow-up chains
 - Wikidata enriches background political entities but is optional in the pipeline.
 - Policy topics attach to events through `news:concernsPolicyTopic`.
 - Cross-source integration is represented through `news:representedInOfficialSource` and `news:matchedToSourceRecord`.
-- Current completion is deterministic graph enrichment. Future RAG can extend this layer, but it should preserve ontology validation before writing triples.
+- The RAG completion step adds actor, department, and topic links for events where those properties are missing, using retrieved KG context to constrain and validate proposals.

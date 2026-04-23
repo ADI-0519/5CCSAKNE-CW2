@@ -1,0 +1,63 @@
+{
+  "people": [
+    "Angela Rayner",
+    "Jonathan Portes",
+    "Sunder Katwala",
+    "Max Wilkinson",
+    "Shabana Mahmood",
+    "Stella Creasy"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour",
+    "The Guardian"
+  ],
+  "locations": [
+    "London",
+    "King's College"
+  ],
+  "topics": [
+    "Immigration",
+    "Economic Policy",
+    "Public Spending",
+    "Taxation"
+  ],
+  "politicians": [
+    "Angela Rayner"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Home Office",
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Migration policy changes by Shabana Mahmood",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-13",
+      "location": null,
+      "policy_topics": [
+        "Immigration",
+        "Public Spending"
+      ],
+      "political_actors": [
+        "Shabana Mahmood"
+      ],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "openai"
+    }
+  ]
+}

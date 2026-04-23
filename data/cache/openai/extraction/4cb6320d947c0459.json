@@ -1,17 +1,16 @@
 {
   "people": [
-    "Andy Burnham",
-    "Faiza Shaheen",
-    "Keir Starmer",
     "Rachel Reeves",
-    "Richard Walker"
+    "Keir Starmer",
+    "Richard Walker",
+    "Faiza Shaheen",
+    "Andy Burnham"
   ],
   "organizations": [
-    "Labour",
-    "Treasury",
     "Greenpeace UK",
     "National Education Union",
-    "Tax Justice UK"
+    "Tax Justice UK",
+    "Labour"
   ],
   "locations": [
     "Chingford"
@@ -19,18 +18,18 @@
   "topics": [
     "Energy",
     "Taxation",
-    "Defence",
     "Economic Policy"
   ],
   "politicians": [
-    "Keir Starmer",
-    "Rachel Reeves"
+    "Rachel Reeves",
+    "Keir Starmer"
   ],
   "political_parties": [
-    "Labour"
+    "Labour Party"
   ],
   "government_bodies": [
-    "Treasury"
+    "HM Treasury",
+    "Competition and Markets Authority"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
@@ -38,8 +37,24 @@
     {
       "name": "US-Israel war on Iran",
       "type": "GovernmentPolicyEvent",
-      "date": "2026-03-26",
-      "location": null
+      "date": null,
+      "location": null,
+      "policy_topics": [
+        "Economic Policy",
+        "Energy"
+      ],
+      "political_actors": [
+        "Rachel Reeves",
+        "Keir Starmer"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
     }
   ]
 }

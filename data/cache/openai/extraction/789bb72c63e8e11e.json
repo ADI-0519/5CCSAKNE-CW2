@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "Andy Burnham",
+    "Angela Rayner",
+    "Boris Johnson",
+    "Donald Trump",
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Foreign Office",
+    "Labour Party",
+    "No 10"
+  ],
+  "locations": [
+    "Manchester"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "Keir Starmer",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "No 10"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

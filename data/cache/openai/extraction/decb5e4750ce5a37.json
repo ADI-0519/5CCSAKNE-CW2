@@ -1,0 +1,23 @@
+{
+  "people": [
+    "Daria Bukowska",
+    "Johanna Thompson",
+    "Pawel Bukowski"
+  ],
+  "organizations": [],
+  "locations": [
+    "Norfolk",
+    "Poland",
+    "Turkey"
+  ],
+  "topics": [
+    "Healthcare",
+    "Mental Health"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

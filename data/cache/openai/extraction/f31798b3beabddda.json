@@ -10,12 +10,10 @@
     "Zack Polanski"
   ],
   "organizations": [
-    "Labour Party",
-    "Green Party",
     "Conservative Party",
+    "Green Party",
+    "Labour Party",
     "Reform UK",
-    "Parliament",
-    "HM Treasury",
     "Unite"
   ],
   "locations": [
@@ -46,9 +44,33 @@
     "Reform UK"
   ],
   "government_bodies": [
-    "Parliament"
+    "HM Treasury"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Introduction of new workers' rights",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-05",
+      "location": null,
+      "policy_topics": [
+        "Workers' rights",
+        "Employment Law"
+      ],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "HM Treasury"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

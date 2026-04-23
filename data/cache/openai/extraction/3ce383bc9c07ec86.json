@@ -4,7 +4,9 @@
     "Tim Bonner"
   ],
   "organizations": [
-    "Labour"
+    "Labour",
+    "League Against Cruel Sports",
+    "Countryside Alliance"
   ],
   "locations": [
     "England",
@@ -16,10 +18,35 @@
   ],
   "politicians": [],
   "political_parties": [
-    "Labour"
+    "Labour Party"
   ],
   "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Public consultation on banning trail hunting",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-26",
+      "location": null,
+      "policy_topics": [
+        "Animal welfare",
+        "Hunting"
+      ],
+      "political_actors": [
+        "Sue Hayman",
+        "Tim Bonner"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "The government on Thursday opened its long-awaited public consultation on how to implement the ban"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

@@ -3,25 +3,26 @@
     "Keir Starmer",
     "Donald Trump",
     "Emily Thornberry",
-    "Kim Darroch",
     "Nigel Farage",
     "Robert Jenrick",
+    "Kim Darroch",
+    "Emmanuel Macron",
+    "King Charles",
     "Prince William",
     "Brigitte Macron",
-    "Emmanuel Macron"
+    "Business Insider"
   ],
   "organizations": [
     "Labour",
-    "Conservative Party",
     "Reform UK",
-    "Downing Street",
-    "Parliament"
+    "Downing Street"
   ],
   "locations": [],
   "topics": [
+    "Politics",
+    "Foreign policy",
     "Government Policy",
     "Defence",
-    "Politics",
     "Parliament"
   ],
   "politicians": [
@@ -30,12 +31,10 @@
   ],
   "political_parties": [
     "Labour Party",
-    "Conservative Party",
     "Reform UK"
   ],
   "government_bodies": [
-    "Downing Street",
-    "Parliament"
+    "Downing Street"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

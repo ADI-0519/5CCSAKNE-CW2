@@ -1,14 +1,12 @@
 {
   "people": [
-    "King Charles",
-    "Queen Camilla",
     "Emily Thornberry",
     "Ed Davey",
     "Zack Polanski",
     "Donald Trump",
-    "John McDonnell",
     "Clive Lewis",
     "Kim Johnson",
+    "John McDonnell",
     "Jake Atkinson",
     "Pete Hegseth"
   ],
@@ -16,7 +14,6 @@
     "Buckingham Palace",
     "Foreign Office",
     "Labour Party",
-    "Liberal Democrats",
     "Green Party",
     "Stop Trump Coalition"
   ],
@@ -27,17 +24,14 @@
   "topics": [
     "Government Policy",
     "Defence",
-    "Foreign Policy",
-    "Public Sentiment"
+    "Foreign Policy"
   ],
   "politicians": [
-    "Keir Starmer",
-    "Ed Davey"
+    "Keir Starmer"
   ],
   "political_parties": [
     "Labour Party",
-    "Green Party",
-    "Liberal Democrats"
+    "Green Party"
   ],
   "government_bodies": [
     "Foreign, Commonwealth and Development Office"
@@ -46,7 +40,7 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "State Visit of King Charles to the US",
+      "name": "King Charles\u2019s State Visit to the United States",
       "type": "GovernmentPolicyEvent",
       "date": "2026-04-27",
       "location": "United States",
@@ -54,21 +48,18 @@
         "Foreign Policy"
       ],
       "political_actors": [
+        "King Charles III",
         "Donald Trump",
-        "Ed Davey",
-        "Emily Thornberry"
+        "Keir Starmer"
       ],
       "government_bodies": [
-        "Foreign, Commonwealth and Development Office"
+        "Buckingham Palace",
+        "Foreign Office"
       ],
       "parliamentary_body": null,
-      "political_parties": [
-        "Labour Party",
-        "Green Party",
-        "Liberal Democrats"
-      ],
+      "political_parties": [],
       "evidence_spans": [
-        "The announcement of the visit came just minutes after Trump launched another verbal attack on the UK."
+        "Buckingham Palace has confirmed the state visit to the US in April"
       ],
       "confidence": "high",
       "extraction_method": "heuristic"

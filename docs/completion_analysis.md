@@ -4,7 +4,9 @@ This document describes the current completion/enrichment stage in the pipeline 
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 6 March 2026 to 6 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news over a rolling 30-day collection window, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+
+The submitted cached snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 ## Current Pipeline State
 
@@ -29,28 +31,29 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260420T202251Z`
-- normalised source records: `732`
-- Guardian articles: `253`
+- timestamp: `20260423T121805Z`
+- normalised source records: `700`
+- Guardian articles: `270`
 - Parliament source records: `20`
-- GOV.UK source records: `459`
-- Wikidata entities: `1730` politicians, `967` parties, `490` government bodies
-- ontology graph: `188` triples
-- source-derived instance KG: `14429` triples
-- Wikidata KG: `25064` triples
-- prototype KG: `39510` triples
-- completed KG: `40279` triples
+- GOV.UK source records: `410`
+- Wikidata entities: `1724` politicians, `968` parties, `489` government bodies
+- ontology graph: `192` triples
+- source-derived instance KG: `13458` triples
+- Wikidata KG: `25115` triples
+- prototype KG: `38596` triples
+- completed KG: `39101` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
-- `255` `news:reportsOn` inverse links
-- `236` `news:matchedToSourceRecord` cross-source links
-- `35` `news:involvesActor` links (RAG)
-- `91` `news:involvesGovernmentBody` links (RAG)
-- `144` `news:concernsPolicyTopic` links (RAG)
+- `194` `news:reportsOn` inverse links
+- `157` `news:matchedToSourceRecord` cross-source links
+- `5` `news:representedInOfficialSource` links
+- `7` `news:involvesActor` links (RAG)
+- `6` `news:involvesGovernmentBody` links (RAG)
+- `114` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `769` triples.
+The completed KG is therefore larger than the prototype KG by `505` triples.
 
 ## What Is Covered Well
 
@@ -96,23 +99,53 @@ The following properties are materially populated:
 
 This supports the final CQ set because the questions now focus on policy events, official institutions, source provenance, topics, reporting articles, and cross-source linkage.
 
-## Remaining Gaps
+## Incomplete Ontology Elements
 
-`G1.` Event identity is still partly article-local.
+`O1.` No formal property characteristics on most object properties.
 
-The pipeline creates policy-event nodes from source records and extracted article evidence. Some event names remain broad, so two records about the same real-world event may not always collapse to one canonical event.
+`news:involvesActor` and `news:memberOfParty` are declared `owl:IrreflexiveProperty` and `news:publishedBy` and `news:occursOnDate` are declared `owl:FunctionalProperty`. Beyond these four, the remaining object properties carry no formal axioms such as cardinality restrictions, so the reasoner has no basis to detect further constraint violations.
 
-`G2.` Cross-source matching is conservative.
+`O2.` No disjointness axioms between event subclasses.
 
-`matchedToSourceRecord` links are added only when existing official-source evidence or a title/date/topic match is strong enough. This avoids many false matches but means some genuine links remain absent.
+`news:GovernmentPolicyEvent` and `news:ParliamentaryEvent` are not declared `owl:disjointWith`. In the domain they represent conceptually distinct event types with different provenance, but the ontology does not formally enforce this separation, so a reasoning step cannot flag instances typed as both.
 
-`G3.` Article-extracted actors are not fully disambiguated.
+`O3.` No cardinality constraint on `news:occursOnDate` beyond functional.
 
-Wikidata provides strong background entities, but article-extracted political actors are still produced mainly from controlled names and extraction heuristics. Full entity resolution between extracted names and Wikidata URIs remains future work.
+`news:occursOnDate` is declared functional, which enforces at most one date per event. The ontology does not separately enforce that at least one date is always present; a `PolicyEvent` with no date passes the TBox without a violation, making the date-completeness guarantee informal rather than axiomatic.
 
-`G4.` Completion provenance is lightweight.
+`O4.` No provenance vocabulary for completion-generated links.
 
-The graph records the linked source record but does not yet attach confidence scores, evidence spans, or a detailed explanation of why each match was accepted.
+The ontology has no class or datatype property to record a confidence score, evidence span, or extraction method alongside completion-generated triples. All assertions written by the RAG step are treated as equally certain in the graph, which limits post-hoc auditability.
+
+`O5.` No temporal ordering or sequencing property.
+
+The ontology models individual events with dates but has no property to link related events in order, such as a parliamentary debate preceding a policy announcement. This limits the expressiveness of the event-centred model for questions about causal or procedural event sequences.
+
+## Incomplete Instance Elements
+
+`I1.` Event identity is still partly article-local.
+
+The pipeline creates policy-event nodes from source records and extracted article evidence. Some event names remain broad, so two records about the same real-world event may not always collapse to one canonical event node.
+
+`I2.` Cross-source matching is conservative.
+
+`news:matchedToSourceRecord` links are added only when title similarity, event type, and date agreement score above a threshold. This avoids false matches but means genuine article-to-official-source links remain absent where the threshold is not met.
+
+`I3.` Article-extracted actors are not resolved to Wikidata URIs.
+
+Wikidata provides background entities for UK politicians, but article-extracted political actors are produced mainly from controlled names and heuristics. An actor mentioned by name in a Guardian article and the corresponding Wikidata politician entity are not linked by any `owl:sameAs` or `skos:exactMatch` assertion.
+
+`I4.` Parliamentary body assignment is incomplete.
+
+Five of the ten `news:ParliamentaryEvent` instances lack `news:occursInParliamentaryBody`. These are Guardian-sourced events typed as `ParliamentaryEvent` with a generic "Parliamentary Debate" label but no chamber reference in either the event name or the article text, so the body assignment step finds no match.
+
+`I5.` Completion provenance is not recorded at the instance level.
+
+RAG-added `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` triples carry no associated evidence metadata in the graph. The completion audit JSON captures per-event additions, but this information is not surfaced as RDF statements, so a SPARQL query cannot distinguish a completion-generated topic link from one written during the initial mapping stage.
+
+`I6.` Location extraction does not reliably capture international event venues.
+
+Addressed: `INTERNATIONAL_BODY_LOCATIONS` in `domain_knowledge.py` maps events whose names mention a known international body to the correct city: WTO General Council to Geneva, UN Human Rights Council to Geneva, OSCE to Vienna, and so on. `CANONICAL_LOCATION_NAMES` in `data_extraction.py` was extended to include the venue cities from that dict, so they pass the downstream validity gate and reach the graph. The extraction pipeline also no longer defaults to Westminster when no stronger candidate is available. Events whose names do not match any known body fragment still lack location data.
 
 ## Why Completion Matters
 
@@ -121,7 +154,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
-- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 35 actor links, 91 department links, and 144 topic links were not present in the prototype KG.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 114 topic links were not present in the prototype KG. Manual annotation of all 127 accepted additions gives estimated precision of 96.8% (3 incorrect: one actor hallucination and two misapplied topic labels on local election events).
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 

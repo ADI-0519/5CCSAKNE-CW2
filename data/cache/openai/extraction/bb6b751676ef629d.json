@@ -10,16 +10,13 @@
     "Torsten Bell"
   ],
   "organizations": [
-    "Conservative",
     "Green Party",
     "Labour",
     "Labour Party",
     "Liberal Democrats",
     "Plaid Cymru",
     "Reform UK",
-    "Scottish National Party (SNP)",
-    "Treasury",
-    "Workers Party"
+    "Scottish National Party"
   ],
   "locations": [
     "England",
@@ -38,19 +35,15 @@
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
     "Green Party",
-    "Labour",
     "Labour Party",
     "Liberal Democrats",
     "Plaid Cymru",
     "Reform UK",
-    "Scottish National Party (SNP)"
+    "Scottish National Party"
   ],
-  "government_bodies": [
-    "Treasury"
-  ],
-  "sentiment": "Negative",
+  "government_bodies": [],
+  "sentiment": "Positive",
   "article_type": "NewsArticle",
   "events": []
 }

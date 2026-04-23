@@ -1,5 +1,3 @@
-"""Tests for SPARQL competency-query execution."""
-
 import json
 from pathlib import Path
 
@@ -8,7 +6,7 @@ from rdflib.namespace import XSD
 
 from src.build_ontology import build_ontology
 from src.data_extraction import extract_relevant_information
-from src.data_normalisation import normalise_data
+from src.data_normalisation import normalise_collected_sources, normalise_data
 from src.json_to_rdf import NEWS, SCHEMA, convert_json_to_rdf
 from src.run_queries import execute_queries, load_query_definitions, save_results
 
@@ -17,7 +15,9 @@ FIXTURE_PATH = Path(__file__).parent / "fixtures" / "sample_response.json"
 
 def build_fixture_graph():
     raw_data = json.loads(FIXTURE_PATH.read_text())
-    rdf_graph = convert_json_to_rdf(normalise_data(extract_relevant_information(raw_data)))
+    # skip date window check (fixture records aren't dropped as window rolls)
+    articles = normalise_collected_sources(raw_data, enforce_date_window=False)
+    rdf_graph = convert_json_to_rdf(normalise_data(extract_relevant_information(articles)))
     graph = build_ontology()
     for triple in rdf_graph:
         graph.add(triple)
@@ -89,7 +89,7 @@ def test_execute_queries_normalises_and_deduplicates_identical_rows():
             Literal("Joint Statement: EU-UK Financial Regulatory Forum, March 2026"),
         )
     )
-    graph.add((event, NEWS.occursOnDate, Literal("2026-03-12")))
+    graph.add((event, NEWS.occursOnDate, Literal("2026-03-25")))
     graph.add((department, SCHEMA.name, Literal("  HM Treasury  ")))
     graph.add((duplicate_department, SCHEMA.name, Literal("HM Treasury")))
 
@@ -122,7 +122,7 @@ WHERE {
         {
             "statementName": "Joint Statement: EU-UK Financial Regulatory Forum, March 2026",
             "departmentName": "HM Treasury",
-            "eventDate": "2026-03-12",
+            "eventDate": "2026-03-25",
         }
     ]
 
@@ -151,7 +151,7 @@ def test_cq17_only_returns_articles_backed_by_matched_source_records():
         graph.add((event, RDF.type, NEWS.GovernmentPolicyEvent))
         graph.add((event, NEWS.reportedByArticle, article))
         graph.add((event, NEWS.involvesGovernmentBody, department))
-        graph.add((event, NEWS.occursOnDate, Literal("2026-03-12", datatype=XSD.date)))
+        graph.add((event, NEWS.occursOnDate, Literal("2026-03-25", datatype=XSD.date)))
 
     graph.add((matched_event, NEWS.matchedToSourceRecord, source_record))
 

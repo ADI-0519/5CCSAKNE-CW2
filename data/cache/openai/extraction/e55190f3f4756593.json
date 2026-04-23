@@ -1,17 +1,14 @@
 {
   "people": [
-    "Keir Starmer",
-    "Donald Trump",
     "Bernard Jenkin",
-    "Tan Singh Dhesi",
+    "Donald Trump",
+    "Keir Starmer",
     "Meg Hillier",
     "Peter Mandelson",
-    "John Crace"
+    "Tan Singh Dhesi"
   ],
   "organizations": [
-    "Labour",
-    "Conservative",
-    "House of Commons"
+    "Labour"
   ],
   "locations": [
     "London"
@@ -19,19 +16,15 @@
   "topics": [
     "Defence",
     "Parliament",
-    "Politics",
-    "Energy"
+    "Politics"
   ],
   "politicians": [
     "Keir Starmer"
   ],
   "political_parties": [
-    "Labour",
-    "Conservative"
+    "Labour Party"
   ],
-  "government_bodies": [
-    "House of Commons"
-  ],
+  "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
   "events": []

@@ -5,8 +5,8 @@
     "Maddie Harris"
   ],
   "organizations": [
-    "Humans for Rights Network",
-    "Home Office"
+    "Home Office",
+    "Humans for Rights Network"
   ],
   "locations": [],
   "topics": [
@@ -19,5 +19,25 @@
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Detention of age-disputed children",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-05",
+      "location": null,
+      "policy_topics": [
+        "Immigration",
+        "Child Protection"
+      ],
+      "political_actors": [],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

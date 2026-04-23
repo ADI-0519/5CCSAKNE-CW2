@@ -1,0 +1,58 @@
+{
+  "people": [
+    "Angus Robertson",
+    "Eluned Morgan",
+    "John Swinney",
+    "Keir Starmer",
+    "Laura McAllister",
+    "Michael Keating",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Plaid Cymru",
+    "Scottish National Party",
+    "Welsh Government",
+    "Democratic Unionist Party",
+    "Reform UK",
+    "Scotland Office",
+    "Scottish Government"
+  ],
+  "locations": [
+    "Scotland",
+    "Wales",
+    "Northern Ireland",
+    "Westminster",
+    "London",
+    "Belfast",
+    "Cardiff",
+    "Edinburgh"
+  ],
+  "topics": [
+    "Government Policy",
+    "Politics",
+    "Public Spending",
+    "Education"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Eluned Morgan",
+    "John Swinney",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Plaid Cymru",
+    "Scottish National Party",
+    "Democratic Unionist Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Scottish Government",
+    "Welsh Government",
+    "Scotland Office"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

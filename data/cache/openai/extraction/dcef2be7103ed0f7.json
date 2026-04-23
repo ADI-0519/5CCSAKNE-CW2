@@ -8,34 +8,27 @@
     "Zack Polanski"
   ],
   "organizations": [
-    "Conservative",
-    "Labour",
+    "Labour Party",
+    "Conservative Party",
     "Plaid Cymru",
-    "SNP"
+    "Scottish National Party"
   ],
   "locations": [
-    "Caerphilly",
     "England",
     "Scotland",
     "Wales"
   ],
   "topics": [
-    "Political Volatility",
-    "Polling",
-    "Five-party system"
+    "Politics"
   ],
   "politicians": [
     "Keir Starmer",
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
-    "Labour",
-    "Plaid Cymru",
-    "SNP",
-    "Reform",
-    "Lib Dems",
-    "Greens"
+    "Conservative Party",
+    "Labour Party",
+    "Plaid Cymru"
   ],
   "government_bodies": [],
   "sentiment": "Neutral",

@@ -1,0 +1,59 @@
+{
+  "people": [
+    "Peter Mandelson",
+    "Keir Starmer",
+    "Jeffrey Epstein"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "UK Security Vetting (UKSV)",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "locations": [
+    "London",
+    "York"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "UK Security Vetting (UKSV)"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Humble Address Motion",
+      "type": "ParliamentaryEvent",
+      "date": "2026-04-20",
+      "location": "House of Commons, London",
+      "policy_topics": [
+        "Parliament",
+        "Politics"
+      ],
+      "political_actors": [
+        "Conservatives",
+        "Labour"
+      ],
+      "government_bodies": [
+        "Cabinet Office"
+      ],
+      "parliamentary_body": "House of Commons",
+      "political_parties": [
+        "Labour",
+        "Conservatives"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

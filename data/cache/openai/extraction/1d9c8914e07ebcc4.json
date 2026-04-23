@@ -1,29 +1,25 @@
 {
   "people": [
-    "Bridget Phillipson",
-    "Keir Starmer"
+    "Keir Starmer",
+    "Bridget Phillipson"
   ],
-  "organizations": [],
+  "organizations": [
+    "Department for Education"
+  ],
   "locations": [
     "Australia"
   ],
   "topics": [
-    "Government Policy",
     "Education"
   ],
   "politicians": [
     "Keir Starmer"
   ],
   "political_parties": [],
-  "government_bodies": [],
+  "government_bodies": [
+    "Department for Education"
+  ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Government Digital Wellbeing Consultation",
-      "type": "PolicyEvent",
-      "date": "2026-05-26",
-      "location": null
-    }
-  ]
+  "events": []
 }

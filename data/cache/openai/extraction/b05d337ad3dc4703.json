@@ -4,18 +4,16 @@
     "Nigel Farage",
     "Tommy Robinson",
     "Stephen Yaxley-Lennon",
-    "Louis Theroux",
-    "Luke Tryl",
     "Matthew Goodwin",
-    "Caprice Bourret",
-    "Suella Braverman",
+    "Luke Tryl",
     "Lady Victoria Hervey",
     "Holly Valance",
-    "Greta Thunberg"
+    "Caprice Bourret",
+    "Greta Thunberg",
+    "Louis Theroux"
   ],
   "organizations": [
-    "Reform UK",
-    "Conservative"
+    "Reform UK"
   ],
   "locations": [
     "UK",
@@ -23,15 +21,14 @@
     "Palm Beach"
   ],
   "topics": [
-    "Politics"
+    "Politics",
+    "Public Opinion"
   ],
   "politicians": [
-    "Nigel Farage",
-    "Suella Braverman"
+    "Nigel Farage"
   ],
   "political_parties": [
-    "Reform UK",
-    "Conservative"
+    "Reform UK"
   ],
   "government_bodies": [],
   "sentiment": "Negative",

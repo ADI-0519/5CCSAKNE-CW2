@@ -1,16 +1,15 @@
 {
   "people": [
-    "Kemi Badenoch",
     "Claire Coutinho",
-    "Tessa Khan",
     "Greg Jackson",
-    "Nigel Farage"
+    "Kemi Badenoch",
+    "Nigel Farage",
+    "Tessa Khan"
   ],
   "organizations": [
     "Conservative",
     "Labour",
     "Reform UK",
-    "Uplift",
     "The Guardian"
   ],
   "locations": [
@@ -28,8 +27,8 @@
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
-    "Labour",
+    "Conservative Party",
+    "Labour Party",
     "Reform UK"
   ],
   "government_bodies": [],

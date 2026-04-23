@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Andrew Griffith",
+    "Prof Anand Menon",
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "locations": [
+    "England",
+    "Scotland",
+    "Wales"
+  ],
+  "topics": [
+    "Government Policy",
+    "Economic Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

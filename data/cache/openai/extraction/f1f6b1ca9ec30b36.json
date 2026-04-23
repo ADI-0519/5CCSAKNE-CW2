@@ -1,17 +1,15 @@
 {
   "people": [
+    "Laurence Taylor",
     "Axel Rudakubana",
-    "David Anderson",
-    "Islamic State",
-    "Laurence Taylor"
+    "David Anderson"
   ],
   "organizations": [
-    "Police News",
     "The Guardian"
   ],
   "locations": [
-    "London",
-    "Southport"
+    "Southport",
+    "London"
   ],
   "topics": [
     "Government Policy",
@@ -22,12 +20,5 @@
   "government_bodies": [],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Policy Announcement",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-04-02",
-      "location": "London"
-    }
-  ]
+  "events": []
 }

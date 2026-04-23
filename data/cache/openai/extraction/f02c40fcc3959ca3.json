@@ -1,0 +1,31 @@
+{
+  "people": [
+    "Uran Ferizi",
+    "Shabana Mahmood",
+    "Stella Creasy",
+    "Suella Braverman",
+    "Ariseld Muca"
+  ],
+  "organizations": [
+    "Home Office",
+    "Labour"
+  ],
+  "locations": [
+    "UK",
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Parliament"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

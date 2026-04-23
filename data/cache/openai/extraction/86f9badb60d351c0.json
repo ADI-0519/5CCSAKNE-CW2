@@ -15,13 +15,12 @@
   "locations": [
     "London",
     "Mayfair",
-    "England",
-    "Royal Chelsea Hospital"
+    "England"
   ],
   "topics": [
     "Politics",
-    "Property",
     "Public Spending",
+    "Property",
     "Taxation"
   ],
   "politicians": [
@@ -36,10 +35,20 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Fundraising event for Donald Trump",
+      "name": "Sale of Providence House",
       "type": "PolicyEvent",
-      "date": "2024-01-01",
-      "location": "Providence House"
+      "date": "2026-04-02",
+      "location": "London",
+      "policy_topics": [],
+      "political_actors": [
+        "Nick Candy"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
     }
   ]
 }

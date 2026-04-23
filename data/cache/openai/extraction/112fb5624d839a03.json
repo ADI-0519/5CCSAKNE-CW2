@@ -1,0 +1,62 @@
+{
+  "people": [
+    "Adam Mitula",
+    "Aron Webb",
+    "Audra Murray",
+    "Chris Parry",
+    "Daniel Bennett",
+    "Jackie Olden",
+    "Matthew Goodwin",
+    "Simon Dudley"
+  ],
+  "organizations": [
+    "Green Party",
+    "Reform UK",
+    "Hope Not Hate",
+    "The Guardian"
+  ],
+  "locations": [
+    "Manchester",
+    "Tameside",
+    "Scotland",
+    "Wales"
+  ],
+  "topics": [
+    "Politics",
+    "Race",
+    "Antisemitism",
+    "Local elections"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Green Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Local elections",
+      "type": "PolicyEvent",
+      "date": "2026-05-07",
+      "location": "Tameside",
+      "policy_topics": [],
+      "political_actors": [
+        "Adam Mitula",
+        "Aron Webb",
+        "Audra Murray",
+        "Daniel Bennett"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Reform UK",
+        "Green Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

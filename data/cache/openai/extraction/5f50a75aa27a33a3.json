@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Andrew Bailey",
+    "Christine Lagarde",
+    "David Miliband",
+    "Donald Trump",
+    "Jerome Powell",
+    "Kristalina Georgieva",
+    "Rachel Reeves",
+    "Scott Bessent"
+  ],
+  "organizations": [
+    "International Monetary Fund (IMF)",
+    "World Bank",
+    "Allianz",
+    "Foreign, Commonwealth and Development Office",
+    "HM Treasury"
+  ],
+  "locations": [
+    "Washington DC",
+    "England",
+    "Spain"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Energy",
+    "Politics"
+  ],
+  "politicians": [
+    "Rachel Reeves"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

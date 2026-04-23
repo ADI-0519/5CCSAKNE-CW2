@@ -7,7 +7,7 @@
   ],
   "organizations": [
     "Reform UK",
-    "Labour Party",
+    "Labour",
     "Department for Education",
     "Institute for Fiscal Studies"
   ],
@@ -17,15 +17,15 @@
     "London"
   ],
   "topics": [
-    "Government Policy",
     "Education",
-    "Politics"
+    "Government Policy",
+    "Public Spending"
   ],
   "politicians": [],
   "political_parties": [
-    "Reform UK",
+    "Conservative Party",
     "Labour Party",
-    "Conservative Party"
+    "Reform UK"
   ],
   "government_bodies": [
     "Department for Education"

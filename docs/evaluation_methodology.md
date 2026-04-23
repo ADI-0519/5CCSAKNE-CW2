@@ -4,7 +4,9 @@ This document defines how the current UK parliamentary and government policy eve
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 6 March 2026 to 6 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news over a rolling 30-day collection window, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+
+The submitted cached snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 The pipeline produces these artefacts:
 
@@ -46,6 +48,7 @@ Evidence sources:
 - `python -m pytest`
 - `kg/generated/*.ttl`
 - `output/*_query_results.json`
+- `output/rag_evaluation.json`
 
 ## 2. Competency-Question Coverage
 
@@ -68,7 +71,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260420T202251Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260423T121805Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -111,6 +114,7 @@ The current completion stage adds:
 - `news:reportsOn` inverse links from existing `news:reportedByArticle` triples
 - `news:matchedToSourceRecord` links for official-source matching
 - occasional additional `news:representedInOfficialSource` links when a match score is strong enough
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links via an LLM-assisted RAG step for events missing those properties
 
 Method:
 
@@ -121,18 +125,18 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `39545` triples
-- completed KG: `40049` triples
-- completion delta: `504` triples
-- `reportsOn` links added: `266`
-- `matchedToSourceRecord` links added: `238`
+- prototype KG: `38596` triples
+- completed KG: `39101` triples
+- completion delta: `505` triples
+- `reportsOn` links added: `194`
+- `matchedToSourceRecord` links added: `157`
 
 Important quality questions:
 
 - are matched source records from the correct source system?
 - do source-record titles support the event they are matched to?
 - do completion-added source matches improve provenance without inflating false matches?
-- should future RAG work add confidence and evidence metadata?
+- what is the precision of RAG-added actor, department, and topic triples? (auditable via `output/rag_evaluation.json`)
 
 ## 5. Cross-Source Evaluation
 
@@ -155,10 +159,10 @@ Metrics:
 
 Latest validated source counts:
 
-- Guardian: `253`
+- Guardian: `270`
 - Parliament: `20`
-- GOV.UK: `459`
-- Wikidata: `1730` politicians, `968` parties, `490` government bodies
+- GOV.UK: `410`
+- Wikidata: `1724` politicians, `968` parties, `489` government bodies
 
 ## 6. Performance And Reproducibility
 
@@ -183,13 +187,15 @@ Metrics:
 
 ## 7. LLM Baseline Comparison
 
-Goal: compare KG-based answering with direct LLM answering on a small subset of competency questions.
+Goal: illustrate the difference between KG-backed SPARQL answers and direct LLM answers on a small subset of competency questions.
+
+This is an illustrative contrast, not a controlled evaluation. The LLM answers from training knowledge without any constraint to the same 700 collected records or the same date window. A discrepancy between a SPARQL row count and an LLM answer could reflect KG incompleteness, LLM hallucination, or simply a different scope of knowledge, so it is not straightforwardly interpretable as one being more correct than the other.
 
 Method:
 
 - choose 5 representative CQs
-- ask an LLM to answer directly from the source text or summaries
-- compare those answers with SPARQL results
+- ask an LLM to answer from training knowledge
+- compare the structure and grounding of those answers with SPARQL results
 
 Comparison criteria:
 
@@ -199,9 +205,9 @@ Comparison criteria:
 - ease of auditing
 - failure modes
 
-Expected framing:
+Framing:
 
-The KG/SPARQL approach is more structured and auditable. Direct LLM answers may be fluent but are harder to reproduce and verify.
+The KG/SPARQL approach produces answers that are grounded in and traceable to the collected dataset. Direct LLM answers may be fluent but cannot be tied to a specific record, triple, or source document.
 
 ## Final Evaluation Position
 

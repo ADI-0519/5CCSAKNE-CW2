@@ -41,7 +41,7 @@ def sample_collected_data():
                         {
                             "title": "Budget debate in the House of Commons",
                             "url": "https://api.parliament.uk/event/1",
-                            "date": "2026-03-20T11:00:00Z",
+                            "date": "2026-03-25T11:00:00Z",
                             "house": "House of Commons",
                             "description": "MPs debated tax and public spending measures.",
                             "topics": ["Budget", "Taxation"],
@@ -55,7 +55,7 @@ def sample_collected_data():
                         {
                             "title": "Home Office immigration statement",
                             "link": "/government/speeches/home-office-immigration-statement",
-                            "public_timestamp": "2026-03-22T09:30:00Z",
+                            "public_timestamp": "2026-03-25T09:30:00Z",
                             "description": "A ministerial statement on immigration policy.",
                             "format": "speech",
                             "organisations": ["Home Office"],

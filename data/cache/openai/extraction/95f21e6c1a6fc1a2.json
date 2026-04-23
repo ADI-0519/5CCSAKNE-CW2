@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Angela Rayner",
+    "Chris Curtis",
+    "Darren Jones",
+    "David Lammy",
+    "Keir Starmer",
+    "Louise Haigh",
+    "Wes Streeting"
+  ],
+  "organizations": [
+    "Labour",
+    "Good Growth Foundation",
+    "Downing Street"
+  ],
+  "locations": [
+    "Westminster"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Energy",
+    "Taxation",
+    "Parliament"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "David Lammy",
+    "Keir Starmer",
+    "Wes Streeting"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Department of Health and Social Care",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

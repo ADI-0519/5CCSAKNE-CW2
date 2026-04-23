@@ -23,7 +23,29 @@
     "Reform UK"
   ],
   "government_bodies": [],
-  "sentiment": "Positive",
+  "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Unveiling New Party Pledge",
+      "type": "PolicyEvent",
+      "date": "2026-03-31",
+      "location": "Heathrow airport",
+      "policy_topics": [
+        "Economic Policy",
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Nigel Farage"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Reform UK"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

@@ -18,14 +18,7 @@
   "politicians": [],
   "political_parties": [],
   "government_bodies": [],
-  "sentiment": "Negative",
+  "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Doctors Strikes",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-04-07",
-      "location": "England"
-    }
-  ]
+  "events": []
 }

@@ -1,64 +1,54 @@
 {
   "people": [
-    "Andy Burnham",
-    "Beverley Knight",
     "Billy Bragg",
-    "Brian Eno",
-    "Charlotte Church",
+    "Andy Burnham",
+    "Zack Polanski",
+    "Dawn Butler",
+    "Sabby Dhalu",
+    "Tommy Robinson",
+    "Nigel Farage",
+    "Donald Trump",
     "Christopher Eccleston",
     "David Harewood",
-    "Dawn Butler",
-    "Donald Trump",
-    "James Acaster",
-    "Jessie Ware",
-    "Joy Crookes",
     "Lenny Henry",
-    "Lolly Adefope",
-    "Maxine Peake",
-    "Nigel Farage",
-    "Paloma Faith",
-    "Sabby Dhalu",
-    "Self Esteem",
     "Steve Coogan",
     "Toby Jones",
-    "Zack Polanski",
-    "Tommy Robinson"
+    "Lolly Adefope",
+    "Maxine Peake",
+    "Paloma Faith",
+    "Charlotte Church",
+    "Brian Eno",
+    "Beverley Knight",
+    "James Acaster",
+    "Self Esteem",
+    "Jessie Ware",
+    "Joy Crookes",
+    "Hot Chip"
   ],
   "organizations": [
+    "Together Alliance",
     "Green Party",
-    "Labour",
-    "Together Alliance"
+    "Labour Party",
+    "Stand Up to Racism"
   ],
   "locations": [
-    "England",
     "London",
     "Manchester",
-    "Park Lane",
-    "Trafalgar Square"
+    "England"
   ],
   "topics": [
     "Politics",
     "Parliament"
   ],
   "politicians": [
-    "Nigel Farage",
-    "Andy Burnham",
-    "Zack Polanski",
-    "Dawn Butler"
+    "Nigel Farage"
   ],
   "political_parties": [
     "Green Party",
-    "Labour"
+    "Labour Party"
   ],
   "government_bodies": [],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "March against the far right",
-      "type": "PolicyEvent",
-      "date": "2026-03-28",
-      "location": "London"
-    }
-  ]
+  "events": []
 }

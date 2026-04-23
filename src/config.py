@@ -1,4 +1,5 @@
 import os
+from datetime import date, timedelta
 from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
@@ -28,9 +29,12 @@ from src.domain_knowledge import (
 load_dotenv()
 
 # project scope
+# Live collection uses a rolling 30-day window.
+# For coursework submission and evaluation, the shipped cached snapshot is fixed to 2026-03-23 through 2026-04-22, and all reported results refer to that cache.
 
-DATE_START = "2026-03-06"
-DATE_END = "2026-04-06"
+_today = date.today()
+DATE_END = _today.isoformat()
+DATE_START = (_today - timedelta(days=30)).isoformat()
 DATE_WINDOW = {"start": DATE_START, "end": DATE_END}
 
 PROJECT_SCOPE = (
@@ -182,7 +186,6 @@ GOVUK_DOCUMENT_FORMATS = [
     "consultation",
 ]
 GOVUK_ALWAYS_INCLUDE_FORMATS = {
-    "policy_paper",
     "consultation",
 }
 GOVUK_SCOPE_SIGNAL_TERMS = {
@@ -207,15 +210,20 @@ GOVUK_SCOPE_SIGNAL_TERMS = {
     "welfare",
 }
 GOVUK_EXCLUDED_TEXT_TERMS = {
+    "annual report",
     "appointments to",
+    "code of practice",
+    "data strategy",
     "extension notice",
     "form ",
     "helpsheet",
     "manual",
     "minutes",
+    "privacy policy",
     "rates and allowances",
     "report:",
     "self assessment",
+    "small and medium-sized enterprise",
     "terms of reference",
 }
 
@@ -273,22 +281,18 @@ GOVUK_EVENT_FALLBACK_SECTIONS = {
 GOVUK_EXPLICIT_EVENT_SIGNAL_TERMS = {
     "agreement",
     "announcement",
-    "charter",
     "consultation",
     "crackdown",
     "declaration",
     "funding",
     "investment",
     "launch",
-    "measures",
-    "plan",
     "policy",
     "reform",
     "response",
     "rules",
     "speech",
     "statement",
-    "strategy",
     "summit",
     "vision",
 }
@@ -411,6 +415,8 @@ EXTRACTION_LOCATION_BLOCKLIST = {
     "CenTax",
     "Common",
     "Conservatives",
+    "English",
+    "Error",
     "Farage",
     "Kemi",
     "Labour MPs",

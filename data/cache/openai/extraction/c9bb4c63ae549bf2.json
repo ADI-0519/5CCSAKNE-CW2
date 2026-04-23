@@ -1,21 +1,22 @@
 {
   "people": [
+    "Calais Food Collective",
     "Emmanuel Macron",
-    "Shabana Mahmood",
-    "Rishi Sunak",
-    "Xavier Ducept",
     "Lachlan Macrae",
     "Lavanya Pallapi",
-    "Martin Hewitt"
+    "Martin Hewitt",
+    "Rishi Sunak",
+    "Shabana Mahmood",
+    "Xavier Ducept"
   ],
   "organizations": [
-    "Home Office",
     "Downing Street",
+    "Home Office",
     "Joint Council",
-    "Calais Food Collective"
+    "No 10"
   ],
   "locations": [
-    "France"
+    "French"
   ],
   "topics": [
     "Immigration",
@@ -26,10 +27,9 @@
   ],
   "political_parties": [],
   "government_bodies": [
-    "Home Office",
     "Downing Street",
-    "No 10",
-    "Parliament"
+    "Home Office",
+    "No 10"
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",

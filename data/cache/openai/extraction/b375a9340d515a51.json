@@ -1,0 +1,32 @@
+{
+  "people": [
+    "Richard Tice",
+    "Zack Polanski",
+    "Kate Middleton",
+    "Matt Goodwin",
+    "Princess Charlotte"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Green Party",
+    "Peryton Intelligence"
+  ],
+  "locations": [
+    "Birmingham",
+    "Erdington",
+    "Wales"
+  ],
+  "topics": [
+    "Politics",
+    "AI (artificial intelligence)"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Green Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

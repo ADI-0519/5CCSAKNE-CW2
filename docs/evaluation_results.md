@@ -4,21 +4,22 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260421T232429Z`
+- `20260423T121805Z`
 
 Primary artefacts:
 
-- `data/processed/20260421T232429Z_normalised_articles.json`
-- `data/processed/20260421T232429Z_extracted_articles.json`
-- `data/processed/20260421T232429Z_kg_records.json`
-- `output/20260421T232429Z_instance_kg.ttl`
-- `output/20260421T232429Z_wikidata_kg.ttl`
-- `output/20260421T232429Z_prototype_kg.ttl`
-- `output/20260421T232429Z_completed_kg.ttl`
-- `output/20260421T232429Z_query_results.json`
-- `output/20260421T232429Z_validation_results.json`
-- `output/20260421T232429Z_completion_audit.json`
-- `output/20260421T232429Z_kg_summary.json`
+- `data/processed/20260423T121805Z_normalised_articles.json`
+- `data/processed/20260423T121805Z_extracted_articles.json`
+- `data/processed/20260423T121805Z_kg_records.json`
+- `kg/generated/new_kg.ttl`
+- `kg/generated/wikidata_kg.ttl`
+- `kg/generated/prototype_kg.ttl`
+- `kg/generated/completed_kg.ttl`
+- `output/query_results.json`
+- `output/validation_results.json`
+- `output/completion_audit.json`
+- `output/kg_summary.json`
+- `output/rag_evaluation.json`
 
 ## 1. Structural Results
 
@@ -26,39 +27,40 @@ The pipeline completed all stages successfully.
 
 Source records:
 
-- Guardian records: `253`
+- Guardian records: `270`
 - Parliament records: `20`
-- GOV.UK records: `459`
-- Combined normalised records: `732`
+- GOV.UK records: `410`
+- Combined normalised records: `700`
 
 Wikidata enrichment:
 
-- Politicians: `1722`
+- Politicians: `1724`
 - Political parties: `968`
-- Government bodies: `490`
+- Government bodies: `489`
 
 Generated graph counts:
 
-- Ontology graph: `188` triples
-- Source-derived instance KG: `15032` triples
-- Wikidata KG: `25051` triples
-- Prototype KG: `40107` triples
-- Completed KG: `40830` triples
+- Ontology graph: `192` triples
+- Source-derived instance KG: `13458` triples
+- Wikidata KG: `25115` triples
+- Prototype KG: `38596` triples
+- Completed KG: `39101` triples
 
 Completion additions:
 
-- `272` `news:reportsOn` inverse links
-- `237` `news:matchedToSourceRecord` links
-- `4` `news:representedInOfficialSource` links
-- RAG additions: `13` actor links, `14` department links, `138` topic links
-- Total delta from prototype to completed KG: `723` triples
+- `194` `news:reportsOn` inverse links
+- `157` `news:matchedToSourceRecord` links
+- `5` `news:representedInOfficialSource` links
+- RAG additions: `7` actor links, `6` department links, `114` topic links
+- RAG precision (manual annotation, all 127 accepted): `96.8%` (`91/94` events fully correct, `3` incorrect additions)
+- Total delta from prototype to completed KG: `505` triples
 
 Structural judgment:
 
-- The pipeline is runnable end to end from live APIs.
+- The pipeline is runnable end to end from cached snapshots via `--from-cache`.
 - Raw source snapshots, processed JSON artefacts, generated Turtle files, validation reports, summary metrics, and query results are all saved.
 - The ontology, source-derived RDF, Wikidata RDF, prototype KG, completed KG, and SPARQL queries are aligned around the event-centred vocabulary.
-- The final graph passes all `17` graph validation rules with `0` failures and `0` violations.
+- The final graph passes all `17` graph validation rules with `0` violations and `0` errors.
 
 ## 2. Competency Question Results
 
@@ -66,33 +68,32 @@ All `20/20` competency queries returned at least one row when the current query 
 
 | CQ | Row count |
 | --- | ---: |
-| CQ01 | 14 |
-| CQ02 | 66 |
-| CQ03 | 8 |
-| CQ04 | 237 |
-| CQ05 | 4 |
-| CQ06 | 9 |
-| CQ07 | 16 |
+| CQ01 | 10 |
+| CQ02 | 52 |
+| CQ03 | 7 |
+| CQ04 | 147 |
+| CQ05 | 6 |
+| CQ06 | 10 |
+| CQ07 | 18 |
 | CQ08 | 4 |
-| CQ09 | 8 |
-| CQ10 | 12 |
-| CQ11 | 224 |
-| CQ12 | 12 |
-| CQ13 | 41 |
-| CQ14 | 12 |
-| CQ15 | 12 |
-| CQ16 | 5 |
-| CQ17 | 2 |
-| CQ18 | 12 |
-| CQ19 | 1 |
-| CQ20 | 16 |
+| CQ09 | 17 |
+| CQ10 | 16 |
+| CQ11 | 142 |
+| CQ12 | 11 |
+| CQ13 | 35 |
+| CQ14 | 16 |
+| CQ15 | 7 |
+| CQ16 | 7 |
+| CQ17 | 5 |
+| CQ18 | 18 |
+| CQ19 | 5 |
+| CQ20 | 17 |
 
 Important judgments:
 
 - `CQ04` confirms that reported policy events can also be represented in official Parliament or GOV.UK source records.
 - `CQ11` and `CQ12` confirm that official source records support institution and topic queries over the completed graph.
-- `CQ17` was tightened to require source-grounded government policy events, reducing weak article-only over-linking.
-- `CQ09` intentionally exposes missing links, so a non-zero result is useful for incompleteness analysis rather than a failure.
+- `CQ09` intentionally exposes missing links; its count of `17` reflects events without complete institution grounding in the current snapshot.
 
 ## 3. Validation and Summary Metrics
 
@@ -104,34 +105,33 @@ Validation:
 
 Summary metrics:
 
-- Policy events: `271`
-- Government policy events: `182`
-- Parliamentary events: `6`
-- Parliamentary debates: `9`
-- Ministerial statements: `66`
-- Events with dates: `271` (`100%`)
-- Events with topics: `271` (`100%`)
-- Events with a government body: `263` (`97.05%`)
-- Events linked to official source records: `237` (`87.45%`)
+- Policy events: `194`
+- Government policy events: `173`
+- Parliamentary events: `10`
+- Parliamentary debates: `5`
+- Ministerial statements: `55`
+- Events with dates: `194` (`100%`)
+- Events with topics: `194` (`100%`)
+- Events with a government body: `181` (`93.3%`)
+- Events linked to official source records: `153` (`78.87%`)
 
 Extraction summary:
 
-- Extracted events: `272`
-- Generic fallback events: `31`
+- Extracted events: `194`
+- Generic fallback events: `22`
 - Generic fallback names:
-  - `Policy Announcement`: `22`
-  - `Ministerial Statement`: `9`
+  - `Policy Announcement`: `19`
+  - `Ministerial Statement`: `3`
 - Confidence counts:
-  - `high`: `157`
-  - `medium`: `108`
-  - `low`: `7`
+  - `high`: `138`
+  - `medium`: `56`
 - Extraction methods:
-  - `heuristic`: `254`
-  - `openai`: `18`
+  - `heuristic`: `193`
+  - `openai`: `1`
 
 ## 4. Baseline Comparison
 
-The direct LLM baseline comparison was refreshed against the latest prototype and completed graphs.
+The direct LLM baseline is an illustrative contrast, not a controlled evaluation. The LLM answers from training knowledge without being constrained to the same 700 collected records or the same date window, so differences in counts are not straightforwardly interpretable as KG completeness gaps. The comparison is included to show that SPARQL answers are dataset-grounded and auditable in a way that direct LLM answers are not.
 
 Reference file:
 
@@ -139,25 +139,40 @@ Reference file:
 
 Headline results:
 
-- `CQ04`: prototype `233`, completed `237`, delta `+4`
-- `CQ11`: prototype `212`, completed `224`, delta `+12`
-- `CQ12`: prototype `11`, completed `12`, delta `+1`
-- `CQ16`: prototype `5`, completed `5`, delta `+0`
-- `CQ18`: prototype `11`, completed `12`, delta `+1`
+- `CQ04`: prototype `144`, completed `147`, delta `+3`
+- `CQ11`: prototype `135`, completed `142`, delta `+7`
+- `CQ12`: prototype `11`, completed `11`, delta `+0`
+- `CQ16`: prototype `7`, completed `7`, delta `+0`
+- `CQ18`: prototype `16`, completed `18`, delta `+2`
 
 Interpretation:
 
-- The completed KG improves several query families in ways that a direct LLM answer cannot reliably ground in the actual dataset.
-- `CQ16` shows that some actor-party-topic structure was already present before completion, while other target queries measurably benefit from completion and enrichment.
+- `CQ04` shows completion benefit, with 3 additional rows from `matchedToSourceRecord` links enabling cross-source traversal that the prototype graph cannot support.
+- `CQ11` shows the clearest completion benefit, with 7 additional rows from `matchedToSourceRecord` and `representedInOfficialSource` links enabling cross-source traversal that the prototype graph cannot support.
+- `CQ18` also shows completion benefit from additional actor links.
+- `CQ12` and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
+- A direct LLM answer cannot ground any of these results in the actual dataset; each SPARQL result is traceable to specific triples and source records.
 
-## 5. Evaluation Position
+## 5. Performance Benchmark
+
+The benchmark times a full `--from-cache` pipeline run without any data collection or API calls.
+
+- Elapsed time: `24.01` seconds
+- Records processed: `700`
+- Throughput: `29.15` records/second
+- Platform: Linux (WSL2 6.6.87.2-microsoft-standard-WSL2), Python 3.12.3
+- Peak memory: `238.09 MB` (RSS, sampled via /proc on WSL2)
+
+The benchmark confirms the pipeline is fast enough for repeated iteration from cache without any meaningful wait cost.
+
+## 6. Evaluation Position
 
 The strongest defensible evaluation claim is:
 
 - the pipeline runs end to end
 - the ontology and RDF generation are aligned with the current CQ set
 - the completed graph answers all `20` competency queries
-- the final graph passes all `17` validation rules with no failures
+- the final graph passes all `17` validation rules with `0` violations
 - official-source records are integrated into the KG rather than only stored as raw data
 - the completion stage improves navigability and provenance through `reportsOn`, `matchedToSourceRecord`, and conservative enrichment
 
@@ -176,12 +191,13 @@ The graph is weaker for:
 - the generic fallback subset, which should be interpreted as low-information abstractions rather than richly grounded event identities
 - the limited size of the direct LLM baseline, which covers only five target CQs
 
-## 6. Recommended Final Framing
+## 7. Recommended Final Framing
 
 The final report should frame the system as a working automated KG pipeline with an event-centred ontology, auditable domain knowledge, conservative semantic projection, and ontology-aware QA.
 
 It should explicitly state that:
 
-- heuristics act as weak supervision, canonicalisation support, and fallback extraction
+- heuristics act as primary extraction; OpenAI extraction is a targeted fallback that fires only when the heuristic result lacks both structured events and an institution or actor. 193 of 194 events had enough structure for the gate to skip the LLM call entirely.
+- the primary LLM contribution in the pipeline is the RAG completion step, which processed `94` events and accepted `127` triples
 - OpenAI is used critically for structured extraction support, completion support, and evaluation baselines
 - validation, query coverage, completion audit logs, and summary metrics provide the strongest evidence for the current final pipeline

@@ -8,10 +8,11 @@
     "Conservative",
     "Downing Street",
     "Financial Times",
-    "House of Lords",
     "Labour",
     "Liberal Democrats",
-    "No 10"
+    "No 10",
+    "Society News",
+    "The Lords"
   ],
   "locations": [
     "England",
@@ -34,7 +35,6 @@
   ],
   "government_bodies": [
     "Downing Street",
-    "House of Lords",
     "No 10"
   ],
   "sentiment": "Positive",

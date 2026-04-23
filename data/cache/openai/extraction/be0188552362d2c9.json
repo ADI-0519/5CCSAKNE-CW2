@@ -1,16 +1,16 @@
 {
   "people": [
     "Ella Smith",
-    "Hannah Nicholls",
+    "Hannah Nicholls-Harrison",
     "James Taylor",
     "Samuel Thomas",
     "Tom Pollard"
   ],
   "organizations": [
-    "Labour",
     "Mencap",
     "Mind",
-    "Scope"
+    "Scope",
+    "Labour"
   ],
   "locations": [],
   "topics": [
@@ -21,17 +21,12 @@
   ],
   "politicians": [],
   "political_parties": [
-    "Labour"
+    "Labour Party"
   ],
-  "government_bodies": [],
-  "sentiment": "Negative",
+  "government_bodies": [
+    "Department for Work and Pensions"
+  ],
+  "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "Policy Announcement",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-03-29",
-      "location": null
-    }
-  ]
+  "events": []
 }

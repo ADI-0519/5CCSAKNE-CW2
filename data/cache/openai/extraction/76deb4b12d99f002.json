@@ -8,12 +8,14 @@
     "Matt Schlapp",
     "Lois Perry",
     "Donald Trump",
-    "Tulsi Gabbard"
+    "Ron DeSantis",
+    "Tulsi Gabbard",
+    "Viktor Orb\u00e1n"
   ],
   "organizations": [
     "Reform UK",
     "Conservative Party",
-    "Conservative Political Action Conference"
+    "Heartland Institute"
   ],
   "locations": [
     "London",
@@ -25,22 +27,15 @@
     "Economic Policy"
   ],
   "politicians": [
-    "Nigel Farage",
-    "Kemi Badenoch"
+    "Kemi Badenoch",
+    "Nigel Farage"
   ],
   "political_parties": [
     "Conservative Party",
     "Reform UK"
   ],
   "government_bodies": [],
-  "sentiment": "Neutral",
+  "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "CPAC UK Conference",
-      "type": "PolicyEvent",
-      "date": "2026-07-16",
-      "location": "London"
-    }
-  ]
+  "events": []
 }

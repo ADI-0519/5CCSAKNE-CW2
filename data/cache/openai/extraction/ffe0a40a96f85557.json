@@ -1,0 +1,42 @@
+{
+  "people": [
+    "David Lammy",
+    "Yvette Cooper",
+    "Keir Starmer",
+    "Lord Mandelson",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Sir Chris Wormald",
+    "Sir Oliver"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "FCDO",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour"
+  ],
+  "locations": [
+    "Washington"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

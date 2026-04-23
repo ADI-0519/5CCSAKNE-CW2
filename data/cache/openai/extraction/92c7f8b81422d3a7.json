@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Keir Starmer",
+    "John Nash",
+    "Olivia Bailey",
+    "Liz Kendall",
+    "Ian Cheshire"
+  ],
+  "organizations": [
+    "Meta",
+    "Google",
+    "TikTok",
+    "Snap",
+    "Ofcom",
+    "Labour Party",
+    "Conservative Party",
+    "Downing Street"
+  ],
+  "locations": [],
+  "topics": [
+    "Internet safety",
+    "Government Policy",
+    "Children's wellbeing"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Ofcom"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

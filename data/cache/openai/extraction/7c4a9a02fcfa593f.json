@@ -10,9 +10,8 @@
     "The Guardian"
   ],
   "locations": [
-    "Channel beaches",
     "Heathrow",
-    "France"
+    "English Channel"
   ],
   "topics": [
     "Immigration",
@@ -30,12 +29,5 @@
   ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
-  "events": [
-    {
-      "name": "UK to pay France extra \u00a316m in stopgap deal",
-      "type": "GovernmentPolicyEvent",
-      "date": "2026-03-31",
-      "location": "Channel beaches"
-    }
-  ]
+  "events": []
 }

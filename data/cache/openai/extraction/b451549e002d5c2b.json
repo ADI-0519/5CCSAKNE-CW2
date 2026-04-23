@@ -9,28 +9,29 @@
     "Greater Manchester Police",
     "Green Party",
     "Labour",
-    "Reform UK"
+    "Reform UK",
+    "GB News"
   ],
   "locations": [
     "Gorton",
+    "Dentons",
     "Greater Manchester",
     "England"
   ],
   "topics": [
-    "Politics"
+    "Politics",
+    "Parliament"
   ],
   "politicians": [
     "Nigel Farage"
   ],
   "political_parties": [
     "Green Party",
-    "Labour",
+    "Labour Party",
     "Reform UK"
   ],
-  "government_bodies": [
-    "Greater Manchester Police"
-  ],
-  "sentiment": "Negative",
+  "government_bodies": [],
+  "sentiment": "Positive",
   "article_type": "NewsArticle",
   "events": []
 }

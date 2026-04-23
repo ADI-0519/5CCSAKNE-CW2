@@ -1,22 +1,23 @@
 {
   "people": [
-    "Morgan McSweeney",
     "Peter Mandelson",
+    "Morgan McSweeney",
     "Keir Starmer",
     "Jeffrey Epstein"
   ],
   "organizations": [
     "Cabinet Office",
-    "Conservative",
+    "Metropolitan police",
     "Labour",
-    "Downing Street",
-    "No 10",
-    "Parliament"
+    "Conservative"
   ],
   "locations": [
     "London",
     "Westminster",
-    "Tower Hamlets"
+    "Tower Hamlets",
+    "Stepney Green",
+    "Belgrave Road",
+    "Pimlico"
   ],
   "topics": [
     "Politics",
@@ -26,14 +27,13 @@
     "Keir Starmer"
   ],
   "political_parties": [
-    "Conservative",
-    "Labour"
+    "Conservative Party",
+    "Labour Party"
   ],
   "government_bodies": [
     "Cabinet Office",
-    "Downing Street",
     "No 10",
-    "Parliament"
+    "Downing Street"
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",

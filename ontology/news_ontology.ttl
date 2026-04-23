@@ -45,7 +45,8 @@ news:hasAuthor a owl:ObjectProperty ;
     rdfs:range news:Journalist ;
     rdfs:subPropertyOf schema:author .
 
-news:involvesActor a owl:ObjectProperty ;
+news:involvesActor a owl:IrreflexiveProperty,
+        owl:ObjectProperty ;
     rdfs:label "involves actor" ;
     rdfs:comment "Links a policy event to a political actor involved in it." ;
     rdfs:domain news:PolicyEvent ;
@@ -64,7 +65,8 @@ news:matchedToSourceRecord a owl:ObjectProperty ;
     rdfs:domain news:PolicyEvent ;
     rdfs:range news:SourceRecord .
 
-news:memberOfParty a owl:ObjectProperty ;
+news:memberOfParty a owl:IrreflexiveProperty,
+        owl:ObjectProperty ;
     rdfs:label "member of party" ;
     rdfs:comment "Links a political actor to the political party they belong to." ;
     rdfs:domain news:PoliticalActor ;
@@ -84,14 +86,16 @@ news:occursInParliamentaryBody a owl:ObjectProperty ;
     rdfs:domain news:ParliamentaryEvent ;
     rdfs:range news:ParliamentaryBody .
 
-news:occursOnDate a owl:DatatypeProperty ;
+news:occursOnDate a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
     rdfs:label "occurs on date" ;
     rdfs:comment "The calendar date on which a policy event occurs." ;
     rdfs:domain news:PolicyEvent ;
     rdfs:range xsd:date ;
     rdfs:subPropertyOf core:startDate .
 
-news:publishedBy a owl:ObjectProperty ;
+news:publishedBy a owl:FunctionalProperty,
+        owl:ObjectProperty ;
     rdfs:label "published by" ;
     rdfs:comment "Links a news article to the news organisation that published it." ;
     rdfs:domain news:NewsArticle ;

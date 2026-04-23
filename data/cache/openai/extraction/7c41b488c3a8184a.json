@@ -10,8 +10,8 @@
   "locations": [
     "Gulf",
     "Iran",
-    "Saudi Arabia",
     "Qatar",
+    "Saudi Arabia",
     "Bahrain",
     "Kuwait"
   ],
@@ -20,7 +20,6 @@
     "Government Policy"
   ],
   "politicians": [
-    "John Healey",
     "Keir Starmer"
   ],
   "political_parties": [],

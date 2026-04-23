@@ -1,16 +1,17 @@
 {
   "people": [
-    "Becky Hart",
-    "Dr Aisha Awan"
+    "Aisha Awan",
+    "Becky Hart"
   ],
   "organizations": [
     "Home Office",
-    "The Guardian",
-    "NHS-funded REACHE"
+    "NHS",
+    "NHS-funded REACHE",
+    "Bhatt Murphy",
+    "The Guardian"
   ],
   "locations": [
-    "Manchester",
-    "NHS"
+    "Manchester"
   ],
   "topics": [
     "Immigration",
@@ -24,5 +25,25 @@
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Lifting of the ban on asylum seekers working in NHS",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-26",
+      "location": null,
+      "policy_topics": [
+        "Immigration",
+        "Healthcare"
+      ],
+      "political_actors": [],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

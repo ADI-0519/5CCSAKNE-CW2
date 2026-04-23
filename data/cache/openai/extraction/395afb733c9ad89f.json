@@ -1,0 +1,63 @@
+{
+  "people": [
+    "Matt Forde",
+    "Nigel Farage",
+    "Shabana Mahmood"
+  ],
+  "organizations": [
+    "Labour",
+    "Reform UK",
+    "Green New Deal Rising",
+    "IPPR",
+    "Home Office"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [
+    "Shabana Mahmood",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "On-stage event with Shabana Mahmood",
+      "type": "ParliamentaryEvent",
+      "date": "2026-04-21",
+      "location": "Duchess theatre, London",
+      "policy_topics": [
+        "Immigration"
+      ],
+      "political_actors": [
+        "Shabana Mahmood"
+      ],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Reform UK"
+      ],
+      "evidence_spans": [
+        "\u2018white liberal\u2019 hecklers",
+        "accused at an on-stage event of copying the policies of Nigel Farage\u2019s Reform UK",
+        "pressure from Labour MPs and cabinet colleagues to water down hardline plans for asylum and immigration"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

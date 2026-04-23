@@ -6,6 +6,8 @@
   "organizations": [
     "Home Office",
     "Deighton Pierce Glynn",
+    "Oxford",
+    "Cambridge",
     "Imperial College London"
   ],
   "locations": [
@@ -26,10 +28,26 @@
   "article_type": "NewsArticle",
   "events": [
     {
-      "name": "Visa Ban Announcement",
+      "name": "Visa ban announcement",
       "type": "GovernmentPolicyEvent",
       "date": "2026-03-23",
-      "location": "UK"
+      "location": "UK",
+      "policy_topics": [
+        "Immigration"
+      ],
+      "political_actors": [
+        "Shabana Mahmood"
+      ],
+      "government_bodies": [
+        "Home Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "this month the home secretary, Shabana Mahmood, announced a ban on student visas for people from Sudan, Afghanistan, Myanmar and Cameroon"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
     }
   ]
 }

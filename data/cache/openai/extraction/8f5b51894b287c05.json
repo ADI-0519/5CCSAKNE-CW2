@@ -1,13 +1,12 @@
 {
   "people": [
+    "Donald Trump",
     "Keir Starmer",
     "Rachel Reeves",
-    "Donald Trump",
     "Liz Truss"
   ],
   "organizations": [
     "Ministry of Defence",
-    "Treasury",
     "Competition and Markets Authority"
   ],
   "locations": [
@@ -16,8 +15,7 @@
   "topics": [
     "Energy",
     "Defence",
-    "Government Policy",
-    "Economy"
+    "Government Policy"
   ],
   "politicians": [
     "Keir Starmer",
@@ -25,9 +23,7 @@
   ],
   "political_parties": [],
   "government_bodies": [
-    "Ministry of Defence",
-    "Treasury",
-    "Competition and Markets Authority"
+    "Ministry of Defence"
   ],
   "sentiment": "Neutral",
   "article_type": "NewsArticle",

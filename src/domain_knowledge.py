@@ -1,11 +1,3 @@
-"""Shared domain lexicons and stable classification rules.
-
-This module holds the small, explicit knowledge resources that we treat as
-canonical project lexicons rather than ad hoc extraction heuristics. Keeping
-them here makes the rule layer easier to audit and avoids duplicating core
-classification logic across the pipeline.
-"""
-
 import re
 
 POLITICIAN_NAMES = [
@@ -62,7 +54,6 @@ PARLIAMENTARY_BODY_NAMES = [
 
 GOVERNMENT_DEPARTMENT_NAMES = [
     "HM Treasury",
-    "Treasury",
     "Home Office",
     "Cabinet Office",
     "Department of Health and Social Care",
@@ -88,6 +79,8 @@ GOVERNMENT_DEPARTMENT_NAMES = [
     "DSIT",
     "Department for Energy Security and Net Zero",
     "DESNZ",
+    "Northern Ireland Office",
+    "NIO",
 ]
 
 GOVERNMENT_BODY_NAMES = GOVERNMENT_DEPARTMENT_NAMES + [
@@ -106,9 +99,15 @@ GOVERNMENT_BODY_NAMES = GOVERNMENT_DEPARTMENT_NAMES + [
     "Charity Commission",
     "Attorney General's Office",
     "Welsh Government",
-    "House of Commons",
-    "House of Lords",
-    "Parliament",
+    "Scottish Government",
+    "Maritime and Coastguard Agency",
+    "MCA",
+    "Medicines and Healthcare products Regulatory Agency",
+    "MHRA",
+    "Homes England",
+    "Active Travel England",
+    "Competition and Markets Authority",
+    "CMA",
 ]
 
 UK_LOCATION_NAMES = [
@@ -150,6 +149,21 @@ GOVERNMENT_BODY_NAME_SET = frozenset(GOVERNMENT_BODY_NAMES)
 UK_LOCATION_NAME_SET = frozenset(UK_LOCATION_NAMES)
 TOPIC_NAME_SET = frozenset(TOPIC_GROUPS)
 
+INTERNATIONAL_BODY_LOCATIONS = {
+    "UN Security Council": "New York",
+    "UN General Assembly": "New York",
+    "UN Human Rights Council": "Geneva",
+    "WTO General Council": "Geneva",
+    "OSCE": "Vienna",
+    "NATO": "Brussels",
+    "European Council": "Brussels",
+    "EU Council": "Brussels",
+    "IMF": "Washington",
+    "World Bank": "Washington",
+    "ICC": "The Hague",
+    "ICJ": "The Hague",
+}
+
 PARLIAMENTARY_BODY_KEYWORDS = frozenset(
     {
         "commons",
@@ -188,6 +202,7 @@ GOVERNMENT_BODY_ALIASES = {
     "fcdo": "Foreign, Commonwealth and Development Office",
     "department for business, energy & industrial strategy": "Department for Business and Trade",
     "department for business, energy and industrial strategy": "Department for Business and Trade",
+    "department for international trade": "Department for Business and Trade",
     "dit": "Department for Business and Trade",
     "dbt": "Department for Business and Trade",
     "department for transport": "Department for Transport",
@@ -205,6 +220,8 @@ GOVERNMENT_BODY_ALIASES = {
     "department for energy security and net zero": "Department for Energy Security and Net Zero",
     "department for energy security & net zero": "Department for Energy Security and Net Zero",
     "desnz": "Department for Energy Security and Net Zero",
+    "northern ireland office": "Northern Ireland Office",
+    "nio": "Northern Ireland Office",
     "hm revenue and customs": "HM Revenue and Customs",
     "hmrc": "HM Revenue and Customs",
     "driver and vehicle licensing agency": "Driver and Vehicle Licensing Agency",
@@ -216,6 +233,15 @@ GOVERNMENT_BODY_ALIASES = {
     "charity commission": "Charity Commission",
     "attorney general's office": "Attorney General's Office",
     "prime minister's office": "Prime Minister's Office",
+    "maritime and coastguard agency": "Maritime and Coastguard Agency",
+    "mca": "Maritime and Coastguard Agency",
+    "medicines and healthcare products regulatory agency": "Medicines and Healthcare products Regulatory Agency",
+    "mhra": "Medicines and Healthcare products Regulatory Agency",
+    "homes england": "Homes England",
+    "active travel england": "Active Travel England",
+    "competition and markets authority": "Competition and Markets Authority",
+    "cma": "Competition and Markets Authority",
+    "scottish government": "Scottish Government",
     "welsh government": "Welsh Government",
 }
 
@@ -228,6 +254,12 @@ OFFICIAL_BODY_KIND_OVERRIDES = {
     "attorney general's office": "government_body",
     "prime minister's office": "government_body",
     "welsh government": "government_body",
+    "scottish government": "government_body",
+    "maritime and coastguard agency": "government_body",
+    "medicines and healthcare products regulatory agency": "government_body",
+    "homes england": "government_body",
+    "active travel england": "government_body",
+    "competition and markets authority": "government_body",
 }
 
 MINISTER_ROLE_DEPARTMENT_MAP = {
@@ -250,6 +282,8 @@ MINISTER_ROLE_DEPARTMENT_MAP = {
     "secretary of state for culture, media and sport": "Department for Culture, Media and Sport",
     "minister for the cabinet office": "Cabinet Office",
     "paymaster general": "Cabinet Office",
+    "exchequer": "HM Treasury",
+    "levy": "HM Treasury",
 }
 
 MINISTERIAL_STATEMENT_SIGNAL_TERMS = frozenset(
@@ -329,15 +363,7 @@ GOVERNMENT_BODY_MATCH_SET = frozenset(_normalise_label(name) for name in GOVERNM
 
 
 def classify_official_body_kind(name):
-    """Return the stable body kind label used by ontology mapping.
-
-    The ordering is deliberate:
-    1. exact parliamentary bodies
-    2. exact government departments
-    3. high-precision keyword fallbacks
-    4. generic government body
-    """
-
+    # order matters: parliamentary exact > department exact > keyword fallback > generic
     lowered = _normalise_label(canonicalise_government_body_name(name))
     override = OFFICIAL_BODY_KIND_OVERRIDES.get(lowered)
     if override:

@@ -3,14 +3,13 @@
     "Suella Braverman",
     "Lisa Nandy",
     "Mark Bullingham",
-    "Nigel Farage",
     "Dame Tracey Crouch",
-    "Alex"
+    "Nigel Farage"
   ],
   "organizations": [
     "Reform UK",
     "Football Association",
-    "Conservative",
+    "Conservative Party",
     "PA Media"
   ],
   "locations": [
@@ -19,18 +18,21 @@
   ],
   "topics": [
     "Politics",
-    "Football",
-    "Diversity and Inclusion"
+    "Diversity and Inclusion",
+    "Football"
   ],
   "politicians": [
     "Suella Braverman",
+    "Lisa Nandy",
     "Nigel Farage"
   ],
   "political_parties": [
-    "Reform UK",
-    "Conservative"
+    "Conservative Party",
+    "Reform UK"
   ],
-  "government_bodies": [],
+  "government_bodies": [
+    "Football Association"
+  ],
   "sentiment": "Negative",
   "article_type": "NewsArticle",
   "events": []

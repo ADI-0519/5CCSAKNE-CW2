@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Dylan Thomas",
+    "Hannah Devenney",
+    "Judy O\u2019Shea",
+    "Michael Solomon Williams",
+    "Richard Stevens",
+    "Thalia Marrington",
+    "Tim Pullen"
+  ],
+  "organizations": [
+    "Go-Ahead",
+    "First Bus",
+    "Labour Party",
+    "Campaign for Better Transport"
+  ],
+  "locations": [
+    "Mousehole",
+    "Cornwall",
+    "England",
+    "London",
+    "Penzance",
+    "Iran"
+  ],
+  "topics": [
+    "Public Spending",
+    "Economic Policy",
+    "Transport"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

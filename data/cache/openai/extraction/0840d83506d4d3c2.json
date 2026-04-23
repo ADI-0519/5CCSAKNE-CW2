@@ -7,9 +7,9 @@
   ],
   "organizations": [
     "Reform UK",
-    "Conservative",
-    "Berkley Group",
     "Fire Brigades Union",
+    "Berkley Group",
+    "Ebbsfleet Development Corporation",
     "Homes England",
     "Inside Housing"
   ],
@@ -19,16 +19,15 @@
   ],
   "topics": [
     "Housing",
-    "Politics",
-    "Immigration"
+    "Politics"
   ],
   "politicians": [
     "Keir Starmer",
     "Nigel Farage"
   ],
   "political_parties": [
-    "Conservative",
-    "Reform UK"
+    "Reform UK",
+    "Conservative Party"
   ],
   "government_bodies": [],
   "sentiment": "Negative",

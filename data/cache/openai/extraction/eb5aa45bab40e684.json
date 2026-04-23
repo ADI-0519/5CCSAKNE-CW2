@@ -14,14 +14,13 @@
     "Electoral Commission",
     "GB News",
     "Labour",
-    "Parliament",
     "Reform UK"
   ],
   "locations": [
     "Iran",
     "Monaco",
-    "Russia",
-    "Thailand"
+    "Russia-linked",
+    "Thailand-based"
   ],
   "topics": [
     "Government Policy",
@@ -36,9 +35,37 @@
     "Reform UK"
   ],
   "government_bodies": [
-    "Parliament"
+    "HM Treasury"
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
-  "events": []
+  "events": [
+    {
+      "name": "Introduction of annual cap on overseas donations and moratorium on crypto donations",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-25",
+      "location": null,
+      "policy_topics": [
+        "Government Policy",
+        "Public Spending"
+      ],
+      "political_actors": [
+        "Keir Starmer",
+        "Sir Philip Rycroft"
+      ],
+      "government_bodies": [
+        "HM Treasury"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Reform UK"
+      ],
+      "evidence_spans": [
+        "government said it would bring in the annual cap as well as a moratorium on crypto donations from Wednesday"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
 }

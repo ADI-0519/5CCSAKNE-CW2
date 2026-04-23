@@ -1,6 +1,6 @@
 # 5CCSAKNE Coursework 2
 
-Knowledge Engineering coursework: a knowledge graph of UK parliamentary and government policy events reported in UK news between 6 March 2026 and 6 April 2026, built from structured and unstructured sources.
+Knowledge Engineering coursework: a knowledge graph of UK parliamentary and government policy events reported in UK news, built over a rolling 30-day collection window from structured and unstructured sources. The submitted snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 ## Reproducing the Submitted Run (examiners start here)
 
@@ -26,15 +26,13 @@ If either directory is shipped as a separate archive, unpack it at the repo root
 
 ### What to look for after the run
 
-Generated artefacts land in `output/` with a UTC timestamp prefix:
+Generated artefacts land in `output/` (non-timestamped, always reflecting the most recent run) and `data/processed/` (timestamped JSON stage outputs):
 
-- `output/<ts>_completed_kg.ttl` — the final knowledge graph.
-- `output/<ts>_query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
-- `output/<ts>_validation_results.json` — SPARQL-based graph validation report (expected: `0` violations).
-- `output/<ts>_completion_audit.json` — per-event summary of links added during Stage 9 completion.
-- `output/<ts>_kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
-
-The non-timestamped copies in `output/` always reflect the most recent run.
+- `output/completed_kg.ttl` — the final knowledge graph.
+- `output/query_results.json` — row counts and bindings for all 20 competency queries (expected: `20/20` queries return at least one row).
+- `output/validation_results.json` — SPARQL-based graph validation report (expected: `0` errors; 1 warning-severity rule, V15, may report violations for GOV.UK records where no department could be identified).
+- `output/completion_audit.json` — per-event summary of links added during Stage 9 completion.
+- `output/kg_summary.json` — headline metrics (triple counts, coverage, completion deltas).
 
 ## Data Sources
 
@@ -75,6 +73,22 @@ The non-timestamped copies in `output/` always reflect the most recent run.
 ```bash
 python -m pytest
 ```
+
+## Running Evaluations
+
+After reproducing the submitted run with `python -m src.main --from-cache`, the evaluation scripts can be run with their default artefacts:
+
+```bash
+python -m src.evaluate_extraction evaluate
+python -m src.evaluate_rag
+python -m src.evaluate_completion
+```
+
+These commands align with the evaluator defaults in `src/`:
+
+- `src.evaluate_extraction evaluate` scores the latest `data/processed/*_kg_records.json` predictions against `data/evaluation/gold_standard_extraction.json`, writing `output/extraction_evaluation.json` and `docs/extraction_evaluation.md`.
+- `src.evaluate_rag` reads `output/completion_audit.json` and cached RAG completion payloads, writing `output/rag_evaluation.json` and `docs/rag_evaluation.md`.
+- `src.evaluate_completion` compares `kg/generated/prototype_kg.ttl` with `kg/generated/completed_kg.ttl` for the selected competency questions, includes cached direct-LLM baseline answers when available, and writes `docs/baseline_comparison.md`.
 
 ## Live-API Mode (not required for marking)
 

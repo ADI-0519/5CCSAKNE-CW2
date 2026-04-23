@@ -10,7 +10,7 @@
   ],
   "organizations": [
     "Green Party",
-    "Labour Party",
+    "Labour",
     "Liberal Democrats",
     "Resolution Foundation"
   ],
@@ -30,8 +30,7 @@
     "Liberal Democrats"
   ],
   "government_bodies": [
-    "HM Treasury",
-    "Competition and Markets Authority"
+    "HM Treasury"
   ],
   "sentiment": "Positive",
   "article_type": "NewsArticle",
