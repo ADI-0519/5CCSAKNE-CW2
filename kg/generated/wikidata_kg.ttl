@@ -28553,3 +28553,4 @@
     schema:foundingDate "1834-12-18"^^xsd:date ;
     schema:location <http://example.org/news#location/Conservative_Campaign_Headquarters> ;
     schema:name "Conservative Party" .
+

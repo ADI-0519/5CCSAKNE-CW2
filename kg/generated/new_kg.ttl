@@ -5104,6 +5104,7 @@
 
 <http://example.org/news#event/Competition_and_scaling__Tech_eu_Summit_London_2026_2026-04-22_London> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Competition_and_Markets_Authority> ;
     news:occursInLocation <http://example.org/news#location/London> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/44d60457220543e7> ;
@@ -5123,6 +5124,7 @@
 <http://example.org/news#event/Connect_Fund_to_award_additional__1_5_million_to_community_and_voluntary_groups_2026-04-16_Northern_Ireland> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Public_Spending> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Northern_Ireland_Office> ;
     news:occursInLocation <http://example.org/news#location/Northern_Ireland> ;
     news:occursOnDate "2026-04-16"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/93d7512d977ebce1> ;
@@ -5164,6 +5166,7 @@
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Public_Spending> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Active_Travel_England> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-30"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/92cd8193ab383218> ;
@@ -5451,6 +5454,7 @@
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Homes_England> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/b64f7cf8a0102c10> ;
@@ -5461,6 +5465,7 @@
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Homes_England> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/053089c73532309b> ;
@@ -5470,6 +5475,7 @@
 <http://example.org/news#event/Homes_England_marks_National_Housing_Bank_launch_as_part_of_a_once-in-a-generation_investment_offer_to_accelerate_delivery_of_new_homes_and_mixed-use_schemes_2026-03-31_England> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Housing> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Homes_England> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-31"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/0d0243531c185cfb> ;
@@ -5728,6 +5734,7 @@
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Healthcare>,
         <http://example.org/news#topic/Public_Spending> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Medicines_and_Healthcare_products_Regulatory_Agency> ;
     news:occursOnDate "2026-04-08"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e902449ffca8d78b> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/e902449ffca8d78b> ;
@@ -5892,6 +5899,7 @@
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Government_Policy>,
         <http://example.org/news#topic/Housing> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Homes_England> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-03-24"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/b58d634309a2199c> ;
@@ -5905,7 +5913,8 @@
         <http://example.org/news#topic/Healthcare> ;
     news:involvesGovernmentBody <http://example.org/news#organisation/Department_for_Business_and_Trade>,
         <http://example.org/news#organisation/Department_for_Science__Innovation_and_Technology>,
-        <http://example.org/news#organisation/Department_of_Health_and_Social_Care> ;
+        <http://example.org/news#organisation/Department_of_Health_and_Social_Care>,
+        <http://example.org/news#organisation/Medicines_and_Healthcare_products_Regulatory_Agency> ;
     news:occursInLocation <http://example.org/news#location/England> ;
     news:occursOnDate "2026-04-02"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/83490eaa9c366586> ;
@@ -5963,7 +5972,8 @@
     news:concernsPolicyTopic <http://example.org/news#topic/Defence>,
         <http://example.org/news#topic/Education>,
         <http://example.org/news#topic/Energy> ;
-    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Ministry_of_Defence>,
+        <http://example.org/news#organisation/Northern_Ireland_Office> ;
     news:occursInLocation <http://example.org/news#location/Northern_Ireland> ;
     news:occursOnDate "2026-04-22"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/e612e3a5be344d14> ;
@@ -6544,6 +6554,7 @@
 
 <http://example.org/news#event/Summer_boost_for_HM_Coastguard_Search_and_Rescue_helicopters_2026-04-07> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Maritime_and_Coastguard_Agency> ;
     news:occursOnDate "2026-04-07"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/63cf1f207c7bc7f8> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/63cf1f207c7bc7f8> ;
@@ -7081,11 +7092,11 @@
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/4f915e5838bb1df6> ;
     schema:name "£70m funding to address building safety professional shortages" .
 
-<http://example.org/news#event/_Strong_economic_returns__from_Maritime_and_Coastguard_Agency_seafarer_training_support__finds_independent_report_2026-04-13_Maritime> a news:GovernmentPolicyEvent,
+<http://example.org/news#event/_Strong_economic_returns__from_Maritime_and_Coastguard_Agency_seafarer_training_support__finds_independent_report_2026-04-13> a news:GovernmentPolicyEvent,
         news:PolicyEvent ;
     news:concernsPolicyTopic <http://example.org/news#topic/Economic_Policy>,
         <http://example.org/news#topic/Public_Spending> ;
-    news:occursInLocation <http://example.org/news#location/Maritime> ;
+    news:involvesGovernmentBody <http://example.org/news#organisation/Maritime_and_Coastguard_Agency> ;
     news:occursOnDate "2026-04-13"^^xsd:date ;
     news:reportedByArticle <http://example.org/news#article/540a16a882511728> ;
     news:representedInOfficialSource <http://example.org/news#source-record/govuk/540a16a882511728> ;
@@ -13621,19 +13632,16 @@
 <http://example.org/news#location/Lebanon> a news:Location ;
     schema:name "Lebanon" .
 
-<http://example.org/news#location/Maritime> a news:Location ;
-    schema:name "Maritime" .
-
 <http://example.org/news#location/Syria> a news:Location ;
     schema:name "Syria" .
+
+<http://example.org/news#organisation/Active_Travel_England> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Active Travel England" .
 
 <http://example.org/news#organisation/Charity_Commission> a news:GovernmentBody,
         news:OfficialBody ;
     schema:name "Charity Commission" .
-
-<http://example.org/news#organisation/Competition_and_Markets_Authority> a news:GovernmentBody,
-        news:OfficialBody ;
-    schema:name "Competition and Markets Authority" .
 
 <http://example.org/news#organisation/Holyrood> a news:GovernmentBody,
         news:OfficialBody ;
@@ -14946,9 +14954,26 @@
 <http://example.org/news#location/Scotland> a news:Location ;
     schema:name "Scotland" .
 
+<http://example.org/news#organisation/Competition_and_Markets_Authority> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Competition and Markets Authority" .
+
+<http://example.org/news#organisation/Maritime_and_Coastguard_Agency> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Maritime and Coastguard Agency" .
+
+<http://example.org/news#organisation/Medicines_and_Healthcare_products_Regulatory_Agency> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Medicines and Healthcare products Regulatory Agency" .
+
 <http://example.org/news#organisation/No_10> a news:GovernmentBody,
         news:OfficialBody ;
     schema:name "No 10" .
+
+<http://example.org/news#organisation/Northern_Ireland_Office> a news:GovernmentBody,
+        news:GovernmentDepartment,
+        news:OfficialBody ;
+    schema:name "Northern Ireland Office" .
 
 <http://example.org/news#organisation/Scottish_Government> a news:GovernmentBody,
         news:OfficialBody ;
@@ -15251,6 +15276,10 @@
         news:OfficialBody ;
     schema:name "Department for Science, Innovation and Technology" .
 
+<http://example.org/news#organisation/Homes_England> a news:GovernmentBody,
+        news:OfficialBody ;
+    schema:name "Homes England" .
+
 <http://example.org/news#organisation/Ministry_of_Justice> a news:GovernmentBody,
         news:GovernmentDepartment,
         news:OfficialBody ;
@@ -15509,3 +15538,4 @@
 
 <http://example.org/news#organisation/GOV_UK> a news:NewsOrganisation ;
     schema:name "GOV.UK" .
+
