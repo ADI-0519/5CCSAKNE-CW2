@@ -87,6 +87,8 @@ GOVERNMENT_DEPARTMENT_NAMES = [
     "DSIT",
     "Department for Energy Security and Net Zero",
     "DESNZ",
+    "Northern Ireland Office",
+    "NIO",
 ]
 
 GOVERNMENT_BODY_NAMES = GOVERNMENT_DEPARTMENT_NAMES + [
@@ -106,6 +108,14 @@ GOVERNMENT_BODY_NAMES = GOVERNMENT_DEPARTMENT_NAMES + [
     "Attorney General's Office",
     "Welsh Government",
     "Scottish Government",
+    "Maritime and Coastguard Agency",
+    "MCA",
+    "Medicines and Healthcare products Regulatory Agency",
+    "MHRA",
+    "Homes England",
+    "Active Travel England",
+    "Competition and Markets Authority",
+    "CMA",
 ]
 
 UK_LOCATION_NAMES = [
@@ -203,6 +213,8 @@ GOVERNMENT_BODY_ALIASES = {
     "department for energy security and net zero": "Department for Energy Security and Net Zero",
     "department for energy security & net zero": "Department for Energy Security and Net Zero",
     "desnz": "Department for Energy Security and Net Zero",
+    "northern ireland office": "Northern Ireland Office",
+    "nio": "Northern Ireland Office",
     "hm revenue and customs": "HM Revenue and Customs",
     "hmrc": "HM Revenue and Customs",
     "driver and vehicle licensing agency": "Driver and Vehicle Licensing Agency",
@@ -214,6 +226,14 @@ GOVERNMENT_BODY_ALIASES = {
     "charity commission": "Charity Commission",
     "attorney general's office": "Attorney General's Office",
     "prime minister's office": "Prime Minister's Office",
+    "maritime and coastguard agency": "Maritime and Coastguard Agency",
+    "mca": "Maritime and Coastguard Agency",
+    "medicines and healthcare products regulatory agency": "Medicines and Healthcare products Regulatory Agency",
+    "mhra": "Medicines and Healthcare products Regulatory Agency",
+    "homes england": "Homes England",
+    "active travel england": "Active Travel England",
+    "competition and markets authority": "Competition and Markets Authority",
+    "cma": "Competition and Markets Authority",
     "scottish government": "Scottish Government",
     "welsh government": "Welsh Government",
 }
@@ -228,6 +248,11 @@ OFFICIAL_BODY_KIND_OVERRIDES = {
     "prime minister's office": "government_body",
     "welsh government": "government_body",
     "scottish government": "government_body",
+    "maritime and coastguard agency": "government_body",
+    "medicines and healthcare products regulatory agency": "government_body",
+    "homes england": "government_body",
+    "active travel england": "government_body",
+    "competition and markets authority": "government_body",
 }
 
 MINISTER_ROLE_DEPARTMENT_MAP = {
