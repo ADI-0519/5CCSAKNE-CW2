@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Find Out Now",
+    "Jane Green",
+    "Joe Twyman",
+    "Keir Starmer",
+    "Nigel Farage",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Conservative Party",
+    "Plaid Cymru",
+    "Scottish National Party"
+  ],
+  "locations": [
+    "England",
+    "Scotland",
+    "Wales"
+  ],
+  "topics": [
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Plaid Cymru"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}
