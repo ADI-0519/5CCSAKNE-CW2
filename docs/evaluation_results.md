@@ -4,13 +4,13 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260423T003657Z`
+- `20260423T022716Z`
 
 Primary artefacts:
 
-- `data/processed/20260423T003657Z_normalised_articles.json`
-- `data/processed/20260423T003657Z_extracted_articles.json`
-- `data/processed/20260423T003657Z_kg_records.json`
+- `data/processed/20260423T022716Z_normalised_articles.json`
+- `data/processed/20260423T022716Z_extracted_articles.json`
+- `data/processed/20260423T022716Z_kg_records.json`
 - `kg/generated/new_kg.ttl`
 - `kg/generated/wikidata_kg.ttl`
 - `kg/generated/prototype_kg.ttl`
@@ -41,18 +41,18 @@ Wikidata enrichment:
 Generated graph counts:
 
 - Ontology graph: `188` triples
-- Source-derived instance KG: `13302` triples
+- Source-derived instance KG: `12978` triples
 - Wikidata KG: `25115` triples
-- Prototype KG: `38426` triples
-- Completed KG: `38958` triples
+- Prototype KG: `38136` triples
+- Completed KG: `38602` triples
 
 Completion additions:
 
-- `198` `news:reportsOn` inverse links
-- `158` `news:matchedToSourceRecord` links
-- `10` `news:representedInOfficialSource` links
-- RAG additions: `9` actor links, `13` department links, `105` topic links
-- Total delta from prototype to completed KG: `532` triples
+- `188` `news:reportsOn` inverse links
+- `149` `news:matchedToSourceRecord` links
+- `5` `news:representedInOfficialSource` links
+- RAG additions: `7` actor links, `6` department links, `111` topic links
+- Total delta from prototype to completed KG: `466` triples
 
 Structural judgment:
 
@@ -67,21 +67,21 @@ All `20/20` competency queries returned at least one row when the current query 
 
 | CQ | Row count |
 | --- | ---: |
-| CQ01 | 12 |
-| CQ02 | 55 |
-| CQ03 | 8 |
-| CQ04 | 155 |
-| CQ05 | 7 |
-| CQ06 | 12 |
-| CQ07 | 18 |
+| CQ01 | 10 |
+| CQ02 | 52 |
+| CQ03 | 7 |
+| CQ04 | 147 |
+| CQ05 | 6 |
+| CQ06 | 10 |
+| CQ07 | 17 |
 | CQ08 | 4 |
-| CQ09 | 28 |
+| CQ09 | 25 |
 | CQ10 | 16 |
-| CQ11 | 150 |
+| CQ11 | 140 |
 | CQ12 | 11 |
-| CQ13 | 37 |
+| CQ13 | 35 |
 | CQ14 | 16 |
-| CQ15 | 8 |
+| CQ15 | 7 |
 | CQ16 | 7 |
 | CQ17 | 5 |
 | CQ18 | 18 |
@@ -104,29 +104,28 @@ Validation:
 
 Summary metrics:
 
-- Policy events: `198`
-- Government policy events: `166`
+- Policy events: `188`
+- Government policy events: `165`
 - Parliamentary events: `12`
 - Parliamentary debates: `7`
-- Ministerial statements: `54`
-- Events with dates: `198` (`100%`)
-- Events with topics: `198` (`100%`)
-- Events with a government body: `174` (`87.88%`)
-- Events linked to official source records: `156` (`78.79%`)
+- Ministerial statements: `52`
+- Events with dates: `188` (`100%`)
+- Events with topics: `188` (`100%`)
+- Events with a government body: `167` (`88.83%`)
+- Events linked to official source records: `147` (`78.19%`)
 
 Extraction summary:
 
-- Extracted events: `198`
-- Generic fallback events: `31`
+- Extracted events: `188`
+- Generic fallback events: `22`
 - Generic fallback names:
-  - `Policy Announcement`: `28`
+  - `Policy Announcement`: `19`
   - `Ministerial Statement`: `3`
 - Confidence counts:
-  - `high`: `137`
-  - `medium`: `54`
-  - `low`: `7`
+  - `high`: `136`
+  - `medium`: `52`
 - Extraction methods:
-  - `heuristic`: `197`
+  - `heuristic`: `187`
   - `openai`: `1`
 
 ## 4. Baseline Comparison
@@ -139,20 +138,32 @@ Reference file:
 
 Headline results:
 
-- `CQ04`: prototype `152`, completed `155`, delta `+3`
-- `CQ11`: prototype `137`, completed `150`, delta `+13`
+- `CQ04`: prototype `125`, completed `125`, delta `+0`
+- `CQ11`: prototype `109`, completed `115`, delta `+6`
 - `CQ12`: prototype `11`, completed `11`, delta `+0`
 - `CQ16`: prototype `7`, completed `7`, delta `+0`
-- `CQ18`: prototype `16`, completed `18`, delta `+2`
+- `CQ18`: prototype `11`, completed `12`, delta `+1`
 
 Interpretation:
 
-- `CQ11` shows the clearest completion benefit, with 13 additional rows from `matchedToSourceRecord` and `representedInOfficialSource` links enabling cross-source traversal that the prototype graph cannot support.
-- `CQ04` and `CQ18` also show completion benefit from additional source-record and actor links.
-- `CQ12` and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
+- `CQ11` shows the clearest completion benefit, with 6 additional rows from `matchedToSourceRecord` and `representedInOfficialSource` links enabling cross-source traversal that the prototype graph cannot support.
+- `CQ18` also shows completion benefit from additional actor links.
+- `CQ04`, `CQ12`, and `CQ16` show no delta, meaning the relevant triples were already present in the prototype before completion ran.
 - A direct LLM answer cannot ground any of these results in the actual dataset.
 
-## 5. Evaluation Position
+## 5. Performance Benchmark
+
+The benchmark times a full `--from-cache` pipeline run without any data collection or API calls.
+
+- Elapsed time: `21.05` seconds
+- Records processed: `673`
+- Throughput: `31.97` records/second
+- Platform: Linux (WSL2 6.6.87.2-microsoft-standard-WSL2), Python 3.12.3
+- Peak memory: not available (WSL2 reports `null` for working set; measurement is Windows-only)
+
+The benchmark confirms the pipeline is fast enough for repeated iteration from cache without any meaningful wait cost.
+
+## 6. Evaluation Position
 
 The strongest defensible evaluation claim is:
 
@@ -178,7 +189,7 @@ The graph is weaker for:
 - the generic fallback subset, which should be interpreted as low-information abstractions rather than richly grounded event identities
 - the limited size of the direct LLM baseline, which covers only five target CQs
 
-## 6. Recommended Final Framing
+## 7. Recommended Final Framing
 
 The final report should frame the system as a working automated KG pipeline with an event-centred ontology, auditable domain knowledge, conservative semantic projection, and ontology-aware QA.
 
