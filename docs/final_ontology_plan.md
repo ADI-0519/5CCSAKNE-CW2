@@ -166,7 +166,6 @@ Future work may add:
 
 - richer provenance for completion links
 - confidence scores or evidence spans
-- RAG-based source retrieval for proposed matches
 - stronger entity resolution between article-extracted actors and Wikidata entities
 - a separate article-analytics module if sentiment, follow-up chains, or article subtypes become required again
 
