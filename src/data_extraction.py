@@ -153,7 +153,7 @@ def find_named_matches(text, candidates):
     return unique_sorted(matches)
 
 
-def extract_topics(text, tags=None, section=None):
+def extract_topics(text, tags=None, section=None, source_system=None):
     text_lower = text.lower()
     topic_scores = defaultdict(int)
 
@@ -182,14 +182,13 @@ def extract_topics(text, tags=None, section=None):
         return []
 
     ranked = sorted(topic_scores.items(), key=lambda item: (-item[1], item[0]))
+    min_score = 1 if source_system in {"parliament", "govuk"} else 2
     selected = []
     for topic_name, score in ranked:
-        if score <= 0:
-            continue
-        if topic_name in {"Government Policy", "Politics"} and score < 2:
+        if score < min_score:
             continue
         selected.append(topic_name)
-        if len(selected) == 4:
+        if len(selected) == 3:
             break
 
     return selected
@@ -274,13 +273,17 @@ def extract_people(text, spacy_candidates=None):
 
 
 def extract_locations(text, spacy_candidates=None):
+    text_lower = text.lower()
     found = set(find_named_matches(text, CANONICAL_LOCATION_NAMES))
     found.update(spacy_candidates or [])
 
     for match in LOCATION_PATTERN.finditer(text):
         location = normalise_label(match.group(1))
-        if is_location_candidate_valid(location):
-            found.add(location)
+        if not is_location_candidate_valid(location):
+            continue
+        if location not in CANONICAL_LOCATION_NAMES and phrase_match_count(text_lower, location.lower()) < 2:
+            continue
+        found.add(location)
 
     return sanitize_locations(found)
 
@@ -817,6 +820,10 @@ def choose_event_location(event_name, event_type, locations, text_lower, topics)
 
 
 def generic_event_fallback_blocked(article, article_type=None):
+    # generic fallback tends to adds noise, not value for this source
+    if article.get("source_system") == "parliament":
+        return True
+
     title_lower = normalise_label(article.get("title")).lower()
     url_lower = str(article.get("url") or "").lower()
     section_lower = normalise_label(article.get("section")).lower()
@@ -1647,11 +1654,14 @@ def extract_article_record(article):
     people = extract_people(text, spacy_candidates=spacy_entities["people"])
     organisations = extract_organisations(text, spacy_candidates=spacy_entities["organizations"])
     locations = extract_locations(text, spacy_candidates=spacy_entities["locations"])
-    topics = extract_topics(text, tags=article.get("tags"), section=article.get("section"))
+    topics = extract_topics(text, tags=article.get("tags"), section=article.get("section"), source_system=article.get("source_system"))
     politicians = classify_politicians(people)
     political_parties = classify_political_parties(organisations)
     government_bodies = unique_sorted(
-        classify_government_bodies(organisations) + infer_government_bodies_from_text(text)
+        classify_government_bodies(organisations)
+        + infer_government_bodies_from_text(
+            " ".join(p for p in [article.get("title"), article.get("summary")] if p)
+        )
     )
     blocked_people = set(organisations) | set(political_parties) | set(government_bodies)
     organisations = sanitize_organizations(organisations)
