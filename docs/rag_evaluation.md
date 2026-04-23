@@ -2,14 +2,14 @@
 
 ## Summary
 
-- events with RAG additions: `95`
-- total proposed values: `290`
-- total accepted after validation: `132`
-- total rejected by validation: `158`
-- acceptance rate (validation filter): `45.5%`
+- events with RAG additions: `94`
+- total proposed values: `275`
+- total accepted after validation: `127`
+- total rejected by validation: `148`
+- acceptance rate (validation filter): `46.2%`
 - accepted actors: `7`
 - accepted departments: `6`
-- accepted topics: `119`
+- accepted topics: `114`
 
 ## Per-event sample
 
@@ -18,8 +18,8 @@ The table below covers events where at least one RAG triple was accepted. The `m
 | event | accepted actors | accepted departments | accepted topics | proposed | accepted |
 | --- | --- | --- | --- | ---: | ---: |
 | 130 cultural venues  museums  and libraries to receive fundi | - | - | Government Policy | 3 | 1 |
-| 27th Anniversary of the NATO Response to the Humanitarian Cr | - | - | Defence, Government Policy | 4 | 2 |
-| Attacks on international shipping in the Gulf have been deep | - | - | Defence, Parliament | 4 | 2 |
+| 27th Anniversary of the NATO Response to the Humanitarian Cr | - | - | Defence, Government Policy | 3 | 2 |
+| Attacks on international shipping in the Gulf have been deep | - | - | Government Policy | 2 | 1 |
 | Attorney General s Harry Street Lecture speech 2026-03-24 | Attorney General | - | Government Policy | 3 | 2 |
 | Better journeys ahead  agreement secured to benefit Welsh pa | - | - | Government Policy | 3 | 1 |
 | Carbon border adjustment mechanism  CBAM   Policy summary 20 | - | - | Economic Policy | 3 | 1 |
@@ -43,7 +43,7 @@ The table below covers events where at least one RAG triple was accepted. The `m
 | Homes England investment roadmap December 2025 2026-03-31 En | - | Ministry of Housing  Communities and Local Government | - | 3 | 1 |
 | Homes England marks National Housing Bank launch as part of  | - | Ministry of Housing  Communities and Local Government | Government Policy | 3 | 2 |
 | Hydrogen investment fuels South Yorkshire s next industrial  | - | - | Government Policy | 3 | 1 |
-| Israel s decision to expand its ground operations further in | - | - | Defence, Government Policy | 3 | 2 |
+| Israel s decision to expand its ground operations further in | - | - | Government Policy | 2 | 1 |
 | Japan-UK Foreign Ministers  Strategic Dialogue 2026   Joint  | - | - | Government Policy | 2 | 1 |
 | Jobs  energy security and investment boost for Scotland 2026 | - | - | Government Policy | 3 | 1 |
 | Joint Statement from the leaders of the Joint Expeditionary  | - | - | Defence, Government Policy | 3 | 2 |
@@ -64,12 +64,11 @@ The table below covers events where at least one RAG triple was accepted. The `m
 | New UK Aid for displaced people in Lebanon as Minister visit | - | - | Government Policy | 4 | 1 |
 | New powers to protect vital free speech at universities 2026 | - | - | Government Policy | 3 | 1 |
 | Northern Ireland start-up boost with new  50 million defence | - | - | Economic Policy | 3 | 1 |
-| On Russian submarine activity in the Atlantic  Joint stateme | - | - | Defence | 3 | 1 |
+| On Russian submarine activity in the Atlantic  Joint stateme | - | - | Defence, Government Policy | 3 | 2 |
 | Parliamentary Debate 2026-03-26 0de59430 | - | Department for Culture  Media and Sport | Government Policy | 4 | 2 |
-| Parliamentary Debate 2026-04-19 Washington e1004497 | - | - | Government Policy | 3 | 1 |
 | Policy Announcement 2026-04-08 Westminster 24972cfc | Ben Delo | - | Government Policy | 3 | 2 |
 | Powering the farms of the future with  50 million tech inves | - | - | Economic Policy, Government Policy | 3 | 2 |
-| Recent Houthi attacks against Israel threaten to further des | - | - | Defence, Government Policy | 4 | 2 |
+| Recent Houthi attacks against Israel threaten to further des | - | - | Defence, Government Policy | 3 | 2 |
 | Reformed Arts Council to better ensure the arts are no longe | - | - | Government Policy | 3 | 1 |
 | Reforms to make it easier for overseas companies to move to  | - | - | Economic Policy | 3 | 1 |
 | Report by the Head of OSCE Mission to Bosnia and Herzegovina | - | - | Government Policy | 2 | 1 |
@@ -86,30 +85,30 @@ The table below covers events where at least one RAG triple was accepted. The `m
 | Summer boost for HM Coastguard Search and Rescue helicopters | - | - | Government Policy | 2 | 1 |
 | Summoning of the Iranian Ambassador to the United Kingdom  F | - | - | Government Policy, Immigration | 4 | 2 |
 | Tay Cities Region backed by up to  20 million from UK govern | - | - | Public Spending | 3 | 1 |
-| The UK remains committed to working with the GCC  the United | - | - | Government Policy | 2 | 1 |
+| The UK remains committed to working with the GCC  the United | - | - | Government Policy | 3 | 1 |
 | The UK stands ready to engage constructively with all partie | - | - | Energy, Government Policy | 4 | 2 |
-| The UK supports EU-UN coordination in maintaining internatio | - | - | Defence, Government Policy | 4 | 2 |
+| The UK supports EU-UN coordination in maintaining internatio | - | - | Defence, Government Policy | 3 | 2 |
 | The UK will continue to champion coordination between the Le | - | - | Government Policy | 2 | 1 |
 | The UK will not cease in our support for Ukraine and its peo | - | - | Defence, Government Policy | 4 | 2 |
-| The United Kingdom condemns violence against UN peacekeepers | - | - | Defence, Government Policy | 4 | 2 |
-| The United Kingdom remains concerned by the deteriorating hu | - | - | Government Policy | 3 | 1 |
+| The United Kingdom condemns violence against UN peacekeepers | - | - | Government Policy | 2 | 1 |
+| The United Kingdom remains concerned by the deteriorating hu | - | - | Government Policy | 2 | 1 |
 | The Universal Credit  Personal Independence Payment and Empl | - | - | Economic Policy | 3 | 1 |
-| The only solution to the current crisis in South Sudan is th | - | - | Government Policy | 2 | 1 |
+| The only solution to the current crisis in South Sudan is th | - | - | Government Policy | 3 | 1 |
 | Time to Pay Up  Government unveils toughest crackdown on lat | - | - | Economic Policy | 3 | 1 |
 | UK Explanation of Vote on the Declaration of the trafficking | - | - | Government Policy | 2 | 1 |
 | UN Human Rights Council 61  UK Introductory Statement on the | - | - | Government Policy | 2 | 1 |
-| UN Human Rights Council 61  UK Statement for the Interactive | - | - | Government Policy, Immigration | 4 | 2 |
-| UN Human Rights Council 61  UK Statement for the resolution  | - | - | Government Policy | 3 | 1 |
+| UN Human Rights Council 61  UK Statement for the Interactive | - | - | Government Policy | 3 | 1 |
+| UN Human Rights Council 61  UK Statement for the resolution  | - | - | Government Policy | 2 | 1 |
 | UN Human Rights Council 61  UK Statement on the Appointment  | - | - | Government Policy | 2 | 1 |
 | Update following negotiations on an enhanced FTA with Switze | - | - | Economic Policy | 3 | 1 |
 | WTO General Council March 2026  UK Statement Day 1 and Day 2 | - | - | Economic Policy, Government Policy | 3 | 2 |
 | We call for greater efforts to protect women and girls  and  | - | - | Government Policy | 3 | 1 |
 | We can shape a world where every human being can live with d | - | - | Government Policy | 2 | 1 |
-| We condemn increasing drone strikes on civilians and humanit | - | - | Government Policy | 3 | 1 |
+| We condemn increasing drone strikes on civilians and humanit | - | - | Government Policy | 2 | 1 |
 | We continue to call on Kosovo and Serbia to resolve outstand | - | - | Government Policy | 3 | 1 |
 | We must honour the dedication of humanitarian and UN personn | - | - | Government Policy | 2 | 1 |
-| We must preserve the land and the people of Palestine so tha | - | - | Government Policy, Immigration | 3 | 2 |
-| We reiterate our commitment to an inclusive political proces | - | - | Government Policy | 3 | 1 |
+| We must preserve the land and the people of Palestine so tha | - | - | Government Policy | 2 | 1 |
+| We reiterate our commitment to an inclusive political proces | - | - | Government Policy | 2 | 1 |
 |  1 billion invested in health protection as new Pandemic Str | - | - | Government Policy | 3 | 1 |
 |  Wainwright way  becomes England s newest National Trail 202 | - | - | Government Policy | 2 | 1 |
 
