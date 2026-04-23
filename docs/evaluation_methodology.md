@@ -128,7 +128,7 @@ Latest validated result:
 - completed KG: `39111` triples
 - completion delta: `503` triples
 - `reportsOn` links added: `194`
-- `matchedToSourceRecord` links added: `157`
+- `matchedToSourceRecord` links added: `155`
 
 Important quality questions:
 
