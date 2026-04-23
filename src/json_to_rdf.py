@@ -725,6 +725,11 @@ def add_events(
         ):
             event_class = NEWS.PolicyEvent
 
+        # downgrade debates with no parliamentary body match (e.g. UNHRC in Geneva)
+        if event_class == NEWS.ParliamentaryDebate and not selected_parliamentary_bodies:
+            if source_system not in {"hansard", "parliament"}:
+                event_class = NEWS.GovernmentPolicyEvent
+
         graph.add((uri, RDF.type, NEWS.PolicyEvent))
         if event_class != NEWS.PolicyEvent:
             graph.add((uri, RDF.type, event_class))
