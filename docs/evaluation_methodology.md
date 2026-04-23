@@ -71,7 +71,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260423T073344Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260423T110354Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -124,11 +124,11 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `38608` triples
-- completed KG: `39111` triples
-- completion delta: `503` triples
+- prototype KG: `38576` triples
+- completed KG: `39086` triples
+- completion delta: `510` triples
 - `reportsOn` links added: `194`
-- `matchedToSourceRecord` links added: `155`
+- `matchedToSourceRecord` links added: `157`
 
 Important quality questions:
 
@@ -186,13 +186,15 @@ Metrics:
 
 ## 7. LLM Baseline Comparison
 
-Goal: compare KG-based answering with direct LLM answering on a small subset of competency questions.
+Goal: illustrate the difference between KG-backed SPARQL answers and direct LLM answers on a small subset of competency questions.
+
+This is an illustrative contrast, not a controlled evaluation. The LLM answers from training knowledge without any constraint to the same 700 collected records or the same date window. A discrepancy between a SPARQL row count and an LLM answer could reflect KG incompleteness, LLM hallucination, or simply a different scope of knowledge, so it is not straightforwardly interpretable as one being more correct than the other.
 
 Method:
 
 - choose 5 representative CQs
-- ask an LLM to answer directly from the source text or summaries
-- compare those answers with SPARQL results
+- ask an LLM to answer from training knowledge
+- compare the structure and grounding of those answers with SPARQL results
 
 Comparison criteria:
 
@@ -202,9 +204,9 @@ Comparison criteria:
 - ease of auditing
 - failure modes
 
-Expected framing:
+Framing:
 
-The KG/SPARQL approach is more structured and auditable. Direct LLM answers may be fluent but are harder to reproduce and verify.
+The KG/SPARQL approach produces answers that are grounded in and traceable to the collected dataset. Direct LLM answers may be fluent but cannot be tied to a specific record, triple, or source document.
 
 ## Final Evaluation Position
 
