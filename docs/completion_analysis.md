@@ -31,17 +31,17 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260423T110354Z`
+- timestamp: `20260423T121805Z`
 - normalised source records: `700`
 - Guardian articles: `270`
 - Parliament source records: `20`
 - GOV.UK source records: `410`
 - Wikidata entities: `1724` politicians, `968` parties, `489` government bodies
 - ontology graph: `192` triples
-- source-derived instance KG: `13438` triples
+- source-derived instance KG: `13458` triples
 - Wikidata KG: `25115` triples
-- prototype KG: `38576` triples
-- completed KG: `39086` triples
+- prototype KG: `38596` triples
+- completed KG: `39101` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
@@ -51,9 +51,9 @@ Completion additions in that run:
 - `5` `news:representedInOfficialSource` links
 - `7` `news:involvesActor` links (RAG)
 - `6` `news:involvesGovernmentBody` links (RAG)
-- `119` `news:concernsPolicyTopic` links (RAG)
+- `114` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `510` triples.
+The completed KG is therefore larger than the prototype KG by `505` triples.
 
 ## What Is Covered Well
 
@@ -137,7 +137,7 @@ Wikidata provides background entities for UK politicians, but article-extracted 
 
 `I4.` Parliamentary body assignment is incomplete.
 
-Five of the twelve `news:ParliamentaryEvent` instances lack `news:occursInParliamentaryBody` because the source text did not name a specific chamber or committee. Events from written statements are sometimes attributed to the body name but this is not consistently extracted across the full Parliament record set.
+Five of the ten `news:ParliamentaryEvent` instances lack `news:occursInParliamentaryBody` because the source text did not name a specific chamber or committee. Events from written statements are sometimes attributed to the body name but this is not consistently extracted across the full Parliament record set.
 
 `I5.` Completion provenance is not recorded at the instance level.
 
@@ -154,7 +154,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
-- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 119 topic links were not present in the prototype KG.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 114 topic links were not present in the prototype KG.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 

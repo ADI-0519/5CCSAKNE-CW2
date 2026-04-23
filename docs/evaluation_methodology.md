@@ -71,7 +71,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260423T110354Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260423T121805Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -124,9 +124,9 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `38576` triples
-- completed KG: `39086` triples
-- completion delta: `510` triples
+- prototype KG: `38596` triples
+- completed KG: `39101` triples
+- completion delta: `505` triples
 - `reportsOn` links added: `194`
 - `matchedToSourceRecord` links added: `157`
 

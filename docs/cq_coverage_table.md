@@ -29,7 +29,7 @@ This table records which sources and pipeline steps support each competency ques
 
 ## Query results
 
-Counts come from running the current query set against the latest validated completed KG from `20260423T110354Z`, where all `20/20` queries returned at least one row and all `17` of `17` validation rules passed with `0` violations.
+Counts come from running the current query set against the latest validated completed KG from `20260423T121805Z`, where all `20/20` queries returned at least one row and all `17` of `17` validation rules passed with `0` violations.
 
 Classification legend:
 

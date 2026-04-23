@@ -4,13 +4,13 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260423T110354Z`
+- `20260423T121805Z`
 
 Primary artefacts:
 
-- `data/processed/20260423T110354Z_normalised_articles.json`
-- `data/processed/20260423T110354Z_extracted_articles.json`
-- `data/processed/20260423T110354Z_kg_records.json`
+- `data/processed/20260423T121805Z_normalised_articles.json`
+- `data/processed/20260423T121805Z_extracted_articles.json`
+- `data/processed/20260423T121805Z_kg_records.json`
 - `kg/generated/new_kg.ttl`
 - `kg/generated/wikidata_kg.ttl`
 - `kg/generated/prototype_kg.ttl`
@@ -41,18 +41,18 @@ Wikidata enrichment:
 Generated graph counts:
 
 - Ontology graph: `192` triples
-- Source-derived instance KG: `13438` triples
+- Source-derived instance KG: `13458` triples
 - Wikidata KG: `25115` triples
-- Prototype KG: `38576` triples
-- Completed KG: `39086` triples
+- Prototype KG: `38596` triples
+- Completed KG: `39101` triples
 
 Completion additions:
 
 - `194` `news:reportsOn` inverse links
 - `157` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
-- RAG additions: `7` actor links, `6` department links, `119` topic links
-- Total delta from prototype to completed KG: `510` triples
+- RAG additions: `7` actor links, `6` department links, `114` topic links
+- Total delta from prototype to completed KG: `505` triples
 
 Structural judgment:
 
@@ -105,9 +105,9 @@ Validation:
 Summary metrics:
 
 - Policy events: `194`
-- Government policy events: `171`
-- Parliamentary events: `12`
-- Parliamentary debates: `7`
+- Government policy events: `173`
+- Parliamentary events: `10`
+- Parliamentary debates: `5`
 - Ministerial statements: `55`
 - Events with dates: `194` (`100%`)
 - Events with topics: `194` (`100%`)
@@ -160,7 +160,7 @@ The benchmark times a full `--from-cache` pipeline run without any data collecti
 - Records processed: `700`
 - Throughput: `29.15` records/second
 - Platform: Linux (WSL2 6.6.87.2-microsoft-standard-WSL2), Python 3.12.3
-- Peak memory: `232.2 MB` (RSS, sampled via /proc on WSL2)
+- Peak memory: `238.09 MB` (RSS, sampled via /proc on WSL2)
 
 The benchmark confirms the pipeline is fast enough for repeated iteration from cache without any meaningful wait cost.
 
@@ -197,6 +197,6 @@ The final report should frame the system as a working automated KG pipeline with
 It should explicitly state that:
 
 - heuristics act as primary extraction; OpenAI extraction is a targeted fallback that fires only when the heuristic result lacks both structured events and an institution or actor. . 193 of 194 events had enough structure for the gate to skip the LLM call entirely.
-- the primary LLM contribution in the pipeline is the RAG completion step, which processed `95` events and accepted `132` triples
+- the primary LLM contribution in the pipeline is the RAG completion step, which processed `94` events and accepted `127` triples
 - OpenAI is used critically for structured extraction support, completion support, and evaluation baselines
 - validation, query coverage, completion audit logs, and summary metrics provide the strongest evidence for the current final pipeline
