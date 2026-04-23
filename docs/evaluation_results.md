@@ -4,13 +4,13 @@ This document records the latest validated evaluation snapshot for the current p
 
 Evaluated run:
 
-- `20260423T040948Z`
+- `20260423T073344Z`
 
 Primary artefacts:
 
-- `data/processed/20260423T040948Z_normalised_articles.json`
-- `data/processed/20260423T040948Z_extracted_articles.json`
-- `data/processed/20260423T040948Z_kg_records.json`
+- `data/processed/20260423T073344Z_normalised_articles.json`
+- `data/processed/20260423T073344Z_extracted_articles.json`
+- `data/processed/20260423T073344Z_kg_records.json`
 - `kg/generated/new_kg.ttl`
 - `kg/generated/wikidata_kg.ttl`
 - `kg/generated/prototype_kg.ttl`
@@ -41,15 +41,15 @@ Wikidata enrichment:
 Generated graph counts:
 
 - Ontology graph: `192` triples
-- Source-derived instance KG: `13445` triples
+- Source-derived instance KG: `13470` triples
 - Wikidata KG: `25115` triples
-- Prototype KG: `38583` triples
-- Completed KG: `39086` triples
+- Prototype KG: `38608` triples
+- Completed KG: `39111` triples
 
 Completion additions:
 
 - `194` `news:reportsOn` inverse links
-- `155` `news:matchedToSourceRecord` links
+- `157` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
 - RAG additions: `7` actor links, `6` department links, `112` topic links
 - Total delta from prototype to completed KG: `503` triples
@@ -59,7 +59,7 @@ Structural judgment:
 - The pipeline is runnable end to end from cached snapshots via `--from-cache`.
 - Raw source snapshots, processed JSON artefacts, generated Turtle files, validation reports, summary metrics, and query results are all saved.
 - The ontology, source-derived RDF, Wikidata RDF, prototype KG, completed KG, and SPARQL queries are aligned around the event-centred vocabulary.
-- The final graph passes `16` of `17` graph validation rules. The single failing rule (V15) reports `8` warning-severity violations for government policy events missing a government body link. All violations are warnings; there are `0` errors.
+- The final graph passes all `17` graph validation rules with `0` violations and `0` errors.
 
 ## 2. Competency Question Results
 
@@ -73,11 +73,11 @@ All `20/20` competency queries returned at least one row when the current query 
 | CQ04 | 147 |
 | CQ05 | 6 |
 | CQ06 | 10 |
-| CQ07 | 17 |
+| CQ07 | 18 |
 | CQ08 | 4 |
-| CQ09 | 25 |
+| CQ09 | 17 |
 | CQ10 | 16 |
-| CQ11 | 140 |
+| CQ11 | 142 |
 | CQ12 | 11 |
 | CQ13 | 35 |
 | CQ14 | 16 |
@@ -86,21 +86,21 @@ All `20/20` competency queries returned at least one row when the current query 
 | CQ17 | 5 |
 | CQ18 | 18 |
 | CQ19 | 4 |
-| CQ20 | 16 |
+| CQ20 | 17 |
 
 Important judgments:
 
 - `CQ04` confirms that reported policy events can also be represented in official Parliament or GOV.UK source records.
 - `CQ11` and `CQ12` confirm that official source records support institution and topic queries over the completed graph.
-- `CQ09` intentionally exposes missing links; its count of `25` reflects the smaller dataset in this run producing proportionally more events without complete institution grounding.
+- `CQ09` intentionally exposes missing links; its count of `17` reflects events without complete institution grounding in the current snapshot.
 
 ## 3. Validation and Summary Metrics
 
 Validation:
 
 - Rules checked: `17`
-- Failed rules: `1` (V15, warning severity only)
-- Violations: `8` (all warnings, `0` errors)
+- Failed rules: `0`
+- Violations: `0`
 
 Summary metrics:
 
@@ -111,7 +111,7 @@ Summary metrics:
 - Ministerial statements: `55`
 - Events with dates: `194` (`100%`)
 - Events with topics: `194` (`100%`)
-- Events with a government body: `173` (`89.18%`)
+- Events with a government body: `179` (`92.27%`)
 - Events linked to official source records: `153` (`78.87%`)
 
 Extraction summary:
@@ -139,7 +139,7 @@ Reference file:
 Headline results:
 
 - `CQ04`: prototype `144`, completed `147`, delta `+3`
-- `CQ11`: prototype `133`, completed `140`, delta `+7`
+- `CQ11`: prototype `135`, completed `142`, delta `+7`
 - `CQ12`: prototype `11`, completed `11`, delta `+0`
 - `CQ16`: prototype `7`, completed `7`, delta `+0`
 - `CQ18`: prototype `16`, completed `18`, delta `+2`
@@ -156,11 +156,11 @@ Interpretation:
 
 The benchmark times a full `--from-cache` pipeline run without any data collection or API calls.
 
-- Elapsed time: `22.03` seconds
+- Elapsed time: `23.53` seconds
 - Records processed: `700`
-- Throughput: `31.77` records/second
+- Throughput: `29.75` records/second
 - Platform: Linux (WSL2 6.6.87.2-microsoft-standard-WSL2), Python 3.12.3
-- Peak memory: not available (WSL2 reports `null` for working set; measurement is Windows-only)
+- Peak memory: `231.54 MB` (RSS, sampled via /proc on WSL2)
 
 The benchmark confirms the pipeline is fast enough for repeated iteration from cache without any meaningful wait cost.
 
@@ -171,7 +171,7 @@ The strongest defensible evaluation claim is:
 - the pipeline runs end to end
 - the ontology and RDF generation are aligned with the current CQ set
 - the completed graph answers all `20` competency queries
-- the final graph passes `16` of `17` validation rules; the single V15 failure is warning-severity with `0` errors
+- the final graph passes all `17` validation rules with `0` violations
 - official-source records are integrated into the KG rather than only stored as raw data
 - the completion stage improves navigability and provenance through `reportsOn`, `matchedToSourceRecord`, and conservative enrichment
 
