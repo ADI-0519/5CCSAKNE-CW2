@@ -45,15 +45,15 @@ Classification legend:
 | CQ04 | Answered | 147 | Confirms events can be both reported by news articles and represented in official source records. |
 | CQ05 | Answered | 6 | Shows shared policy topics across parliamentary and government policy events. |
 | CQ06 | Answered | 10 | Parliamentary-body links are populated consistently; the explicit parent-type assertion fix ensures ParliamentaryDebate instances satisfy the ParliamentaryEvent type check in the query. |
-| CQ07 | Answered | 17 | Government departments can be ranked by linked policy-event count. |
+| CQ07 | Answered | 18 | Government departments can be ranked by linked policy-event count. |
 | CQ08 | Answered (soft) | 4 | Party membership depends on actor-party typing quality and Wikidata enrichment. |
-| CQ09 | Diagnostic | 25 | Intentionally identifies reported events still missing a government body, parliamentary body, or topic; the count reflects events without complete institution grounding. |
+| CQ09 | Diagnostic | 17 | Intentionally identifies reported events still missing a government body, parliamentary body, or topic; the count reflects events without complete institution grounding. |
 | CQ10 | Answered | 16 | Policy-topic frequency query over reported parliamentary and government policy events. |
-| CQ11 | Answered | 140 | Cross-source question requiring both official-source representation and a department link; the completed graph supports this with 6 additional rows over the prototype. |
+| CQ11 | Answered | 142 | Cross-source question requiring both official-source representation and a department link; the completed graph supports this with 7 additional rows over the prototype. |
 | CQ12 | Answered | 11 | Topic aggregation over officially evidenced events; concernsPolicyTopic links from the RAG step extend the result set. |
 | CQ13 | Answered | 35 | Topic co-occurrence query exercises event-topic self-joins. |
 | CQ14 | Answered | 16 | Comparative parliamentary-versus-government topic coverage query. |
-| CQ15 | Answered | 7 | Location aggregation over events with populated occursInLocation links. |
+| CQ15 | Answered | 6 | Location aggregation over events with populated occursInLocation links. |
 | CQ16 | Answered | 7 | Actor-party-topic aggregation benefits from RAG-added actor links. |
 | CQ17 | Answered | 5 | Journalist-to-article-to-event-to-department retrieval over source-grounded government policy events. |
 | CQ18 | Answered | 18 | Finds topics on events involving both actors and government bodies; both involvesActor and involvesGovernmentBody are partly completion-supported. |
