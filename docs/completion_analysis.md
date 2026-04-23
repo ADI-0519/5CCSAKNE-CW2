@@ -31,23 +31,23 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260423T040948Z`
+- timestamp: `20260423T073344Z`
 - normalised source records: `700`
 - Guardian articles: `270`
 - Parliament source records: `20`
 - GOV.UK source records: `410`
 - Wikidata entities: `1724` politicians, `968` parties, `489` government bodies
 - ontology graph: `192` triples
-- source-derived instance KG: `13445` triples
+- source-derived instance KG: `13470` triples
 - Wikidata KG: `25115` triples
-- prototype KG: `38583` triples
-- completed KG: `39086` triples
+- prototype KG: `38608` triples
+- completed KG: `39111` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
 - `194` `news:reportsOn` inverse links
-- `155` `news:matchedToSourceRecord` cross-source links
+- `157` `news:matchedToSourceRecord` cross-source links
 - `5` `news:representedInOfficialSource` links
 - `7` `news:involvesActor` links (RAG)
 - `6` `news:involvesGovernmentBody` links (RAG)
