@@ -1,7 +1,7 @@
 # Extraction Evaluation
 
 - Gold standard: `data/evaluation/gold_standard_extraction.json`
-- Prediction input: `data/processed/20260423T073344Z_kg_records.json`
+- Prediction input: `data/processed/20260423T110354Z_kg_records.json`
 - Evaluated samples: `51`
 - Missing predictions: `0`
 
@@ -16,7 +16,7 @@
 - political_actors: precision `0.8571`, recall `1.0`, f1 `0.9231`
 - political_parties: precision `1.0`, recall `1.0`, f1 `1.0`
 - record_government_bodies: precision `0.5306`, recall `0.8966`, f1 `0.6667`
-- record_locations: precision `0.3396`, recall `1.0`, f1 `0.507`
+- record_locations: precision `0.3273`, recall `1.0`, f1 `0.4932`
 
 ## By Source System
 
@@ -46,7 +46,7 @@
 - political_actors: precision `0.8571`, recall `1.0`, f1 `0.9231`
 - political_parties: precision `1.0`, recall `1.0`, f1 `1.0`
 - record_government_bodies: precision `0.3636`, recall `0.8`, f1 `0.5`
-- record_locations: precision `0.25`, recall `1.0`, f1 `0.4`
+- record_locations: precision `0.2381`, recall `1.0`, f1 `0.3846`
 
 ### parliament
 
