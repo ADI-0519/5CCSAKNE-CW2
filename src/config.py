@@ -414,6 +414,7 @@ EXTRACTION_LOCATION_BLOCKLIST = {
     "Common",
     "Conservatives",
     "English",
+    "Error",
     "Farage",
     "Kemi",
     "Labour MPs",
