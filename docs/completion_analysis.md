@@ -47,7 +47,7 @@ Latest validated run:
 Completion additions in that run:
 
 - `194` `news:reportsOn` inverse links
-- `157` `news:matchedToSourceRecord` cross-source links
+- `155` `news:matchedToSourceRecord` cross-source links
 - `5` `news:representedInOfficialSource` links
 - `7` `news:involvesActor` links (RAG)
 - `6` `news:involvesGovernmentBody` links (RAG)
