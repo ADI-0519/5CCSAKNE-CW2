@@ -31,29 +31,29 @@ The third step is an LLM-assisted enrichment step. For each policy event missing
 
 Latest validated run:
 
-- timestamp: `20260423T073344Z`
+- timestamp: `20260423T110354Z`
 - normalised source records: `700`
 - Guardian articles: `270`
 - Parliament source records: `20`
 - GOV.UK source records: `410`
 - Wikidata entities: `1724` politicians, `968` parties, `489` government bodies
 - ontology graph: `192` triples
-- source-derived instance KG: `13470` triples
+- source-derived instance KG: `13438` triples
 - Wikidata KG: `25115` triples
-- prototype KG: `38608` triples
-- completed KG: `39111` triples
+- prototype KG: `38576` triples
+- completed KG: `39086` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
 
 - `194` `news:reportsOn` inverse links
-- `155` `news:matchedToSourceRecord` cross-source links
+- `157` `news:matchedToSourceRecord` cross-source links
 - `5` `news:representedInOfficialSource` links
 - `7` `news:involvesActor` links (RAG)
 - `6` `news:involvesGovernmentBody` links (RAG)
-- `112` `news:concernsPolicyTopic` links (RAG)
+- `119` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `503` triples.
+The completed KG is therefore larger than the prototype KG by `510` triples.
 
 ## What Is Covered Well
 
@@ -145,7 +145,7 @@ RAG-added `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concern
 
 `I6.` Location extraction does not reliably capture international event venues.
 
-Events published via GOV.UK may be attributed to Westminster rather than the country where the physical meeting occurred, because the extraction filter restricts candidates to canonical UK location names. Events such as the WTO General Council (Geneva) or the Sudan Conference (Berlin) carry Westminster as their `news:occursInLocation` value. The event name and official source URL retain the correct geographic context, but it is not reflected in the location triple.
+Addressed: `INTERNATIONAL_BODY_LOCATIONS` in `domain_knowledge.py` maps events whose names mention a known international body to the correct city: WTO General Council to Geneva, UN Human Rights Council to Geneva, OSCE to Vienna, and so on. `CANONICAL_LOCATION_NAMES` in `data_extraction.py` was extended to include the venue cities from that dict, so they pass the downstream validity gate and reach the graph. The extraction pipeline also no longer defaults to Westminster when no stronger candidate is available. Events whose names do not match any known body fragment still lack location data.
 
 ## Why Completion Matters
 
@@ -154,7 +154,7 @@ Completion improves the query layer without changing the core ontology:
 - `news:reportsOn` lets queries start from articles and navigate to events.
 - `news:matchedToSourceRecord` makes cross-source alignment explicit for source-integration audits.
 - Mirroring existing `representedInOfficialSource` evidence into `matchedToSourceRecord` keeps official-source integration visible even when the graph is inspected outside the CQ query set.
-- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 112 topic links were not present in the prototype KG.
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links added by the RAG step make events queryable that were previously invisible to CQs requiring actor or topic filtering. The 7 actor links, 6 department links, and 119 topic links were not present in the prototype KG.
 
 The latest run confirms this is enough for all `20/20` competency queries to return at least one row.
 
