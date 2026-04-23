@@ -1,0 +1,60 @@
+{
+  "people": [
+    "Rachel Reeves",
+    "Keir Starmer",
+    "Richard Walker",
+    "Faiza Shaheen",
+    "Andy Burnham"
+  ],
+  "organizations": [
+    "Greenpeace UK",
+    "National Education Union",
+    "Tax Justice UK",
+    "Labour"
+  ],
+  "locations": [
+    "Chingford"
+  ],
+  "topics": [
+    "Energy",
+    "Taxation",
+    "Economic Policy"
+  ],
+  "politicians": [
+    "Rachel Reeves",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Competition and Markets Authority"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "US-Israel war on Iran",
+      "type": "GovernmentPolicyEvent",
+      "date": null,
+      "location": null,
+      "policy_topics": [
+        "Economic Policy",
+        "Energy"
+      ],
+      "political_actors": [
+        "Rachel Reeves",
+        "Keir Starmer"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

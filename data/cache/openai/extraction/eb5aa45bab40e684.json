@@ -1,0 +1,71 @@
+{
+  "people": [
+    "Christopher Harborne",
+    "Duncan Hames",
+    "Elon Musk",
+    "Keir Starmer",
+    "Nathan Gill",
+    "Phil Brickell",
+    "Richard Tice",
+    "Sir Philip Rycroft",
+    "Steve Reed"
+  ],
+  "organizations": [
+    "Electoral Commission",
+    "GB News",
+    "Labour",
+    "Reform UK"
+  ],
+  "locations": [
+    "Iran",
+    "Monaco",
+    "Russia-linked",
+    "Thailand-based"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Introduction of annual cap on overseas donations and moratorium on crypto donations",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-03-25",
+      "location": null,
+      "policy_topics": [
+        "Government Policy",
+        "Public Spending"
+      ],
+      "political_actors": [
+        "Keir Starmer",
+        "Sir Philip Rycroft"
+      ],
+      "government_bodies": [
+        "HM Treasury"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party",
+        "Reform UK"
+      ],
+      "evidence_spans": [
+        "government said it would bring in the annual cap as well as a moratorium on crypto donations from Wednesday"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Donald Trump",
+    "Emmanuel Macron",
+    "Keir Starmer",
+    "Kristalina Georgieva",
+    "Rachel Reeves",
+    "Scott Bessent"
+  ],
+  "organizations": [
+    "Downing Street",
+    "The US Treasury",
+    "International Monetary Fund (IMF)"
+  ],
+  "locations": [
+    "America",
+    "Paris",
+    "Washington"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Energy",
+    "Defence"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Downing Street",
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

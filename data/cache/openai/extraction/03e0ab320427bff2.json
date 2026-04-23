@@ -1,0 +1,41 @@
+{
+  "people": [
+    "Alex Thomas",
+    "Chris Wormald",
+    "Dave Penman",
+    "Gordon Brown",
+    "Jeremy Heywood",
+    "Keir Starmer",
+    "Liz Truss",
+    "Matthew Doyle",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Peter Ricketts",
+    "Sir Richard Dearlove",
+    "Tom Scholar"
+  ],
+  "organizations": [
+    "Foreign Office",
+    "Labour",
+    "No 10"
+  ],
+  "locations": [
+    "Whitehall"
+  ],
+  "topics": [
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

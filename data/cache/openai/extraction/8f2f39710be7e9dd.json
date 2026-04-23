@@ -1,0 +1,36 @@
+{
+  "people": [
+    "William Bain",
+    "Shanker Singham",
+    "Keir Starmer",
+    "Sam Lowe"
+  ],
+  "organizations": [
+    "British Chambers of Commerce",
+    "Labour",
+    "Growth Commission"
+  ],
+  "locations": [
+    "Scotland",
+    "Brussels",
+    "Dover",
+    "Paris",
+    "Northern Ireland"
+  ],
+  "topics": [
+    "Trade policy",
+    "Brexit",
+    "Farming",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

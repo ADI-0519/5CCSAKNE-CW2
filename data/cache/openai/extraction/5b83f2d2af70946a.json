@@ -1,0 +1,30 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Donald Trump",
+    "Susan Breau",
+    "Victor Kattan"
+  ],
+  "organizations": [
+    "Downing Street",
+    "Institute of Advanced Legal Studies",
+    "University of Nottingham"
+  ],
+  "locations": [
+    "Cyprus"
+  ],
+  "topics": [
+    "Defence",
+    "International law"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Downing Street"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

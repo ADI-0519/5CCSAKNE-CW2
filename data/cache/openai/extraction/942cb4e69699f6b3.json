@@ -1,0 +1,46 @@
+{
+  "people": [
+    "Antonia Romeo",
+    "Chris Wormald",
+    "Darren Jones",
+    "James Lyons",
+    "Jeremy Heywood",
+    "Jill Cuthbertson",
+    "Keir Starmer",
+    "Vidhya Alakeson",
+    "Sophie Nazemi",
+    "Steph Driver",
+    "Tim Allan"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Downing Street",
+    "Financial Times",
+    "Home Office",
+    "Labour Party",
+    "Ministry of Justice",
+    "No 10"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "HM Treasury",
+    "Home Office",
+    "Ministry of Justice",
+    "No 10"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

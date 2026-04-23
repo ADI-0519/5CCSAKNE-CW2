@@ -1,0 +1,76 @@
+{
+  "people": [
+    "Andy Burnham",
+    "Angela Rayner",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Michael Ashcroft",
+    "Nigel Farage",
+    "Sharon Graham",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Reform UK",
+    "Unite"
+  ],
+  "locations": [
+    "Birmingham",
+    "Glasgow",
+    "Leeds",
+    "Manchester",
+    "Scotland",
+    "Wales",
+    "Westminster"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Government Policy",
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Angela Rayner",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Green Party",
+    "Conservative Party",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Introduction of new workers' rights",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-05",
+      "location": null,
+      "policy_topics": [
+        "Workers' rights",
+        "Employment Law"
+      ],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "HM Treasury"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

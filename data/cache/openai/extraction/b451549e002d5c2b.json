@@ -1,0 +1,37 @@
+{
+  "people": [
+    "Hannah Spencer",
+    "Matthew Goodwin",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Democracy Volunteers",
+    "Greater Manchester Police",
+    "Green Party",
+    "Labour",
+    "Reform UK",
+    "GB News"
+  ],
+  "locations": [
+    "Gorton",
+    "Dentons",
+    "Greater Manchester",
+    "England"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

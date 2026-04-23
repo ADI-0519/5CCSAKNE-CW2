@@ -1,0 +1,40 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Peter Mandelson",
+    "Olly Robbins",
+    "John Lamont",
+    "Louie French",
+    "Antonia Romeo",
+    "Cat Little"
+  ],
+  "organizations": [
+    "Labour Party",
+    "Conservative Party",
+    "Foreign Office",
+    "Downing Street",
+    "Cabinet Office"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

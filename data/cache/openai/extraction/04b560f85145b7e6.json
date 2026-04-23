@@ -1,0 +1,53 @@
+{
+  "people": [
+    "David Lammy",
+    "Ed Davey",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Peter Mandelson",
+    "Sir Olly Robbins",
+    "Yvette Cooper"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Conservative Party",
+    "Development Office",
+    "Downing Street",
+    "FCDO",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour Party",
+    "Liberal Democrats",
+    "No 10"
+  ],
+  "locations": [
+    "Hastings",
+    "Washington"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Ed Davey",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

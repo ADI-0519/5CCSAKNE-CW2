@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Kemi Badenoch",
+    "Keir Starmer",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Ministry of Defence",
+    "HM Treasury"
+  ],
+  "locations": [
+    "London"
+  ],
+  "topics": [
+    "Defence",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Kemi Badenoch",
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Ministry of Defence",
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

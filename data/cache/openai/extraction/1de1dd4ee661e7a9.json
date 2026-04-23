@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Chris Curtis",
+    "David Lammy",
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Yvette Cooper"
+  ],
+  "organizations": [
+    "Foreign, Commonwealth and Development Office",
+    "Downing Street",
+    "The Guardian",
+    "The Times"
+  ],
+  "locations": [
+    "Ukraine"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament"
+  ],
+  "politicians": [
+    "David Lammy",
+    "Keir Starmer",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

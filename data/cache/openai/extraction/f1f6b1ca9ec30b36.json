@@ -1,0 +1,24 @@
+{
+  "people": [
+    "Laurence Taylor",
+    "Axel Rudakubana",
+    "David Anderson"
+  ],
+  "organizations": [
+    "The Guardian"
+  ],
+  "locations": [
+    "Southport",
+    "London"
+  ],
+  "topics": [
+    "Government Policy",
+    "Counter-terrorism policy"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

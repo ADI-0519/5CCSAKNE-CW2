@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Aid Foreign",
+    "Amelia Whitworth",
+    "Gideon Rabinowitz",
+    "Yvette Cooper"
+  ],
+  "organizations": [
+    "Bond",
+    "Plan International",
+    "Foreign, Commonwealth and Development Office",
+    "Home Office",
+    "Organisation for Economic Cooperation and Development (OECD)"
+  ],
+  "locations": [
+    "Africa",
+    "Syria"
+  ],
+  "topics": [
+    "Government Policy",
+    "Public Spending",
+    "Defence",
+    "Healthcare"
+  ],
+  "politicians": [
+    "Yvette Cooper"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office",
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,30 @@
+{
+  "people": [
+    "Alan Bates",
+    "Imran Hussain",
+    "Sasha Rozansky"
+  ],
+  "organizations": [
+    "Home Office",
+    "Refugee Council",
+    "Deighton Pierce Glynn"
+  ],
+  "locations": [
+    "Finchley",
+    "Croydon",
+    "Iraq",
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Housing"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

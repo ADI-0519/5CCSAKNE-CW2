@@ -1,0 +1,59 @@
+{
+  "people": [
+    "Richard Bingley",
+    "Nigel Farage"
+  ],
+  "organizations": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Ukip"
+  ],
+  "locations": [
+    "Thurrock",
+    "Essex",
+    "Plymouth",
+    "England"
+  ],
+  "topics": [
+    "Politics",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Richard Bingley",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party",
+    "Reform UK",
+    "Ukip"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Local elections in Thurrock",
+      "type": "PolicyEvent",
+      "date": "2026-05-07",
+      "location": "Thurrock",
+      "policy_topics": [
+        "Local government"
+      ],
+      "political_actors": [
+        "Richard Bingley"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Reform UK"
+      ],
+      "evidence_spans": [
+        "If Bingley is elected to Thurrock council in Essex on 7 May"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

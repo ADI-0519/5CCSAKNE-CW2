@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Shabana Mahmood",
+    "Nigel Farage",
+    "Xavier Ducept"
+  ],
+  "organizations": [
+    "Home Office",
+    "Reform UK",
+    "The Guardian"
+  ],
+  "locations": [
+    "Heathrow",
+    "English Channel"
+  ],
+  "topics": [
+    "Immigration",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Shabana Mahmood",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

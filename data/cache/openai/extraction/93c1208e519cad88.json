@@ -1,0 +1,50 @@
+{
+  "people": [
+    "Mandira Moitra Sarkar",
+    "Julian Denis",
+    "James Nolan",
+    "Kevin Barker",
+    "Seema Syeda",
+    "Fizza Qureshi",
+    "Keir Starmer",
+    "Nigella Lawson",
+    "Jamie Oliver",
+    "Alex Pretti",
+    "Renee Good"
+  ],
+  "organizations": [
+    "Home Office",
+    "Joint Council for the Welfare of Immigrants",
+    "Migrants' Rights Network (MRN)",
+    "Labour",
+    "Reform UK"
+  ],
+  "locations": [
+    "Guildford",
+    "Surrey",
+    "England",
+    "California",
+    "Tanzania",
+    "Lewisham",
+    "Broadway Market",
+    "London"
+  ],
+  "topics": [
+    "Immigration",
+    "Public Spending",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour",
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

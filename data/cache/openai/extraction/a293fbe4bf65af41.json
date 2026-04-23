@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Jeremy Hunt",
+    "John Fingleton",
+    "Kwasi Kwarteng",
+    "Liz Truss",
+    "Rachel Reeves",
+    "Ruth Curtice",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour",
+    "Liberal Democrats",
+    "Resolution Foundation"
+  ],
+  "locations": [],
+  "topics": [
+    "Energy",
+    "Economic Policy",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

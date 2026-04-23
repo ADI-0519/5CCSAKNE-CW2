@@ -1,0 +1,44 @@
+{
+  "people": [
+    "Andrew Muir",
+    "Claire Hanna",
+    "Michelle O'Neill",
+    "Edwin Poots",
+    "Emma Little-Pengelly",
+    "Malachi O'Doherty",
+    "Paul Bew",
+    "Suzanne Breen"
+  ],
+  "organizations": [
+    "Democratic Unionist Party",
+    "Social Democratic and Labour Party",
+    "Alliance party",
+    "Ulster Unionist party"
+  ],
+  "locations": [
+    "Belfast",
+    "Northern Ireland",
+    "Stormont",
+    "Lough Neagh"
+  ],
+  "topics": [
+    "Government Policy",
+    "Housing",
+    "Parliament"
+  ],
+  "politicians": [
+    "Michelle O'Neill",
+    "Claire Hanna"
+  ],
+  "political_parties": [
+    "Democratic Unionist Party",
+    "Sinn F\u00e9in",
+    "Social Democratic and Labour Party",
+    "Alliance Party",
+    "Ulster Unionist Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

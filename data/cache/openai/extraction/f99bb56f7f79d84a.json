@@ -1,0 +1,39 @@
+{
+  "people": [
+    "Nigel Farage",
+    "Dr Jess Garland"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Electoral Reform Society"
+  ],
+  "locations": [
+    "Birmingham",
+    "London",
+    "Tameside",
+    "Warwickshire",
+    "West Midlands",
+    "England"
+  ],
+  "topics": [
+    "Politics"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Green Party",
+    "Labour Party",
+    "Liberal Democrats",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

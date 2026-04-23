@@ -1,0 +1,31 @@
+{
+  "people": [
+    "Sadiq Khan",
+    "Keir Starmer",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Labour"
+  ],
+  "locations": [
+    "London",
+    "England",
+    "Iran",
+    "Ukraine"
+  ],
+  "topics": [
+    "Politics",
+    "Parliament",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,43 @@
+{
+  "people": [
+    "Boris Johnson",
+    "David Cameron",
+    "Gordon Brown",
+    "Theresa May",
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Emily Thornberry",
+    "Richard Foord",
+    "Matthew Doyle",
+    "Tony Blair"
+  ],
+  "organizations": [
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "No 10",
+    "Downing Street"
+  ],
+  "locations": [
+    "Washington"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "BreakingNewsArticle",
+  "events": []
+}

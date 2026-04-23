@@ -1,0 +1,35 @@
+{
+  "people": [
+    "Zia Yusuf",
+    "John Dramani Mahama",
+    "Patrick Robinson",
+    "Prof Sir Hilary Beckles"
+  ],
+  "organizations": [
+    "Reform UK",
+    "British Treasury",
+    "Caricom Reparations Commission",
+    "African Union",
+    "Caribbean Community"
+  ],
+  "locations": [
+    "London",
+    "Westminster"
+  ],
+  "topics": [
+    "Immigration",
+    "Reparations and reparative justice",
+    "Slavery",
+    "Colonialism"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

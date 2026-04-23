@@ -1,0 +1,76 @@
+{
+  "people": [
+    "Diane Abbott",
+    "Donald Trump",
+    "Fiona Hill",
+    "Gen Richard Barrons",
+    "George Robertson",
+    "John Healey",
+    "John Hutton",
+    "Keir Starmer",
+    "Lord Robertson",
+    "Rachel Reeves",
+    "Royal Air Force",
+    "Royal Navy",
+    "Tan Dhesi",
+    "Vladimir Putin"
+  ],
+  "organizations": [
+    "Labour",
+    "Military Ministry",
+    "Ministry of Defence",
+    "No 10"
+  ],
+  "locations": [
+    "London",
+    "Nato",
+    "Salisbury"
+  ],
+  "topics": [
+    "Defence",
+    "Parliament",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Ministry of Defence",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "BreakingNewsArticle",
+  "events": [
+    {
+      "name": "Discussion with Defence Secretary",
+      "type": "MinisterialStatement",
+      "date": "2026-04-14",
+      "location": "Salisbury",
+      "policy_topics": [
+        "Defence"
+      ],
+      "political_actors": [
+        "George Robertson",
+        "John Healey"
+      ],
+      "government_bodies": [
+        "Ministry of Defence"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "John Healey was extremely angry with George Robertson."
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

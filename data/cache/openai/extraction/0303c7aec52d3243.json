@@ -1,0 +1,68 @@
+{
+  "people": [
+    "Emily Thornberry",
+    "Ed Davey",
+    "Zack Polanski",
+    "Donald Trump",
+    "Clive Lewis",
+    "Kim Johnson",
+    "John McDonnell",
+    "Jake Atkinson",
+    "Pete Hegseth"
+  ],
+  "organizations": [
+    "Buckingham Palace",
+    "Foreign Office",
+    "Labour Party",
+    "Green Party",
+    "Stop Trump Coalition"
+  ],
+  "locations": [
+    "United States",
+    "Iran"
+  ],
+  "topics": [
+    "Government Policy",
+    "Defence",
+    "Foreign Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Green Party"
+  ],
+  "government_bodies": [
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "King Charles\u2019s State Visit to the United States",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-27",
+      "location": "United States",
+      "policy_topics": [
+        "Foreign Policy"
+      ],
+      "political_actors": [
+        "King Charles III",
+        "Donald Trump",
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "Buckingham Palace",
+        "Foreign Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "Buckingham Palace has confirmed the state visit to the US in April"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

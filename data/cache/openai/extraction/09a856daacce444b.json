@@ -1,0 +1,34 @@
+{
+  "people": [
+    "Gary Webster",
+    "Kate Burt",
+    "Lisa Smart",
+    "Nick Thomas-Symonds"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Haemophilia Society",
+    "Press Association"
+  ],
+  "locations": [
+    "Hampshire",
+    "Treloar",
+    "NHS"
+  ],
+  "topics": [
+    "Healthcare",
+    "Government Policy",
+    "Education"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [
+    "Cabinet Office"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

@@ -1,0 +1,25 @@
+{
+  "people": [
+    "Miranda Biddle"
+  ],
+  "organizations": [
+    "HMRC",
+    "Home Office",
+    "The National Audit Office",
+    "The3million"
+  ],
+  "locations": [],
+  "topics": [
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "HM Revenue and Customs",
+    "Home Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

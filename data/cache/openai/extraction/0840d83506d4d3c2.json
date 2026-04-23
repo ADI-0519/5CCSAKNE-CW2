@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Nigel Farage",
+    "Simon Dudley",
+    "Steve Wright"
+  ],
+  "organizations": [
+    "Reform UK",
+    "Fire Brigades Union",
+    "Berkley Group",
+    "Ebbsfleet Development Corporation",
+    "Homes England",
+    "Inside Housing"
+  ],
+  "locations": [
+    "England",
+    "London"
+  ],
+  "topics": [
+    "Housing",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK",
+    "Conservative Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

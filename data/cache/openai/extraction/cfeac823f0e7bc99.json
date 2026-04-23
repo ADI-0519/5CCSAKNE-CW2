@@ -1,0 +1,35 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Stella Creasy"
+  ],
+  "organizations": [
+    "Labour Movement for Europe",
+    "European Union",
+    "Foreign Office",
+    "Home Office"
+  ],
+  "locations": [
+    "Brussels",
+    "Calais"
+  ],
+  "topics": [
+    "Immigration",
+    "Defence",
+    "Economic Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Home Office",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

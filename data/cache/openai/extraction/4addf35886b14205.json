@@ -1,0 +1,34 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "Keir Starmer",
+    "Oliver Robbins",
+    "Peter Mandelson",
+    "Jeffrey Epstein"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Downing Street",
+    "Labour"
+  ],
+  "locations": [
+    "Westminster"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

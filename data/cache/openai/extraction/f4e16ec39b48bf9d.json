@@ -1,0 +1,43 @@
+{
+  "people": [
+    "Donald Trump",
+    "Jeremy Corbyn",
+    "Keir Starmer",
+    "Nigel Farage",
+    "Steve Reed",
+    "Zack Polanski"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK"
+  ],
+  "locations": [
+    "Clacton",
+    "England",
+    "Essex",
+    "London",
+    "Wales",
+    "Washington"
+  ],
+  "topics": [
+    "Parliament",
+    "Politics",
+    "Housing",
+    "Antisemitism"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage",
+    "Steve Reed"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

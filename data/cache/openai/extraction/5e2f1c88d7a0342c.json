@@ -1,0 +1,39 @@
+{
+  "people": [
+    "George Robertson",
+    "James Murray",
+    "John Healey",
+    "John Hutton",
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Rachel Reeves",
+    "Tony Blair"
+  ],
+  "organizations": [
+    "Labour",
+    "Conservative"
+  ],
+  "locations": [],
+  "topics": [
+    "Defence",
+    "Public Spending",
+    "Government Policy",
+    "Parliament"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Rachel Reeves"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "HM Treasury",
+    "Ministry of Defence"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

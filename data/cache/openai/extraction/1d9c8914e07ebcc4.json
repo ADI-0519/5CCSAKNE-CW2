@@ -1,0 +1,25 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Bridget Phillipson"
+  ],
+  "organizations": [
+    "Department for Education"
+  ],
+  "locations": [
+    "Australia"
+  ],
+  "topics": [
+    "Education"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Department for Education"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

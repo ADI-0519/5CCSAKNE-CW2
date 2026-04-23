@@ -1,0 +1,50 @@
+{
+  "people": [
+    "David Galan",
+    "Donald Trump",
+    "Ian Taylor",
+    "Jai Patel",
+    "Kwasi Kwarteng",
+    "Nigel Farage",
+    "Paul Withers"
+  ],
+  "organizations": [
+    "GB News",
+    "Reform UK"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Public Spending"
+  ],
+  "politicians": [
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Reform UK"
+  ],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "CEO Resignation",
+      "type": "PolicyEvent",
+      "date": "2026-04-16",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Jai Patel",
+        "David Galan"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "medium",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

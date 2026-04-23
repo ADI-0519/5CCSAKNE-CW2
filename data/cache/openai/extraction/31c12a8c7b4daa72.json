@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Peter Mandelson",
+    "Morgan McSweeney",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Conservative Party",
+    "Downing Street",
+    "Labour Party",
+    "No 10",
+    "Sky News"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch"
+  ],
+  "political_parties": [
+    "Conservative Party",
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

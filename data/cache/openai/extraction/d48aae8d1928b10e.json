@@ -1,0 +1,30 @@
+{
+  "people": [
+    "Liza Tobay",
+    "Monique Hawkins"
+  ],
+  "organizations": [
+    "Home Office",
+    "the3million"
+  ],
+  "locations": [
+    "Dusseldorf",
+    "Edinburgh",
+    "Germany",
+    "Munich",
+    "Scotland"
+  ],
+  "topics": [
+    "Immigration",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [],
+  "political_parties": [],
+  "government_bodies": [
+    "Home Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

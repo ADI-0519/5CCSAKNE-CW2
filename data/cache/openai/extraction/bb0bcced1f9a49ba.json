@@ -1,0 +1,46 @@
+{
+  "people": [
+    "Akhmed Yacoub",
+    "Bob",
+    "Brenda",
+    "Dan",
+    "David",
+    "Emma",
+    "Kayla",
+    "Nigel Farage",
+    "Taz",
+    "Asma",
+    "Terry",
+    "Zack Polanski",
+    "Keir Starmer",
+    "Donald Trump"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour",
+    "Reform UK"
+  ],
+  "locations": [
+    "Birmingham",
+    "Yardley",
+    "Aldi"
+  ],
+  "topics": [
+    "Economic Policy",
+    "Healthcare",
+    "Energy"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party",
+    "Reform UK"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

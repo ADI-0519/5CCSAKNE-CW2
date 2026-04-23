@@ -1,0 +1,36 @@
+{
+  "people": [
+    "Anas Sarwar",
+    "Angus Robertson",
+    "Sam Gough",
+    "Mark Langdon"
+  ],
+  "organizations": [
+    "Labour",
+    "Scottish National Party",
+    "Creative Scotland",
+    "Scottish Enterprise",
+    "Summerhall Arts"
+  ],
+  "locations": [
+    "Scotland",
+    "Edinburgh",
+    "Glasgow",
+    "Ireland"
+  ],
+  "topics": [
+    "Public Spending",
+    "Government Policy"
+  ],
+  "politicians": [],
+  "political_parties": [
+    "Labour Party",
+    "Scottish National Party"
+  ],
+  "government_bodies": [
+    "Scottish Government"
+  ],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

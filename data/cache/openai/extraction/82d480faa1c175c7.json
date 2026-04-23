@@ -1,0 +1,60 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Peter Mandelson"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign Office",
+    "Foreign, Commonwealth and Development Office",
+    "Labour",
+    "No 10"
+  ],
+  "locations": [
+    "US"
+  ],
+  "topics": [
+    "Parliament",
+    "Government Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Order of inquiry into security concerns over Mandelson\u2019s tenure",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-20",
+      "location": null,
+      "policy_topics": [
+        "Government Policy"
+      ],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "Cabinet Office"
+      ],
+      "parliamentary_body": "House of Commons",
+      "political_parties": [
+        "Labour Party"
+      ],
+      "evidence_spans": [
+        "Starmer orders an investigation into any security concerns relating to Peter Mandelson\u2019s tenure as UK ambassador to the US"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

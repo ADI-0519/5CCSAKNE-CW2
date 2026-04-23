@@ -1,0 +1,57 @@
+{
+  "people": [
+    "Peter Mandelson",
+    "Keir Starmer",
+    "Rachel Reeves",
+    "David Lammy",
+    "Yvette Cooper",
+    "Darren Jones",
+    "Kemi Badenoch",
+    "Olly Robbins",
+    "Antonia Romeo",
+    "Catherine Little",
+    "Vidhya Alakeson",
+    "Jeffrey Epstein"
+  ],
+  "organizations": [
+    "Guardian",
+    "Cabinet Office",
+    "Foreign Office",
+    "Global Counsel",
+    "US Department of Justice",
+    "Labour Party",
+    "Conservative Party",
+    "No 10"
+  ],
+  "locations": [
+    "Washington",
+    "London",
+    "Northern Ireland",
+    "Southampton"
+  ],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Politics",
+    "Defence"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Kemi Badenoch",
+    "Rachel Reeves",
+    "David Lammy",
+    "Yvette Cooper"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Conservative Party"
+  ],
+  "government_bodies": [
+    "Cabinet Office",
+    "Downing Street",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

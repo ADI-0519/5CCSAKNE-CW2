@@ -1,0 +1,62 @@
+{
+  "people": [
+    "Andrew Bailey",
+    "Donald Trump",
+    "Keir Starmer",
+    "Rachel Reeves",
+    "Scott Bessent"
+  ],
+  "organizations": [
+    "Sky News",
+    "HM Treasury"
+  ],
+  "locations": [
+    "England",
+    "Washington"
+  ],
+  "topics": [
+    "Energy",
+    "Government Policy",
+    "Immigration",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer",
+    "Rachel Reeves"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "HM Treasury"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Economic Fallout from US-Iran Conflict",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-15",
+      "location": "Washington",
+      "policy_topics": [
+        "Economic Policy",
+        "Foreign Policy"
+      ],
+      "political_actors": [
+        "Donald Trump",
+        "Keir Starmer",
+        "Rachel Reeves"
+      ],
+      "government_bodies": [
+        "HM Treasury"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [
+        "US economic deal with UK",
+        "US strikes on Iran",
+        "IMF meetings"
+      ],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

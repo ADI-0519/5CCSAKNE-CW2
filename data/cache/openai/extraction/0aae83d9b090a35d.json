@@ -1,0 +1,32 @@
+{
+  "people": [
+    "Zack Polanski",
+    "Keir Starmer",
+    "Sadiq Khan",
+    "Steve Reed"
+  ],
+  "organizations": [
+    "Green Party",
+    "Labour"
+  ],
+  "locations": [
+    "England",
+    "London"
+  ],
+  "topics": [
+    "Housing",
+    "Defence",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Green Party",
+    "Labour Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}

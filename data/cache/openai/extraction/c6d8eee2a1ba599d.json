@@ -1,0 +1,38 @@
+{
+  "people": [
+    "Rhun ap Iorwerth",
+    "Nigel Farage",
+    "Prof Gerry Holtham"
+  ],
+  "organizations": [
+    "Plaid Cymru",
+    "Reform UK",
+    "Labour Party",
+    "Green Party"
+  ],
+  "locations": [
+    "Wales",
+    "Wrexham",
+    "Westminster"
+  ],
+  "topics": [
+    "Politics",
+    "Healthcare",
+    "Taxation",
+    "Education"
+  ],
+  "politicians": [
+    "Rhun ap Iorwerth",
+    "Nigel Farage"
+  ],
+  "political_parties": [
+    "Plaid Cymru",
+    "Reform UK",
+    "Labour Party",
+    "Green Party"
+  ],
+  "government_bodies": [],
+  "sentiment": "Positive",
+  "article_type": "NewsArticle",
+  "events": []
+}

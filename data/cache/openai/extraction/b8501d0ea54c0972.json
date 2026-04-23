@@ -1,0 +1,213 @@
+{
+  "people": [
+    "Antonia Romeo",
+    "Chris Wormald",
+    "Jeffrey Epstein",
+    "Keir Starmer",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Sir Chris Wormald"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "FCDO",
+    "Foreign, Commonwealth and Development Office",
+    "No 10",
+    "The Guardian"
+  ],
+  "locations": [],
+  "topics": [
+    "Parliament",
+    "Politics",
+    "Defence"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Cabinet Office",
+    "FCDO",
+    "No 10"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": [
+    {
+      "name": "Mandelson Due Diligence Begins",
+      "type": "GovernmentPolicyEvent",
+      "date": "2024-12-01",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer",
+        "Peter Mandelson"
+      ],
+      "government_bodies": [
+        "Cabinet Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Mandelson Answers Due Diligence Questions",
+      "type": "GovernmentPolicyEvent",
+      "date": "2024-12-10",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Peter Mandelson"
+      ],
+      "government_bodies": [
+        "Cabinet Office"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Starmer Decides to Appoint Mandelson",
+      "type": "GovernmentPolicyEvent",
+      "date": "2024-12-18",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Mandelson Publicly Announced as Ambassador",
+      "type": "GovernmentPolicyEvent",
+      "date": "2024-12-20",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer",
+        "Peter Mandelson"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Security Vetting on Mandelson Begins",
+      "type": "GovernmentPolicyEvent",
+      "date": "2024-12-23",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Peter Mandelson"
+      ],
+      "government_bodies": [
+        "UKSV"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Mandelson Starts Role as UK Ambassador",
+      "type": "GovernmentPolicyEvent",
+      "date": "2025-01-25",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer",
+        "Peter Mandelson"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Mandelson Fails Security Vetting",
+      "type": "GovernmentPolicyEvent",
+      "date": "2025-01-28",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Peter Mandelson"
+      ],
+      "government_bodies": [
+        "UKSV"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "FCDO Approves Mandelson\u2019s Security Vetting",
+      "type": "GovernmentPolicyEvent",
+      "date": "2025-01-29",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [
+        "FCDO"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Mandelson is Sacked as Ambassador",
+      "type": "GovernmentPolicyEvent",
+      "date": "2025-09-11",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer",
+        "Peter Mandelson"
+      ],
+      "government_bodies": [
+        "No 10"
+      ],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    },
+    {
+      "name": "Starmer\u2019s Statement on Mandelson\u2019s Appointment",
+      "type": "GovernmentPolicyEvent",
+      "date": "2026-04-20",
+      "location": null,
+      "policy_topics": [],
+      "political_actors": [
+        "Keir Starmer"
+      ],
+      "government_bodies": [],
+      "parliamentary_body": null,
+      "political_parties": [],
+      "evidence_spans": [],
+      "confidence": "high",
+      "extraction_method": "heuristic"
+    }
+  ]
+}

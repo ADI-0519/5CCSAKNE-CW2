@@ -1,0 +1,28 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Lancaster House"
+  ],
+  "organizations": [
+    "Labour",
+    "Liberal Democrats"
+  ],
+  "locations": [],
+  "topics": [
+    "Government Policy",
+    "Parliament",
+    "Economic Policy",
+    "Politics"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [
+    "Labour Party",
+    "Liberal Democrats"
+  ],
+  "government_bodies": [],
+  "sentiment": "Neutral",
+  "article_type": "NewsArticle",
+  "events": []
+}

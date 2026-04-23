@@ -1,0 +1,33 @@
+{
+  "people": [
+    "Keir Starmer",
+    "Mark Sedwill",
+    "Sir Simon McDonald",
+    "Jon Sopel",
+    "Olly Robbins",
+    "Peter Mandelson",
+    "Ian Collard"
+  ],
+  "organizations": [
+    "Cabinet Office",
+    "Foreign Office",
+    "UK Security Vetting (UKSV)",
+    "Downing Street"
+  ],
+  "locations": [],
+  "topics": [
+    "Politics",
+    "Government Policy"
+  ],
+  "politicians": [
+    "Keir Starmer"
+  ],
+  "political_parties": [],
+  "government_bodies": [
+    "Cabinet Office",
+    "Foreign, Commonwealth and Development Office"
+  ],
+  "sentiment": "Negative",
+  "article_type": "NewsArticle",
+  "events": []
+}
