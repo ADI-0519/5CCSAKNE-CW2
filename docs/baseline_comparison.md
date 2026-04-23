@@ -3,7 +3,7 @@
 | CQ | prototype count | completed count | delta | LLM answer |
 |----|-----------------|-----------------|-------|------------|
 | CQ04 | 144 | 147 | +3 | During March to April 2026, several key policy events reported in news articles ... |
-| CQ11 | 133 | 140 | +7 | In March to April 2026, several key policy events involved UK government departm... |
+| CQ11 | 135 | 142 | +7 | In March to April 2026, several key policy events involved UK government departm... |
 | CQ12 | 11 | 11 | +0 | During March to April 2026, the most frequently linked policy topics in UK polit... |
 | CQ16 | 7 | 7 | +0 | In the UK political landscape from March to April 2026, several political actors... |
 | CQ18 | 16 | 18 | +2 | In the period from March to April 2026, key policy topics involving both politic... |
