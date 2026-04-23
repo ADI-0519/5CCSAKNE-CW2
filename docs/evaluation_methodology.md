@@ -114,6 +114,7 @@ The current completion stage adds:
 - `news:reportsOn` inverse links from existing `news:reportedByArticle` triples
 - `news:matchedToSourceRecord` links for official-source matching
 - occasional additional `news:representedInOfficialSource` links when a match score is strong enough
+- `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` links via an LLM-assisted RAG step for events missing those properties
 
 Method:
 
