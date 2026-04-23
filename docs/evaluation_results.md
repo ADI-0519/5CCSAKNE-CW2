@@ -196,7 +196,7 @@ The final report should frame the system as a working automated KG pipeline with
 
 It should explicitly state that:
 
-- heuristics act as primary extraction; OpenAI extraction is a targeted fallback that fires only when the heuristic result lacks both structured events and an institution or actor. . 193 of 194 events had enough structure for the gate to skip the LLM call entirely.
+- heuristics act as primary extraction; OpenAI extraction is a targeted fallback that fires only when the heuristic result lacks both structured events and an institution or actor. 193 of 194 events had enough structure for the gate to skip the LLM call entirely.
 - the primary LLM contribution in the pipeline is the RAG completion step, which processed `94` events and accepted `127` triples
 - OpenAI is used critically for structured extraction support, completion support, and evaluation baselines
 - validation, query coverage, completion audit logs, and summary metrics provide the strongest evidence for the current final pipeline
