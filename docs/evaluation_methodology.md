@@ -71,7 +71,7 @@ Metrics:
 
 Latest validated result:
 
-- `20/20` current queries returned at least one row against the completed KG from run `20260423T022716Z`
+- `20/20` current queries returned at least one row against the completed KG from run `20260423T073344Z`
 
 ## 3. Extraction And Mapping Quality
 
@@ -124,11 +124,11 @@ Method:
 
 Latest validated result:
 
-- prototype KG: `39895` triples
-- completed KG: `40600` triples
-- completion delta: `705` triples
-- `reportsOn` links added: `274`
-- `matchedToSourceRecord` links added: `236`
+- prototype KG: `38608` triples
+- completed KG: `39111` triples
+- completion delta: `503` triples
+- `reportsOn` links added: `194`
+- `matchedToSourceRecord` links added: `157`
 
 Important quality questions:
 
@@ -158,10 +158,10 @@ Metrics:
 
 Latest validated source counts:
 
-- Guardian: `253`
+- Guardian: `270`
 - Parliament: `20`
-- GOV.UK: `459`
-- Wikidata: `1765` politicians, `1006` parties, `483` government bodies
+- GOV.UK: `410`
+- Wikidata: `1724` politicians, `968` parties, `489` government bodies
 
 ## 6. Performance And Reproducibility
 
