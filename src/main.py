@@ -221,7 +221,7 @@ def main():
         f"{validation_report['total_violations']} violations found."
     )
 
-    # Stage 12: Save headline KG summary metrics
+    # stage 12: save headline KG summary metrics
     print("[PIPELINE] Stage 12: Save KG summary metrics")
     summary_report = build_summary(completed_graph, kg_records, validation_report)
     save_summary(summary_report, LATEST_KG_SUMMARY_PATH)
