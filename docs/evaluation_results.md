@@ -43,7 +43,7 @@ Generated graph counts:
 - Ontology graph: `188` triples
 - Source-derived instance KG: `12978` triples
 - Wikidata KG: `25115` triples
-- Prototype KG: `38136` triples
+- Prototype KG: `38112` triples
 - Completed KG: `38602` triples
 
 Completion additions:
@@ -52,7 +52,7 @@ Completion additions:
 - `149` `news:matchedToSourceRecord` links
 - `5` `news:representedInOfficialSource` links
 - RAG additions: `7` actor links, `6` department links, `111` topic links
-- Total delta from prototype to completed KG: `466` triples
+- Total delta from prototype to completed KG: `490` triples
 
 Structural judgment:
 
