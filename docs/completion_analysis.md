@@ -137,7 +137,7 @@ Wikidata provides background entities for UK politicians, but article-extracted 
 
 `I4.` Parliamentary body assignment is incomplete.
 
-Five of the ten `news:ParliamentaryEvent` instances lack `news:occursInParliamentaryBody` because the source text did not name a specific chamber or committee. Events from written statements are sometimes attributed to the body name but this is not consistently extracted across the full Parliament record set.
+Five of the ten `news:ParliamentaryEvent` instances lack `news:occursInParliamentaryBody`. These are Guardian-sourced events typed as `ParliamentaryEvent` with a generic "Parliamentary Debate" label but no chamber reference in either the event name or the article text, so the body assignment step finds no match.
 
 `I5.` Completion provenance is not recorded at the instance level.
 
