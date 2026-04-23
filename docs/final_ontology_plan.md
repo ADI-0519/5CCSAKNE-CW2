@@ -145,6 +145,7 @@ Subproperty examples:
 - `news:concernsPolicyTopic rdfs:subPropertyOf schema:about`
 - `news:issuedByDepartment rdfs:subPropertyOf news:involvesGovernmentBody`
 - `news:occursInLocation rdfs:subPropertyOf core:eventPlace`
+- `news:occursOnDate rdfs:subPropertyOf core:startDate`
 - `news:memberOfParty rdfs:subPropertyOf schema:memberOf`
 - `news:publishedBy rdfs:subPropertyOf schema:publisher`
 - `news:hasAuthor rdfs:subPropertyOf schema:author`
