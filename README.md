@@ -76,6 +76,16 @@ Processed JSON files in `data/processed/` still keep a UTC timestamp prefix for 
 python -m pytest
 ```
 
+## Benchmarking
+
+To measure the cached submission run directly and write a machine-readable benchmark report:
+
+```bash
+python -m src.benchmark_pipeline --output output/performance_benchmark.json
+```
+
+This records end-to-end wall-clock runtime, benchmark exit status, records-per-second throughput, and the final query / validation / graph totals produced by that run.
+
 ## Live-API Mode (not required for marking)
 
 To re-collect data from live APIs instead of using the shipped cache:
