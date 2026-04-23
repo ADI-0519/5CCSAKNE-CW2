@@ -1,7 +1,10 @@
 {
-  "proposed_actors": [],
+  "proposed_actors": [
+    "Ed Davey"
+  ],
   "proposed_departments": [],
   "proposed_topics": [
+    "Energy",
     "Government Policy"
   ]
 }
