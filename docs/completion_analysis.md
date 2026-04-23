@@ -35,11 +35,11 @@ Latest validated run:
 - Parliament source records: `20`
 - GOV.UK source records: `394`
 - Wikidata entities: `1724` politicians, `968` parties, `489` government bodies
-- ontology graph: `188` triples
+- ontology graph: `192` triples
 - source-derived instance KG: `12978` triples
 - Wikidata KG: `25115` triples
-- prototype KG: `38136` triples
-- completed KG: `38602` triples
+- prototype KG: `38116` triples
+- completed KG: `38606` triples
 - query coverage: `20/20`
 
 Completion additions in that run:
@@ -51,7 +51,7 @@ Completion additions in that run:
 - `6` `news:involvesGovernmentBody` links (RAG)
 - `111` `news:concernsPolicyTopic` links (RAG)
 
-The completed KG is therefore larger than the prototype KG by `466` triples.
+The completed KG is therefore larger than the prototype KG by `490` triples.
 
 ## What Is Covered Well
 
@@ -97,23 +97,49 @@ The following properties are materially populated:
 
 This supports the final CQ set because the questions now focus on policy events, official institutions, source provenance, topics, reporting articles, and cross-source linkage.
 
-## Remaining Gaps
+## Incomplete Ontology Elements
 
-`G1.` Event identity is still partly article-local.
+`O1.` No formal property characteristics on most object properties.
 
-The pipeline creates policy-event nodes from source records and extracted article evidence. Some event names remain broad, so two records about the same real-world event may not always collapse to one canonical event.
+`news:involvesActor` and `news:memberOfParty` are declared `owl:IrreflexiveProperty` and `news:publishedBy` and `news:occursOnDate` are declared `owl:FunctionalProperty`. Beyond these four, the remaining object properties carry no formal axioms such as cardinality restrictions, so the reasoner has no basis to detect further constraint violations.
 
-`G2.` Cross-source matching is conservative.
+`O2.` No disjointness axioms between event subclasses.
 
-`matchedToSourceRecord` links are added only when existing official-source evidence or a title/date/topic match is strong enough. This avoids many false matches but means some genuine links remain absent.
+`news:GovernmentPolicyEvent` and `news:ParliamentaryEvent` are not declared `owl:disjointWith`. In the domain they represent conceptually distinct event types with different provenance, but the ontology does not formally enforce this separation, so a reasoning step cannot flag instances typed as both.
 
-`G3.` Article-extracted actors are not fully disambiguated.
+`O3.` No cardinality constraint on `news:occursOnDate` beyond functional.
 
-Wikidata provides strong background entities, but article-extracted political actors are still produced mainly from controlled names and extraction heuristics. Full entity resolution between extracted names and Wikidata URIs remains future work.
+`news:occursOnDate` is declared functional, which enforces at most one date per event. The ontology does not separately enforce that at least one date is always present; a `PolicyEvent` with no date passes the TBox without a violation, making the date-completeness guarantee informal rather than axiomatic.
 
-`G4.` Completion provenance is lightweight.
+`O4.` No provenance vocabulary for completion-generated links.
 
-The graph records the linked source record but does not yet attach confidence scores, evidence spans, or a detailed explanation of why each match was accepted.
+The ontology has no class or datatype property to record a confidence score, evidence span, or extraction method alongside completion-generated triples. All assertions written by the RAG step are treated as equally certain in the graph, which limits post-hoc auditability.
+
+`O5.` No temporal ordering or sequencing property.
+
+The ontology models individual events with dates but has no property to link related events in order, such as a parliamentary debate preceding a policy announcement. This limits the expressiveness of the event-centred model for questions about causal or procedural event sequences.
+
+## Incomplete Instance Elements
+
+`I1.` Event identity is still partly article-local.
+
+The pipeline creates policy-event nodes from source records and extracted article evidence. Some event names remain broad, so two records about the same real-world event may not always collapse to one canonical event node.
+
+`I2.` Cross-source matching is conservative.
+
+`news:matchedToSourceRecord` links are added only when title similarity, event type, and date agreement score above a threshold. This avoids false matches but means genuine article-to-official-source links remain absent where the threshold is not met.
+
+`I3.` Article-extracted actors are not resolved to Wikidata URIs.
+
+Wikidata provides background entities for UK politicians, but article-extracted political actors are produced mainly from controlled names and heuristics. An actor mentioned by name in a Guardian article and the corresponding Wikidata politician entity are not linked by any `owl:sameAs` or `skos:exactMatch` assertion.
+
+`I4.` Parliamentary body assignment is incomplete.
+
+Five of the twelve `news:ParliamentaryEvent` instances lack `news:occursInParliamentaryBody` because the source text did not name a specific chamber or committee. Events from written statements are sometimes attributed to the body name but this is not consistently extracted across the full Parliament record set.
+
+`I5.` Completion provenance is not recorded at the instance level.
+
+RAG-added `news:involvesActor`, `news:involvesGovernmentBody`, and `news:concernsPolicyTopic` triples carry no associated evidence metadata in the graph. The completion audit JSON captures per-event additions, but this information is not surfaced as RDF statements, so a SPARQL query cannot distinguish a completion-generated topic link from one written during the initial mapping stage.
 
 ## Why Completion Matters
 
