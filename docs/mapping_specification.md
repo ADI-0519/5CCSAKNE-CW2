@@ -4,7 +4,9 @@ This document records how the current pipeline maps source data into the local U
 
 Project scope:
 
-`UK parliamentary and government policy events reported in UK news during 23 March 2026 to 22 April 2026, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+`UK parliamentary and government policy events reported in UK news over a rolling 30-day collection window, using Guardian as the core textual reporting source, Parliament/Hansard and GOV.UK as official sources, optional Wikidata enrichment, and OpenAI for constrained extraction support where configured.`
+
+The submitted cached snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 ## Mapping Overview
 

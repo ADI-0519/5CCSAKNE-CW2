@@ -1,6 +1,6 @@
 # 5CCSAKNE Coursework 2
 
-Knowledge Engineering coursework: a knowledge graph of UK parliamentary and government policy events reported in UK news between 23 March 2026 and 22 April 2026, built from structured and unstructured sources.
+Knowledge Engineering coursework: a knowledge graph of UK parliamentary and government policy events reported in UK news, built over a rolling 30-day collection window from structured and unstructured sources. The submitted snapshot covers 23 March 2026 to 22 April 2026 and is fixed for examiner reproducibility.
 
 ## Reproducing the Submitted Run (examiners start here)
 
