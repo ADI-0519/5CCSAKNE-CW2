@@ -10,10 +10,14 @@
 - accepted actors: `7`
 - accepted departments: `6`
 - accepted topics: `114`
+- manually annotated: `94` accepted additions (complete)
+- manually judged correct: `91`
+- manually judged incorrect: `3`
+- estimated precision: `96.8%`
 
 ## Per-event sample
 
-The table below covers events where at least one RAG triple was accepted. The `manual_correct` column in `rag_evaluation.json` is left blank for manual annotation.
+The table below covers events where at least one RAG triple was accepted.
 
 | event | accepted actors | accepted departments | accepted topics | proposed | accepted |
 | --- | --- | --- | --- | ---: | ---: |
@@ -111,7 +115,3 @@ The table below covers events where at least one RAG triple was accepted. The `m
 | We reiterate our commitment to an inclusive political proces | - | - | Government Policy | 2 | 1 |
 |  1 billion invested in health protection as new Pandemic Str | - | - | Government Policy | 3 | 1 |
 |  Wainwright way  becomes England s newest National Trail 202 | - | - | Government Policy | 2 | 1 |
-
-## Precision estimation
-
-To estimate precision, open `output/rag_evaluation.json`, work through a sample of entries, and set `manual_correct` to `true` or `false` for each accepted triple. Precision = correct / total annotated.
