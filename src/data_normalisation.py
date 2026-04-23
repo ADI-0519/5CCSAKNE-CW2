@@ -101,7 +101,10 @@ def canonicalise_date(date_str):
 
 
 def is_within_configured_window(date_str):
-    canonical = canonicalise_date(str(date_str))
+    try:
+        canonical = canonicalise_date(str(date_str))
+    except ValueError:
+        return False
     date_only = canonical[:10]
     return CONFIG["date_start"] <= date_only <= CONFIG["date_end"]
 
