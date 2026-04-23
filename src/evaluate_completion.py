@@ -18,9 +18,7 @@ FALLBACK_COMPLETED = Path("kg/generated/completed_kg.ttl")
 
 def find_most_recent(pattern):
     matches = sorted(OUTPUT_DIR.glob(pattern))
-    if matches:
-        return matches[-1]
-    return None
+    return matches[-1] if matches else None
 
 
 BASELINE_SCHEMA = {
@@ -151,8 +149,8 @@ def main():
     parser.add_argument("--completed", type=Path, default=None)
     args = parser.parse_args()
 
-    proto_path = args.prototype or find_most_recent("*_prototype_kg.ttl") or FALLBACK_PROTOTYPE
-    completed_path = args.completed or find_most_recent("*_completed_kg.ttl") or FALLBACK_COMPLETED
+    proto_path = args.prototype or (FALLBACK_PROTOTYPE if FALLBACK_PROTOTYPE.exists() else find_most_recent("*_prototype_kg.ttl"))
+    completed_path = args.completed or (FALLBACK_COMPLETED if FALLBACK_COMPLETED.exists() else find_most_recent("*_completed_kg.ttl"))
 
     table_rows, interpretations = run(proto_path, completed_path)
 

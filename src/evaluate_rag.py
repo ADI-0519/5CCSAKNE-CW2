@@ -10,10 +10,10 @@ OUTPUT_DIR = Path("output")
 
 
 def find_most_recent_audit():
+    if DEFAULT_AUDIT_PATH.exists():
+        return DEFAULT_AUDIT_PATH
     matches = sorted(OUTPUT_DIR.glob("*_completion_audit.json"))
-    if matches:
-        return matches[-1]
-    return DEFAULT_AUDIT_PATH
+    return matches[-1] if matches else DEFAULT_AUDIT_PATH
 
 
 def load_json(path):
