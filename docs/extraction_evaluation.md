@@ -1,7 +1,7 @@
 # Extraction Evaluation
 
 - Gold standard: `data/evaluation/gold_standard_extraction.json`
-- Prediction input: `data/processed/20260423T022716Z_kg_records.json`
+- Prediction input: `data/processed/20260423T032541Z_kg_records.json`
 - Evaluated samples: `51`
 - Missing predictions: `0`
 
