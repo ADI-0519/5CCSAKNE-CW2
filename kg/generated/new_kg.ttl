@@ -15509,4 +15509,3 @@
 
 <http://example.org/news#organisation/GOV_UK> a news:NewsOrganisation ;
     schema:name "GOV.UK" .
-

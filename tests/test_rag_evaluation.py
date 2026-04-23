@@ -27,7 +27,10 @@ def make_audit_entry(
 def test_uri_to_label_strips_sub_prefix():
     assert uri_to_label("http://example.org/news#topic/Government_Policy") == "Government Policy"
     assert uri_to_label("http://example.org/news#organisation/Home_Office") == "Home Office"
-    assert uri_to_label("http://example.org/news#event/Housing_Reform_2026-03-25") == "Housing Reform 2026-03-25"
+    assert (
+        uri_to_label("http://example.org/news#event/Housing_Reform_2026-03-25")
+        == "Housing Reform 2026-03-25"
+    )
 
 
 def test_uri_to_label_no_sub_prefix():
@@ -86,9 +89,13 @@ def test_build_report_skips_entries_with_no_rag(monkeypatch, tmp_path):
     audit_data = {
         "entry_count": 3,
         "entries": [
-            make_audit_entry("http://example.org/news#event/A", topics=["http://example.org/news#topic/T"]),
+            make_audit_entry(
+                "http://example.org/news#event/A", topics=["http://example.org/news#topic/T"]
+            ),
             make_audit_entry("http://example.org/news#event/B"),  # no rag additions
-            make_audit_entry("http://example.org/news#event/C", actors=["http://example.org/news#P"]),
+            make_audit_entry(
+                "http://example.org/news#event/C", actors=["http://example.org/news#P"]
+            ),
         ],
     }
     audit_path = tmp_path / "audit.json"

@@ -90,9 +90,7 @@ def build_report(audit_path):
     skipped = 0
     for e in entries:
         has_rag = (
-            e.get("rag_added_actors")
-            or e.get("rag_added_departments")
-            or e.get("rag_added_topics")
+            e.get("rag_added_actors") or e.get("rag_added_departments") or e.get("rag_added_topics")
         )
         if not has_rag:
             skipped += 1
@@ -154,8 +152,7 @@ def build_markdown(report):
         depts = ", ".join(e["accepted_departments"]) or "-"
         topics = ", ".join(e["accepted_topics"]) or "-"
         lines.append(
-            f"| {label} | {actors} | {depts} | {topics} "
-            f"| {e['n_proposed']} | {e['n_accepted']} |"
+            f"| {label} | {actors} | {depts} | {topics} | {e['n_proposed']} | {e['n_accepted']} |"
         )
 
     lines += [

@@ -442,8 +442,12 @@ def normalise_guardian_articles(raw_data, enforce_date_window=True):
 
 def normalise_collected_sources(collected_data, enforce_date_window=True):
     sources = collected_data.get("sources", {})
-    guardian_records = normalise_guardian_articles(sources.get("guardian") or {}, enforce_date_window)
-    parliament_records = normalise_parliament_records(sources.get("parliament") or {}, enforce_date_window)
+    guardian_records = normalise_guardian_articles(
+        sources.get("guardian") or {}, enforce_date_window
+    )
+    parliament_records = normalise_parliament_records(
+        sources.get("parliament") or {}, enforce_date_window
+    )
     govuk_records = normalise_govuk_records(sources.get("govuk") or {}, enforce_date_window)
     combined = guardian_records + parliament_records + govuk_records
 

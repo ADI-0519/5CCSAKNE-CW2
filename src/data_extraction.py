@@ -281,7 +281,10 @@ def extract_locations(text, spacy_candidates=None):
         location = normalise_label(match.group(1))
         if not is_location_candidate_valid(location):
             continue
-        if location not in CANONICAL_LOCATION_NAMES and phrase_match_count(text_lower, location.lower()) < 2:
+        if (
+            location not in CANONICAL_LOCATION_NAMES
+            and phrase_match_count(text_lower, location.lower()) < 2
+        ):
             continue
         found.add(location)
 
@@ -955,7 +958,11 @@ def sanitize_event_candidates(article, text, entities, topics, locations, events
             location = preferred_event_location(
                 sorted(valid_locations), signals["text_lower"], topics
             )
-        if location and location not in CANONICAL_LOCATION_NAMES and location.lower() not in name.lower():
+        if (
+            location
+            and location not in CANONICAL_LOCATION_NAMES
+            and location.lower() not in name.lower()
+        ):
             location = None
 
         key = (name, event_type, event_date, location or None)
@@ -1658,7 +1665,12 @@ def extract_article_record(article):
     people = extract_people(text, spacy_candidates=spacy_entities["people"])
     organisations = extract_organisations(text, spacy_candidates=spacy_entities["organizations"])
     locations = extract_locations(text, spacy_candidates=spacy_entities["locations"])
-    topics = extract_topics(text, tags=article.get("tags"), section=article.get("section"), source_system=article.get("source_system"))
+    topics = extract_topics(
+        text,
+        tags=article.get("tags"),
+        section=article.get("section"),
+        source_system=article.get("source_system"),
+    )
     politicians = classify_politicians(people)
     political_parties = classify_political_parties(organisations)
     government_bodies = unique_sorted(

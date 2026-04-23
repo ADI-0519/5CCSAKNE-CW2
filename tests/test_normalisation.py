@@ -39,6 +39,7 @@ class TestUtilityFunctions:
 
     def test_is_within_configured_window(self):
         from datetime import date, timedelta
+
         today = date.today()
         inside = (today - timedelta(days=15)).isoformat() + "T10:00:00Z"
         outside = (today - timedelta(days=45)).isoformat() + "T10:00:00Z"

@@ -146,7 +146,9 @@ def main():
 
     # stage 2: normalise source records
     print("[PIPELINE] Stage 2: Normalise collected source records")
-    source_records = normalise_collected_sources(collected_data, enforce_date_window=not args.from_cache)
+    source_records = normalise_collected_sources(
+        collected_data, enforce_date_window=not args.from_cache
+    )
     save_normalised_articles(source_records, filename="normalised_articles.json")
     save_json(
         source_records, f"{CONFIG['PROCESSED_DATA_DIR']}/{timestamp}_normalised_articles.json"

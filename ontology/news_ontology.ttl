@@ -236,4 +236,3 @@ news:PolicyEvent a owl:Class ;
     rdfs:label "Policy Event" ;
     rdfs:comment "A real-world event concerning UK government policy or parliamentary policy activity." ;
     rdfs:subClassOf core:Event .
-
