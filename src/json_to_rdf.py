@@ -717,9 +717,7 @@ def add_events(
             graph, record, event, body_uris, event_class
         )
 
-        # Text-news events should not remain typed as GovernmentPolicyEvent when
-        # event-specific body grounding fails. Keeping them as generic PolicyEvent
-        # avoids overclaiming official government involvement from broad article noise.
+        # downgrade to PolicyEvent when body grounding fails for non-official sources
         if (
             event_class == NEWS.GovernmentPolicyEvent
             and source_system not in OFFICIAL_SOURCE_SYSTEMS
@@ -730,6 +728,10 @@ def add_events(
         graph.add((uri, RDF.type, NEWS.PolicyEvent))
         if event_class != NEWS.PolicyEvent:
             graph.add((uri, RDF.type, event_class))
+        if event_class == NEWS.ParliamentaryDebate:
+            graph.add((uri, RDF.type, NEWS.ParliamentaryEvent))
+        elif event_class == NEWS.MinisterialStatement:
+            graph.add((uri, RDF.type, NEWS.GovernmentPolicyEvent))
         add_name(graph, uri, canonical_name)
 
         graph.add((uri, NEWS.reportedByArticle, article))
