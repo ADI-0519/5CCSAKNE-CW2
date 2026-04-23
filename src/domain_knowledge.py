@@ -1,11 +1,3 @@
-"""Shared domain lexicons and stable classification rules.
-
-This module holds the small, explicit knowledge resources that we treat as
-canonical project lexicons rather than ad hoc extraction heuristics. Keeping
-them here makes the rule layer easier to audit and avoids duplicating core
-classification logic across the pipeline.
-"""
-
 import re
 
 POLITICIAN_NAMES = [
@@ -356,15 +348,7 @@ GOVERNMENT_BODY_MATCH_SET = frozenset(_normalise_label(name) for name in GOVERNM
 
 
 def classify_official_body_kind(name):
-    """Return the stable body kind label used by ontology mapping.
-
-    The ordering is deliberate:
-    1. exact parliamentary bodies
-    2. exact government departments
-    3. high-precision keyword fallbacks
-    4. generic government body
-    """
-
+    # order matters: parliamentary exact > department exact > keyword fallback > generic
     lowered = _normalise_label(canonicalise_government_body_name(name))
     override = OFFICIAL_BODY_KIND_OVERRIDES.get(lowered)
     if override:
