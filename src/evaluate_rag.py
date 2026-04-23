@@ -7,6 +7,7 @@ DEFAULT_JSON_OUTPUT = Path("output/rag_evaluation.json")
 DEFAULT_MD_OUTPUT = Path("docs/rag_evaluation.md")
 
 OUTPUT_DIR = Path("output")
+GOLD_ANNOTATIONS_PATH = Path("data/evaluation/gold_rag_annotations.json")
 
 
 def find_most_recent_audit():
@@ -82,9 +83,16 @@ def build_entry(audit_entry):
     }
 
 
+def load_gold_annotations():
+    if not GOLD_ANNOTATIONS_PATH.exists():
+        return {}
+    return load_json(GOLD_ANNOTATIONS_PATH)
+
+
 def build_report(audit_path):
     audit = load_json(audit_path)
     entries = audit.get("entries", [])
+    gold = load_gold_annotations()
 
     rag_entries = []
     skipped = 0
@@ -95,7 +103,11 @@ def build_report(audit_path):
         if not has_rag:
             skipped += 1
             continue
-        rag_entries.append(build_entry(e))
+        entry = build_entry(e)
+        annotation = gold.get(entry["event_uri"], {})
+        entry["manual_correct"] = annotation.get("manual_correct")
+        entry["manual_notes"] = annotation.get("manual_notes", "")
+        rag_entries.append(entry)
 
     total_proposed = sum(e["n_proposed"] for e in rag_entries)
     total_accepted = sum(e["n_accepted"] for e in rag_entries)
@@ -105,18 +117,29 @@ def build_report(audit_path):
     dept_accepted = sum(len(e["accepted_departments"]) for e in rag_entries)
     topic_accepted = sum(len(e["accepted_topics"]) for e in rag_entries)
 
+    summary = {
+        "events_with_rag_additions": len(rag_entries),
+        "events_skipped_no_rag": skipped,
+        "total_proposed": total_proposed,
+        "total_accepted": total_accepted,
+        "total_rejected": total_rejected,
+        "accepted_actors": actor_accepted,
+        "accepted_departments": dept_accepted,
+        "accepted_topics": topic_accepted,
+        "acceptance_rate": round(total_accepted / total_proposed, 3) if total_proposed else 0,
+    }
+
+    annotated = [e for e in rag_entries if e["manual_correct"] is not None]
+    if annotated:
+        n_correct = sum(1 for e in annotated if e["manual_correct"])
+        n_incorrect = len(annotated) - n_correct
+        summary["annotated_total"] = len(annotated)
+        summary["annotated_correct"] = n_correct
+        summary["annotated_incorrect"] = n_incorrect
+        summary["estimated_precision"] = round(n_correct / len(annotated), 4)
+
     return {
-        "summary": {
-            "events_with_rag_additions": len(rag_entries),
-            "events_skipped_no_rag": skipped,
-            "total_proposed": total_proposed,
-            "total_accepted": total_accepted,
-            "total_rejected": total_rejected,
-            "accepted_actors": actor_accepted,
-            "accepted_departments": dept_accepted,
-            "accepted_topics": topic_accepted,
-            "acceptance_rate": round(total_accepted / total_proposed, 3) if total_proposed else 0,
-        },
+        "summary": summary,
         "entries": rag_entries,
     }
 
@@ -136,11 +159,25 @@ def build_markdown(report):
         f"- accepted actors: `{s['accepted_actors']}`",
         f"- accepted departments: `{s['accepted_departments']}`",
         f"- accepted topics: `{s['accepted_topics']}`",
+    ]
+
+    annotated = s.get("annotated_total")
+    if annotated:
+        n_correct = s.get("annotated_correct", 0)
+        n_incorrect = s.get("annotated_incorrect", 0)
+        precision = s.get("estimated_precision", 0)
+        lines += [
+            f"- manually annotated: `{annotated}` accepted additions (complete)",
+            f"- manually judged correct: `{n_correct}`",
+            f"- manually judged incorrect: `{n_incorrect}`",
+            f"- estimated precision: `{precision:.1%}`",
+        ]
+
+    lines += [
         "",
         "## Per-event sample",
         "",
-        "The table below covers events where at least one RAG triple was accepted. "
-        "The `manual_correct` column in `rag_evaluation.json` is left blank for manual annotation.",
+        "The table below covers events where at least one RAG triple was accepted.",
         "",
         "| event | accepted actors | accepted departments | accepted topics | proposed | accepted |",
         "| --- | --- | --- | --- | ---: | ---: |",
@@ -155,14 +192,7 @@ def build_markdown(report):
             f"| {label} | {actors} | {depts} | {topics} | {e['n_proposed']} | {e['n_accepted']} |"
         )
 
-    lines += [
-        "",
-        "## Precision estimation",
-        "",
-        "To estimate precision, open `output/rag_evaluation.json`, work through a sample of "
-        "entries, and set `manual_correct` to `true` or `false` for each accepted triple. "
-        "Precision = correct / total annotated.",
-    ]
+
 
     return "\n".join(lines) + "\n"
 
